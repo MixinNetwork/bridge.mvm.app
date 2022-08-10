@@ -1,5 +1,5 @@
 <script>
-	import Drawer from '$lib/components/drawer.svelte';
+	import Drawer from '$lib/components/drawer/drawer.svelte';
 </script>
 
 <div class="drawer drawer-mobile">

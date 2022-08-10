@@ -5,8 +5,8 @@
 	import { browser } from '$app/env';
 	import { legalUser, logout } from '$lib/stores/user';
 	import { lastUrl } from '$lib/stores/last-url';
-	import { createWeb3Client } from '../lib/web3';
-	import { clearCachedProvider } from '../lib/stores/cached-provider';
+	import { createWeb3Client } from '$lib/web3';
+	import { clearCachedProvider } from '$lib/stores/cached-provider';
 
 	let listening = false;
 

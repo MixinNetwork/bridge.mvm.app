@@ -17,6 +17,7 @@
 		"@esbuild-plugins/node-modules-polyfill": "^0.1.4",
 		"@nanostores/persistent": "^0.6.0",
 		"@playwright/test": "^1.22.2",
+		"@poppanator/sveltekit-svg": "^0.3.4",
 		"@sveltejs/adapter-static": "next",
 		"@sveltejs/kit": "next",
 		"@types/cookie": "^0.5.1",

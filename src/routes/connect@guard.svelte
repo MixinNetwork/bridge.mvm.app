@@ -5,11 +5,11 @@
 	import type { ProviderKey } from '$lib/web3/type';
 	import { account, provider, setProvider, switchMVM } from '$lib/stores/ether';
 	import SpinnerModal from '$lib/components/common/spinner-modal.svelte';
-	import { legalUser, register } from '$lib/stores/user';
+	import { legalUser, registerAndSave } from '$lib/stores/user';
 	import { goto } from '$app/navigation';
 	import { lastUrl } from '$lib/stores/last-url';
-	import { createWeb3Client } from '../lib/web3';
-	import { clearCachedProvider } from '../lib/stores/cached-provider';
+	import { createWeb3Client } from '$lib/web3';
+	import { clearCachedProvider } from '$lib/stores/cached-provider';
 
 	interface IProvider {
 		key: ProviderKey;
@@ -48,7 +48,7 @@
 
 			if (!$account) throw new Error('No account found');
 
-			await register($account);
+			await registerAndSave($account);
 			await switchMVM();
 		} finally {
 			loading = false;

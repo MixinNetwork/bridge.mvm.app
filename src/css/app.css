@@ -10,4 +10,15 @@
 	.background {
 		@apply bg-gradient-to-b from-[#DDDEF5] to-[#F6F7FA];
 	}
+	.absolute-center {
+		@apply absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transform;
+	}
+
+	.absolute-vertical-center {
+		@apply absolute top-1/2 -translate-y-1/2 transform;
+	}
+
+	.absolute-horizontal-center {
+		@apply absolute left-1/2 -translate-x-1/2 transform;
+	}
 }

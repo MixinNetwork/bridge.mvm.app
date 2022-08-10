@@ -22,4 +22,18 @@
 	:root {
 		@apply min-h-screen;
 	}
+
+	a,
+	button,
+	label {
+		@apply hover:opacity-80 hover:active:focus:opacity-60 disabled:opacity-20;
+	}
+
+	button {
+		@apply select-none;
+	}
+
+	* {
+		@apply outline-none;
+	}
 }

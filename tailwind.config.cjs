@@ -9,7 +9,7 @@ module.exports = {
 			xl: '1280px'
 		},
 		extend: {
-			color: {
+			colors: {
 				brand: {
 					primary: '#5959D8',
 					green: '#3AD076',
