@@ -1,0 +1,25 @@
+@layer base {
+	/* css page scrollbar toggle center no jumping */
+	html {
+		@apply overflow-y-scroll;
+	}
+
+	:root {
+		@apply overflow-y-auto overflow-x-hidden;
+	}
+
+	:root body {
+		@apply absolute;
+	}
+
+	body {
+		@apply w-screen overflow-hidden;
+	}
+	/* css page scrollbar toggle center no jumping */
+
+	html,
+	body,
+	:root {
+		@apply min-h-screen;
+	}
+}

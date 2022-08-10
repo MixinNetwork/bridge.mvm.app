@@ -1,0 +1,13 @@
+@import 'tailwindcss/base';
+@import './base.css';
+
+@import 'tailwindcss/components';
+@import './drawer.css';
+
+@import 'tailwindcss/utilities';
+
+@layer components {
+	.background {
+		@apply bg-gradient-to-b from-[#DDDEF5] to-[#F6F7FA];
+	}
+}
