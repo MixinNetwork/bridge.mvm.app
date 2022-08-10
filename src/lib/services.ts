@@ -5,5 +5,5 @@ export const register = async (address: string) => {
 	});
 
 	const { user } = await response.json();
-    return user
+	return user;
 };
