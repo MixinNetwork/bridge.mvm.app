@@ -1,6 +1,6 @@
-import type Network from './types/network';
+import type { NetworkParam } from '../types/network';
 
-export const XIN_ASSET_ID = 'c94ac88f-4671-3976-b60a-09064f1811e8';
+export const ETH_ASSET_ID = '43d61dcd-e413-450d-80b8-101d5e903357';
 
 export const REGISTRY_ADDRESS = '0x3c84B6C98FBeB813e05a7A7813F0442883450B1F';
 export const BRIDGE_ADDRESS = '0x12266b2BbdEAb152f8A0CF83c3997Bc8dbAD0be0';
@@ -34,7 +34,7 @@ export const WHITELIST = [
 	'965e5c6e-434c-3fa9-b780-c50f43cd955c' // cnb
 ];
 
-export const networkParams: Record<string, Network> = {
+export const networkParams: Record<string, NetworkParam> = {
 	[MAINNET_CHAIN_HEX_ID]: {
 		chainId: MAINNET_CHAIN_HEX_ID,
 		rpcUrls: [RPC_URL],

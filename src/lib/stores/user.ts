@@ -1,16 +1,14 @@
-import { persistentAtom } from '@nanostores/persistent';
-import { derived } from 'svelte/store';
-import { register } from '../services';
+import { derived } from '@square/svelte-store';
+import { register } from '../helpers/api';
+import { jsonPersistentEncoder, persistentWritable } from '../helpers/store/persistent';
 import type RegisteredUser from '../types/user';
 import { account } from './ether';
 
-const writableUser = persistentAtom<RegisteredUser | undefined>('USER', undefined, {
-	encode: JSON.stringify,
-	decode: (encoded) => {
-		if (encoded === undefined) return undefined;
-		return JSON.parse(encoded);
-	}
-});
+const writableUser = persistentWritable<RegisteredUser | undefined>(
+	'USER',
+	undefined,
+	jsonPersistentEncoder
+);
 
 export const registerAndSave = async (address: string) => writableUser.set(await register(address));
 

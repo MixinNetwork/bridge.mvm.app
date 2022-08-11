@@ -2,14 +2,16 @@
 	import Brand from '$lib/components/brand.svelte';
 	import walletConnect from '$lib/assets/logo/wallet-connect.svg';
 	import metamask from '$lib/assets/logo/metamask.svg';
-	import type { ProviderKey } from '$lib/web3/type';
-	import { account, provider, setProvider, switchMVM } from '$lib/stores/ether';
+	import type { ProviderKey } from '$lib/helpers/web3client/type';
+	import { account, provider, setProvider } from '$lib/stores/ether';
 	import SpinnerModal from '$lib/components/common/spinner-modal.svelte';
 	import { legalUser, registerAndSave } from '$lib/stores/user';
 	import { goto } from '$app/navigation';
-	import { lastUrl } from '$lib/stores/last-url';
-	import { createWeb3Client } from '$lib/web3';
+	import { createWeb3Client } from '$lib/helpers/web3client';
 	import { clearCachedProvider } from '$lib/stores/cached-provider';
+	import { switchMVM } from '$lib/stores/services/ether';
+	import { page } from '$app/stores';
+	import { LAST_URL } from './__layout-guard@default.svelte';
 
 	interface IProvider {
 		key: ProviderKey;
@@ -56,7 +58,7 @@
 	};
 
 	$: if ($legalUser && $provider) {
-		goto($lastUrl || '/');
+		goto($page.url.searchParams.get(LAST_URL) || '/');
 	}
 </script>
 

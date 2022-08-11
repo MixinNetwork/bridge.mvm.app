@@ -1,4 +1,4 @@
-export interface Network {
+export interface NetworkParam {
 	chainId: string;
 	rpcUrls: string[];
 	chainName: string;
@@ -7,4 +7,4 @@ export interface Network {
 	iconUrls?: string[];
 }
 
-export default Network;
+export type Network = 'mainnet' | 'mvm';

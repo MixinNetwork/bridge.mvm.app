@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { ProviderKey } from '../web3/type';
+	import type { ProviderKey } from '../helpers/web3client/type';
 	import clsx from 'clsx';
 
 	import { cachedProvider } from '../stores/cached-provider';

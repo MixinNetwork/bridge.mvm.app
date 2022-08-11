@@ -20,5 +20,9 @@ module.exports = {
 			}
 		}
 	},
-	plugins: []
+	plugins: [
+		({ addVariant }) => {
+			addVariant('child', '& > *');
+		}
+	]
 };

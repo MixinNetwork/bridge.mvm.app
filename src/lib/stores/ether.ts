@@ -1,7 +1,6 @@
 import { ethers } from 'ethers';
-import { derived, get, writable } from 'svelte/store';
-import { MAINNET_CHAIN_ID, MVM_CHAIN_ID, networkParams } from '../constant';
-import toHex from '../helpers/to-hex';
+import { derived, get } from '@square/svelte-store';
+import { deepWritable } from '../helpers/store/deep';
 import { clearCachedProvider } from './cached-provider';
 
 interface EtherStore {
@@ -12,7 +11,7 @@ interface EtherStore {
 	// network?: string;
 }
 
-const store = writable<EtherStore>({});
+const store = deepWritable<EtherStore>({});
 
 export const setProvider = async (
 	provider: (ethers.providers.ExternalProvider | ethers.providers.JsonRpcFetchFunc) &
@@ -62,26 +61,3 @@ export const provider = derived(store, ($store) => $store.provider);
 export const library = derived(store, ($store) => $store.library);
 export const chainId = derived(store, ($store) => $store.chainId);
 export const account = derived(store, ($store) => $store.account);
-
-const switchNetwork = async (network: string | number) => {
-	const library = get(provider);
-	if (!library) throw new Error('No provider');
-
-	try {
-		await library.provider.request?.({
-			method: 'wallet_switchEthereumChain',
-			params: [{ chainId: toHex(network) }]
-		});
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	} catch (switchError: any) {
-		if (switchError.code === 4902) {
-			await library.provider.request?.({
-				method: 'wallet_addEthereumChain',
-				params: [networkParams[toHex(network)]]
-			});
-		}
-	}
-};
-
-export const switchMVM = () => switchNetwork(MVM_CHAIN_ID);
-export const switchMainnet = () => switchNetwork(MAINNET_CHAIN_ID);
