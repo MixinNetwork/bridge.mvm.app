@@ -16,7 +16,7 @@
 		"@coinbase/wallet-sdk": "^3.4.1",
 		"@esbuild-plugins/node-modules-polyfill": "^0.1.4",
 		"@mixin.dev/mixin-node-sdk": "^4.6.0",
-		"@playwright/test": "^1.22.2",
+		"@playwright/test": "^1.25.0",
 		"@poppanator/sveltekit-svg": "^0.3.4",
 		"@square/svelte-store": "^0.2.0",
 		"@sveltejs/adapter-static": "next",
