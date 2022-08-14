@@ -37,9 +37,9 @@
 	export let u: User;
 	export let p: ProviderKey;
 
-	$: assets.set(a);
-	$: user.set(u);
-	$: provider.set(p);
+	$: a && assets.set(a);
+	$: u && user.set(u);
+	$: p && provider.set(p);
 </script>
 
 <Header>

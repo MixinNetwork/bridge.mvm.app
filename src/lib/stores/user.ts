@@ -28,6 +28,7 @@ export const logout = () => {
 export const legalUser = derived([user, account], ([$user, $account]) => {
 	return $user && $user.address === $account;
 });
+
 export const shortAddress = derived(user, ($user) => {
 	const account = $user?.address;
 	if (!account) return;
