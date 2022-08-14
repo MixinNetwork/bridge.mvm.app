@@ -5,7 +5,9 @@ import { getBalance, getERC20Balance } from '$lib/helpers/web3/common';
 import { fetchAssetContract } from '$lib/helpers/web3/registry';
 import type { Asset } from '$lib/types/asset';
 
-export const GET: RequestHandler = async ({ locals: { user, provider } }) => {
+export const GET: RequestHandler<Record<string, string>, Asset[]> = async ({
+	locals: { user, provider }
+}) => {
 	if (!user || !provider) return { status: 401 };
 
 	const assetClient = AssetClient({ keystore: { ...user, ...user.key } });
@@ -56,6 +58,6 @@ export const GET: RequestHandler = async ({ locals: { user, provider } }) => {
 
 	return {
 		status: 200,
-		body: assets as any
+		body: assets
 	};
 };

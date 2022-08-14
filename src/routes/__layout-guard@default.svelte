@@ -6,9 +6,8 @@
 	import { browser } from '$app/env';
 	import { legalUser, logout } from '$lib/stores/user';
 	import { createWeb3Client } from '$lib/helpers/web3client';
-	import { clearLastProvider } from '$lib/stores/provider';
 	import type { Load } from '@sveltejs/kit';
-	import { get } from 'svelte/store';
+	import { get } from '@square/svelte-store';
 
 	export const load: Load = ({ session: { user, provider }, url }) => {
 		if (url.pathname === '/connect') return;

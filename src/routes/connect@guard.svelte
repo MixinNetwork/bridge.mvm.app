@@ -11,7 +11,6 @@
 	import { provider as cacheProvider, clearLastProvider } from '$lib/stores/provider';
 	import { page } from '$app/stores';
 	import { LAST_URL } from './__layout-guard@default.svelte';
-	import type { Load } from '@sveltejs/kit';
 
 	interface IProvider {
 		key: ProviderKey;
@@ -34,8 +33,6 @@
 			icon: walletConnect
 		}
 	];
-
-	export const load: Load = ({ session }) => {};
 </script>
 
 <script lang="ts">
