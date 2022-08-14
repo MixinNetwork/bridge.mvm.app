@@ -1,25 +1,17 @@
 import type { Writable } from '@square/svelte-store';
 import { deepWritable } from './deep';
+import Cookies from 'js-cookie';
 
 export interface PersistentEncoder<Origin = unknown> {
 	encode: (value: Origin) => string;
 	decode: (encoded: string) => Origin;
 }
 
-const getItem = (key: string) => {
-	if (typeof window === 'undefined') return null;
-	return localStorage.getItem(key);
-};
-
-const removeItem = (key: string) => {
-	if (typeof window === 'undefined') return;
-	localStorage.removeItem(key);
-};
-
-const setItem = (key: string, value: string): void => {
-	if (typeof window === 'undefined') return;
-	localStorage.setItem(key, value);
-};
+export interface PersistentStore {
+	getItem: (key: string) => string | null | undefined;
+	setItem: (key: string, value: string) => void;
+	removeItem: (key: string) => void;
+}
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const jsonPersistentEncoder: PersistentEncoder<any> = {
@@ -27,16 +19,54 @@ export const jsonPersistentEncoder: PersistentEncoder<any> = {
 	encode: JSON.stringify
 };
 
+const localStoragePersistentStore: PersistentStore = {
+	getItem: (key: string) => {
+		if (typeof window === 'undefined') return null;
+		return localStorage.getItem(key);
+	},
+
+	removeItem: (key: string) => {
+		if (typeof window === 'undefined') return;
+		localStorage.removeItem(key);
+	},
+
+	setItem: (key: string, value: string): void => {
+		if (typeof window === 'undefined') return;
+		localStorage.setItem(key, value);
+	}
+};
+
+const cookiePersistentStore: PersistentStore = {
+	getItem: (key: string) => {
+		if (typeof window === 'undefined') return;
+		return Cookies.get(key);
+	},
+	setItem: (key: string, value: string) => {
+		if (typeof window === 'undefined') return;
+		Cookies.set(key, value);
+	},
+
+	removeItem: (key: string) => {
+		if (typeof window === 'undefined') return;
+		Cookies.remove(key);
+	}
+};
+
 export const persistentWritable = <T>(
 	key: string,
 	initial: T,
-	option?: PersistentEncoder<T>
+	option?: PersistentEncoder<T> & {
+		store?: 'cookie' | 'localstorage';
+	}
 ): Writable<T> => {
-	const decode = (value: string | null): T => {
+	const decode = (value: string | null | undefined): T => {
 		if (!value) return initial;
 		if (!option) return value as T;
 		return option.decode(value);
 	};
+
+	const { getItem, setItem, removeItem } =
+		option?.store === 'localstorage' ? localStoragePersistentStore : cookiePersistentStore;
 
 	const raw = getItem(key);
 	const $deepWritable = deepWritable<T>(decode(raw));

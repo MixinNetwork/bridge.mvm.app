@@ -1,10 +1,10 @@
 import type { Provider, ProviderKey } from './type';
-import { cachedProvider, setCachedProvider } from '../../stores/cached-provider';
+import { provider, setLastProvider } from '../../stores/provider';
 import { get } from '@square/svelte-store';
 
-export const createWeb3Client = async (provider: ProviderKey = 'injected') => {
+export const createWeb3Client = async (providerKey: ProviderKey = 'injected') => {
 	let connect: () => Promise<unknown> | unknown;
-	switch (provider) {
+	switch (providerKey) {
 		case 'walletconnect':
 			connect = (await import('./wallet-connect')).default;
 			break;
@@ -14,13 +14,13 @@ export const createWeb3Client = async (provider: ProviderKey = 'injected') => {
 
 	return {
 		cacheConnect: async () => {
-			const cache = get(cachedProvider);
+			const cache = get(provider);
 			if (!cache) return;
 			return (await createWeb3Client(cache)).connect();
 		},
 		connect: async () => {
 			const p = await connect();
-			setCachedProvider(provider);
+			setLastProvider(providerKey);
 			return p as Provider;
 		}
 	};

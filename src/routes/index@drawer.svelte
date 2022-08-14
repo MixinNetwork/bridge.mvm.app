@@ -1,4 +1,4 @@
-<script>
+<script context="module" lang="ts">
 	import clsx from 'clsx';
 	import Brand from '$lib/components/brand.svelte';
 	import Header from '$lib/components/header.svelte';
@@ -7,8 +7,39 @@
 	import Balance from '$lib/components/balance.svelte';
 	import Send from '$lib/assets/send.svg?component';
 	import Receive from '$lib/assets/receive.svg?component';
-	import { whiteAssetBalances } from '$lib/stores/model';
-	import { bigMul, formatCurrency, toRounding } from '../lib/helpers/big';
+	import { assets } from '$lib/stores/model';
+	import type { Load } from '@sveltejs/kit';
+	import { user } from '$lib/stores/user';
+	import type { User } from '$lib/types/user';
+	import { provider } from '$lib/stores/provider';
+	import type { Asset } from '$lib/types/asset';
+	import type { ProviderKey } from '$lib/helpers/web3client/type';
+
+	export const load: Load = async ({ fetch, session: { user, provider } }) => {
+		const response = await fetch('/api/assets');
+		const assets = await response.json();
+
+		return {
+			status: response.status,
+			props: {
+				a: assets,
+				u: user,
+				p: provider
+			}
+		};
+	};
+</script>
+
+<script lang="ts">
+	import AssetItem from '../lib/components/asset-item.svelte';
+
+	export let a: Asset[];
+	export let u: User;
+	export let p: ProviderKey;
+
+	$: assets.set(a);
+	$: user.set(u);
+	$: provider.set(p);
 </script>
 
 <Header>
@@ -20,10 +51,10 @@
 </Header>
 
 <div
-	class="flex h-44 flex-col items-center justify-center md:mx-5 md:items-start lg:mt-10 lg:h-auto lg:flex-row lg:items-center lg:justify-between"
+	class="flex flex-col items-center justify-center pt-4 md:items-start md:px-5 md:pt-10 lg:mt-10 lg:h-auto lg:flex-row lg:items-center lg:justify-between"
 >
 	<Balance />
-	<div class="w-full px-11 md:w-80 md:p-0">
+	<div class="mt-6 w-full px-11 md:w-80 md:p-0">
 		<div
 			class={clsx(
 				'grid h-12 w-full grid-cols-2 shadow-sm font-semibold child:space-x-2',
@@ -53,22 +84,10 @@
 	</div>
 </div>
 
-<div class="mt-8 rounded-t-2xl bg-white md:mx-5">
+<div class="my-8 rounded-2xl bg-white md:mx-5">
 	<div class="px-5 py-4 text-lg font-semibold">Assets</div>
 
-	{#each $whiteAssetBalances ?? [] as { asset_id, icon_url, name, symbol, balance, price_usd } (asset_id)}
-		<div class="flex items-center space-x-3 p-5">
-			<img src={icon_url} width="40" height="40" alt={name} />
-			<div>
-				<div class=" font-bold">{name}</div>
-				<div class=" text-sm font-semibold opacity-30">{symbol}</div>
-			</div>
-			<div class="flex grow flex-col items-end">
-				<div class="font-bold">{toRounding(balance, 8)}</div>
-				<div class=" text-sm font-semibold opacity-30">
-					${formatCurrency(bigMul(balance, price_usd))}
-				</div>
-			</div>
-		</div>
+	{#each $assets ?? [] as asset (asset.asset_id)}
+		<AssetItem {asset} />
 	{/each}
 </div>

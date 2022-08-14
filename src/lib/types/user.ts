@@ -1,4 +1,4 @@
-export default interface RegisteredUser {
+export interface RegisteredUser {
 	contract: string;
 	created_at: string;
 	full_name: string;
@@ -9,4 +9,8 @@ export default interface RegisteredUser {
 		private_key: string;
 		session_id: string;
 	};
+}
+
+export interface User extends RegisteredUser {
+	address: string;
 }

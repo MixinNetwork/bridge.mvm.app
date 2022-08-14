@@ -3,15 +3,15 @@
 	import walletConnect from '$lib/assets/logo/wallet-connect.svg';
 	import metamask from '$lib/assets/logo/metamask.svg';
 	import type { ProviderKey } from '$lib/helpers/web3client/type';
-	import { account, provider, setProvider } from '$lib/stores/ether';
+	import { account, setProvider } from '$lib/stores/ether';
 	import SpinnerModal from '$lib/components/common/spinner-modal.svelte';
-	import { legalUser, registerAndSave } from '$lib/stores/user';
+	import { registerAndSave } from '$lib/stores/user';
 	import { goto } from '$app/navigation';
 	import { createWeb3Client } from '$lib/helpers/web3client';
-	import { clearCachedProvider } from '$lib/stores/cached-provider';
-	import { switchMVM } from '$lib/stores/services/ether';
+	import { provider as cacheProvider, clearLastProvider } from '$lib/stores/provider';
 	import { page } from '$app/stores';
 	import { LAST_URL } from './__layout-guard@default.svelte';
+	import type { Load } from '@sveltejs/kit';
 
 	interface IProvider {
 		key: ProviderKey;
@@ -34,6 +34,8 @@
 			icon: walletConnect
 		}
 	];
+
+	export const load: Load = ({ session }) => {};
 </script>
 
 <script lang="ts">
@@ -44,22 +46,19 @@
 			loading = true;
 
 			const web3Client = await createWeb3Client(provider);
-			clearCachedProvider();
+			clearLastProvider();
 			const p = await web3Client.connect();
 			await setProvider(p);
 
 			if (!$account) throw new Error('No account found');
+			if (!$cacheProvider) throw new Error('No cached provider found');
 
 			await registerAndSave($account);
-			await switchMVM();
+			goto($page.url.searchParams.get(LAST_URL) || '/');
 		} finally {
 			loading = false;
 		}
 	};
-
-	$: if ($legalUser && $provider) {
-		goto($page.url.searchParams.get(LAST_URL) || '/');
-	}
 </script>
 
 <div class="flex flex-col items-center pt-12">

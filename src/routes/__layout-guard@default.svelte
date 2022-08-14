@@ -1,21 +1,32 @@
 <script context="module" lang="ts">
 	export const LAST_URL = 'last-url';
-</script>
-
-<script lang="ts">
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import { setProvider } from '$lib/stores/ether';
 	import { browser } from '$app/env';
 	import { legalUser, logout } from '$lib/stores/user';
 	import { createWeb3Client } from '$lib/helpers/web3client';
-	import { clearCachedProvider } from '$lib/stores/cached-provider';
+	import { clearLastProvider } from '$lib/stores/provider';
+	import type { Load } from '@sveltejs/kit';
+	import { get } from 'svelte/store';
 
+	export const load: Load = ({ session: { user, provider }, url }) => {
+		if (url.pathname === '/connect') return;
+		if (user && provider) return;
+		if (browser && get(legalUser)) return;
+
+		return {
+			status: 302,
+			redirect: `/connect?${LAST_URL}=${url.href.replace(url.origin, '')}`
+		};
+	};
+</script>
+
+<script lang="ts">
 	let listening = false;
 
 	const init = async () => {
 		if (!browser) return;
-		if ($legalUser) return;
 
 		let p;
 		const web3Client = await createWeb3Client();
@@ -23,8 +34,9 @@
 			p = await web3Client.cacheConnect();
 			await (p && setProvider(p));
 		} catch (e) {
+			console.log('guard error', e);
+
 			logout();
-			clearCachedProvider();
 		}
 
 		listening = true;
@@ -32,14 +44,9 @@
 
 	$: isConnect = $page.url.pathname === '/connect';
 
-	if (browser) {
-		init();
-	}
+	if (browser) init();
 
-	$: if (listening && !$legalUser) {
-		logout();
-		clearCachedProvider();
-	}
+	$: if (listening && !$legalUser) logout();
 
 	$: if (!isConnect && listening && !$legalUser) {
 		const url = $page.url.href.replace($page.url.origin, '');

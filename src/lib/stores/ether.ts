@@ -1,7 +1,7 @@
 import { ethers } from 'ethers';
 import { derived, get } from '@square/svelte-store';
 import { deepWritable } from '../helpers/store/deep';
-import { clearCachedProvider } from './cached-provider';
+import { clearLastProvider } from './provider';
 
 interface EtherStore {
 	library?: ethers.providers.Web3Provider;
@@ -29,7 +29,7 @@ export const setProvider = async (
 	};
 
 	const handleDisconnect = () => {
-		clearCachedProvider();
+		clearLastProvider();
 		store.set({});
 	};
 

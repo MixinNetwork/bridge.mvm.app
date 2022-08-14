@@ -1,4 +1,6 @@
-export const register = async (address: string) => {
+import type { RegisteredUser } from '../types/user';
+
+export const register = async (address: string): Promise<RegisteredUser> => {
 	const response = await fetch('https://bridge.mvm.dev/users', {
 		method: 'POST',
 		body: JSON.stringify({ public_key: address })
