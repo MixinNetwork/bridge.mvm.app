@@ -2,9 +2,9 @@
 	export const LAST_URL = 'last-url';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
-	import { account, setProvider } from '$lib/stores/ether';
+	import { setProvider } from '$lib/stores/ether';
 	import { browser } from '$app/env';
-	import { legalUser, logout, user } from '$lib/stores/user';
+	import { legalUser, logout } from '$lib/stores/user';
 	import { createWeb3Client } from '$lib/helpers/web3client';
 	import type { Load } from '@sveltejs/kit';
 	import { get } from '@square/svelte-store';

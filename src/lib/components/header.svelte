@@ -28,7 +28,7 @@
 		y = scrollable?.scrollTop;
 	};
 
-	$: scrollable = element && findScrollable(element);
+	$: scrollable = element?.parentElement && findScrollable(element.parentElement);
 	$: if (scrollable) {
 		y = scrollable?.scrollTop;
 		scrollable.addEventListener('scroll', listener);
@@ -36,7 +36,6 @@
 			scrollable?.removeEventListener('scroll', listener);
 		});
 	}
-
 	$: showBackground = y && height && y > height;
 </script>
 
@@ -44,7 +43,7 @@
 	class={clsx(
 		'w-full px-5 py-3 h-12 transition-all md:h-16 bg-white bg-opacity-0 sticky top-0 z-50',
 		clazz,
-		showBackground && 'bg-opacity-100',
+		showBackground && 'bg-opacity-80',
 		'[&>*:nth-child(1)]:float-left',
 		'[&>*:nth-child(2)]:absolute-center',
 		'[&>*:nth-child(n+3)]:float-right'

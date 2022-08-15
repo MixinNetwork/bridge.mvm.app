@@ -11,6 +11,7 @@
 	import { provider as cacheProvider, clearLastProvider } from '$lib/stores/provider';
 	import { page } from '$app/stores';
 	import { LAST_URL } from './__layout-guard@default.svelte';
+	import Modal from '$lib/components/common/modal/modal.svelte';
 
 	interface IProvider {
 		key: ProviderKey;
@@ -75,4 +76,4 @@
 	</div>
 </div>
 
-<SpinnerModal isOpen={loading} />
+<Modal isOpen={loading} content={SpinnerModal} maskClosable={false} keyboardClosable={false} />

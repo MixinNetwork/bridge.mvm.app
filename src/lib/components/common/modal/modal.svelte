@@ -1,25 +1,43 @@
 <script lang="ts">
-	import clsx from 'clsx';
-	import { fade } from 'svelte/transition';
-	import { focus } from 'focus-svelte';
+	import { afterUpdate, createEventDispatcher, onDestroy, SvelteComponent } from 'svelte';
+	import modalStore, { renderModal, unRenderModal, type ModalProps } from './modal-state';
+	import './modal-init';
+	import { get } from '@square/svelte-store';
 
-	let isOpen: boolean;
-	let clazz: string | undefined = undefined;
-	let containerClass: string | undefined = undefined;
+	export let isOpen = false;
+	// type is SvelteComponent
+	export let content: unknown;
+	export let maskClosable = true;
+	export let keyboardClosable = true;
 
-	export { isOpen, clazz as class, containerClass as containerClass };
+	const dispatch = createEventDispatcher();
+	let onClose = () => {
+		content && unRenderModal(content as SvelteComponent);
+		dispatch('close');
+	};
+
+	const sync = (isOpen: boolean) => {
+		if (!content) return;
+
+		const $modalStore = get(modalStore);
+		const currentlyOpen = $modalStore.find(({ node }) => node === content);
+
+		if (content && !currentlyOpen && isOpen) {
+			let props: ModalProps = {
+				onClose,
+				node: content as SvelteComponent,
+				maskClosable,
+				keyboardClosable
+			};
+			renderModal(props);
+		} else if (currentlyOpen && !isOpen) {
+			onClose();
+		}
+	};
+
+	onDestroy(() => {
+		onClose();
+	});
+
+	$: afterUpdate(() => sync(isOpen));
 </script>
-
-{#if isOpen}
-	<div
-		class={clsx(
-			'fixed inset-0 z-[9999] flex flex-col items-center justify-center overflow-auto bg-black bg-opacity-10 ',
-			clazz
-		)}
-		transition:fade
-	>
-		<div class={clsx(containerClass)} use:focus={isOpen}>
-			<slot />
-		</div>
-	</div>
-{/if}

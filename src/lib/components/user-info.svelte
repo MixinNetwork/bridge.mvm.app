@@ -6,26 +6,30 @@
 
 	import MetaMask from '$lib/assets/logo/metamask.svg?component';
 	import WalletConnect from '$lib/assets/logo/wallet-connect.svg?component';
+	import Logout from '$lib/assets/logout.svg?component';
 	import Arrow from '$lib/assets/arrow.svg?component';
+
 	import { totalBalanceUsd } from '../stores/model';
 	import { formatCurrency } from '../helpers/big';
+	import Modal from './common/modal/modal.svelte';
+	import LogoutModal from './modal/logout-modal.svelte';
 
 	let clazz: string | undefined = undefined;
 	export { clazz as class };
+
+	let logoutModalOpen = false;
+
+	$: ProviderLogo = $provider === 'injected' ? MetaMask : WalletConnect;
 </script>
 
 <div
 	class={clsx(
-		'flex items-center space-x-3 md:py-2 md:px-4 md:rounded-full md:bg-white w-fit transition',
+		'group relative flex md:h-10 items-center space-x-3 md:py-2 md:px-4 md:rounded-full md:bg-white w-fit transition',
 		clazz
 	)}
 >
 	<div class="child:h-14 child:w-14 child:md:h-4 child:md:w-4">
-		{#if $provider === 'injected'}
-			<MetaMask />
-		{:else if $provider === 'walletconnect'}
-			<WalletConnect />
-		{/if}
+		<ProviderLogo />
 	</div>
 	<div class="font-bold md:text-sm md:font-semibold">
 		<div class="text-xl md:hidden">{formatCurrency($totalBalanceUsd || 0)}</div>
@@ -35,4 +39,31 @@
 		</div>
 	</div>
 	<Arrow class="rotate-90 sm:hidden md:block" />
+
+	<div
+		class="invisible absolute top-9 right-0 mt-2 hidden w-96 flex-col rounded-2xl bg-white pb-5 opacity-0 transition-all delay-100 group-hover:visible group-hover:opacity-100 md:flex"
+	>
+		<div class=" flex items-center space-x-3 p-6">
+			<ProviderLogo class="h-12 w-12" />
+			<div class=" font-semibold">
+				<div>
+					{$shortAddress}
+				</div>
+			</div>
+		</div>
+		<button
+			class="flex h-14 items-center space-x-3 px-6 hover:bg-brand-primary hover:bg-opacity-5"
+			on:click={() => (logoutModalOpen = !logoutModalOpen)}
+		>
+			<Logout />
+			<div class="grow text-start">Log out</div>
+			<Arrow />
+		</button>
+	</div>
+
+	<Modal
+		isOpen={logoutModalOpen}
+		content={LogoutModal}
+		on:close={() => (logoutModalOpen = !logoutModalOpen)}
+	/>
 </div>

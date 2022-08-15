@@ -11,7 +11,7 @@
 	import UserInfo from '../user-info.svelte';
 </script>
 
-<div class="w-72 bg-white md:w-64">
+<div class="w-72 rounded-r-2xl bg-white md:w-64 md:rounded-none">
 	<Brand class="hidden !space-x-2 px-5 py-4 md:mb-6 md:flex md:text-xl" logoClass="w-8" />
 	<UserInfo class=" mt-20 mb-9 ml-8  md:hidden" />
 	<DrawerItem logo={Assets} href="/" title="Assets" />

@@ -84,7 +84,7 @@
 	</div>
 </div>
 
-<div class="my-8 rounded-2xl bg-white md:mx-5">
+<div class="my-8 rounded-2xl bg-white last:child:rounded-b-2xl md:mx-5">
 	<div class="px-5 py-4 text-lg font-semibold">Assets</div>
 
 	{#each $assets ?? [] as asset (asset.asset_id)}

@@ -29,9 +29,9 @@ export const legalUser = derived([user, account], ([$user, $account]) => {
 	return $user && $user.address === $account;
 });
 
-export const shortAddress = derived(user, ($user) => {
-	const account = $user?.address;
-	if (!account) return;
+export const address = derived(user, ($user) => $user?.address);
 
-	return account.slice(0, 4) + '...' + account.slice(-4);
+export const shortAddress = derived(address, ($address) => {
+	if (!$address) return;
+	return $address.slice(0, 4) + '...' + $address.slice(-4);
 });
