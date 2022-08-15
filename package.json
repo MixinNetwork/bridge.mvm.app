@@ -13,7 +13,7 @@
 		"format": "prettier --write --plugin-search-dir=. ."
 	},
 	"devDependencies": {
-		"@coinbase/wallet-sdk": "^3.4.1",
+		"@coinbase/wallet-sdk": "^3.4.2",
 		"@esbuild-plugins/node-modules-polyfill": "^0.1.4",
 		"@mixin.dev/mixin-node-sdk": "^4.6.0",
 		"@playwright/test": "^1.25.0",
