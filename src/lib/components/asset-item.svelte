@@ -28,7 +28,7 @@
 	</div>
 
 	<div
-		class=" hidden space-x-4 font-semibold child:flex child:h-10 child:w-[102px] child:items-center child:justify-center child:rounded-full child:bg-white lg:flex"
+		class=" hidden space-x-4 font-semibold child:flex child:h-10 child:w-[102px] child:items-center child:justify-center child:rounded-full child:bg-white lg:flex lg:pl-10 xl:pl-32"
 	>
 		<a href={`/bridge?${ASSET_KEY}=${asset.asset_id}&${MODE_KEY}=deposit&`}>Deposit</a>
 		<a href={`/bridge?${ASSET_KEY}=${asset.asset_id}&${MODE_KEY}=withdraw&`}>Withdraw</a>

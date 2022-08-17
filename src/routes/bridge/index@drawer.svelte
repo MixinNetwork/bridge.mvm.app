@@ -12,7 +12,7 @@
 	import Eth from '$lib/assets/logo/eth.svg?component';
 	import AssetIcon from '$lib/components/asset-icon.svelte';
 	import { ETH_ASSET_ID } from '$lib/constants/common';
-	import { asyncDerived, get } from '@square/svelte-store';
+	import { asyncDerived } from '@square/svelte-store';
 	import { getBalance, getERC20Balance } from '$lib/helpers/web3/common';
 	import type { Network } from '$lib/types/network';
 	import { bigGte } from '$lib/helpers/big';
@@ -90,8 +90,11 @@
 
 	$: mainnetBalance = buildBalanceStore({ assetId: asset.asset_id, network: 'mainnet' });
 	$: mvmBalance = buildBalanceStore({ assetId: asset.asset_id, network: 'mvm' });
-	$: fromBalance = depositMode ? $mainnetBalance : $mvmBalance;
-	$: toBalance = depositMode ? $mvmBalance : $mainnetBalance;
+
+	$: cacheMvmBalance = $mainnetBalance || asset.balance;
+
+	$: fromBalance = depositMode ? $mainnetBalance : cacheMvmBalance;
+	$: toBalance = depositMode ? cacheMvmBalance : $mainnetBalance;
 
 	let amount: number | undefined | string;
 
@@ -216,7 +219,7 @@
 
 		<button
 			class="!mt-12 self-center rounded-full bg-brand-primary py-4 px-6 font-semibold text-white"
-			disabled={!amount}
+			disabled={!amount && !!mvmBalance}
 			on:click={transfer}>Transfer</button
 		>
 	</div>
