@@ -1,15 +1,12 @@
 import type { Stores } from '@square/svelte-store';
+import { isEqual } from 'lodash-es';
 
-export const mapTemplate = <
-	Key extends string | number | symbol = string,
-	Store extends Stores = never
->(
-	build: (key: Key) => Store
-) => {
-	const cache = {} as Record<Key, Store>;
+export const mapTemplate = <Key, Store extends Stores = never>(build: (key: Key) => Store) => {
+	const cache = new Map<Key, Store>();
 	const template = (key: Key) => {
-		if (!cache[key]) cache[key] = build(key);
-		return cache[key];
+		const k = [...cache.keys()].find((k) => isEqual(k, key));
+		if (!k) cache.set(key, build(key));
+		return cache.get(k || key);
 	};
 
 	return template;

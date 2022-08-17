@@ -14,6 +14,7 @@
 	import { provider } from '$lib/stores/provider';
 	import type { Asset } from '$lib/types/asset';
 	import type { ProviderKey } from '$lib/helpers/web3client/type';
+	import AssetItem from '$lib/components/asset-item.svelte';
 
 	export const load: Load = async ({ fetch, session: { user, provider } }) => {
 		const response = await fetch('/api/assets');
@@ -31,8 +32,6 @@
 </script>
 
 <script lang="ts">
-	import AssetItem from '../lib/components/asset-item.svelte';
-
 	export let a: Asset[];
 	export let u: User;
 	export let p: ProviderKey;
@@ -45,9 +44,9 @@
 <Header>
 	<Brand class="space-x-2 md:hidden" logoClass="w-6" MVMClass="text-lg" bridgeClass="hidden" />
 	<a href="/" class="md:hidden">
-		<svelte:component this={Helper} />
+		<Helper />
 	</a>
-	<UserInfo class="sm:hidden md:flex" />
+	<UserInfo class="hidden md:flex" />
 </Header>
 
 <div

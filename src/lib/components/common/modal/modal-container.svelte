@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { get } from '@square/svelte-store';
-	import { focus } from 'focus-svelte';
 	import Overlay from './overlay.svelte';
 	import modalState from './modal-state';
 
@@ -19,10 +18,8 @@
 
 <svelte:window on:keydown={keyDown} />
 
-{#each $modalState as { node, onClose, maskClosable } (node)}
-	<Overlay {onClose} {maskClosable}>
-		<div use:focus={true}>
-			<svelte:component this={node} {onClose} />
-		</div>
+{#each $modalState as { node, onClose, callback, maskClosable, overlayClass } (node)}
+	<Overlay {onClose} {maskClosable} class={overlayClass}>
+		<svelte:component this={node} {onClose} {callback} />
 	</Overlay>
 {/each}

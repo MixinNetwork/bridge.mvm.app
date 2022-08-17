@@ -3,9 +3,11 @@ import type { SvelteComponent } from 'svelte';
 
 export interface ModalProps {
 	onClose: () => void;
+	callback: ((data: unknown) => void) | undefined;
 	node: SvelteComponent;
 	maskClosable: boolean;
 	keyboardClosable: boolean;
+	overlayClass: string | undefined;
 }
 
 export const modalStore = writable<ModalProps[]>([]);

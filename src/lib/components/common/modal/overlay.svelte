@@ -1,18 +1,27 @@
 <script context="module" lang="ts">
+	import clsx from 'clsx';
 	import { quadOut } from 'svelte/easing';
 	import { fade } from 'svelte/transition';
+	import { focus } from 'focus-svelte';
 </script>
 
 <script lang="ts">
-	export let onClose = () => {
+	let clazz: string | undefined = undefined;
+	let onClose = () => {
 		//
 	};
-	export let maskClosable = false;
+	let maskClosable = false;
+
+	export { onClose, maskClosable, clazz as class };
 
 	let self: HTMLElement | undefined;
+	let wrapper: HTMLElement | undefined;
 
 	function overLayClicked(event: Event) {
-		if (maskClosable && (event.target === self || event.target === self?.parentElement)) {
+		if (
+			maskClosable &&
+			(event.target === self || event.target === wrapper || event.target === self?.parentElement)
+		) {
 			onClose();
 		}
 	}
@@ -20,9 +29,18 @@
 
 <div
 	transition:fade={{ duration: 250, easing: quadOut }}
-	class=" fixed inset-0 z-10 flex items-center justify-center overflow-auto bg-black bg-opacity-10"
+	class={clsx(
+		'fixed inset-0 z-10 flex items-center justify-center overflow-auto bg-black bg-opacity-10',
+		clazz
+	)}
 	on:click={overLayClicked}
 	bind:this={self}
 >
-	<slot />
+	<div
+		use:focus={true}
+		class="flex w-full items-center justify-center overflow-hidden"
+		bind:this={wrapper}
+	>
+		<slot />
+	</div>
 </div>

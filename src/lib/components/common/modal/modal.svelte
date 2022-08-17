@@ -4,16 +4,22 @@
 	import './modal-init';
 	import { get } from '@square/svelte-store';
 
-	export let isOpen = false;
+	let isOpen = false;
 	// type is SvelteComponent
-	export let content: unknown;
-	export let maskClosable = true;
-	export let keyboardClosable = true;
+	let content: unknown;
+	let overlayClass: string | undefined = undefined;
+	let maskClosable = true;
+	let keyboardClosable = true;
+
+	export { isOpen, content, overlayClass as class, maskClosable, keyboardClosable, callback };
 
 	const dispatch = createEventDispatcher();
 	let onClose = () => {
 		content && unRenderModal(content as SvelteComponent);
 		dispatch('close');
+	};
+	let callback = (data: unknown) => {
+		dispatch('callback', data);
 	};
 
 	const sync = (isOpen: boolean) => {
@@ -25,9 +31,11 @@
 		if (content && !currentlyOpen && isOpen) {
 			let props: ModalProps = {
 				onClose,
+				callback,
 				node: content as SvelteComponent,
 				maskClosable,
-				keyboardClosable
+				keyboardClosable,
+				overlayClass
 			};
 			renderModal(props);
 		} else if (currentlyOpen && !isOpen) {
