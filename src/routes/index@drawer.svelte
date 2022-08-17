@@ -9,36 +9,27 @@
 	import Receive from '$lib/assets/receive.svg?component';
 	import { assets } from '$lib/stores/model';
 	import type { Load } from '@sveltejs/kit';
-	import { user } from '$lib/stores/user';
-	import type { User } from '$lib/types/user';
-	import { providerKey } from '$lib/stores/provider';
 	import type { Asset } from '$lib/types/asset';
-	import type { ProviderKey } from '$lib/helpers/web3client/type';
 	import AssetItem from '$lib/components/asset-item.svelte';
+	import { browser } from '$app/env';
+	import { fetchAssets } from '$lib/helpers/api';
 
-	export const load: Load = async ({ fetch, session: { user, provider } }) => {
-		const response = await fetch('/api/assets');
-		const assets = await response.json();
+	export const load: Load = async ({ fetch }) => {
+		if (browser) {
+			fetchAssets(fetch).then((a) => assets.set(a));
+			return;
+		}
 
-		return {
-			status: response.status,
-			props: {
-				a: assets,
-				u: user,
-				p: provider
-			}
-		};
+		const a = await fetchAssets(fetch);
+
+		return { props: { a } };
 	};
 </script>
 
 <script lang="ts">
 	export let a: Asset[];
-	export let u: User;
-	export let p: ProviderKey;
 
 	$: a && assets.set(a);
-	$: u && user.set(u);
-	$: p && providerKey.set(p);
 </script>
 
 <Header>

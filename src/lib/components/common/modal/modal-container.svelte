@@ -18,8 +18,8 @@
 
 <svelte:window on:keydown={keyDown} />
 
-{#each $modalState as { node, onClose, callback, maskClosable, overlayClass } (node)}
+{#each $modalState as { node, onClose, callback, maskClosable, overlayClass, contentProps } (node)}
 	<Overlay {onClose} {maskClosable} class={overlayClass}>
-		<svelte:component this={node} {onClose} {callback} />
+		<svelte:component this={node} {onClose} {callback} {...contentProps || {}} />
 	</Overlay>
 {/each}

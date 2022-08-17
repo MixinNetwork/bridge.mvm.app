@@ -1,11 +1,8 @@
 <script context="module" lang="ts">
 	import type { Load } from '@sveltejs/kit';
-	import type { ProviderKey } from '$lib/helpers/web3client/type';
 	import { assets } from '$lib/stores/model';
-	import { providerKey } from '$lib/stores/provider';
 	import { user } from '$lib/stores/user';
 	import type { Asset } from '$lib/types/asset';
-	import type { User } from '$lib/types/user';
 	import Header from '$lib/components/header.svelte';
 	import Helper from '$lib/assets/helper.svg?component';
 	import UserInfo from '$lib/components/user-info.svelte';
@@ -15,7 +12,7 @@
 	import Eth from '$lib/assets/logo/eth.svg?component';
 	import AssetIcon from '$lib/components/asset-icon.svelte';
 	import { ETH_ASSET_ID } from '$lib/constants/common';
-	import { asyncDerived } from '@square/svelte-store';
+	import { asyncDerived, get } from '@square/svelte-store';
 	import { getBalance, getERC20Balance } from '$lib/helpers/web3/common';
 	import type { Network } from '$lib/types/network';
 	import { bigGte } from '$lib/helpers/big';
@@ -28,23 +25,18 @@
 	import Modal from '$lib/components/common/modal/modal.svelte';
 	import SpinnerModal from '$lib/components/common/spinner-modal.svelte';
 	import { account, provider } from '$lib/stores/ether';
+	import { fetchAssets } from '$lib/helpers/api';
 
 	export type Mode = 'deposit' | 'withdraw';
 	export const MODE_KEY = 'mode';
 	export const ASSET_KEY = 'asset';
 
-	export const load: Load = async ({ fetch, session: { user, provider } }) => {
-		const response = await fetch('/api/assets');
-		const assets = await response.json();
+	export const load: Load = async ({ fetch }) => {
+		if (browser) return;
 
-		return {
-			status: response.status,
-			props: {
-				a: assets,
-				u: user,
-				p: provider
-			}
-		};
+		const a = await fetchAssets(fetch);
+
+		return { props: { a } };
 	};
 
 	const buildBalanceStore = ({ assetId, network }: { assetId: string; network: Network }) => {
@@ -72,19 +64,15 @@
 
 <script lang="ts">
 	export let a: Asset[];
-	export let u: User;
-	export let p: ProviderKey;
 
 	let assetId = $page.url.searchParams.get(ASSET_KEY);
-	let mode = $page.url.searchParams.get(MODE_KEY);
+	let mode = $page.url.searchParams.get(MODE_KEY) || 'deposit';
 	$: depositMode = mode !== 'withdraw';
 
 	let openedSelectModal = false;
 	const toggle = () => (openedSelectModal = !openedSelectModal);
 
 	$: a && assets.set(a);
-	$: u && user.set(u);
-	$: p && providerKey.set(p);
 
 	let asset: Asset;
 	$: if ((asset || mode) && browser) {

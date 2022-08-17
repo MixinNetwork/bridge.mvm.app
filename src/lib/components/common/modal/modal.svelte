@@ -10,6 +10,7 @@
 	let overlayClass: string | undefined = undefined;
 	let maskClosable = true;
 	let keyboardClosable = true;
+	let contentProps: unknown = undefined;
 
 	export { isOpen, content, overlayClass as class, maskClosable, keyboardClosable, callback };
 
@@ -35,7 +36,8 @@
 				node: content as SvelteComponent,
 				maskClosable,
 				keyboardClosable,
-				overlayClass
+				overlayClass,
+				contentProps
 			};
 			renderModal(props);
 		} else if (currentlyOpen && !isOpen) {

@@ -3,11 +3,13 @@ import type { SvelteComponent } from 'svelte';
 
 export interface ModalProps {
 	onClose: () => void;
-	callback: ((data: unknown) => void) | undefined;
+	callback?: (data: unknown) => void;
 	node: SvelteComponent;
 	maskClosable: boolean;
 	keyboardClosable: boolean;
-	overlayClass: string | undefined;
+	overlayClass?: string;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	contentProps?: any;
 }
 
 export const modalStore = writable<ModalProps[]>([]);
