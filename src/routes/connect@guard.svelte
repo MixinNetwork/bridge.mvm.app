@@ -8,7 +8,7 @@
 	import { registerAndSave } from '$lib/stores/user';
 	import { goto } from '$app/navigation';
 	import { createWeb3Client } from '$lib/helpers/web3client';
-	import { provider as cacheProvider, clearLastProvider } from '$lib/stores/provider';
+	import { providerKey as cacheProvider, clearLastProvider } from '$lib/stores/provider';
 	import { page } from '$app/stores';
 	import { LAST_URL } from './__layout-guard@default.svelte';
 	import Modal from '$lib/components/common/modal/modal.svelte';

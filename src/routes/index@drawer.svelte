@@ -11,7 +11,7 @@
 	import type { Load } from '@sveltejs/kit';
 	import { user } from '$lib/stores/user';
 	import type { User } from '$lib/types/user';
-	import { provider } from '$lib/stores/provider';
+	import { providerKey } from '$lib/stores/provider';
 	import type { Asset } from '$lib/types/asset';
 	import type { ProviderKey } from '$lib/helpers/web3client/type';
 	import AssetItem from '$lib/components/asset-item.svelte';
@@ -38,7 +38,7 @@
 
 	$: a && assets.set(a);
 	$: u && user.set(u);
-	$: p && provider.set(p);
+	$: p && providerKey.set(p);
 </script>
 
 <Header>

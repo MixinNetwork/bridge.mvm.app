@@ -1,7 +1,7 @@
 <script lang="ts">
 	import clsx from 'clsx';
 
-	import { provider } from '../stores/provider';
+	import { providerKey } from '../stores/provider';
 	import { shortAddress } from '../stores/user';
 
 	import MetaMask from '$lib/assets/logo/metamask.svg?component';
@@ -16,10 +16,9 @@
 
 	let clazz: string | undefined = undefined;
 	export { clazz as class };
-
 	let logoutModalOpen = false;
 
-	$: ProviderLogo = $provider === 'injected' ? MetaMask : WalletConnect;
+	$: ProviderLogo = $providerKey === 'injected' ? MetaMask : WalletConnect;
 </script>
 
 <div

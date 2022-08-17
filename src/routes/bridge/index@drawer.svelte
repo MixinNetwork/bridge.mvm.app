@@ -2,7 +2,7 @@
 	import type { Load } from '@sveltejs/kit';
 	import type { ProviderKey } from '$lib/helpers/web3client/type';
 	import { assets } from '$lib/stores/model';
-	import { provider } from '$lib/stores/provider';
+	import { providerKey } from '$lib/stores/provider';
 	import { user } from '$lib/stores/user';
 	import type { Asset } from '$lib/types/asset';
 	import type { User } from '$lib/types/user';
@@ -27,6 +27,7 @@
 	import { registryContract, switchMainnet, switchMVM } from '$lib/stores/services/ether';
 	import Modal from '$lib/components/common/modal/modal.svelte';
 	import SpinnerModal from '$lib/components/common/spinner-modal.svelte';
+	import { account, provider } from '$lib/stores/ether';
 
 	export type Mode = 'deposit' | 'withdraw';
 	export const MODE_KEY = 'mode';
@@ -83,7 +84,7 @@
 
 	$: a && assets.set(a);
 	$: u && user.set(u);
-	$: p && provider.set(p);
+	$: p && providerKey.set(p);
 
 	let asset: Asset;
 	$: if ((asset || mode) && browser) {
@@ -119,6 +120,8 @@
 			$registryContract;
 			// current provider
 			$provider;
+			// current wallet address
+			$account;
 
 			if (depositMode) {
 				await switchMainnet();
