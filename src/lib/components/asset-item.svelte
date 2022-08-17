@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { ASSET_KEY, MODE_KEY } from '../../routes/bridge/index@drawer.svelte';
+
 	import { bigMul, formatCurrency, toRounding } from '../helpers/big';
 
 	import type { Asset } from '../types/asset';
@@ -26,10 +28,10 @@
 	</div>
 
 	<div
-		class=" hidden space-x-4 font-semibold child:h-10 child:w-[102px] child:rounded-full child:bg-white lg:flex"
+		class=" hidden space-x-4 font-semibold child:flex child:h-10 child:w-[102px] child:items-center child:justify-center child:rounded-full child:bg-white lg:flex"
 	>
-		<button>Deposit</button>
-		<button>Withdraw</button>
+		<a href={`/bridge?${ASSET_KEY}=${asset.asset_id}&${MODE_KEY}=deposit&`}>Deposit</a>
+		<a href={`/bridge?${ASSET_KEY}=${asset.asset_id}&${MODE_KEY}=withdraw&`}>Withdraw</a>
 		<button>Swap</button>
 	</div>
 </div>
