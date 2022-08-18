@@ -1,9 +1,12 @@
 <script lang="ts">
+	import { page } from '$app/stores';
 	import Drawer from '$lib/components/drawer/drawer.svelte';
 </script>
 
 <div class="drawer drawer-mobile">
-	<input id="drawer-toggle" type="checkbox" class="drawer-toggle" />
+	{#key $page.url.pathname}
+		<input id="drawer-toggle" type="checkbox" class="drawer-toggle" checked={false} />
+	{/key}
 	<div class="drawer-side">
 		<label for="drawer-toggle" class="drawer-overlay" />
 		<Drawer />
