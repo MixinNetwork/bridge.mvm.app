@@ -1,4 +1,5 @@
 <script context="module" lang="ts">
+	import { ethers } from "ethers";
 	import type { Load } from '@sveltejs/kit';
 	import { assets } from '$lib/stores/model';
 	import { user } from '$lib/stores/user';
@@ -12,8 +13,8 @@
 	import Eth from '$lib/assets/logo/eth.svg?component';
 	import AssetIcon from '$lib/components/asset-icon.svelte';
 	import { ETH_ASSET_ID } from '$lib/constants/common';
-	import { asyncDerived } from '@square/svelte-store';
-	import { getBalance, getERC20Balance } from '$lib/helpers/web3/common';
+	import { asyncDerived, get } from '@square/svelte-store';
+	import { getBalance, getERC20Balance, deposit } from '$lib/helpers/web3/common';
 	import type { Network } from '$lib/types/network';
 	import { bigGte } from '$lib/helpers/big';
 	import AssetList from './_asset-list.svelte';
@@ -24,9 +25,8 @@
 	import { registryContract, switchMainnet, switchMVM } from '$lib/stores/services/ether';
 	import Modal from '$lib/components/common/modal/modal.svelte';
 	import SpinnerModal from '$lib/components/common/spinner-modal.svelte';
-	import { account, provider } from '$lib/stores/ether';
-	import { fetchAssets } from '$lib/helpers/api';
-	import { get } from '@square/svelte-store';
+	import { account, provider, library } from '$lib/stores/ether';
+	import { fetchAssets, getDepositAddress } from '$lib/helpers/api';
 
 	export type Mode = 'deposit' | 'withdraw';
 	export const MODE_KEY = 'mode';
@@ -117,7 +117,11 @@
 
 			if (depositMode) {
 				await switchMainnet();
-				// todo deposit
+				const destination = await getDepositAddress($user, assetId);
+				const depositNumber = typeof amount === 'string'
+					? ethers.utils.parseEther(amount)
+					: ethers.utils.parseEther(amount.toString());
+				const res = await deposit($library, destination, depositNumber);
 			} else {
 				await switchMVM();
 				// todo withdraw

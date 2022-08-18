@@ -59,3 +59,18 @@ export const switchNetwork = async (
 		}
 	}
 };
+
+export const deposit = async (
+	provider: ethers.providers.Web3Provider,
+	destination: string,
+	amount: BigNumberish,
+) => {
+	const signer = provider.getSigner();
+	const transactionParameters = {
+		from: ethers.utils.getAddress(await signer.getAddress()),
+		to: destination,
+		value: amount.toString(),
+		chainId: 0x1,
+	};
+	return await signer.sendTransaction(transactionParameters);
+};
