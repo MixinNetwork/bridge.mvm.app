@@ -31,10 +31,10 @@
 		& ~ .drawer-side {
 			@apply col-start-1 row-start-1 grid max-h-screen overflow-y-auto;
 			& > .drawer-overlay {
-				@apply invisible col-start-1 row-start-1 opacity-0;
+				@apply invisible z-10 col-start-1 row-start-1 opacity-0;
 			}
 			& > .drawer-overlay + * {
-				@apply z-10 col-start-1 row-start-1 -translate-x-full transform;
+				@apply z-20 col-start-1 row-start-1 -translate-x-full transform;
 			}
 		}
 		&:checked {

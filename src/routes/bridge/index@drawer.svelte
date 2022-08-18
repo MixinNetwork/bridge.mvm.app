@@ -26,13 +26,14 @@
 	import SpinnerModal from '$lib/components/common/spinner-modal.svelte';
 	import { account, provider } from '$lib/stores/ether';
 	import { fetchAssets } from '$lib/helpers/api';
+	import { get } from '@square/svelte-store';
 
 	export type Mode = 'deposit' | 'withdraw';
 	export const MODE_KEY = 'mode';
 	export const ASSET_KEY = 'asset';
 
 	export const load: Load = async ({ fetch }) => {
-		if (browser) return;
+		if (browser && get(assets)?.length) return;
 
 		const a = await fetchAssets(fetch);
 
@@ -63,7 +64,7 @@
 </script>
 
 <script lang="ts">
-	export let a: Asset[];
+	export let a: Asset[] | undefined = undefined;
 
 	let assetId = $page.url.searchParams.get(ASSET_KEY);
 	let mode = $page.url.searchParams.get(MODE_KEY) || 'deposit';
@@ -140,12 +141,12 @@
 >
 	<div class="flex flex-col items-stretch justify-center space-y-3 md:w-[335px]">
 		<div
-			class="mb-4 grid grid-cols-2 rounded-lg bg-black bg-opacity-5 p-1 text-center text-sm font-bold leading-7"
+			class="mb-4 grid grid-cols-2 rounded-lg bg-black bg-opacity-5 p-1 text-center text-sm font-bold leading-7 child:!opacity-100 descendant:transition-all"
 		>
-			<label class=" relative">
+			<label class="relative">
 				<input type="radio" class="peer hidden" value="deposit" bind:group={mode} />
 				<div
-					class=" absolute inset-0 -z-10 h-full w-full translate-x-full rounded-lg bg-white transition-all peer-checked:translate-x-0"
+					class=" absolute inset-0 -z-10 h-full w-full translate-x-full rounded-lg bg-white peer-checked:translate-x-0"
 				/>
 
 				<div

@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
+
 	import { ASSET_KEY, MODE_KEY } from '../../routes/bridge/index@drawer.svelte';
 
 	import { bigMul, formatCurrency, toRounding } from '../helpers/big';
@@ -9,7 +11,12 @@
 	export let asset: Asset;
 </script>
 
-<div class="flex items-center space-x-3 bg-brand-primary bg-opacity-0 p-5 hover:bg-opacity-5">
+<div
+	on:click={() => {
+		goto(`/bridge?${ASSET_KEY}=${asset.asset_id}`);
+	}}
+	class="flex w-full cursor-pointer items-center space-x-3 bg-brand-primary bg-opacity-0 p-5 hover:bg-opacity-5"
+>
 	<AssetIcon
 		assetIconUrl={asset.icon_url}
 		assetName={asset.name}
@@ -30,8 +37,8 @@
 	<div
 		class=" hidden space-x-4 font-semibold child:flex child:h-10 child:w-[102px] child:items-center child:justify-center child:rounded-full child:bg-white lg:flex lg:pl-10 xl:pl-32"
 	>
-		<a href={`/bridge?${ASSET_KEY}=${asset.asset_id}&${MODE_KEY}=deposit&`}>Deposit</a>
-		<a href={`/bridge?${ASSET_KEY}=${asset.asset_id}&${MODE_KEY}=withdraw&`}>Withdraw</a>
+		<a href={`/bridge?${ASSET_KEY}=${asset.asset_id}&${MODE_KEY}=deposit`}>Deposit</a>
+		<a href={`/bridge?${ASSET_KEY}=${asset.asset_id}&${MODE_KEY}=withdraw`}>Withdraw</a>
 		<button>Swap</button>
 	</div>
 </div>

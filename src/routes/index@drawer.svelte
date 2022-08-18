@@ -13,9 +13,10 @@
 	import AssetItem from '$lib/components/asset-item.svelte';
 	import { browser } from '$app/env';
 	import { fetchAssets } from '$lib/helpers/api';
+	import { get } from '@square/svelte-store';
 
 	export const load: Load = async ({ fetch }) => {
-		if (browser) {
+		if (browser && get(assets)?.length) {
 			fetchAssets(fetch).then((a) => assets.set(a));
 			return;
 		}
@@ -27,7 +28,7 @@
 </script>
 
 <script lang="ts">
-	export let a: Asset[];
+	export let a: Asset[] | undefined = undefined;
 
 	$: a && assets.set(a);
 </script>

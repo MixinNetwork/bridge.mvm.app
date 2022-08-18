@@ -2,6 +2,7 @@
 // for information about these interfaces
 // and what to do when importing types
 import type { User } from './lib/types/user';
+import type { ProviderKey } from './lib/helpers/web3client/type';
 
 declare global {
 	namespace App {
@@ -18,7 +19,7 @@ declare global {
 
 		interface Session {
 			user?: User;
-			provider?: string;
+			provider?: ProviderKey;
 		}
 
 		// interface Stuff {}

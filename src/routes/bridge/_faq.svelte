@@ -1,4 +1,4 @@
-<div class=" space-y-5 rounded-xl bg-white px-5 pt-4 pb-20 text-lg">
+<div class=" space-y-5 rounded-xl bg-white px-5 pt-4 pb-20">
 	<div class=" text-xl font-bold">FAQ</div>
 	<div class=" font-semibold">Where can I use the MVM Web Wallet?</div>
 

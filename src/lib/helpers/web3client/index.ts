@@ -1,5 +1,5 @@
 import type { Provider, ProviderKey } from './type';
-import { providerKey } from '../../stores/provider';
+import { providerKey, setProviderKey } from '../../stores/provider';
 import { get } from '@square/svelte-store';
 
 export const createWeb3Client = async (provider: ProviderKey = 'injected') => {
@@ -20,7 +20,7 @@ export const createWeb3Client = async (provider: ProviderKey = 'injected') => {
 		},
 		connect: async () => {
 			const p = await connect();
-			providerKey.set(provider);
+			setProviderKey(provider);
 			return p as Provider;
 		}
 	};
