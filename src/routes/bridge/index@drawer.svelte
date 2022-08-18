@@ -115,9 +115,10 @@
 			// current wallet address
 			$account;
 
-			const transferAmount = typeof amount === 'string'
-				? ethers.utils.parseEther(amount)
-				: ethers.utils.parseEther(amount.toString());
+			const transferAmount =
+				typeof amount === 'string'
+					? ethers.utils.parseEther(amount)
+					: ethers.utils.parseEther(amount.toString());
 
 			if (depositMode) {
 				await switchMainnet();
