@@ -39,23 +39,23 @@ export const getERC20Balance = async ({
 };
 
 export const switchNetwork = async (
-	provider: ethers.providers.ExternalProvider,
+	provider: ethers.providers.Web3Provider,
 	network: Network
 ) => {
 	const number = network === 'mainnet' ? MAINNET_CHAIN_ID : MVM_CHAIN_ID;
 
 	try {
-		await provider.request?.({
-			method: 'wallet_switchEthereumChain',
-			params: [{ chainId: toHex(number) }]
-		});
+		await provider.send(
+			'wallet_switchEthereumChain',
+			[{ chainId: toHex(number) }]
+		);
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	} catch (switchError: any) {
 		if (switchError.code === 4902) {
-			await provider.request?.({
-				method: 'wallet_addEthereumChain',
-				params: [networkParams[toHex(number)]]
-			});
+			await provider.send(
+				'wallet_addEthereumChain',
+				[networkParams[toHex(number)]]
+			);
 		}
 	}
 };

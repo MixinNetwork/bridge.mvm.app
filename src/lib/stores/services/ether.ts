@@ -4,12 +4,12 @@ import { REGISTRY_ABI } from '../../constants/abis';
 import { REGISTRY_ADDRESS } from '../../constants/common';
 import { switchNetwork } from '../../helpers/web3/common';
 import type { Network } from '../../types/network';
-import { provider, library } from '../ether';
+import { library } from '../ether';
 
 const switchNetworkWithProvider = async (network: Network) => {
-	const $provider = get(provider);
-	if (!$provider) throw new Error('No provider');
-	return switchNetwork($provider.provider, network);
+	const $library = get(library);
+	if (!$library) throw new Error('No provider');
+	return switchNetwork($library, network);
 };
 
 export const switchMVM = () => switchNetworkWithProvider('mvm');
