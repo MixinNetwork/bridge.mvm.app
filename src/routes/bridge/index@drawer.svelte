@@ -1,5 +1,4 @@
 <script context="module" lang="ts">
-	import { ethers } from 'ethers';
 	import type { Load } from '@sveltejs/kit';
 	import { assets } from '$lib/stores/model';
 	import { user } from '$lib/stores/user';
