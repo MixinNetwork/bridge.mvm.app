@@ -38,24 +38,15 @@ export const getERC20Balance = async ({
 	return utils.formatUnits(balance, unitName);
 };
 
-export const switchNetwork = async (
-	provider: ethers.providers.Web3Provider,
-	network: Network
-) => {
+export const switchNetwork = async (provider: ethers.providers.Web3Provider, network: Network) => {
 	const number = network === 'mainnet' ? MAINNET_CHAIN_ID : MVM_CHAIN_ID;
 
 	try {
-		await provider.send(
-			'wallet_switchEthereumChain',
-			[{ chainId: toHex(number) }]
-		);
+		await provider.send('wallet_switchEthereumChain', [{ chainId: toHex(number) }]);
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	} catch (switchError: any) {
 		if (switchError.code === 4902) {
-			await provider.send(
-				'wallet_addEthereumChain',
-				[networkParams[toHex(number)]]
-			);
+			await provider.send('wallet_addEthereumChain', [networkParams[toHex(number)]]);
 		}
 	}
 };
@@ -63,14 +54,14 @@ export const switchNetwork = async (
 export const deposit = async (
 	provider: ethers.providers.Web3Provider,
 	destination: string,
-	amount: BigNumberish,
+	amount: BigNumberish
 ) => {
 	const signer = provider.getSigner();
 	const transactionParameters = {
 		from: ethers.utils.getAddress(await signer.getAddress()),
 		to: destination,
 		value: amount.toString(),
-		chainId: 0x1,
+		chainId: 0x1
 	};
 	return await signer.sendTransaction(transactionParameters);
 };

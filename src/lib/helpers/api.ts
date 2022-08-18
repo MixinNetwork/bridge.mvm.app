@@ -1,4 +1,4 @@
-import { MixinApi } from "@mixin.dev/mixin-node-sdk";
+import { MixinApi } from '@mixin.dev/mixin-node-sdk';
 import type { Asset } from '../types/asset';
 import type { RegisteredUser, User } from '../types/user';
 
@@ -23,9 +23,9 @@ export const getDepositAddress = async (user: User, assetId: string) => {
 	const keystore = {
 		user_id: user.user_id,
 		private_key: user.key.private_key,
-		session_id: user.session_id,
+		session_id: user.session_id
 	};
-	const mixinClient = MixinApi({keystore});
+	const mixinClient = MixinApi({ keystore });
 	const { destination } = await mixinClient.asset.fetch(assetId);
 	return destination;
 };

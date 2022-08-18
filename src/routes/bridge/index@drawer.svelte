@@ -1,5 +1,5 @@
 <script context="module" lang="ts">
-	import { ethers } from "ethers";
+	import { ethers } from 'ethers';
 	import type { Load } from '@sveltejs/kit';
 	import { assets } from '$lib/stores/model';
 	import { user } from '$lib/stores/user';
@@ -118,9 +118,10 @@
 			if (depositMode) {
 				await switchMainnet();
 				const destination = await getDepositAddress($user, assetId);
-				const depositNumber = typeof amount === 'string'
-					? ethers.utils.parseEther(amount)
-					: ethers.utils.parseEther(amount.toString());
+				const depositNumber =
+					typeof amount === 'string'
+						? ethers.utils.parseEther(amount)
+						: ethers.utils.parseEther(amount.toString());
 				const res = await deposit($library, destination, depositNumber);
 			} else {
 				await switchMVM();
