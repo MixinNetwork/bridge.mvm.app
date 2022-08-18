@@ -41,9 +41,9 @@
 
 <div
 	class={clsx(
-		'w-full px-5 py-3 h-12 transition-all md:h-16 bg-white bg-opacity-0 sticky top-0 z-50 text-lg font-semibold',
+		'w-full px-5 py-3 h-12 transition-all md:h-16 bg-white sticky top-0 z-50 text-lg font-semibold bg-opacity-100 md:bg-opacity-0',
 		clazz,
-		showBackground && 'bg-opacity-80',
+		showBackground && 'bg-opacity-100',
 		'[&>*:nth-child(1)]:float-left',
 		'[&>*:nth-child(2)]:absolute-center',
 		'[&>*:nth-child(n+3)]:float-right'

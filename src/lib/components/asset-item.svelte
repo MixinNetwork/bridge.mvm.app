@@ -39,6 +39,6 @@
 	>
 		<a href={`/bridge?${ASSET_KEY}=${asset.asset_id}&${MODE_KEY}=deposit`}>Deposit</a>
 		<a href={`/bridge?${ASSET_KEY}=${asset.asset_id}&${MODE_KEY}=withdraw`}>Withdraw</a>
-		<button>Swap</button>
+		<!-- <button>Swap</button> -->
 	</div>
 </div>

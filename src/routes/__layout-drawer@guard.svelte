@@ -11,7 +11,7 @@
 		<label for="drawer-toggle" class="drawer-overlay" />
 		<Drawer />
 	</div>
-	<div class="drawer-content">
+	<div class="drawer-content flex flex-col">
 		<slot />
 	</div>
 </div>

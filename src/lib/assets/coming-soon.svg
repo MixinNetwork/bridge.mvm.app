@@ -1,0 +1,19 @@
+<svg width="108" height="74" viewBox="0 0 108 74" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <g opacity="0.1">
+        <ellipse cx="53.1265" cy="40" rx="28.0669" ry="28" stroke="black" stroke-width="4" />
+        <path
+            d="M32.0762 20.9051C16.0892 18.4842 4.59973 19.2876 3.34939 23.6278C1.49939 30.0497 22.7655 41.7828 50.8486 49.8343C78.9317 57.8859 103.197 59.207 105.047 52.7852C106.324 48.352 96.5858 41.3879 81.1933 34.8511"
+            stroke="black" stroke-width="4" />
+        <ellipse cx="85.2035" cy="11" rx="3.00717" ry="3" stroke="black" stroke-width="3" />
+        <ellipse cx="83.6993" cy="67.5" rx="2.50598" ry="2.5" stroke="black" stroke-width="3" />
+        <ellipse cx="7.51813" cy="68.5" rx="3.50837" ry="3.5" stroke="black" stroke-width="3" />
+        <ellipse cx="6.51574" cy="53.5" rx="2.50598" ry="2.5" fill="black" />
+        <ellipse cx="73.6759" cy="6.5" rx="2.50598" ry="2.5" fill="black" />
+        <ellipse cx="102.244" cy="2" rx="2.00478" ry="2" fill="black" />
+        <ellipse cx="94.2245" cy="28" rx="2.00478" ry="2" fill="black" />
+        <ellipse cx="30.0722" cy="72" rx="2.00478" ry="2" fill="black" />
+        <path
+            d="M33.6622 29.6499C32.9287 31.0198 32.3363 32.4763 31.9043 34M37.0885 24.9002C41.1092 20.6516 46.8076 18 53.1268 18C54.6727 18 56.1814 18.1587 57.6375 18.4606"
+            stroke="black" stroke-width="3" stroke-linecap="round" />
+    </g>
+</svg>
