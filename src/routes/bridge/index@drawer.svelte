@@ -26,7 +26,7 @@
 	import Modal from '$lib/components/common/modal/modal.svelte';
 	import SpinnerModal from '$lib/components/common/spinner-modal.svelte';
 	import { account, provider, library } from '$lib/stores/ether';
-	import { fetchAssets, getDepositAddress } from '$lib/helpers/api';
+	import { fetchAssets } from '$lib/helpers/api';
 
 	export type Mode = 'deposit' | 'withdraw';
 	export const MODE_KEY = 'mode';
@@ -115,14 +115,13 @@
 			// current wallet address
 			$account;
 
+			const transferAmount = typeof amount === 'string'
+				? ethers.utils.parseEther(amount)
+				: ethers.utils.parseEther(amount.toString());
+
 			if (depositMode) {
 				await switchMainnet();
-				const destination = await getDepositAddress($user, assetId);
-				const depositNumber =
-					typeof amount === 'string'
-						? ethers.utils.parseEther(amount)
-						: ethers.utils.parseEther(amount.toString());
-				const res = await deposit($library, destination, depositNumber);
+				await deposit($library, asset.destination, transferAmount);
 			} else {
 				await switchMVM();
 				// todo withdraw
