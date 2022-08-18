@@ -22,10 +22,10 @@
 	import { goto } from '$app/navigation';
 	import { browser } from '$app/env';
 	import Faq from './_faq.svelte';
-	import { registryContract, switchMainnet, switchMVM } from '$lib/stores/services/ether';
+	import { switchMainnet, switchMVM } from '$lib/stores/services/ether';
 	import Modal from '$lib/components/common/modal/modal.svelte';
 	import SpinnerModal from '$lib/components/common/spinner-modal.svelte';
-	import { account, provider, library } from '$lib/stores/ether';
+	import { library } from '$lib/stores/ether';
 	import { fetchAssets } from '$lib/helpers/api';
 
 	export type Mode = 'deposit' | 'withdraw';
@@ -108,21 +108,11 @@
 		loading = true;
 
 		try {
-			// contract
-			$registryContract;
-			// current provider
-			$provider;
-			// current wallet address
-			$account;
-
-			const transferAmount =
-				typeof amount === 'string'
-					? ethers.utils.parseEther(amount)
-					: ethers.utils.parseEther(amount.toString());
+			const value = typeof amount === 'string' ? amount : amount.toString();
 
 			if (depositMode) {
 				await switchMainnet();
-				await deposit($library, asset.destination, transferAmount);
+				await deposit($library, asset, value);
 			} else {
 				await switchMVM();
 				// todo withdraw

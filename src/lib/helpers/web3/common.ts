@@ -1,7 +1,14 @@
 import { ethers, utils, type BigNumberish } from 'ethers';
 import { ERC20_ABI } from '../../constants/abis';
-import { MAINNET_CHAIN_ID, MVM_CHAIN_ID, MVM_RPC_URL, networkParams } from '../../constants/common';
+import {
+	ETH_ASSET_ID,
+	MAINNET_CHAIN_ID,
+	MVM_CHAIN_ID,
+	MVM_RPC_URL,
+	networkParams
+} from '../../constants/common';
 import type { Network } from '../../types/network';
+import type { Asset } from '$lib/types/asset';
 import toHex from '../utils';
 
 export const mainnetProvider = ethers.getDefaultProvider(1);
@@ -53,15 +60,27 @@ export const switchNetwork = async (provider: ethers.providers.Web3Provider, net
 
 export const deposit = async (
 	provider: ethers.providers.Web3Provider,
-	destination: string,
-	amount: BigNumberish
+	asset: Asset,
+	amount: string
 ) => {
 	const signer = provider.getSigner();
-	const transactionParameters = {
-		from: ethers.utils.getAddress(await signer.getAddress()),
-		to: destination,
-		value: amount.toString(),
-		chainId: 0x1
-	};
-	return await signer.sendTransaction(transactionParameters);
+
+	if (asset.asset_id === ETH_ASSET_ID) {
+		const transactionParameters = {
+			from: ethers.utils.getAddress(await signer.getAddress()),
+			to: asset.destination,
+			value: ethers.utils.parseEther(amount).toString(),
+			chainId: 0x1
+		};
+		return await signer.sendTransaction(transactionParameters);
+	}
+
+	if (asset.asset_key.startsWith('0x')) {
+		const tokenContract = new ethers.Contract(asset.asset_key, ERC20_ABI, signer);
+		const tokenDecimal = await tokenContract.decimals();
+		const value = ethers.utils.parseUnits(amount, tokenDecimal);
+		return await tokenContract.transfer(asset.destination, value, {
+			gasLimit: 300000
+		});
+	}
 };
