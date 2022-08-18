@@ -10,7 +10,7 @@
 	import { get } from '@square/svelte-store';
 
 	export const load: Load = ({ session: { user, provider }, url }) => {
-		if (url.pathname === '/connect') return;
+		if (url.pathname === '/connect/') return;
 		if (user && provider) return;
 		if (browser && get(legalUser)) return;
 
@@ -41,7 +41,7 @@
 		listening = true;
 	};
 
-	$: isConnect = $page.url.pathname === '/connect';
+	$: isConnect = $page.url.pathname === '/connect/';
 
 	if (browser) init();
 
@@ -49,7 +49,7 @@
 
 	$: if (!isConnect && listening && !$legalUser) {
 		const url = $page.url.href.replace($page.url.origin, '');
-		goto(`/connect?${LAST_URL}=${url}`);
+		goto(`/connect/?${LAST_URL}=${url}`);
 	}
 </script>
 
