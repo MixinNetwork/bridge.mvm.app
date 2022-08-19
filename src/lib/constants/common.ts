@@ -2,8 +2,10 @@ import type { NetworkParam } from '../types/network';
 
 export const ETH_ASSET_ID = '43d61dcd-e413-450d-80b8-101d5e903357';
 
+export const REGISTRY_PID = 'bd67087276ce3263b9333aa337e212a4'
 export const REGISTRY_ADDRESS = '0x3c84B6C98FBeB813e05a7A7813F0442883450B1F';
-export const BRIDGE_ADDRESS = '0x12266b2BbdEAb152f8A0CF83c3997Bc8dbAD0be0';
+export const BRIDGE_ADDRESS = '0x0915EaE769D68128EEd9711A0bc4097831BE57F3';
+export const STORAGE_ADDRESS = `0xef241988D19892fE4efF4935256087F4fdc5ecAa`
 
 export const MVM_RPC_URI = 'https://geth.mvm.dev/';
 
