@@ -23,7 +23,7 @@
 		"@sveltejs/kit": "next",
 		"@types/big.js": "^6.1.5",
 		"@types/cookie": "^0.5.1",
-		"@types/eslint": "^8.4.5",
+		"@types/eslint": "^8.4.6",
 		"@types/js-cookie": "^3.0.2",
 		"@types/lodash-es": "^4.17.6",
 		"@types/prettier": "^2.6.4",
