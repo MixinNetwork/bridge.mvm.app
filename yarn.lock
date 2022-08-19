@@ -225,10 +225,10 @@
   resolved "https://registry.yarnpkg.com/@cloudflare/workers-types/-/workers-types-3.14.1.tgz#8927ad8aa4e4cdd42d25793148337ed04f927021"
   integrity sha512-B1/plF62pt+H2IJHvApK8fdOJAVsvojvacuac8x8s+JIyqbropMyqNqHTKLm3YD8ZFLGwYeFTudU+PQ7vGvBdA==
 
-"@coinbase/wallet-sdk@^3.4.2":
-  version "3.4.2"
-  resolved "https://registry.yarnpkg.com/@coinbase/wallet-sdk/-/wallet-sdk-3.4.2.tgz#e4130511142556f8a09e75d1f52f43aba6bff092"
-  integrity sha512-AALPbVciVco9/7NgT2MKrmrMduN2Cd7t+QWmmO6WU72U/OUHXshIAZAJxMC0j7+7N3xA7x9SEbJ7+O5bHS33Ug==
+"@coinbase/wallet-sdk@^3.5.0":
+  version "3.5.0"
+  resolved "https://registry.yarnpkg.com/@coinbase/wallet-sdk/-/wallet-sdk-3.5.0.tgz#a50cbe5779972f5471b20cbed200d3aae80b8d4c"
+  integrity sha512-xdYMpz98gNwhOnSCh7Rm+qziI/K7LnPJnqHI93sZIRiRGtRTtDihcxjVxV2s1rj9NsYjC5jcKiOEgm8VqIK8Tg==
   dependencies:
     "@metamask/safe-event-emitter" "2.0.0"
     "@solana/web3.js" "1.52.0"
@@ -8647,10 +8647,10 @@ supports-preserve-symlinks-flag@^1.0.0:
   resolved "https://registry.yarnpkg.com/supports-preserve-symlinks-flag/-/supports-preserve-symlinks-flag-1.0.0.tgz#6eda4bd344a3c94aea376d4cc31bc77311039e09"
   integrity sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==
 
-svelte-check@^2.7.1:
-  version "2.8.0"
-  resolved "https://registry.yarnpkg.com/svelte-check/-/svelte-check-2.8.0.tgz#cfe1354e72545839c47f0f022c2c007454cd4095"
-  integrity sha512-HRL66BxffMAZusqe5I5k26mRWQ+BobGd9Rxm3onh7ZVu0nTk8YTKJ9vu3LVPjUGLU9IX7zS+jmwPVhJYdXJ8vg==
+svelte-check@^2.8.1:
+  version "2.8.1"
+  resolved "https://registry.yarnpkg.com/svelte-check/-/svelte-check-2.8.1.tgz#484499d66ad6a5043e9dfeb91b0dfadf2a9c63b0"
+  integrity sha512-cibyY1sgt3ONIDnQbSgV2X9AJFhwEslRHNo95lijrYfPzVEvTvbmL2ohsUyqB5L7j1GhLXtQbjCJ4lZZ/fwbeQ==
   dependencies:
     "@jridgewell/trace-mapping" "^0.3.9"
     chokidar "^3.4.1"
