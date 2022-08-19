@@ -13,7 +13,7 @@
 	import AssetIcon from '$lib/components/asset-icon.svelte';
 	import { ETH_ASSET_ID } from '$lib/constants/common';
 	import { asyncDerived, get } from '@square/svelte-store';
-	import { getBalance, getERC20Balance, deposit } from '$lib/helpers/web3/common';
+	import { getBalance, getERC20Balance, deposit, withdraw } from '$lib/helpers/web3/common';
 	import type { Network } from '$lib/types/network';
 	import { bigGte } from '$lib/helpers/big';
 	import AssetList from './_asset-list.svelte';
@@ -91,7 +91,7 @@
 	$: mainnetBalance = buildBalanceStore({ assetId: asset.asset_id, network: 'mainnet' });
 	$: mvmBalance = buildBalanceStore({ assetId: asset.asset_id, network: 'mvm' });
 
-	$: cacheMvmBalance = $mainnetBalance || asset.balance;
+	$: cacheMvmBalance = $mvmBalance || asset.balance;
 
 	$: fromBalance = depositMode ? $mainnetBalance : cacheMvmBalance;
 	$: toBalance = depositMode ? cacheMvmBalance : $mainnetBalance;
@@ -108,13 +108,12 @@
 
 		try {
 			const value = typeof amount === 'string' ? amount : amount.toString();
-
 			if (depositMode) {
 				await switchMainnet();
 				await deposit($library, asset, value);
 			} else {
 				await switchMVM();
-				// todo withdraw
+				await withdraw($library, asset, $user.contract, value)
 			}
 		} finally {
 			loading = false;

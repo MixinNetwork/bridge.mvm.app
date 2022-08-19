@@ -1,3 +1,4 @@
+import { NetworkClient } from "@mixin.dev/mixin-node-sdk";
 import type { Asset } from '../types/asset';
 import type { RegisteredUser } from '../types/user';
 
@@ -9,6 +10,12 @@ export const register = async (address: string): Promise<RegisteredUser> => {
 
 	const { user } = await response.json();
 	return user;
+};
+
+export const fetchWithdrawalFee = async (asset_id: string) => {
+	const networkClient = NetworkClient();
+	const asset = await networkClient.fetchAsset(asset_id);
+	return asset.fee;
 };
 
 export const fetchAssets = async (
