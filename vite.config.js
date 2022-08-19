@@ -1,12 +1,18 @@
 import { sveltekit } from '@sveltejs/kit/vite';
 import nodePolyfills from 'rollup-plugin-polyfill-node';
 import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfill';
+import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill'
 import svg from '@poppanator/sveltekit-svg';
 
 const production = process.env.NODE_ENV === 'production';
 
 /** @type {import('vite').UserConfig} */
 const config = {
+	resolve: {
+		alias: {
+			path: 'path-browserify'
+		}
+	},
 	plugins: [
 		sveltekit(),
 		// ↓ Needed for development mode
@@ -36,7 +42,12 @@ const config = {
 				global: 'globalThis'
 			},
 			// Enable esbuild polyfill plugins
-			plugins: [NodeModulesPolyfillPlugin()]
+			plugins: [
+				NodeGlobalsPolyfillPlugin({
+					buffer: true,
+				}),
+				// NodeModulesPolyfillPlugin(),
+			]
 		}
 	},
 
@@ -51,7 +62,7 @@ const config = {
 		commonjsOptions: {
 			transformMixedEsModules: true
 		}
-	}
+	},
 };
 
 export default config;
