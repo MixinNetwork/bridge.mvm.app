@@ -1,4 +1,4 @@
-import { NetworkClient } from "@mixin.dev/mixin-node-sdk";
+import { NetworkClient } from '@mixin.dev/mixin-node-sdk';
 import type { Asset } from '../types/asset';
 import type { RegisteredUser } from '../types/user';
 

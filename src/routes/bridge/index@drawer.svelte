@@ -113,7 +113,7 @@
 				await deposit($library, asset, value);
 			} else {
 				await switchMVM();
-				await withdraw($library, asset, $user.contract, value)
+				await withdraw($library, asset, $user.contract, value);
 			}
 		} finally {
 			loading = false;

@@ -11,8 +11,8 @@ import {
 import type { Network } from '../../types/network';
 import type { Asset } from '$lib/types/asset';
 import toHex from '../utils';
-import { getWithdrawalExtra } from "../sign";
-import { fetchWithdrawalFee } from "../api";
+import { getWithdrawalExtra } from '../sign';
+import { fetchWithdrawalFee } from '../api';
 
 export const mainnetProvider = ethers.getDefaultProvider(1);
 export const mvmProvider = ethers.getDefaultProvider(MVM_RPC_URL);
@@ -34,7 +34,7 @@ export const getBalance = async ({
 export const getERC20Balance = async ({
 	account,
 	contractAddress,
-	network,
+	network
 }: {
 	account: string;
 	contractAddress: string;
@@ -43,7 +43,7 @@ export const getERC20Balance = async ({
 }) => {
 	const provider = network === 'mainnet' ? mainnetProvider : mvmProvider;
 	const contract = new ethers.Contract(contractAddress, ERC20_ABI, provider);
-	const decimals = await contract.decimals()
+	const decimals = await contract.decimals();
 	const balance = await contract.balanceOf(account);
 	return utils.formatUnits(balance, decimals);
 };
@@ -95,7 +95,7 @@ export const withdraw = async (
 	amount: string,
 	tag = ''
 ) => {
-	const uuid = (await import('uuid'));
+	const uuid = await import('uuid');
 	const traceId = uuid.v4();
 
 	const signer = provider.getSigner();
@@ -113,7 +113,7 @@ export const withdraw = async (
 		await bridge.release(userContract, assetExtra, {
 			gasPrice: 10000000,
 			gasLimit: 350000,
-			value: assetAmount,
+			value: assetAmount
 		});
 
 		await bridge.release(userContract, feeExtra, {
@@ -131,7 +131,7 @@ export const withdraw = async (
 
 		await tokenContract.transferWithExtra(userContract, value, assetExtra, {
 			gasPrice: 10000000,
-			gasLimit: 350000,
+			gasLimit: 350000
 		});
 
 		await bridge.release(userContract, feeExtra, {
@@ -140,4 +140,4 @@ export const withdraw = async (
 			value: feeAmount
 		});
 	}
-}
+};

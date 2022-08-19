@@ -1,7 +1,7 @@
 import { sveltekit } from '@sveltejs/kit/vite';
 import nodePolyfills from 'rollup-plugin-polyfill-node';
 import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfill';
-import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill'
+import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill';
 import svg from '@poppanator/sveltekit-svg';
 
 const production = process.env.NODE_ENV === 'production';
@@ -44,8 +44,8 @@ const config = {
 			// Enable esbuild polyfill plugins
 			plugins: [
 				NodeGlobalsPolyfillPlugin({
-					buffer: true,
-				}),
+					buffer: true
+				})
 				// NodeModulesPolyfillPlugin(),
 			]
 		}
@@ -62,7 +62,7 @@ const config = {
 		commonjsOptions: {
 			transformMixedEsModules: true
 		}
-	},
+	}
 };
 
 export default config;
