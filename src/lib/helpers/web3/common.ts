@@ -35,7 +35,6 @@ export const getERC20Balance = async ({
 	account,
 	contractAddress,
 	network,
-	unitName = 8
 }: {
 	account: string;
 	contractAddress: string;
