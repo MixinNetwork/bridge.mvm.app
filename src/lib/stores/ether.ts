@@ -17,7 +17,7 @@ export const setProvider = async (
 	provider: (ethers.providers.ExternalProvider | ethers.providers.JsonRpcFetchFunc) &
 		ethers.providers.Web3Provider
 ) => {
-	const library: ethers.providers.Web3Provider = new ethers.providers.Web3Provider(provider);
+	const library: ethers.providers.Web3Provider = new ethers.providers.Web3Provider(provider, 'any');
 	const accounts = await library.listAccounts();
 	const network = await library.getNetwork();
 
