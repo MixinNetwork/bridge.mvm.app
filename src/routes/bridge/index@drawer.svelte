@@ -12,8 +12,8 @@
 	import Eth from '$lib/assets/logo/eth.svg?component';
 	import AssetIcon from '$lib/components/asset-icon.svelte';
 	import { ETH_ASSET_ID } from '$lib/constants/common';
-	import { asyncDerived } from '@square/svelte-store';
-	import { getBalance, getERC20Balance } from '$lib/helpers/web3/common';
+	import { asyncDerived, get } from '@square/svelte-store';
+	import { getBalance, getERC20Balance, deposit, withdraw } from '$lib/helpers/web3/common';
 	import type { Network } from '$lib/types/network';
 	import { bigGte } from '$lib/helpers/big';
 	import AssetList from './_asset-list.svelte';
@@ -21,12 +21,11 @@
 	import { goto } from '$app/navigation';
 	import { browser } from '$app/env';
 	import Faq from './_faq.svelte';
-	import { registryContract, switchMainnet, switchMVM } from '$lib/stores/services/ether';
+	import { switchMainnet, switchMVM } from '$lib/stores/services/ether';
 	import Modal from '$lib/components/common/modal/modal.svelte';
 	import SpinnerModal from '$lib/components/common/spinner-modal.svelte';
-	import { account, provider } from '$lib/stores/ether';
+	import { library } from '$lib/stores/ether';
 	import { fetchAssets } from '$lib/helpers/api';
-	import { get } from '@square/svelte-store';
 
 	export type Mode = 'deposit' | 'withdraw';
 	export const MODE_KEY = 'mode';
@@ -92,7 +91,7 @@
 	$: mainnetBalance = buildBalanceStore({ assetId: asset.asset_id, network: 'mainnet' });
 	$: mvmBalance = buildBalanceStore({ assetId: asset.asset_id, network: 'mvm' });
 
-	$: cacheMvmBalance = $mainnetBalance || asset.balance;
+	$: cacheMvmBalance = $mvmBalance || asset.balance;
 
 	$: fromBalance = depositMode ? $mainnetBalance : cacheMvmBalance;
 	$: toBalance = depositMode ? cacheMvmBalance : $mainnetBalance;
@@ -108,19 +107,13 @@
 		loading = true;
 
 		try {
-			// contract
-			$registryContract;
-			// current provider
-			$provider;
-			// current wallet address
-			$account;
-
+			const value = typeof amount === 'string' ? amount : amount.toString();
 			if (depositMode) {
 				await switchMainnet();
-				// todo deposit
+				await deposit($library, asset, value);
 			} else {
 				await switchMVM();
-				// todo withdraw
+				await withdraw($library, asset, $user.contract, value);
 			}
 		} finally {
 			loading = false;
