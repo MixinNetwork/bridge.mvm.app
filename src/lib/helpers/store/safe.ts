@@ -2,10 +2,10 @@
 //
 import { browser } from '$app/env';
 import { getStores } from '$app/stores';
-import { nanoid } from 'nanoid';
+import { v4 } from 'uuid';
 import { get, writable as svelteWritable, type StartStopNotifier } from '@square/svelte-store';
 
-const storesKey = `sandbox_${nanoid()}`;
+const storesKey = `sandbox_${v4()}`;
 
 interface SandboxedStore<T> {
 	value: T;
@@ -30,7 +30,7 @@ interface SandboxedStore<T> {
  * @param {any} initialValue An initial value to set the store to
  */
 export const safeWritable = <T>(initialValue: T, start?: StartStopNotifier<T>) => {
-	const key = nanoid();
+	const key = v4();
 
 	function setStore(value: T) {
 		try {

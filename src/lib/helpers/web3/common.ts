@@ -1,4 +1,5 @@
 import { ethers, utils, type BigNumberish } from 'ethers';
+import { v4 } from 'uuid';
 import { BRIDGE_ABI, ERC20_ABI, MVM_ERC20_ABI } from '../../constants/abis';
 import {
 	BRIDGE_ADDRESS,
@@ -95,8 +96,7 @@ export const withdraw = async (
 	amount: string,
 	tag = ''
 ) => {
-	const uuid = await import('uuid');
-	const traceId = uuid.v4();
+	const traceId = v4();
 
 	const signer = provider.getSigner();
 	const destination = await signer.getAddress();
@@ -123,9 +123,9 @@ export const withdraw = async (
 		});
 	}
 
-	if (asset.chain_id === ETH_ASSET_ID) {
+	if (asset.chain_id === ETH_ASSET_ID && asset.contract) {
 		const tokenAddress = asset.contract;
-		const tokenContract = new ethers.Contract(tokenAddress!, MVM_ERC20_ABI, signer);
+		const tokenContract = new ethers.Contract(tokenAddress, MVM_ERC20_ABI, signer);
 		const tokenDecimal = await tokenContract.decimals();
 		const value = ethers.utils.parseUnits(amount, tokenDecimal);
 
@@ -140,4 +140,6 @@ export const withdraw = async (
 			value: feeAmount
 		});
 	}
+
+	throw new Error('Invalid asset');
 };
