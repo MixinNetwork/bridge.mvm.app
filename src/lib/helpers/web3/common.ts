@@ -40,7 +40,6 @@ export const getERC20Balance = async ({
 	account: string;
 	contractAddress: string;
 	network: Network;
-	unitName?: BigNumberish;
 }) => {
 	const provider = network === 'mainnet' ? mainnetProvider : mvmProvider;
 	const contract = new ethers.Contract(contractAddress, ERC20_ABI, provider);
