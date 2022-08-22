@@ -1,3 +1,4 @@
+import toHex from '../helpers/utils';
 import type { NetworkParam } from '../types/network';
 
 export const ETH_ASSET_ID = '43d61dcd-e413-450d-80b8-101d5e903357';
@@ -21,8 +22,8 @@ export const EMPTY_ADDRESS = '0x0000000000000000000000000000000000000000';
 export const MAINNET_CHAIN_ID = 1;
 export const MVM_CHAIN_ID = 73927;
 
-export const MAINNET_CHAIN_HEX_ID = '0x1';
-export const MVM_CHAIN_HEX_ID = '0x120C7';
+export const MAINNET_CHAIN_HEX_ID = toHex(MAINNET_CHAIN_ID);
+export const MVM_CHAIN_HEX_ID = toHex(MVM_CHAIN_ID);
 
 export const WHITELIST = [
 	'c6d0c728-2624-429b-8e0d-d9d19b6592fa', // btc
@@ -47,7 +48,7 @@ export const networkParams: Record<string, NetworkParam> = {
 	[MVM_CHAIN_HEX_ID]: {
 		chainId: MVM_CHAIN_HEX_ID,
 		rpcUrls: [MVM_RPC_URL],
-		chainName: 'MVM Mainnet',
+		chainName: 'Mixin Virtual Machine',
 		nativeCurrency: { name: 'Ethereum', decimals: 18, symbol: 'ETH' },
 		blockExplorerUrls: [MVM_SCAN_URL]
 	}

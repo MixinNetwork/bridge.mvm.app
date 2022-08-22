@@ -49,14 +49,23 @@ export const getERC20Balance = async ({
 };
 
 export const switchNetwork = async (provider: ethers.providers.Web3Provider, network: Network) => {
+	const request = provider.provider.request;
+	if (!request) throw new Error('Web3Provider.provider.request must be defined');
+
 	const number = network === 'mainnet' ? MAINNET_CHAIN_ID : MVM_CHAIN_ID;
 
 	try {
-		await provider.send('wallet_switchEthereumChain', [{ chainId: toHex(number) }]);
+		await request({
+			method: 'wallet_switchEthereumChain',
+			params: [{ chainId: toHex(number) }]
+		});
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	} catch (switchError: any) {
 		if (switchError?.code !== 4902) return;
-		await provider.send('wallet_addEthereumChain', [networkParams[toHex(number)]]);
+		await request({
+			method: 'wallet_addEthereumChain',
+			params: [networkParams[toHex(number)]]
+		});
 	}
 };
 
@@ -96,6 +105,8 @@ export const withdraw = async (
 	amount: string,
 	tag = ''
 ) => {
+	await switchNetwork(provider, 'mvm');
+
 	const traceId = v4();
 
 	const signer = provider.getSigner();
@@ -106,8 +117,6 @@ export const withdraw = async (
 	const bridge = new ethers.Contract(BRIDGE_ADDRESS, BRIDGE_ABI, signer);
 	const fee = await fetchWithdrawalFee(asset.asset_id);
 	const feeAmount = ethers.utils.parseEther(Number(fee).toFixed(8));
-
-	await switchNetwork(provider, 'mvm');
 
 	if (asset.asset_id === ETH_ASSET_ID) {
 		const assetAmount = ethers.utils.parseEther(Number(amount).toFixed(8));
