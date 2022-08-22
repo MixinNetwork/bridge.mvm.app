@@ -102,7 +102,7 @@
 
 	let loading = false;
 	const transfer = async () => {
-		if (!amount) return;
+		if (!amount || !$library || !$user) return;
 
 		loading = true;
 
