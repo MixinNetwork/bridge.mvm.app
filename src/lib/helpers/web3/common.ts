@@ -66,6 +66,8 @@ export const deposit = async (
 	asset: Asset,
 	amount: string
 ) => {
+	await switchNetwork(provider, 'mainnet');
+
 	const signer = provider.getSigner();
 
 	if (asset.asset_id === ETH_ASSET_ID) {
@@ -105,6 +107,8 @@ export const withdraw = async (
 	const bridge = new ethers.Contract(BRIDGE_ADDRESS, BRIDGE_ABI, signer);
 	const fee = await fetchWithdrawalFee(asset.asset_id);
 	const feeAmount = ethers.utils.parseEther(Number(fee).toFixed(8));
+
+	await switchNetwork(provider, 'mvm');
 
 	if (asset.asset_id === ETH_ASSET_ID) {
 		const assetAmount = ethers.utils.parseEther(Number(amount).toFixed(8));
