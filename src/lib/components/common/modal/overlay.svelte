@@ -30,7 +30,7 @@
 <div
 	transition:fade={{ duration: 250, easing: quadOut }}
 	class={clsx(
-		'fixed inset-0 z-10 flex items-center justify-center overflow-auto bg-black bg-opacity-10',
+		'fixed inset-0 z-20 flex items-center justify-center overflow-auto bg-black bg-opacity-10',
 		clazz
 	)}
 	on:click={overLayClicked}
