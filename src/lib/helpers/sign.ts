@@ -1,5 +1,6 @@
 import { ethers } from 'ethers';
 import { REGISTRY_PID, STORAGE_ADDRESS } from '../constants/common';
+import { Buffer } from 'buffer';
 
 const getWithdrawalAction = (
 	destination: string,
@@ -22,7 +23,6 @@ export const getWithdrawalExtra = async (
 	traceId: string,
 	isAsset: boolean
 ) => {
-	const { Buffer } = await import('buffer');
 	const action = getWithdrawalAction(destination, tag, traceId, isAsset);
 	const value = Buffer.from(action).toString('hex');
 	const hash = ethers.utils.keccak256(`0x${value}`).slice(2);

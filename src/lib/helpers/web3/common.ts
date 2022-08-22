@@ -55,9 +55,8 @@ export const switchNetwork = async (provider: ethers.providers.Web3Provider, net
 		await provider.send('wallet_switchEthereumChain', [{ chainId: toHex(number) }]);
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	} catch (switchError: any) {
-		if (switchError.code === 4902) {
-			await provider.send('wallet_addEthereumChain', [networkParams[toHex(number)]]);
-		}
+		if (switchError?.code !== 4902) return;
+		await provider.send('wallet_addEthereumChain', [networkParams[toHex(number)]]);
 	}
 };
 

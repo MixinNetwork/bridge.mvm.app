@@ -14,17 +14,17 @@ export interface ModalProps {
 
 export const modalStore = writable<ModalProps[]>([]);
 
-export function renderModal(props: ModalProps) {
+export const renderModal = (props: ModalProps) => {
 	const $modalStore = get(modalStore);
 	if ($modalStore.find(({ node }) => node === props.node)) return;
 	modalStore.update((state) => [...state, props]);
-}
+};
 
-export function unRenderModal(contentNode: SvelteComponent) {
+export const unRenderModal = (contentNode: SvelteComponent) => {
 	const $modalStore = get(modalStore);
 	if (!$modalStore.find(({ node }) => node === contentNode)) return;
 
 	modalStore.update((state) => [...state.filter((d) => d.node !== contentNode)]);
-}
+};
 
 export default modalStore;
