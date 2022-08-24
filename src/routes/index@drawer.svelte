@@ -13,7 +13,36 @@
 	import AssetItem from '$lib/components/asset-item.svelte';
 	import { browser } from '$app/env';
 	import { fetchAssets } from '$lib/helpers/api';
-	import { get } from '@square/svelte-store';
+	import { derived, get } from '@square/svelte-store';
+	import { page } from '$app/stores';
+	import DepositModal from './index-modal/_deposit-modal.svelte';
+	import { goto } from '$app/navigation';
+	import { ETH_ASSET_ID } from '../lib/constants/common';
+	import Modal from '$lib/components/common/modal/modal.svelte';
+	import WithdrawModal from './index-modal/_withdraw-modal.svelte';
+
+	export type Mode = 'deposit' | 'withdraw';
+	export const MODE_KEY = 'mode';
+	export const DEPOSIT_MODE_KEY = 'deposit-mode';
+	export type DepositMode = 'qrcode' | 'metamask';
+	export const ASSET_KEY = 'asset';
+
+	export const selectedAsset = derived([page, assets], ([$page, $assets]) => {
+		const assetId = $page.url.searchParams.get(ASSET_KEY);
+		const asset = $assets.find((a) => a.asset_id === assetId);
+		return asset;
+	});
+
+	export const mode = derived(page, ($page) => {
+		const mode = $page.url.searchParams.get(MODE_KEY);
+		return (mode === 'withdraw' ? 'withdraw' : 'deposit') as Mode;
+	});
+
+	export const defaultDepositMode = derived([mode, selectedAsset], ([$mode, $selectedAsset]) => {
+		if ($mode === 'withdraw') return;
+		if (!$selectedAsset) return;
+		return $selectedAsset.chain_id === ETH_ASSET_ID ? 'metamask' : 'qrcode';
+	});
 
 	export const load: Load = async ({ fetch }) => {
 		if (browser && get(assets)?.length) {
@@ -31,6 +60,23 @@
 	export let a: Asset[] | undefined = undefined;
 
 	$: a && assets.set(a);
+
+	$: if (browser) {
+		if ($selectedAsset) {
+			$page.url.searchParams.set(ASSET_KEY, $selectedAsset.asset_id);
+		} else {
+			$page.url.searchParams.delete(ASSET_KEY);
+		}
+		goto($page.url.href, { keepfocus: true, replaceState: true, noscroll: true });
+	}
+
+	const closeModal = () => {
+		$page.url.searchParams.delete(ASSET_KEY);
+		$page.url.searchParams.delete(MODE_KEY);
+		$page.url.searchParams.delete(DEPOSIT_MODE_KEY);
+
+		goto($page.url.href, { keepfocus: true, replaceState: true, noscroll: true });
+	};
 </script>
 
 <Header>
@@ -82,3 +128,15 @@
 		<AssetItem {asset} />
 	{/each}
 </div>
+
+<Modal
+	isOpen={!!$selectedAsset && $mode === 'deposit'}
+	content={DepositModal}
+	on:close={closeModal}
+/>
+
+<Modal
+	isOpen={!!$selectedAsset && $mode === 'withdraw'}
+	content={WithdrawModal}
+	on:close={closeModal}
+/>

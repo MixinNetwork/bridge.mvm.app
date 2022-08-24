@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { afterUpdate, createEventDispatcher, onDestroy, SvelteComponent } from 'svelte';
 	import modalStore, { renderModal, unRenderModal, type ModalProps } from './modal-state';
-	import './modal-init';
 	import { get } from '@square/svelte-store';
 
 	let isOpen = false;
@@ -12,7 +11,15 @@
 	let keyboardClosable = true;
 	let contentProps: unknown = undefined;
 
-	export { isOpen, content, overlayClass as class, maskClosable, keyboardClosable, callback };
+	export {
+		isOpen,
+		content,
+		overlayClass as class,
+		maskClosable,
+		keyboardClosable,
+		callback,
+		contentProps
+	};
 
 	const dispatch = createEventDispatcher();
 	let onClose = () => {
@@ -49,5 +56,6 @@
 		onClose();
 	});
 
+	$: sync(isOpen);
 	$: afterUpdate(() => sync(isOpen));
 </script>

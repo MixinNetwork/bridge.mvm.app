@@ -1,0 +1,78 @@
+<script lang="ts">
+	import { goto } from '$app/navigation';
+	import { page } from '$app/stores';
+	import type { Asset } from '$lib/types/asset';
+	import { ASSET_KEY } from '../index@drawer.svelte';
+	import QrCode from '$lib/components/common/qr-code.svelte';
+	import Copy from '$lib/assets/copy.svg?component';
+	import AssetList from './_asset-list.svelte';
+	import Modal from '$lib/components/common/modal/modal.svelte';
+	import SelectedAssetButton from '../../lib/components/selected-asset-button.svelte';
+
+	export let asset: Asset;
+
+	let openedSelectModal = false;
+	const toggle = () => (openedSelectModal = !openedSelectModal);
+
+	const updateAsset = (event: CustomEvent<Asset>) => {
+		$page.url.searchParams.set(ASSET_KEY, event.detail.asset_id);
+		goto($page.url.href, { keepfocus: true, replaceState: true, noscroll: true });
+	};
+
+	$: address = asset?.deposit_entries[0].destination;
+	$: memo = asset?.deposit_entries[0].tag;
+	$: qrcodes = [
+		{
+			key: 'Address',
+			value: address
+		},
+		...(memo
+			? [
+					{
+						key: 'Memo',
+						value: memo
+					}
+			  ]
+			: [])
+	];
+</script>
+
+<div class=" mx-5 rounded-lg bg-white">
+	<SelectedAssetButton {asset} on:click={toggle} />
+	{#each qrcodes as { key, value } (key)}
+		<div class="mx-4 flex flex-col items-center break-all  pb-6">
+			<QrCode
+				{value}
+				size={130}
+				class=" mt-6 mb-4 h-[130px] w-[130px] rounded-xl bg-white p-3 shadow"
+			/>
+			<div class="rounded-xl bg-black bg-opacity-[3%] py-2 px-3">
+				<div class=" text-sm font-semibold opacity-30">{key}</div>
+				<div class="align-middle font-semibold">
+					{value}
+					<button
+						class="px-3 py-2"
+						on:click={() => {
+							value && navigator.clipboard.writeText(value);
+						}}
+					>
+						<Copy />
+					</button>
+				</div>
+			</div>
+		</div>
+	{/each}
+
+	<ul class="mx-6 list-inside list-disc pb-6 text-xs font-semibold opacity-50">
+		<li>Deposit expected to take 16 comfirmations, in 4 minutes.</li>
+		<li>Min deposit: 0.00000001</li>
+	</ul>
+</div>
+
+<Modal
+	isOpen={openedSelectModal}
+	class="!items-end md:!items-center"
+	content={AssetList}
+	on:close={toggle}
+	on:callback={updateAsset}
+/>

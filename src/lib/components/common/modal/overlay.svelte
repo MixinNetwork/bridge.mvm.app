@@ -1,7 +1,5 @@
 <script context="module" lang="ts">
 	import clsx from 'clsx';
-	import { quadOut } from 'svelte/easing';
-	import { fade } from 'svelte/transition';
 	import { focus } from 'focus-svelte';
 </script>
 
@@ -28,7 +26,6 @@
 </script>
 
 <div
-	transition:fade={{ duration: 250, easing: quadOut }}
 	class={clsx(
 		'fixed inset-0 z-20 flex items-center justify-center overflow-auto bg-black bg-opacity-10',
 		clazz
@@ -38,7 +35,7 @@
 >
 	<div
 		use:focus={true}
-		class="flex w-full items-center justify-center overflow-hidden"
+		class="flex h-full w-full items-center justify-center overflow-hidden"
 		bind:this={wrapper}
 	>
 		<slot />
