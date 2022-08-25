@@ -7,13 +7,28 @@
 
 	import type { Asset } from '../types/asset';
 	import AssetIcon from './asset-icon.svelte';
+	import AssetItemModal from './asset-item-modal.svelte';
+	import Modal from './common/modal/modal.svelte';
 
 	export let asset: Asset;
+
+	let isOpen = false;
+	const toggle = () => (isOpen = !isOpen);
+
+	let innerWidth = 0;
+
+	$: isMd = innerWidth > 720;
+	$: if (isMd) {
+		isOpen = false;
+	}
 </script>
+
+<svelte:window bind:innerWidth />
 
 <div
 	on:click={() => {
-		goto(`/?${ASSET_KEY}=${asset.asset_id}`);
+		if (isMd) return goto(`/?${ASSET_KEY}=${asset.asset_id}`);
+		toggle();
 	}}
 	class="flex w-full cursor-pointer items-center space-x-3 bg-brand-primary bg-opacity-0 p-5 hover:bg-opacity-5"
 >
@@ -42,3 +57,12 @@
 		<!-- <button>Swap</button> -->
 	</div>
 </div>
+
+<Modal
+	{isOpen}
+	content={AssetItemModal}
+	on:close={toggle}
+	contentProps={{
+		asset
+	}}
+/>

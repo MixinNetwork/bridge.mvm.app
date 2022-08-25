@@ -4,6 +4,7 @@
 	import Erc20Label from '$lib/components/erc20-label.svelte';
 	import type { Asset } from '$lib/types/asset';
 	import ModalHeader from '$lib/components/modal/modal-header.svelte';
+	import LayoutBottomSheet from '../../lib/components/modal/layout-bottom-sheet.svelte';
 
 	export let onClose = () => {
 		//
@@ -16,9 +17,7 @@
 	};
 </script>
 
-<div
-	class="flex h-5/6 w-full flex-col self-end rounded-t-2xl bg-white md:h-[550px] md:w-[375px] md:self-center md:rounded-xl"
->
+<LayoutBottomSheet>
 	<ModalHeader class="hidden md:flex" on:click={onClose}>foo</ModalHeader>
 	<div class="grow overflow-y-auto">
 		{#each $assets || [] as asset (asset.asset_id)}
@@ -45,4 +44,4 @@
 			</button>
 		{/each}
 	</div>
-</div>
+</LayoutBottomSheet>

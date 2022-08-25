@@ -1,13 +1,23 @@
 <script lang="ts">
-	export let assetIconUrl: string;
-	export let assetName: string;
-	export let chainIconUrl: string | undefined = undefined;
-	export let chainName: string | undefined = undefined;
+	import clsx from 'clsx';
+	let assetIconUrl: string;
+	let assetName: string;
+	let chainIconUrl: string | undefined = undefined;
+	let chainName: string | undefined = undefined;
+
+	let clazz: string | undefined = undefined;
+	let chainClass: string | undefined = undefined;
+
+	export { clazz as class, chainClass, assetIconUrl, assetName, chainIconUrl, chainName };
 </script>
 
-<div class=" relative h-10 w-10">
+<div class={clsx('relative h-10 w-10', clazz)}>
 	<img src={assetIconUrl} class="h-full w-full" alt={assetName} />
 	{#if chainIconUrl}
-		<img src={chainIconUrl} class="absolute bottom-0 left-0 h-[14px] w-[14px]" alt={chainName} />
+		<img
+			src={chainIconUrl}
+			class={clsx('absolute bottom-0 left-0 h-[14px] w-[14px]', chainClass)}
+			alt={chainName}
+		/>
 	{/if}
 </div>
