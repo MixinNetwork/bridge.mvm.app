@@ -63,7 +63,6 @@
 	$: cacheMvmBalance = $mvmBalance || asset.balance;
 
 	$: fromBalance = depositMode ? $mainnetBalance : cacheMvmBalance;
-	$: toBalance = depositMode ? cacheMvmBalance : $mainnetBalance;
 
 	let amount: number | undefined | string;
 
