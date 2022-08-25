@@ -1,11 +1,12 @@
 <script lang="ts">
+	import clsx from 'clsx';
 	import type { Asset } from '$lib/types/asset';
 	import Eth from '$lib/assets/logo/eth.svg?component';
 	import SelectedAssetButton from '$lib/components/selected-asset-button.svelte';
 	import { asyncDerived } from '@square/svelte-store';
 	import { assets } from '../../lib/stores/model';
 	import { user } from '../../lib/stores/user';
-	import { ETH_ASSET_ID } from '../../lib/constants/common';
+	import { EOS_ASSET_ID, ETH_ASSET_ID } from '../../lib/constants/common';
 	import { getBalance, getERC20Balance } from '../../lib/helpers/web3/common';
 	import { ASSET_KEY } from '../index@drawer.svelte';
 	import type { Network } from '../../lib/types/network';
@@ -56,6 +57,7 @@
 	$: assetId = asset.asset_id;
 
 	$: isEthChain = asset.chain_id === ETH_ASSET_ID;
+	$: isEosChain = asset.chain_id === EOS_ASSET_ID;
 
 	$: mainnetBalance = buildBalanceStore({ assetId, network: 'mainnet' });
 	$: mvmBalance = buildBalanceStore({ assetId, network: 'mvm' });
@@ -73,6 +75,8 @@
 		address = $user?.address || '';
 	}
 
+	let memo = '';
+
 	let loading = false;
 	const transfer = async () => {
 		if (!amount || !$library || !$user) return;
@@ -86,7 +90,7 @@
 			if (depositMode) {
 				await deposit($library, asset, value);
 			} else {
-				await withdraw($library, asset, $user.contract, value, address);
+				await withdraw($library, asset, $user.contract, value, address, memo);
 			}
 		} finally {
 			loading = false;
@@ -141,12 +145,14 @@
 	</div>
 	{#if depositMode}
 		<div class="break-all px-4 py-3 font-semibold">
-			{$user?.address}
+			{address}
 		</div>
 	{:else}
 		<div class="flex">
 			<textarea
-				class="grow resize-none break-all rounded-lg py-3 pl-4 font-semibold"
+				class={clsx('grow resize-none break-all py-3 pl-4 font-semibold', {
+					'rounded-lg': !isEosChain
+				})}
 				placeholder="Address"
 				bind:value={address}
 			/>
@@ -169,6 +175,23 @@
 				<Paste />
 			</button>
 		</div>
+		{#if isEosChain}
+			<div class="flex">
+				<textarea
+					class={clsx('grow resize-none break-all rounded-lg py-3 pl-4 font-semibold')}
+					placeholder="Memo/Tag (Optional)"
+					bind:value={memo}
+				/>
+				<button
+					class="p-3"
+					on:click={async () => {
+						memo = await navigator.clipboard.readText();
+					}}
+				>
+					<Paste />
+				</button>
+			</div>
+		{/if}
 	{/if}
 </div>
 
