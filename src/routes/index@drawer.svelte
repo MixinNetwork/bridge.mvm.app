@@ -96,7 +96,7 @@
 			class={clsx(
 				'grid h-12 w-full grid-cols-2 shadow-sm font-semibold child:space-x-2',
 				'[&>svg]:child:inline-block',
-				'child:bg-white first:child:rounded-l-xl last:child:rounded-r-xl',
+				'child:bg-white first:child:rounded-l-xl last:child:rounded-r-xl child:flex child:items-center child:justify-center',
 				'[&>*:nth-child(n+2)]:relative',
 				'[&>*:nth-child(n+2)]:before:absolute',
 				'[&>*:nth-child(n+2)]:before:left-0',
@@ -109,14 +109,14 @@
 				' [&>*:nth-child(n+2)]:before:content-[""]'
 			)}
 		>
-			<button>
+			<a href={`/?${ASSET_KEY}=${ETH_ASSET_ID}&${MODE_KEY}=deposit&${DEPOSIT_MODE_KEY}=metamask`}>
 				<svelte:component this={Send} />
-				<span>Send</span>
-			</button>
-			<button>
+				<span>Deposit</span>
+			</a>
+			<a href={`/?${ASSET_KEY}=${ETH_ASSET_ID}&${MODE_KEY}=withdraw`}>
 				<svelte:component this={Receive} />
-				<span>Receive</span>
-			</button>
+				<span>Withdraw</span>
+			</a>
 		</div>
 	</div>
 </div>

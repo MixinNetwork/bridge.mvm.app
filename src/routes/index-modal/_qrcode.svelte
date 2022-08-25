@@ -64,7 +64,7 @@
 	{/each}
 
 	<ul class="mx-6 list-inside list-disc pb-6 text-xs font-semibold opacity-50">
-		<li>Deposit expected to take 16 comfirmations, in 4 minutes.</li>
+		<li>Deposit expected to take {asset.confirmations} comfirmations, in 4 minutes.</li>
 		<li>Min deposit: 0.00000001</li>
 	</ul>
 </div>
