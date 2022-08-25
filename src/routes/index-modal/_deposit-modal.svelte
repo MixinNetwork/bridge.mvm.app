@@ -65,7 +65,7 @@
 	{#if depositMode === 'qrcode' && asset}
 		<Qrcode {asset} />
 	{:else if depositMode === 'metamask' && asset?.chain_id === ETH_ASSET_ID}
-		<Bridge {asset} />
+		<Bridge {asset} depositMode={true} />
 	{:else}
 		<div class="mt-14 self-center font-semibold opacity-30">Not yet available</div>
 	{/if}

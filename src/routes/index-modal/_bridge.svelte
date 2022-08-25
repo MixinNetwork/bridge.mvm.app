@@ -7,7 +7,7 @@
 	import { user } from '../../lib/stores/user';
 	import { ETH_ASSET_ID } from '../../lib/constants/common';
 	import { getBalance, getERC20Balance } from '../../lib/helpers/web3/common';
-	import { ASSET_KEY, mode } from '../index@drawer.svelte';
+	import { ASSET_KEY } from '../index@drawer.svelte';
 	import type { Network } from '../../lib/types/network';
 	import { bigGte } from '../../lib/helpers/big';
 	import LogoCircle from '$lib/assets/logo/logo-circle.svg?component';
@@ -48,13 +48,13 @@
 	};
 
 	export let asset: Asset;
+	export let depositMode: boolean;
 
 	let openedSelectModal = false;
 	const toggle = () => (openedSelectModal = !openedSelectModal);
 
 	$: assetId = asset.asset_id;
 
-	$: depositMode = $mode !== 'withdraw';
 	$: isEthChain = asset.chain_id === ETH_ASSET_ID;
 
 	$: mainnetBalance = buildBalanceStore({ assetId, network: 'mainnet' });

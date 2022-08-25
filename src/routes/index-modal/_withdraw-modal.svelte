@@ -16,6 +16,6 @@
 <LayoutModal on:click={onClose}>
 	<div slot="title">Withdraw</div>
 	{#if asset}
-		<Bridge {asset} />
+		<Bridge {asset} depositMode={false} />
 	{/if}
 </LayoutModal>
