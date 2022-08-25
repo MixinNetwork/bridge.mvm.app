@@ -34,7 +34,8 @@ export const WHITELIST = [
 	'31d2ea9c-95eb-3355-b65b-ba096853bc18', // pusd
 	'f5ef6b5d-cc5a-3d90-b2c0-a2fd386e7a3c', // box
 	'c94ac88f-4671-3976-b60a-09064f1811e8', // xin
-	'965e5c6e-434c-3fa9-b780-c50f43cd955c' // cnb
+	'965e5c6e-434c-3fa9-b780-c50f43cd955c', // cnb
+	'6cfe566e-4aad-470b-8c9a-2fd35b49c68d' // eos
 ];
 
 export const networkParams: Record<string, NetworkParam> = {
