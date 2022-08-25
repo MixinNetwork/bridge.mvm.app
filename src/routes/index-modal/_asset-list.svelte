@@ -3,6 +3,7 @@
 	import AssetIcon from '$lib/components/asset-icon.svelte';
 	import Erc20Label from '$lib/components/erc20-label.svelte';
 	import type { Asset } from '$lib/types/asset';
+	import ModalHeader from '$lib/components/modal/modal-header.svelte';
 
 	export let onClose = () => {
 		//
@@ -15,28 +16,33 @@
 	};
 </script>
 
-<div class="max-h-[550px] w-full overflow-y-scroll rounded-t-xl bg-white md:w-96 md:rounded-xl">
-	{#each $assets || [] as asset (asset.asset_id)}
-		<button class="flex w-full space-x-3 px-5 py-4 text-start" on:click={() => click(asset)}>
-			<AssetIcon
-				assetIconUrl={asset.icon_url}
-				assetName={asset.name}
-				chainIconUrl={asset.chain_icon_url}
-				chainName={asset.chain_name}
-			/>
+<div
+	class="flex h-5/6 w-full flex-col self-end rounded-t-2xl bg-white md:h-[550px] md:w-[375px] md:self-center md:rounded-xl"
+>
+	<ModalHeader class="hidden md:flex" on:click={onClose}>foo</ModalHeader>
+	<div class="grow overflow-y-auto">
+		{#each $assets || [] as asset (asset.asset_id)}
+			<button class="flex w-full space-x-3 px-5 py-4 text-start" on:click={() => click(asset)}>
+				<AssetIcon
+					assetIconUrl={asset.icon_url}
+					assetName={asset.name}
+					chainIconUrl={asset.chain_icon_url}
+					chainName={asset.chain_name}
+				/>
 
-			<div>
-				<div class="font-bold">
-					<span class="font-bold">
-						{asset.symbol}
-					</span>
-					<Erc20Label />
-				</div>
+				<div>
+					<div class="font-bold">
+						<span class="font-bold">
+							{asset.symbol}
+						</span>
+						<Erc20Label />
+					</div>
 
-				<div class="text-sm font-semibold opacity-20">
-					{asset.name}
+					<div class="text-sm font-semibold opacity-20">
+						{asset.name}
+					</div>
 				</div>
-			</div>
-		</button>
-	{/each}
+			</button>
+		{/each}
+	</div>
 </div>
