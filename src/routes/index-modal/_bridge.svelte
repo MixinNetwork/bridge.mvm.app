@@ -69,7 +69,7 @@
 
 	$: if (fromBalance && amount && bigGte(amount, fromBalance)) amount = fromBalance;
 
-	let address = isEthChain ? $user?.address || '' : '';
+	$: address = isEthChain ? $user?.address || '' : '';
 	$: if (depositMode) {
 		address = $user?.address || '';
 	}
@@ -177,7 +177,8 @@
 <button
 	class="mt-[70px] self-center rounded-full bg-brand-primary px-6 py-4 text-white"
 	on:click={transfer}
-	disabled={!fromBalance || !amount || amount <= 0}>{depositMode ? 'Deposit' : 'Withdraw'}</button
+	disabled={!address || !fromBalance || !amount || amount <= 0}
+	>{depositMode ? 'Deposit' : 'Withdraw'}</button
 >
 
 <Modal
