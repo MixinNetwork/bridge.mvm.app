@@ -11,7 +11,7 @@
 	export let asset: Asset;
 </script>
 
-<LayoutBottomSheet class="h-auto p-5">
+<LayoutBottomSheet class="!h-auto p-5">
 	<div class="flex items-center space-x-2">
 		<AssetIcon
 			class="h-8 w-8 "

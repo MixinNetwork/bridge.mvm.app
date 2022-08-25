@@ -17,8 +17,8 @@
 
 	let innerWidth = 0;
 
-	$: isMd = innerWidth > 720;
-	$: if (isMd) {
+	$: isLg = innerWidth >= 1024;
+	$: if (isLg) {
 		isOpen = false;
 	}
 </script>
@@ -27,7 +27,7 @@
 
 <div
 	on:click={() => {
-		if (isMd) return goto(`/?${ASSET_KEY}=${asset.asset_id}`);
+		if (isLg) return goto(`/?${ASSET_KEY}=${asset.asset_id}`);
 		toggle();
 	}}
 	class="flex w-full cursor-pointer items-center space-x-3 bg-brand-primary bg-opacity-0 p-5 hover:bg-opacity-5"
