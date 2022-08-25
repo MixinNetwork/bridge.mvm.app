@@ -18,7 +18,7 @@
 </script>
 
 <LayoutBottomSheet>
-	<ModalHeader class="hidden md:flex" on:click={onClose}>foo</ModalHeader>
+	<ModalHeader class="hidden md:flex" on:click={onClose}>Assets</ModalHeader>
 	<div class="grow overflow-y-auto">
 		{#each $assets || [] as asset (asset.asset_id)}
 			<button class="flex w-full space-x-3 px-5 py-4 text-start" on:click={() => click(asset)}>

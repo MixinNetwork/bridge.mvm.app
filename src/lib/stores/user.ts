@@ -1,5 +1,5 @@
 import { session } from '$app/stores';
-import { derived, get } from '@square/svelte-store';
+import { derived } from '@square/svelte-store';
 import { USER_KEY } from '../../hooks';
 import { register } from '../helpers/api';
 import { jsonPersistentEncoder, persistentWritable } from '../helpers/store/persistent';
@@ -13,7 +13,10 @@ const persistentUser = persistentWritable<User | undefined>(
 	jsonPersistentEncoder
 );
 
-export const user = derived(persistentUser, ($user) => $user || get(session).user);
+export const user = derived(
+	[persistentUser, session],
+	([$user, $session]) => $user || $session.user
+);
 
 export const registerAndSave = async (address: string) => {
 	const u = await register(address);
