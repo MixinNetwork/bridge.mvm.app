@@ -4,7 +4,7 @@
 </script>
 
 <div
-	class="z-10 flex h-screen w-screen flex-col items-stretch bg-brand-background pb-6 md:h-auto md:min-h-[558px] md:w-[375px] md:rounded-xl"
+	class="z-10 flex h-screen w-screen flex-col items-stretch bg-brand-background pb-6 md:h-auto md:min-h-[550px] md:w-[375px] md:rounded-xl"
 >
 	<div class=" mb-2 flex items-center justify-between py-3 px-5">
 		<button class=" visible md:invisible" on:click>

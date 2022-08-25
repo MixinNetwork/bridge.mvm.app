@@ -15,7 +15,7 @@
 	};
 </script>
 
-<div class="w-full rounded-t-xl bg-white md:w-96 md:rounded-xl">
+<div class="max-h-[550px] w-full overflow-y-scroll rounded-t-xl bg-white md:w-96 md:rounded-xl">
 	{#each $assets || [] as asset (asset.asset_id)}
 		<button class="flex w-full space-x-3 px-5 py-4 text-start" on:click={() => click(asset)}>
 			<AssetIcon

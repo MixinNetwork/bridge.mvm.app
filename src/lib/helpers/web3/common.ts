@@ -103,6 +103,7 @@ export const withdraw = async (
 	asset: Asset,
 	userContract: string,
 	amount: string,
+	destination: string,
 	tag = ''
 ) => {
 	await switchNetwork(provider, 'mvm');
@@ -110,7 +111,6 @@ export const withdraw = async (
 	const traceId = v4();
 
 	const signer = provider.getSigner();
-	const destination = await signer.getAddress();
 	const assetExtra = await getWithdrawalExtra(destination, tag, traceId, true);
 	const feeExtra = await getWithdrawalExtra(destination, tag, traceId, false);
 

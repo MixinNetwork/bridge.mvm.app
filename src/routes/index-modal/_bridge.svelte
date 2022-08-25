@@ -86,8 +86,7 @@
 			if (depositMode) {
 				await deposit($library, asset, value);
 			} else {
-				// todo address
-				await withdraw($library, asset, $user.contract, value);
+				await withdraw($library, asset, $user.contract, value, address);
 			}
 		} finally {
 			loading = false;
