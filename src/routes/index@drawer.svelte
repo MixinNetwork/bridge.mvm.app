@@ -88,7 +88,7 @@
 </Header>
 
 <div
-	class="flex flex-col items-center justify-center pt-4 md:items-start md:px-5 md:pt-10 lg:mt-10 lg:h-auto lg:flex-row lg:items-center lg:justify-between"
+	class="flex flex-col items-center justify-center pt-4 md:items-start md:px-5 md:pt-10 lg:mt-10 lg:h-auto lg:flex-row lg:items-center lg:justify-between xl:px-16"
 >
 	<Balance />
 	<div class="mt-6 w-full px-11 md:w-80 md:p-0">
@@ -121,7 +121,7 @@
 	</div>
 </div>
 
-<div class="my-8 rounded-2xl bg-white last:child:rounded-b-2xl md:mx-5">
+<div class="my-8 rounded-2xl bg-white last:child:rounded-b-2xl md:mx-5 xl:mx-16">
 	<div class="px-5 py-4 text-lg font-semibold">Assets</div>
 
 	{#each $assets ?? [] as asset (asset.asset_id)}
