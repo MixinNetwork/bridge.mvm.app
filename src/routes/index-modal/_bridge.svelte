@@ -1,3 +1,8 @@
+<script context="module" lang="ts">
+	const inputClasses =
+		'font-semibold text-black text-opacity-80 placeholder-black placeholder-opacity-20';
+</script>
+
 <script lang="ts">
 	import clsx from 'clsx';
 	import type { Asset } from '$lib/types/asset';
@@ -116,7 +121,7 @@
 			>Balance: {fromBalance || '...'}</SelectedAssetButton
 		>
 		<input
-			class=" rounded-b-lg  px-4 py-6 font-semibold"
+			class={clsx('rounded-b-lg  px-4 py-6', inputClasses)}
 			placeholder="Amount"
 			type="number"
 			bind:value={amount}
@@ -144,13 +149,13 @@
 		</div>
 	</div>
 	{#if depositMode}
-		<div class="break-all px-4 py-3 font-semibold">
+		<div class={clsx('break-all px-4 py-3 font-semibold', inputClasses)}>
 			{address}
 		</div>
 	{:else}
 		<div class="flex">
 			<textarea
-				class={clsx('grow resize-none break-all py-3 pl-4 font-semibold', {
+				class={clsx('grow resize-none break-all py-3 pl-4 font-semibold', inputClasses, {
 					'rounded-lg': !isEosChain
 				})}
 				placeholder="Address"
@@ -178,7 +183,10 @@
 		{#if isEosChain}
 			<div class="flex">
 				<textarea
-					class={clsx('grow resize-none break-all rounded-lg py-3 pl-4 font-semibold')}
+					class={clsx(
+						'grow resize-none break-all rounded-lg py-3 pl-4 font-semibold',
+						inputClasses
+					)}
 					placeholder="Memo/Tag (Optional)"
 					bind:value={memo}
 				/>

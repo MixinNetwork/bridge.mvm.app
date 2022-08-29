@@ -16,7 +16,8 @@ module.exports = {
 					red: '#F24E4E',
 					bgFrom: '#DDDEF5',
 					bgTo: '#F6F7FA',
-					background: '#EFF0F9'
+					background: '#EFF0F9',
+					overlayBg: '#13132D80'
 				}
 			}
 		}
