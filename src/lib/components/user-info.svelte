@@ -4,8 +4,8 @@
 	import { providerKey } from '../stores/provider';
 	import { shortAddress } from '../stores/user';
 
-	import MetaMask from '$lib/assets/logo/metamask.svg?component';
-	import WalletConnect from '$lib/assets/logo/wallet-connect.svg?component';
+	import MetaMask from '$lib/assets/logo/metamask.svg';
+	import WalletConnect from '$lib/assets/logo/wallet-connect.svg';
 	import Logout from '$lib/assets/logout.svg?component';
 	import Arrow from '$lib/assets/arrow.svg?component';
 
@@ -18,7 +18,7 @@
 	export { clazz as class };
 	let logoutModalOpen = false;
 
-	$: ProviderLogo = $providerKey === 'injected' ? MetaMask : WalletConnect;
+	$: providerLogo = $providerKey !== 'injected' ? MetaMask : WalletConnect;
 </script>
 
 <div
@@ -27,7 +27,7 @@
 		clazz
 	)}
 >
-	<svelte:component this={ProviderLogo} class="h-14 w-14 md:h-4 md:w-4" />
+	<img src={providerLogo} alt={$providerKey} class="h-14 w-14 md:h-4 md:w-4" />
 	<div class="font-bold md:text-sm md:font-semibold">
 		<div class="text-xl md:hidden">{formatCurrency($totalBalanceUsd || 0)}</div>
 		<div class="inline-flex">
@@ -41,7 +41,7 @@
 		class="invisible absolute top-9 right-0 mt-2 hidden w-96 flex-col rounded-2xl bg-white pb-5 opacity-0 transition-all delay-100 group-hover:visible group-hover:opacity-100 md:flex"
 	>
 		<div class=" flex items-center space-x-3 p-6">
-			<svelte:component this={ProviderLogo} class="h-12 w-12" />
+			<img src={providerLogo} alt={$providerKey} class="h-12 w-12" />
 			<div class=" font-semibold">
 				<div>
 					{$shortAddress}
