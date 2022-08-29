@@ -18,7 +18,7 @@
 	export { clazz as class };
 	let logoutModalOpen = false;
 
-	$: providerLogo = $providerKey !== 'injected' ? MetaMask : WalletConnect;
+	$: providerLogo = $providerKey === 'injected' ? MetaMask : WalletConnect;
 </script>
 
 <div
