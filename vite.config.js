@@ -2,6 +2,7 @@ import { sveltekit } from '@sveltejs/kit/vite';
 import nodePolyfills from 'rollup-plugin-polyfill-node';
 import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill';
 import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfill';
+import inject from '@rollup/plugin-inject';
 
 import svg from '@poppanator/sveltekit-svg';
 
@@ -58,7 +59,8 @@ const config = {
 		rollupOptions: {
 			plugins: [
 				// ↓ Needed for build
-				nodePolyfills()
+				nodePolyfills(),
+				inject({ Buffer: ['buffer', 'Buffer'] }),
 			]
 		},
 		// ↓ Needed for build if using WalletConnect and other providers
