@@ -48,7 +48,7 @@
 			/>
 			<div class="rounded-xl bg-black bg-opacity-[3%] py-2 px-3">
 				<div class=" text-sm font-semibold opacity-30">{key}</div>
-				<div class="align-middle font-semibold">
+				<div class="flex items-center font-semibold">
 					{value}
 					<button
 						class="px-3 py-2"

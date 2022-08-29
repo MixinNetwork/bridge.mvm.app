@@ -76,10 +76,9 @@
 	$: if (fromBalance && amount && bigGte(amount, fromBalance))
 		amount = Number.parseFloat(fromBalance);
 
-	$: address = isEthChain ? $user?.address || '' : '';
-	$: if (depositMode) {
-		address = $user?.address || '';
-	}
+	let address = '';
+	address = isEthChain ? $user?.address || '' : '';
+	if (depositMode) address = $user?.address || '';
 
 	let memo = '';
 

@@ -1,6 +1,5 @@
 import { ethers } from 'ethers';
 import { REGISTRY_PID, STORAGE_ADDRESS } from '../constants/common';
-import { Buffer } from 'buffer';
 
 const getWithdrawalAction = (
 	destination: string,
