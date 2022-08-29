@@ -2,6 +2,7 @@ import { sveltekit } from '@sveltejs/kit/vite';
 import nodePolyfills from 'rollup-plugin-polyfill-node';
 import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill';
 import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfill';
+
 import svg from '@poppanator/sveltekit-svg';
 
 const production = process.env.NODE_ENV === 'production';
@@ -10,7 +11,8 @@ const production = process.env.NODE_ENV === 'production';
 const config = {
 	resolve: {
 		alias: {
-			path: 'path-browserify'
+			path: 'path-browserify',
+			util: 'rollup-plugin-node-polyfills/polyfills/util'
 		}
 	},
 	plugins: [
