@@ -16,6 +16,6 @@
 	<DrawerItem logo={Assets} href="/" title="Assets" />
 	<DrawerItem logo={Transactions} href="/transactions/" title="Transactions" />
 	<DrawerItem logo={Swap} href="/swap/" title="Swap" />
-	<DrawerItem logo={GasToken} href="/gas-token/" title="Gas Token" />
+	<!-- <DrawerItem logo={GasToken} href="/gas-token/" title="Gas Token" /> -->
 	<DrawerItem logo={Support} href="/support/" title="Support" />
 </div>
