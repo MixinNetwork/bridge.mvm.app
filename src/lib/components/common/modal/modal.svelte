@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { afterUpdate, createEventDispatcher, onDestroy, SvelteComponent } from 'svelte';
+	import { createEventDispatcher, onDestroy, SvelteComponent } from 'svelte';
 	import modalStore, { renderModal, unRenderModal, type ModalProps } from './modal-state';
 	import { get } from '@square/svelte-store';
 

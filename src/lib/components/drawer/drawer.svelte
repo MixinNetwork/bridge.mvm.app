@@ -5,7 +5,7 @@
 	import Assets from '$lib/assets/drawer/assets.svg?component';
 	import Transactions from '$lib/assets/drawer/transactions.svg?component';
 	import Swap from '$lib/assets/drawer/swap.svg?component';
-	import GasToken from '$lib/assets/drawer/gas-token.svg?component';
+	// import GasToken from '$lib/assets/drawer/gas-token.svg?component';
 	import Support from '$lib/assets/drawer/support.svg?component';
 	import UserInfo from '../user-info.svelte';
 </script>

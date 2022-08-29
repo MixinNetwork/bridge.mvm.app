@@ -27,9 +27,7 @@
 		clazz
 	)}
 >
-	<div class="child:h-14 child:w-14 child:md:h-4 child:md:w-4">
-		<svelte:component this={ProviderLogo} />
-	</div>
+	<svelte:component this={ProviderLogo} class="h-14 w-14 md:h-4 md:w-4" />
 	<div class="font-bold md:text-sm md:font-semibold">
 		<div class="text-xl md:hidden">{formatCurrency($totalBalanceUsd || 0)}</div>
 		<div class="inline-flex">
