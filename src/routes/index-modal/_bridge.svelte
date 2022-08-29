@@ -204,7 +204,7 @@
 </div>
 
 <button
-	class="mt-[70px] self-center rounded-full bg-brand-primary px-6 py-4 text-white"
+	class="mt-10 self-center rounded-full bg-brand-primary px-6 py-4 text-white"
 	on:click={transfer}
 	disabled={!address || !fromBalance || !amount || amount <= 0}
 	>{depositMode ? 'Deposit' : 'Withdraw'}</button
