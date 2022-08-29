@@ -38,7 +38,7 @@
 	<div slot="title">Deposit to MVM</div>
 
 	<div
-		class="mx-5 mb-3 grid grid-cols-2 rounded-lg bg-black bg-opacity-5 p-1 text-center text-sm font-bold leading-7 child:z-0 child:!opacity-100 descendant:transition-all"
+		class="mx-5 mb-3 grid grid-cols-2 rounded-md bg-black bg-opacity-5 p-1 text-center text-sm font-bold leading-7 child:z-0 child:!opacity-100 descendant:transition-all"
 	>
 		<label class="relative">
 			<input type="radio" class="peer hidden" value="qrcode" bind:group={depositMode} />
@@ -50,7 +50,7 @@
 			</div>
 
 			<div
-				class="absolute inset-0 -z-10 h-full w-full translate-x-full rounded-lg bg-white peer-checked:translate-x-0"
+				class="absolute inset-0 -z-10 h-full w-full translate-x-full rounded-md bg-white peer-checked:translate-x-0"
 			/>
 		</label>
 
