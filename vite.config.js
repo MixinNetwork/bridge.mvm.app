@@ -60,7 +60,7 @@ const config = {
 			plugins: [
 				// ↓ Needed for build
 				nodePolyfills(),
-				inject({ Buffer: ['buffer', 'Buffer'] }),
+				inject({ Buffer: ['buffer', 'Buffer'] })
 			]
 		},
 		// ↓ Needed for build if using WalletConnect and other providers
