@@ -43,10 +43,11 @@ const config = {
 			},
 			// Enable esbuild polyfill plugins
 			plugins: [
-				NodeModulesPolyfillPlugin(),
 				NodeGlobalsPolyfillPlugin({
-					buffer: true
-				})
+					buffer: true,
+					process: true
+				}),
+				NodeModulesPolyfillPlugin()
 			]
 		}
 	},

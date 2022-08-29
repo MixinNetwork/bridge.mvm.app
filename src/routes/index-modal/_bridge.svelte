@@ -61,6 +61,7 @@
 
 	$: assetId = asset.asset_id;
 
+	let isEthChain = asset.chain_id === ETH_ASSET_ID;
 	$: isEthChain = asset.chain_id === ETH_ASSET_ID;
 	$: isEosChain = asset.chain_id === EOS_ASSET_ID;
 
@@ -77,8 +78,9 @@
 		amount = Number.parseFloat(fromBalance);
 
 	let address = '';
-	address = isEthChain ? $user?.address || '' : '';
-	if (depositMode) address = $user?.address || '';
+
+	isEthChain && (address = $user?.address || '');
+	depositMode && (address = $user?.address || '');
 
 	let memo = '';
 

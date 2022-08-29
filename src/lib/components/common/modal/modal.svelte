@@ -58,5 +58,4 @@
 	});
 
 	$: sync(isOpen);
-	$: afterUpdate(() => sync(isOpen));
 </script>

@@ -13,14 +13,12 @@
 	export let asset: Asset;
 
 	let isOpen = false;
-	const toggle = () => (isOpen = !isOpen);
+	const close = () => (isOpen = false);
 
 	let innerWidth = 0;
 
 	$: isLg = innerWidth >= 1024;
-	$: if (isLg) {
-		isOpen = false;
-	}
+	$: if (isLg) isOpen = false;
 </script>
 
 <svelte:window bind:innerWidth />
@@ -28,7 +26,7 @@
 <div
 	on:click={() => {
 		if (isLg) return goto(`/?${ASSET_KEY}=${asset.asset_id}`);
-		toggle();
+		isOpen = true;
 	}}
 	class="flex w-full cursor-pointer items-center  bg-brand-primary bg-opacity-0 p-5 hover:bg-opacity-5"
 >
@@ -63,7 +61,7 @@
 <Modal
 	{isOpen}
 	content={AssetItemModal}
-	on:close={toggle}
+	on:close={close}
 	contentProps={{
 		asset
 	}}
