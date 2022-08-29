@@ -110,7 +110,7 @@
 				'[&>*:nth-child(n+2)]:before:-translate-x-[1px]',
 				'[&>*:nth-child(n+2)]:before:rounded-full',
 				'[&>*:nth-child(n+2)]:before:bg-black',
-				'[&>*:nth-child(n+2)]:before:opacity-20',
+				'[&>*:nth-child(n+2)]:before:bg-opacity-5',
 				' [&>*:nth-child(n+2)]:before:content-[""]'
 			)}
 		>
