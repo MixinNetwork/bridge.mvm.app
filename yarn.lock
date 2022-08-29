@@ -593,10 +593,10 @@
     "@types/node" "*"
     playwright-core "1.25.1"
 
-"@poppanator/sveltekit-svg@^0.3.4":
-  version "0.3.4"
-  resolved "https://registry.yarnpkg.com/@poppanator/sveltekit-svg/-/sveltekit-svg-0.3.4.tgz#0f990ac0007183ee4ce31db61c6c0b910c385556"
-  integrity sha512-LehMKn91Ds82bHOWoQVhd2GuICk8IFrIGotgP3jBaxcYyxHLznkun9IgdWMZCpRsiaSbmKrW1HZ81p/UlfM/JA==
+"@poppanator/sveltekit-svg@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@poppanator/sveltekit-svg/-/sveltekit-svg-1.0.0.tgz#b58551952c3f311eef118b07ed40eb6db236ba67"
+  integrity sha512-GHOzqd/bDCAh6D1QWPEjRSMNQvmtrdE3OI4viBQ9F2SbpmjqDAdrCE+HHJWZPtcBkP4cZ2lIGei3kOrMuvDQjg==
   dependencies:
     svgo "^2.3.0"
 
