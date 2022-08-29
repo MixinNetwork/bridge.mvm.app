@@ -52,8 +52,7 @@
 			if (!$cacheProvider) throw new Error('No cached provider found');
 
 			await registerAndSave($account);
-			console.log('fuck goto 2');
-			// await goto($page.url.searchParams.get(LAST_URL) || '/');
+			await goto($page.url.searchParams.get(LAST_URL) || '/');
 		} finally {
 			loading = false;
 		}

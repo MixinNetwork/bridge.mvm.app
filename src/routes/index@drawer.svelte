@@ -27,11 +27,11 @@
 	export type DepositMode = 'qrcode' | 'metamask';
 	export const ASSET_KEY = 'asset';
 
-	export const selectedAsset = derived([page, assets], ([$page, $assets]) => {
-		const assetId = $page.url.searchParams.get(ASSET_KEY);
-		const asset = $assets.find((a) => a.asset_id === assetId);
-		return asset;
-	});
+	const selectedAssetId = derived(page, ($page) => $page.url.searchParams.get(ASSET_KEY));
+
+	export const selectedAsset = derived([selectedAssetId, assets], ([$selectedAssetId, $assets]) =>
+		$assets.find((a) => a.asset_id === $selectedAssetId)
+	);
 
 	export const mode = derived(page, ($page) => {
 		const mode = $page.url.searchParams.get(MODE_KEY);
@@ -61,17 +61,12 @@
 
 	$: a && assets.set(a);
 
-	$: if (
-		browser &&
-		$selectedAsset &&
-		$selectedAsset?.asset_id !== $page.url.searchParams.get(ASSET_KEY)
-	) {
-		$page.url.searchParams.set(ASSET_KEY, $selectedAsset.asset_id);
-		goto($page.url.href, { keepfocus: true, replaceState: true, noscroll: true });
-	}
-
-	$: if (browser && !$selectedAsset && $page.url.searchParams.has(ASSET_KEY)) {
-		$page.url.searchParams.delete(ASSET_KEY);
+	$: if (browser && $page.url.pathname === '/') {
+		if ($selectedAsset) {
+			$page.url.searchParams.set(ASSET_KEY, $selectedAsset.asset_id);
+		} else {
+			$page.url.searchParams.delete(ASSET_KEY);
+		}
 		goto($page.url.href, { keepfocus: true, replaceState: true, noscroll: true });
 	}
 
