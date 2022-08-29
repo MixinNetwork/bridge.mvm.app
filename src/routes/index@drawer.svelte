@@ -61,12 +61,17 @@
 
 	$: a && assets.set(a);
 
-	$: if (browser) {
-		if ($selectedAsset) {
-			$page.url.searchParams.set(ASSET_KEY, $selectedAsset.asset_id);
-		} else {
-			$page.url.searchParams.delete(ASSET_KEY);
-		}
+	$: if (
+		browser &&
+		$selectedAsset &&
+		$selectedAsset?.asset_id !== $page.url.searchParams.get(ASSET_KEY)
+	) {
+		$page.url.searchParams.set(ASSET_KEY, $selectedAsset.asset_id);
+		goto($page.url.href, { keepfocus: true, replaceState: true, noscroll: true });
+	}
+
+	$: if (browser && !$selectedAsset && $page.url.searchParams.has(ASSET_KEY)) {
+		$page.url.searchParams.delete(ASSET_KEY);
 		goto($page.url.href, { keepfocus: true, replaceState: true, noscroll: true });
 	}
 

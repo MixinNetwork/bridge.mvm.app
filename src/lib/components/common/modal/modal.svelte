@@ -53,7 +53,8 @@
 	};
 
 	onDestroy(() => {
-		onClose();
+		const currentlyOpen = $modalStore.find(({ node }) => node === content);
+		if (currentlyOpen) onClose();
 	});
 
 	$: sync(isOpen);
