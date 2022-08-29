@@ -20,7 +20,7 @@
 		<div class=" text-start">
 			<div class="font-bold">
 				{asset.symbol}
-				{#if asset.chain_id === ETH_ASSET_ID}
+				{#if asset.chain_id === ETH_ASSET_ID && asset.asset_id !== ETH_ASSET_ID}
 					<Erc20Label />
 				{/if}
 			</div>

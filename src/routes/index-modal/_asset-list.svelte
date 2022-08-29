@@ -5,6 +5,7 @@
 	import type { Asset } from '$lib/types/asset';
 	import ModalHeader from '$lib/components/modal/modal-header.svelte';
 	import LayoutBottomSheet from '../../lib/components/modal/layout-bottom-sheet.svelte';
+	import { ETH_ASSET_ID } from '../../lib/constants/common';
 
 	export let onClose = () => {
 		//
@@ -34,7 +35,9 @@
 						<span class="font-bold">
 							{asset.symbol}
 						</span>
-						<Erc20Label />
+						{#if asset.chain_id === ETH_ASSET_ID && asset.asset_id !== ETH_ASSET_ID}
+							<Erc20Label />
+						{/if}
 					</div>
 
 					<div class="text-sm font-semibold opacity-20">
