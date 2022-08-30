@@ -37,7 +37,7 @@
 	];
 </script>
 
-<div class=" mx-5 rounded-lg bg-white">
+<div class="mx-5 grow overflow-y-auto rounded-lg bg-white">
 	<SelectedAssetButton {asset} on:click={toggle} />
 	{#each qrcodes as { key, value } (key)}
 		<div class="mx-4 flex flex-col items-center break-all  pb-6">
