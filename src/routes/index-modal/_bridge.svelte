@@ -9,13 +9,13 @@
 	import Eth from '$lib/assets/logo/eth.svg?component';
 	import SelectedAssetButton from '$lib/components/selected-asset-button.svelte';
 	import { asyncDerived } from '@square/svelte-store';
-	import { assets } from '../../lib/stores/model';
+	import { assets, AssetWithdrawalFee } from '../../lib/stores/model';
 	import { user } from '../../lib/stores/user';
 	import { EOS_ASSET_ID, ETH_ASSET_ID } from '../../lib/constants/common';
 	import { getBalance, getERC20Balance } from '../../lib/helpers/web3/common';
 	import { ASSET_KEY } from '../index@drawer.svelte';
 	import type { Network } from '../../lib/types/network';
-	import { bigGte } from '../../lib/helpers/big';
+	import { bigGte, bigSub } from '../../lib/helpers/big';
 	import LogoCircle from '$lib/assets/logo/logo-circle.svg?component';
 	import Modal from '../../lib/components/common/modal/modal.svelte';
 	import AssetList from './_asset-list.svelte';
@@ -65,6 +65,8 @@
 	$: isEthChain = asset.chain_id === ETH_ASSET_ID;
 	$: isEosChain = asset.chain_id === EOS_ASSET_ID;
 
+	$: transactionGas = asset.asset_id === ETH_ASSET_ID ? 0.0000035 : 0.0000016;
+
 	$: mainnetBalance = buildBalanceStore({ assetId, network: 'mainnet' });
 	$: mvmBalance = buildBalanceStore({ assetId, network: 'mvm' });
 
@@ -77,6 +79,11 @@
 	$: if (fromBalance && amount && bigGte(amount, fromBalance))
 		amount = Number.parseFloat(fromBalance);
 
+	$: assetWithdrawalFee = AssetWithdrawalFee(asset.asset_id);
+
+	$: isGteFee =
+		!depositMode && amount && $assetWithdrawalFee && bigGte(amount, $assetWithdrawalFee);
+
 	let address = '';
 
 	depositMode && (address = $user?.address || '');
@@ -85,7 +92,8 @@
 
 	let loading = false;
 	const transfer = async () => {
-		if (!amount || !$library || !$user) return;
+		if (!amount || !$library || !$user || !$assetWithdrawalFee) return;
+		if (!depositMode && !isGteFee) return;
 
 		loading = true;
 
@@ -96,7 +104,15 @@
 			if (depositMode) {
 				await deposit($library, asset, value);
 			} else {
-				await withdraw($library, asset, $user.contract, value, address || $user?.address, memo);
+				await withdraw(
+					$library,
+					asset,
+					$user.contract,
+					bigSub(value, $assetWithdrawalFee),
+					address || $user?.address,
+					memo,
+					$assetWithdrawalFee
+				);
 			}
 		} finally {
 			loading = false;
@@ -204,11 +220,29 @@
 	{/if}
 </div>
 
+{#if !depositMode}
+	<div
+		class=" mx-5 mt-3 space-y-2 rounded-lg bg-black bg-opacity-5 p-4 text-xs font-semibold text-black text-opacity-50"
+	>
+		<div>
+			Withdrawal fee: {$assetWithdrawalFee || '...'}
+			{asset.symbol}
+		</div>
+		<div>
+			Gas fee: {transactionGas} ETH
+		</div>
+	</div>
+{/if}
+
 <button
 	class="mt-10 self-center rounded-full bg-brand-primary px-6 py-4 text-white"
 	on:click={transfer}
-	disabled={(!isEthChain && !address) || !fromBalance || !amount || amount <= 0}
-	>{depositMode ? 'Deposit' : 'Withdraw'}</button
+	disabled={(!isEthChain && !address) ||
+		(!depositMode && !$assetWithdrawalFee) ||
+		!fromBalance ||
+		!amount ||
+		amount <= 0 ||
+		(!depositMode && !isGteFee)}>{depositMode ? 'Deposit' : 'Withdraw'}</button
 >
 
 <Modal

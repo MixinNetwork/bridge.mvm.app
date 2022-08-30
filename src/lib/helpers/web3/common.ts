@@ -13,7 +13,6 @@ import type { Network } from '../../types/network';
 import type { Asset } from '$lib/types/asset';
 import toHex from '../utils';
 import { getWithdrawalExtra } from '../sign';
-import { fetchWithdrawalFee } from '../api';
 
 export const mainnetProvider = ethers.getDefaultProvider(1);
 export const mvmProvider = ethers.getDefaultProvider(MVM_RPC_URL);
@@ -104,7 +103,8 @@ export const withdraw = async (
 	userContract: string,
 	amount: string,
 	destination: string,
-	tag = ''
+	tag = '',
+	fee: string
 ) => {
 	await switchNetwork(provider, 'mvm');
 
@@ -115,7 +115,6 @@ export const withdraw = async (
 	const feeExtra = await getWithdrawalExtra(destination, tag, traceId, false);
 
 	const bridge = new ethers.Contract(BRIDGE_ADDRESS, BRIDGE_ABI, signer);
-	const fee = await fetchWithdrawalFee(asset.asset_id);
 	const feeAmount = ethers.utils.parseEther(Number(fee).toFixed(8));
 
 	if (asset.asset_id === ETH_ASSET_ID) {
