@@ -37,7 +37,7 @@
 	];
 </script>
 
-<div class="mx-5 grow overflow-y-auto rounded-lg bg-white">
+<div class="mx-5 rounded-lg bg-white">
 	<SelectedAssetButton {asset} on:click={toggle} />
 	{#each qrcodes as { key, value } (key)}
 		<div class="mx-4 flex flex-col items-center break-all  pb-6">
@@ -66,8 +66,8 @@
 	{/each}
 
 	<ul class="mx-6 list-outside list-disc pb-6 text-xs font-semibold opacity-50">
-		<li>Deposit expected to take {asset.confirmations} comfirmations, in 4 minutes.</li>
-		<li>Min deposit: 0.00000001</li>
+		<li>Deposit expected to take {asset.confirmations} comfirmations.</li>
+		<li>Min deposit: 0.00000001 {asset.symbol}</li>
 	</ul>
 </div>
 

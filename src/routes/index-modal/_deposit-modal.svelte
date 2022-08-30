@@ -12,6 +12,7 @@
 	import { ETH_ASSET_ID } from '$lib/constants/common';
 	import Bridge from './_bridge.svelte';
 	import LayoutModal from '$lib/components/modal/layout-modal.svelte';
+	import { providerName } from '$lib/stores/provider';
 
 	export let onClose = () => {
 		//
@@ -57,16 +58,20 @@
 		<label>
 			<input type="radio" class="peer hidden" value="metamask" bind:group={depositMode} />
 			<div class="text-black opacity-50 peer-checked:text-brand-primary peer-checked:opacity-100">
-				MetaMask
+				{$providerName}
 			</div>
 		</label>
 	</div>
 
-	{#if depositMode === 'qrcode' && asset}
-		<Qrcode {asset} />
-	{:else if depositMode === 'metamask' && asset?.chain_id === ETH_ASSET_ID}
-		<Bridge {asset} depositMode={true} />
-	{:else}
-		<div class="flex grow items-center self-center font-semibold opacity-30">Not yet available</div>
-	{/if}
+	<div class="flex grow flex-col items-stretch overflow-y-auto">
+		{#if depositMode === 'qrcode' && asset}
+			<Qrcode {asset} />
+		{:else if depositMode === 'metamask' && asset?.chain_id === ETH_ASSET_ID}
+			<Bridge {asset} depositMode={true} />
+		{:else}
+			<div class="flex grow items-center self-center font-semibold opacity-30">
+				Not yet available
+			</div>
+		{/if}
+	</div>
 </LayoutModal>

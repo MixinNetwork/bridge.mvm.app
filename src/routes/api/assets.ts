@@ -4,6 +4,7 @@ import { ETH_ASSET_ID, WHITELIST } from '$lib/constants/common';
 import { getBalance, getERC20Balance } from '$lib/helpers/web3/common';
 import { fetchAssetContract } from '$lib/helpers/web3/registry';
 import type { Asset } from '$lib/types/asset';
+import { bigGte, bigMul } from '$lib/helpers/big';
 
 export const GET: RequestHandler<Record<string, string>, Asset[]> = async ({
 	locals: { user, provider }
@@ -34,7 +35,7 @@ export const GET: RequestHandler<Record<string, string>, Asset[]> = async ({
 		return Object.assign(asset, { contract, balance });
 	});
 
-	const assets = await Promise.all(promises);
+	let assets = await Promise.all(promises);
 
 	const chainIds = [...new Set(assets.map(({ chain_id }) => chain_id))];
 	const chains = await Promise.all(
@@ -54,6 +55,12 @@ export const GET: RequestHandler<Record<string, string>, Asset[]> = async ({
 			asset.chain_icon_url = chain.icon_url;
 			asset.chain_name = chain.name;
 		}
+	});
+
+	assets = assets.sort((a, b) => {
+		const aBalance = bigMul(a.balance, a.price_usd);
+		const bBalance = bigMul(b.balance, b.price_usd);
+		return bigGte(aBalance, bBalance) ? -1 : 1;
 	});
 
 	return {

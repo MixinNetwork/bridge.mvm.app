@@ -23,8 +23,8 @@
 	import { goto } from '$app/navigation';
 	import SpinnerModal from '$lib/components/common/spinner-modal.svelte';
 	import { library } from '$lib/stores/ether';
-	import Metamask from '$lib/assets/logo/metamask.svg?component';
 	import Paste from '$lib/assets/paste.svg?component';
+	import { providerLogo, providerName } from '$lib/stores/provider';
 
 	const buildBalanceStore = ({ assetId, network }: { assetId: string; network: Network }) => {
 		return asyncDerived([assets, user], async ([$assets, $user]) => {
@@ -168,38 +168,11 @@
 			{address}
 		</div>
 	{:else}
-		<div class="flex">
-			<textarea
-				class={clsx('grow resize-none break-all py-3 pl-4 font-semibold', inputClasses, {
-					'rounded-lg': !isEosChain
-				})}
-				placeholder={isEthChain ? $user?.address || '' : 'Address'}
-				bind:value={address}
-			/>
-			{#if isEthChain}
-				<button
-					class="p-3"
-					on:click={() => {
-						address = $user?.address || '';
-					}}
-				>
-					<Metamask width={18} height={18} />
-				</button>
-			{/if}
-			<button
-				class="p-3"
-				on:click={async () => {
-					address = await navigator.clipboard.readText();
-				}}
-			>
-				<Paste />
-			</button>
-		</div>
 		{#if isEosChain}
-			<div class="flex">
+			<div class="flex border-b-2 border-brand-background">
 				<textarea
 					class={clsx(
-						'grow resize-none break-all rounded-lg py-3 pl-4 font-semibold',
+						'grow resize-none break-all rounded-lg py-3 pl-4 font-semibold ',
 						inputClasses
 					)}
 					placeholder="Memo/Tag (Optional)"
@@ -215,6 +188,31 @@
 				</button>
 			</div>
 		{/if}
+		<div class="flex">
+			<textarea
+				class={clsx('grow resize-none break-all rounded-lg py-3 pl-4 font-semibold', inputClasses)}
+				placeholder={isEthChain ? $user?.address || '' : 'Address'}
+				bind:value={address}
+			/>
+			{#if isEthChain}
+				<button
+					class="p-3"
+					on:click={() => {
+						address = $user?.address || '';
+					}}
+				>
+					<img src={$providerLogo} width={18} height={18} alt={$providerName} />
+				</button>
+			{/if}
+			<button
+				class="p-3"
+				on:click={async () => {
+					address = await navigator.clipboard.readText();
+				}}
+			>
+				<Paste />
+			</button>
+		</div>
 	{/if}
 </div>
 

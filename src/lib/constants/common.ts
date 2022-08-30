@@ -36,8 +36,9 @@ export const WHITELIST = [
 	'31d2ea9c-95eb-3355-b65b-ba096853bc18', // pusd
 	'f5ef6b5d-cc5a-3d90-b2c0-a2fd386e7a3c', // box
 	'c94ac88f-4671-3976-b60a-09064f1811e8', // xin
-	'965e5c6e-434c-3fa9-b780-c50f43cd955c', // cnb
-	'6cfe566e-4aad-470b-8c9a-2fd35b49c68d' // eos
+	// '965e5c6e-434c-3fa9-b780-c50f43cd955c', // cnb
+	'6cfe566e-4aad-470b-8c9a-2fd35b49c68d', // eos
+	'b91e18ff-a9ae-3dc7-8679-e935d9a4b34b' // USDT-TRC20
 ];
 
 export const networkParams: Record<string, NetworkParam> = {
@@ -57,5 +58,6 @@ export const networkParams: Record<string, NetworkParam> = {
 	}
 };
 
+export const TRANSACTION_GAS = 0.0000035;
 
-	export const TRANSACTION_GAS =  0.0000035 ;
+export const average_block_time = {};

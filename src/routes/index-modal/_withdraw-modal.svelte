@@ -15,7 +15,9 @@
 
 <LayoutModal on:click={onClose}>
 	<div slot="title">Withdraw</div>
-	{#if asset}
-		<Bridge {asset} depositMode={false} />
-	{/if}
+	<div class="flex grow flex-col items-stretch overflow-y-auto">
+		{#if asset}
+			<Bridge {asset} depositMode={false} />
+		{/if}
+	</div>
 </LayoutModal>
