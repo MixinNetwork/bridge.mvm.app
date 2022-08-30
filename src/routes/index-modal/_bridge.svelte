@@ -79,7 +79,6 @@
 
 	let address = '';
 
-	isEthChain && (address = $user?.address || '');
 	depositMode && (address = $user?.address || '');
 
 	let memo = '';
@@ -97,7 +96,7 @@
 			if (depositMode) {
 				await deposit($library, asset, value);
 			} else {
-				await withdraw($library, asset, $user.contract, value, address, memo);
+				await withdraw($library, asset, $user.contract, value, address || $user?.address, memo);
 			}
 		} finally {
 			loading = false;
@@ -115,7 +114,7 @@
 				<LogoCircle height={16} width={16} />
 			{/if}
 
-			<div>{depositMode ? 'Etheruem Mainnet' : 'MVM'}</div>
+			<div>{depositMode ? 'Etheruem' : 'MVM'}</div>
 		</div>
 	</div>
 	<div class=" divide-y-2 divide-brand-background child:w-full">
@@ -146,7 +145,7 @@
 					height={16}
 					alt={asset.chain_name || asset.name}
 				/>
-				<div>{asset.chain_name || asset.name}</div>
+				<div>{isEthChain ? 'Etheruem' : asset.chain_name || asset.name}</div>
 			{/if}
 		</div>
 	</div>
@@ -160,7 +159,7 @@
 				class={clsx('grow resize-none break-all py-3 pl-4 font-semibold', inputClasses, {
 					'rounded-lg': !isEosChain
 				})}
-				placeholder="Address"
+				placeholder={isEthChain ? $user?.address || '' : 'Address'}
 				bind:value={address}
 			/>
 			{#if isEthChain}
@@ -208,7 +207,7 @@
 <button
 	class="mt-10 self-center rounded-full bg-brand-primary px-6 py-4 text-white"
 	on:click={transfer}
-	disabled={!address || !fromBalance || !amount || amount <= 0}
+	disabled={(!isEthChain && !address) || !fromBalance || !amount || amount <= 0}
 	>{depositMode ? 'Deposit' : 'Withdraw'}</button
 >
 
