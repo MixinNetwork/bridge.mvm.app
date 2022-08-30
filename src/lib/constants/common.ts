@@ -56,3 +56,6 @@ export const networkParams: Record<string, NetworkParam> = {
 		blockExplorerUrls: [MVM_SCAN_URL]
 	}
 };
+
+
+	export const TRANSACTION_GAS =  0.0000035 ;

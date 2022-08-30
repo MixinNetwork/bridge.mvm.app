@@ -11,7 +11,7 @@
 	import { asyncDerived } from '@square/svelte-store';
 	import { assets, AssetWithdrawalFee } from '$lib/stores/model';
 	import { user } from '$lib/stores/user';
-	import { EOS_ASSET_ID, ETH_ASSET_ID } from '$lib/constants/common';
+	import { EOS_ASSET_ID, ETH_ASSET_ID, TRANSACTION_GAS } from '$lib/constants/common';
 	import { getBalance, getERC20Balance } from '$lib/helpers/web3/common';
 	import { ASSET_KEY } from '../index@drawer.svelte';
 	import type { Network } from '$lib/types/network';
@@ -64,8 +64,6 @@
 	let isEthChain = asset.chain_id === ETH_ASSET_ID;
 	$: isEthChain = asset.chain_id === ETH_ASSET_ID;
 	$: isEosChain = asset.chain_id === EOS_ASSET_ID;
-
-	$: transactionGas = asset.asset_id === ETH_ASSET_ID ? 0.0000035 : 0.0000016;
 
 	$: mainnetBalance = buildBalanceStore({ assetId, network: 'mainnet' });
 	$: mvmBalance = buildBalanceStore({ assetId, network: 'mvm' });
@@ -229,7 +227,7 @@
 			{asset.symbol}
 		</div>
 		<div>
-			Gas fee: {transactionGas} ETH
+			Gas fee: {TRANSACTION_GAS} ETH
 		</div>
 	</div>
 {/if}
