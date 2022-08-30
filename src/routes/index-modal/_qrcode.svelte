@@ -46,10 +46,12 @@
 				size={130}
 				class=" mt-6 mb-4 h-[130px] w-[130px] rounded-xl bg-white p-3 shadow"
 			/>
-			<div class="rounded-xl bg-black bg-opacity-[3%] py-2 px-3">
+			<div class="w-full rounded-xl bg-black bg-opacity-[3%] py-2 px-3">
 				<div class=" text-sm font-semibold opacity-30">{key}</div>
 				<div class="flex items-center font-semibold">
-					{value}
+					<div class="grow">
+						{value}
+					</div>
 					<button
 						class="px-3 py-2"
 						on:click={() => {
