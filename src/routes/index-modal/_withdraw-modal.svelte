@@ -1,5 +1,5 @@
 <script>
-	import LayoutModal from '../../lib/components/modal/layout-modal.svelte';
+	import LayoutModal from '$lib/components/modal/layout-modal.svelte';
 	import { selectedAsset } from '../index@drawer.svelte';
 	import Bridge from './_bridge.svelte';
 

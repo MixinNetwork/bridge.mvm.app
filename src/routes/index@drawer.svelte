@@ -17,7 +17,7 @@
 	import { page } from '$app/stores';
 	import DepositModal from './index-modal/_deposit-modal.svelte';
 	import { goto } from '$app/navigation';
-	import { ETH_ASSET_ID } from '../lib/constants/common';
+	import { ETH_ASSET_ID } from '$lib/constants/common';
 	import Modal from '$lib/components/common/modal/modal.svelte';
 	import WithdrawModal from './index-modal/_withdraw-modal.svelte';
 

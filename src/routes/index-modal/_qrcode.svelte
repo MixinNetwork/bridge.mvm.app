@@ -7,7 +7,7 @@
 	import Copy from '$lib/assets/copy.svg?component';
 	import AssetList from './_asset-list.svelte';
 	import Modal from '$lib/components/common/modal/modal.svelte';
-	import SelectedAssetButton from '../../lib/components/selected-asset-button.svelte';
+	import SelectedAssetButton from '$lib/components/selected-asset-button.svelte';
 
 	export let asset: Asset;
 

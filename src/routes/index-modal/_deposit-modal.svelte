@@ -11,7 +11,7 @@
 	import Qrcode from './_qrcode.svelte';
 	import { ETH_ASSET_ID } from '$lib/constants/common';
 	import Bridge from './_bridge.svelte';
-	import LayoutModal from '../../lib/components/modal/layout-modal.svelte';
+	import LayoutModal from '$lib/components/modal/layout-modal.svelte';
 
 	export let onClose = () => {
 		//

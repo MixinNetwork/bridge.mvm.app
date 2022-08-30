@@ -4,8 +4,8 @@
 	import Erc20Label from '$lib/components/erc20-label.svelte';
 	import type { Asset } from '$lib/types/asset';
 	import ModalHeader from '$lib/components/modal/modal-header.svelte';
-	import LayoutBottomSheet from '../../lib/components/modal/layout-bottom-sheet.svelte';
-	import { ETH_ASSET_ID } from '../../lib/constants/common';
+	import LayoutBottomSheet from '$lib/components/modal/layout-bottom-sheet.svelte';
+	import { ETH_ASSET_ID } from '$lib/constants/common';
 
 	export let onClose = () => {
 		//
