@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { ETH_ASSET_ID } from '../constants/common';
-
 	import type { Asset } from '../types/asset';
 	import AssetIcon from './asset-icon.svelte';
 	import ChainLabel from './chain-label.svelte';
