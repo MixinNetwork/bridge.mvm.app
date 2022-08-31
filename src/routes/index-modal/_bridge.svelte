@@ -15,7 +15,7 @@
 	import { getBalance, getERC20Balance } from '$lib/helpers/web3/common';
 	import { ASSET_KEY } from '../index@drawer.svelte';
 	import type { Network } from '$lib/types/network';
-	import { bigGte, bigSub } from '$lib/helpers/big';
+	import { bigGte, bigSub, toBigString, toRounding } from '$lib/helpers/big';
 	import LogoCircle from '$lib/assets/logo/logo-circle.svg?component';
 	import Modal from '$lib/components/common/modal/modal.svelte';
 	import AssetList from './_asset-list.svelte';
@@ -40,11 +40,13 @@
 			const contract = network === 'mvm' ? asset?.contract : asset?.asset_key;
 			if (!contract) return undefined;
 
-			return getERC20Balance({
+			const balance = await getERC20Balance({
 				account: $user.address,
 				contractAddress: contract,
 				network
 			});
+
+			return toRounding(balance, 8);
 		});
 	};
 
@@ -68,7 +70,7 @@
 	$: mainnetBalance = buildBalanceStore({ assetId, network: 'mainnet' });
 	$: mvmBalance = buildBalanceStore({ assetId, network: 'mvm' });
 
-	$: cacheMvmBalance = $mvmBalance || asset.balance;
+	$: cacheMvmBalance = $mvmBalance || toRounding(asset.balance, 8);
 
 	$: fromBalance = depositMode ? $mainnetBalance : cacheMvmBalance;
 
@@ -133,7 +135,7 @@
 	</div>
 	<div class=" divide-y-2 divide-brand-background child:w-full">
 		<SelectedAssetButton {asset} on:click={toggle}
-			>Balance: {fromBalance || '...'}</SelectedAssetButton
+			>Balance: {fromBalance ? toBigString(fromBalance) : '...'}</SelectedAssetButton
 		>
 		<input
 			class={clsx('rounded-b-lg  px-4 py-6', inputClasses)}
@@ -168,7 +170,7 @@
 			{address}
 		</div>
 	{:else}
-		<div class="flex">
+		<div class="flex border-b-2 border-brand-background">
 			<textarea
 				class={clsx('grow resize-none break-all rounded-lg py-3 pl-4 font-semibold', inputClasses)}
 				placeholder={isEthChain ? $user?.address || '' : 'Address'}
@@ -194,7 +196,7 @@
 			</button>
 		</div>
 		{#if isEosChain}
-			<div class="flex border-b-2 border-brand-background">
+			<div class="flex">
 				<textarea
 					class={clsx(
 						'grow resize-none break-all rounded-lg py-3 pl-4 font-semibold ',
