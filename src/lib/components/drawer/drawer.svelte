@@ -6,7 +6,7 @@
 	import Transactions from '$lib/assets/drawer/transactions.svg?component';
 	import Swap from '$lib/assets/drawer/swap.svg?component';
 	// import GasToken from '$lib/assets/drawer/gas-token.svg?component';
-	import Support from '$lib/assets/drawer/support.svg?component';
+	// import Support from '$lib/assets/drawer/support.svg?component';
 	import UserInfo from '../user-info.svelte';
 </script>
 
@@ -17,5 +17,5 @@
 	<DrawerItem logo={Transactions} href="/transactions/" title="Transactions" />
 	<DrawerItem logo={Swap} href="/swap/" title="Swap" />
 	<!-- <DrawerItem logo={GasToken} href="/gas-token/" title="Gas Token" /> -->
-	<DrawerItem logo={Support} href="/support/" title="Support" />
+	<!-- <DrawerItem logo={Support} href="/support/" title="Support" /> -->
 </div>

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { assets } from '$lib/stores/model';
 	import AssetIcon from '$lib/components/asset-icon.svelte';
-	import Erc20Label from '$lib/components/erc20-label.svelte';
+	import ChainLabel from '$lib/components/chain-label.svelte';
 	import type { Asset } from '$lib/types/asset';
 	import ModalHeader from '$lib/components/modal/modal-header.svelte';
 	import LayoutBottomSheet from '$lib/components/modal/layout-bottom-sheet.svelte';
@@ -35,9 +35,7 @@
 						<span class="font-bold">
 							{asset.symbol}
 						</span>
-						{#if asset.chain_id === ETH_ASSET_ID && asset.asset_id !== ETH_ASSET_ID}
-							<Erc20Label />
-						{/if}
+						<ChainLabel assetId={asset.asset_id} chainId={asset.chain_id} />
 					</div>
 
 					<div class="text-sm font-semibold opacity-20">

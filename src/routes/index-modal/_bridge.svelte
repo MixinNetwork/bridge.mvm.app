@@ -168,26 +168,6 @@
 			{address}
 		</div>
 	{:else}
-		{#if isEosChain}
-			<div class="flex border-b-2 border-brand-background">
-				<textarea
-					class={clsx(
-						'grow resize-none break-all rounded-lg py-3 pl-4 font-semibold ',
-						inputClasses
-					)}
-					placeholder="Memo/Tag (Optional)"
-					bind:value={memo}
-				/>
-				<button
-					class="p-3"
-					on:click={async () => {
-						memo = await navigator.clipboard.readText();
-					}}
-				>
-					<Paste />
-				</button>
-			</div>
-		{/if}
 		<div class="flex">
 			<textarea
 				class={clsx('grow resize-none break-all rounded-lg py-3 pl-4 font-semibold', inputClasses)}
@@ -213,6 +193,26 @@
 				<Paste />
 			</button>
 		</div>
+		{#if isEosChain}
+			<div class="flex border-b-2 border-brand-background">
+				<textarea
+					class={clsx(
+						'grow resize-none break-all rounded-lg py-3 pl-4 font-semibold ',
+						inputClasses
+					)}
+					placeholder="Memo/Tag (Optional)"
+					bind:value={memo}
+				/>
+				<button
+					class="p-3"
+					on:click={async () => {
+						memo = await navigator.clipboard.readText();
+					}}
+				>
+					<Paste />
+				</button>
+			</div>
+		{/if}
 	{/if}
 </div>
 

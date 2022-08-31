@@ -3,7 +3,7 @@
 
 	import { ASSET_KEY, MODE_KEY } from '../../routes/index@drawer.svelte';
 
-	import { bigMul, formatCurrency, toRounding } from '../helpers/big';
+	import { bigMul, formatCurrency, toBigString, toRounding } from '../helpers/big';
 
 	import type { Asset } from '../types/asset';
 	import AssetIcon from './asset-icon.svelte';
@@ -42,7 +42,7 @@
 			<div class=" text-sm font-semibold opacity-30">{asset.symbol}</div>
 		</div>
 		<div class="flex grow flex-col items-end">
-			<div class="font-bold">{toRounding(asset.balance, 8)}</div>
+			<div class="font-bold">{toBigString(toRounding(asset.balance, 8))}</div>
 			<div class=" text-sm font-semibold opacity-30">
 				${formatCurrency(bigMul(asset.balance, asset.price_usd))}
 			</div>

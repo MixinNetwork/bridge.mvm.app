@@ -3,7 +3,7 @@
 
 	import type { Asset } from '../types/asset';
 	import AssetIcon from './asset-icon.svelte';
-	import Erc20Label from './erc20-label.svelte';
+	import ChainLabel from './chain-label.svelte';
 	import Arrow from '$lib/assets/arrow.svg?component';
 
 	export let asset: Asset;
@@ -20,9 +20,7 @@
 		<div class=" text-start">
 			<div class="font-bold">
 				{asset.symbol}
-				{#if asset.chain_id === ETH_ASSET_ID && asset.asset_id !== ETH_ASSET_ID}
-					<Erc20Label />
-				{/if}
+				<ChainLabel assetId={asset.asset_id} chainId={asset.chain_id} />
 			</div>
 
 			<div class="text-sm font-semibold opacity-30">

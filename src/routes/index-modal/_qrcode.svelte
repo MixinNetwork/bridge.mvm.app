@@ -22,10 +22,6 @@
 	$: address = asset?.deposit_entries[0].destination;
 	$: memo = asset?.deposit_entries[0].tag;
 	$: qrcodes = [
-		{
-			key: 'Address',
-			value: address
-		},
 		...(memo
 			? [
 					{
@@ -33,7 +29,11 @@
 						value: memo
 					}
 			  ]
-			: [])
+			: []),
+		{
+			key: 'Address',
+			value: address
+		}
 	];
 </script>
 
