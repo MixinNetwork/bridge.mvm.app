@@ -34,6 +34,6 @@ export const AssetWithdrawalFee = mapTemplate((stringParameters: string) =>
 			|| asset_id === chain_id
 		) return fee;
 
-		return await fetchFeeOnAsset(chain_id, asset_id, fee);
+		return await fetchFeeOnAsset(asset_id, chain_id, fee);
 	}, false)
 );
