@@ -224,7 +224,7 @@
 	>
 		<div>
 			Withdrawal fee: {$assetWithdrawalFee || '...'}
-			{asset.symbol}
+			{asset.chain_symbol}
 		</div>
 		<div>
 			Gas fee: {TRANSACTION_GAS} ETH
