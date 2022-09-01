@@ -54,6 +54,7 @@ export const GET: RequestHandler<Record<string, string>, Asset[]> = async ({
 		if (chain) {
 			asset.chain_icon_url = chain.icon_url;
 			asset.chain_name = chain.name;
+			asset.chain_symbol = chain.symbol;
 		}
 	});
 

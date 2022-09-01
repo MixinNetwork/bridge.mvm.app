@@ -9,6 +9,7 @@
 	export let logo: SvelteComponent;
 	export let title: string;
 	export let href: string;
+	export let target: string | undefined = undefined;
 
 	$: selected = $page.url.pathname === href;
 </script>
@@ -22,6 +23,7 @@
 				'bg-brand-primary bg-opacity-10': selected
 			}
 		)}
+		{target}
 		{href}
 	>
 		<svelte:component

@@ -6,8 +6,9 @@
 	import Transactions from '$lib/assets/drawer/transactions.svg?component';
 	import Swap from '$lib/assets/drawer/swap.svg?component';
 	// import GasToken from '$lib/assets/drawer/gas-token.svg?component';
-	import Support from '$lib/assets/drawer/support.svg?component';
+	// import Support from '$lib/assets/drawer/support.svg?component';
 	import UserInfo from '../user-info.svelte';
+	import Exporor from '$lib/assets/drawer/explorer.svg?component';
 </script>
 
 <div class="w-72 rounded-r-2xl bg-white md:w-64 md:rounded-none">
@@ -17,5 +18,6 @@
 	<DrawerItem logo={Transactions} href="/transactions/" title="Transactions" />
 	<DrawerItem logo={Swap} href="/swap/" title="Swap" />
 	<!-- <DrawerItem logo={GasToken} href="/gas-token/" title="Gas Token" /> -->
-	<DrawerItem logo={Support} href="/support/" title="Support" />
+	<!-- <DrawerItem logo={Support} href="/support/" title="Support" /> -->
+	<DrawerItem logo={Exporor} href="https://scan.mvm.dev/" title="Explorer" target="_blank" />
 </div>

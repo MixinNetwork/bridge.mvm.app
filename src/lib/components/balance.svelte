@@ -1,6 +1,6 @@
 <script lang="ts">
 	import clsx from 'clsx';
-	import { formatCurrency, toRounding } from '../helpers/big';
+	import { formatCurrency, toBigString, toRounding } from '../helpers/big';
 
 	import { totalBalanceBtc, totalBalanceUsd } from '../stores/model';
 </script>
@@ -12,7 +12,7 @@
 	</div>
 	<div>
 		<span class="text-sm font-semibold opacity-30 md:pl-[1ch] md:text-base">
-			{toRounding($totalBalanceBtc ?? 0, 8)} BTC
+			{toBigString(toRounding($totalBalanceBtc ?? 0, 8))} BTC
 		</span>
 	</div>
 </div>
