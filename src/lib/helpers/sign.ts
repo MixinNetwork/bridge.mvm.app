@@ -1,9 +1,9 @@
 import { ethers } from 'ethers';
-import { REGISTRY_PID, STORAGE_ADDRESS, WITHDRAWAL_BOT } from '../constants/common';
+import { REGISTRY_PID, STORAGE_ADDRESS } from '../constants/common';
 
 const getWithdrawalAction = (destination: string, tag: string, amount: string): string => {
 	const action = {
-		receivers: [WITHDRAWAL_BOT],
+		receivers: [import.meta.env.VITE_WITHDRAWAL_BOT_CLIENT_ID],
 		threshold: 1,
 		extra: JSON.stringify({
 			destination,
