@@ -86,7 +86,11 @@
 
 	let memo = '';
 
-	$: assetWithdrawalFee = AssetWithdrawalFee(`${asset.asset_id}&&${asset.chain_id}&&${address}`);
+	$: assetWithdrawalFee = AssetWithdrawalFee({
+		asset_id: asset.asset_id,
+		chain_id: asset.chain_id,
+		destination: address
+	});
 
 	$: isGteFee =
 		!depositMode && amount && $assetWithdrawalFee && bigGte(amount, $assetWithdrawalFee);
