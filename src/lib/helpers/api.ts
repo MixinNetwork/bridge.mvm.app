@@ -19,8 +19,9 @@ export const fetchWithdrawalFee = async (asset_id: string, destination: string) 
 	const asset = await externalClient.checkAddress({
 		asset: asset_id,
 		destination,
-	});
-	return (asset as CheckAddressFee).fee;
+	}) as CheckAddressFee;
+
+	return asset.fee;
 };
 
 export const fetchAssets = async (
@@ -28,4 +29,27 @@ export const fetchAssets = async (
 ): Promise<Asset[]> => {
 	const response = await fetch('/api/assets');
 	return await response.json();
+};
+
+export const fetchFeeOnAsset = async (from: string, to: string, amount: string): Promise<string> => {
+	const overChargeAmount = (Number(amount) * 1.01).toString();
+	if (Number.isNaN(overChargeAmount)) return '0';
+
+	const response = await fetch('https://api.4swap.org/api/orders/pre', {
+		method: 'POST',
+		body: JSON.stringify({
+			pay_asset_id: from,
+			fill_asset_id: to,
+			amount: overChargeAmount,
+		})
+	});
+	const { data } = await response.json();
+
+	if (data) {
+		const payAmount = Number(data.pay_amount);
+		if (payAmount > 0.0001) return (payAmount + 0.0001).toFixed(4);
+		return payAmount.toString();
+	}
+
+	return '';
 };
