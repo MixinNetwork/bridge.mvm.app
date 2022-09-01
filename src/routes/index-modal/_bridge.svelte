@@ -77,16 +77,19 @@
 	$: if (fromBalance && amount && bigGte(amount, fromBalance))
 		amount = Number.parseFloat(fromBalance);
 
-	$: assetWithdrawalFee = AssetWithdrawalFee(asset.asset_id);
-
-	$: isGteFee =
-		!depositMode && amount && $assetWithdrawalFee && bigGte(amount, $assetWithdrawalFee);
-
 	let address = '';
 
 	depositMode && (address = $user?.address || '');
 
 	let memo = '';
+
+	$: assetWithdrawalFee = AssetWithdrawalFee(JSON.stringify({
+		assetId: asset.asset_id,
+		destination: address
+	}));
+
+	$: isGteFee =
+			!depositMode && amount && $assetWithdrawalFee && bigGte(amount, $assetWithdrawalFee);
 
 	let loading = false;
 	const transfer = async () => {
@@ -107,7 +110,7 @@
 					asset,
 					$user.contract,
 					bigSub(value, $assetWithdrawalFee),
-					address || $user?.address,
+					address,
 					memo,
 					$assetWithdrawalFee
 				);
