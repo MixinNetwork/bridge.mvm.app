@@ -89,7 +89,7 @@
 	$: assetWithdrawalFee = AssetWithdrawalFee(`${asset.asset_id}&&${asset.chain_id}&&${address}`);
 
 	$: isGteFee =
-			!depositMode && amount && $assetWithdrawalFee && bigGte(amount, $assetWithdrawalFee);
+		!depositMode && amount && $assetWithdrawalFee && bigGte(amount, $assetWithdrawalFee);
 
 	let loading = false;
 	const transfer = async () => {
@@ -105,15 +105,7 @@
 			if (depositMode) {
 				await deposit($library, asset, value);
 			} else {
-				await withdraw(
-					$library,
-					asset,
-					$user.contract,
-					value,
-					address,
-					memo,
-					$assetWithdrawalFee
-				);
+				await withdraw($library, asset, $user.contract, value, address, memo, $assetWithdrawalFee);
 			}
 		} finally {
 			loading = false;

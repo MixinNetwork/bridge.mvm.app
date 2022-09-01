@@ -125,7 +125,10 @@ export const withdraw = async (
 	if (asset.chain_id === ETH_ASSET_ID && asset.contract) {
 		const tokenContract = new ethers.Contract(asset.contract, MVM_ERC20_ABI, signer);
 		const tokenDecimal = await tokenContract.decimals();
-		const value = ethers.utils.parseUnits((Number(amount) + Number(fee)).toFixed(tokenDecimal).toString(), tokenDecimal);
+		const value = ethers.utils.parseUnits(
+			(Number(amount) + Number(fee)).toFixed(tokenDecimal).toString(),
+			tokenDecimal
+		);
 
 		await tokenContract.transferWithExtra(userContract, value, extra, {
 			gasPrice: 10000000,

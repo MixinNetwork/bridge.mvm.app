@@ -1,4 +1,4 @@
-import ExternalClient from "@mixin.dev/mixin-node-sdk/src/client/external";
+import ExternalClient from '@mixin.dev/mixin-node-sdk/src/client/external';
 import type { Asset, CheckAddressFee } from '../types/asset';
 import type { RegisteredUser } from '../types/user';
 
@@ -16,10 +16,10 @@ export const fetchWithdrawalFee = async (asset_id: string, destination: string) 
 	if (!destination) return '';
 
 	const externalClient = ExternalClient();
-	const asset = await externalClient.checkAddress({
+	const asset = (await externalClient.checkAddress({
 		asset: asset_id,
-		destination,
-	}) as CheckAddressFee;
+		destination
+	})) as CheckAddressFee;
 
 	return asset.fee;
 };
@@ -31,7 +31,11 @@ export const fetchAssets = async (
 	return await response.json();
 };
 
-export const fetchFeeOnAsset = async (from: string, to: string, amount: string): Promise<string> => {
+export const fetchFeeOnAsset = async (
+	from: string,
+	to: string,
+	amount: string
+): Promise<string> => {
 	const overChargeAmount = (Number(amount) * 1.01).toString();
 	if (Number.isNaN(overChargeAmount)) return '0';
 
@@ -40,7 +44,7 @@ export const fetchFeeOnAsset = async (from: string, to: string, amount: string):
 		body: JSON.stringify({
 			pay_asset_id: from,
 			fill_asset_id: to,
-			amount: overChargeAmount,
+			amount: overChargeAmount
 		})
 	});
 	const { data } = await response.json();

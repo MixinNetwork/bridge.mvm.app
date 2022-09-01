@@ -9,16 +9,12 @@ const getWithdrawalAction = (destination: string, tag: string, amount: string): 
 			destination,
 			tag,
 			amount
-		}),
+		})
 	};
 	return JSON.stringify(action);
 };
 
-export const getWithdrawalExtra = async (
-	destination: string,
-	tag: string,
-	amount: string,
-) => {
+export const getWithdrawalExtra = async (destination: string, tag: string, amount: string) => {
 	const action = getWithdrawalAction(destination, tag, amount);
 	const value = Buffer.from(action).toString('hex');
 	const hash = ethers.utils.keccak256(`0x${value}`).slice(2);
