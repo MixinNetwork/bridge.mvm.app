@@ -2,6 +2,7 @@ import toHex from '../helpers/utils';
 import type { NetworkParam } from '../types/network';
 
 export const ETH_ASSET_ID = '43d61dcd-e413-450d-80b8-101d5e903357';
+export const TRX_ASSET_ID = '25dabac5-056a-48ff-b9f9-f67395dc407c';
 
 export const EOS_ASSET_ID = '6cfe566e-4aad-470b-8c9a-2fd35b49c68d';
 
@@ -11,6 +12,8 @@ export const BRIDGE_ADDRESS = '0x0915EaE769D68128EEd9711A0bc4097831BE57F3';
 export const STORAGE_ADDRESS = '0xef241988D19892fE4efF4935256087F4fdc5ecAa';
 
 export const MVM_RPC_URI = 'https://geth.mvm.dev/';
+
+export const WITHDRAWAL_BOT = import.meta.env.WITHDRAWAL_BOT_CLIENT_ID;
 
 export const INFURA_ID = import.meta.env.VITE_INFURA_ID;
 export const RPC_URL = `https://mainnet.infura.io/v3/${INFURA_ID}`;

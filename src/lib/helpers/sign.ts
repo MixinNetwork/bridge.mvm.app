@@ -1,17 +1,15 @@
 import { ethers } from 'ethers';
-import { REGISTRY_PID, STORAGE_ADDRESS } from '../constants/common';
+import { REGISTRY_PID, STORAGE_ADDRESS, WITHDRAWAL_BOT } from '../constants/common';
 
-const getWithdrawalAction = (
-	destination: string,
-	tag: string,
-	traceId: string,
-	isAsset: boolean
-): string => {
-	const sign = isAsset ? 'A' : 'B';
+const getWithdrawalAction = (destination: string, tag: string, amount: string): string => {
 	const action = {
-		destination,
-		tag,
-		extra: `${traceId}:${sign}`
+		receivers: [WITHDRAWAL_BOT],
+		threshold: 1,
+		extra: JSON.stringify({
+			destination,
+			tag,
+			amount
+		}),
 	};
 	return JSON.stringify(action);
 };
@@ -19,10 +17,9 @@ const getWithdrawalAction = (
 export const getWithdrawalExtra = async (
 	destination: string,
 	tag: string,
-	traceId: string,
-	isAsset: boolean
+	amount: string,
 ) => {
-	const action = getWithdrawalAction(destination, tag, traceId, isAsset);
+	const action = getWithdrawalAction(destination, tag, amount);
 	const value = Buffer.from(action).toString('hex');
 	const hash = ethers.utils.keccak256(`0x${value}`).slice(2);
 	return `0x${REGISTRY_PID}${STORAGE_ADDRESS.toLowerCase().slice(2)}${hash}${value}`;

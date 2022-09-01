@@ -108,7 +108,7 @@
 					$library,
 					asset,
 					$user.contract,
-					bigSub(value, $assetWithdrawalFee),
+					value,
 					address,
 					memo,
 					$assetWithdrawalFee

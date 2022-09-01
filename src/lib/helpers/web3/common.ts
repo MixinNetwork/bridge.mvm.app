@@ -1,5 +1,4 @@
 import { ethers, utils, type BigNumberish } from 'ethers';
-import { v4 } from 'uuid';
 import { BRIDGE_ABI, ERC20_ABI, MVM_ERC20_ABI } from '../../constants/abis';
 import {
 	BRIDGE_ADDRESS,
@@ -108,47 +107,31 @@ export const withdraw = async (
 ) => {
 	await switchNetwork(provider, 'mvm');
 
-	const traceId = v4();
-
 	const signer = provider.getSigner();
-	const assetExtra = await getWithdrawalExtra(destination, tag, traceId, true);
-	const feeExtra = await getWithdrawalExtra(destination, tag, traceId, false);
-
-	const bridge = new ethers.Contract(BRIDGE_ADDRESS, BRIDGE_ABI, signer);
-	const feeAmount = ethers.utils.parseEther(Number(fee).toFixed(8));
+	const extra = await getWithdrawalExtra(destination, tag, amount);
 
 	if (asset.asset_id === ETH_ASSET_ID) {
-		const assetAmount = ethers.utils.parseEther(Number(amount).toFixed(8));
+		const totalAmount = ethers.utils.parseEther((Number(amount) + Number(fee)).toFixed(8));
 
-		await bridge.release(userContract, assetExtra, {
+		const bridge = new ethers.Contract(BRIDGE_ADDRESS, BRIDGE_ABI, signer);
+		await bridge.release(userContract, extra, {
 			gasPrice: 10000000,
 			gasLimit: 350000,
-			value: assetAmount
+			value: totalAmount
 		});
-
-		await bridge.release(userContract, feeExtra, {
-			gasPrice: 10000000,
-			gasLimit: 350000,
-			value: feeAmount
-		});
+		return;
 	}
 
 	if (asset.chain_id === ETH_ASSET_ID && asset.contract) {
-		const tokenAddress = asset.contract;
-		const tokenContract = new ethers.Contract(tokenAddress, MVM_ERC20_ABI, signer);
+		const tokenContract = new ethers.Contract(asset.contract, MVM_ERC20_ABI, signer);
 		const tokenDecimal = await tokenContract.decimals();
-		const value = ethers.utils.parseUnits(amount, tokenDecimal);
+		const value = ethers.utils.parseUnits((Number(amount) + Number(fee)).toFixed(tokenDecimal).toString(), tokenDecimal);
 
-		await tokenContract.transferWithExtra(userContract, value, assetExtra, {
+		await tokenContract.transferWithExtra(userContract, value, extra, {
 			gasPrice: 10000000,
 			gasLimit: 350000
 		});
-
-		await bridge.release(userContract, feeExtra, {
-			gasPrice: 10000000,
-			gasLimit: 350000,
-			value: feeAmount
-		});
+		return;
 	}
 
 	throw new Error('Invalid asset');
