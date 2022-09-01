@@ -69,8 +69,9 @@
 
 	$: mainnetBalance = buildBalanceStore({ assetId, network: 'mainnet' });
 	$: mvmBalance = buildBalanceStore({ assetId, network: 'mvm' });
+	$: roundedMvmBalance = $mvmBalance ? toRounding($mvmBalance, 8) : undefined;
 
-	$: cacheMvmBalance = $mvmBalance || toRounding(asset.balance, 8);
+	$: cacheMvmBalance = roundedMvmBalance || toRounding(asset.balance, 8);
 
 	$: fromBalance = depositMode ? $mainnetBalance : cacheMvmBalance;
 
@@ -224,7 +225,7 @@
 	>
 		<div>
 			Withdrawal fee: {$assetWithdrawalFee || '...'}
-			{asset.chain_symbol}
+			{asset.chain_symbol || asset.symbol}
 		</div>
 		<div>
 			Gas fee: {TRANSACTION_GAS} ETH
