@@ -28,19 +28,70 @@ export const MVM_CHAIN_ID = 73927;
 export const MAINNET_CHAIN_HEX_ID = toHex(MAINNET_CHAIN_ID);
 export const MVM_CHAIN_HEX_ID = toHex(MVM_CHAIN_ID);
 
-export const WHITELIST = [
-	'c6d0c728-2624-429b-8e0d-d9d19b6592fa', // btc
-	'4d8c508b-91c5-375b-92b0-ee702ed2dac5', // usdt
-	'eea900a8-b327-488c-8d8d-1428702fe240', // mob
-	'43d61dcd-e413-450d-80b8-101d5e903357', // eth
-	'25dabac5-056a-48ff-b9f9-f67395dc407c', // trx
-	'31d2ea9c-95eb-3355-b65b-ba096853bc18', // pusd
-	'f5ef6b5d-cc5a-3d90-b2c0-a2fd386e7a3c', // box
-	'c94ac88f-4671-3976-b60a-09064f1811e8', // xin
-	// '965e5c6e-434c-3fa9-b780-c50f43cd955c', // cnb
-	'6cfe566e-4aad-470b-8c9a-2fd35b49c68d', // eos
-	'b91e18ff-a9ae-3dc7-8679-e935d9a4b34b' // USDT-TRC20
+export const WHITELIST_ASSET = [
+	{
+		assetId: '43d61dcd-e413-450d-80b8-101d5e903357',
+		contract: undefined,
+		chainSymbol: undefined,
+		symbol: 'ETH'
+	},
+	{
+		assetId: 'b91e18ff-a9ae-3dc7-8679-e935d9a4b34b',
+		contract: '0xaC2ac36102f96f1FdEd2724F1d54b9FCa6bBf1Ee',
+		chainSymbol: 'TRX',
+		symbol: 'USDT'
+	},
+	{
+		assetId: '6cfe566e-4aad-470b-8c9a-2fd35b49c68d',
+		contract: '0xE968257b324264858c0704fcd260D6673D7fE5cF',
+		chainSymbol: undefined,
+		symbol: 'EOS'
+	},
+	{
+		assetId: 'c94ac88f-4671-3976-b60a-09064f1811e8',
+		contract: '0x034A771797a1C8694Bc33E1AA89f51d1f828e5A4',
+		chainSymbol: 'ETH',
+		symbol: 'XIN'
+	},
+	{
+		assetId: 'f5ef6b5d-cc5a-3d90-b2c0-a2fd386e7a3c',
+		contract: '0xBcbC18B37250aC7E9F983141046D56c0aB032d00',
+		chainSymbol: 'ETH',
+		symbol: 'BOX'
+	},
+	{
+		assetId: '31d2ea9c-95eb-3355-b65b-ba096853bc18',
+		contract: '0xa8090F6f19295321968B2f3BcDB44d20bB15742e',
+		chainSymbol: 'ETH',
+		symbol: 'pUSD'
+	},
+	{
+		assetId: '25dabac5-056a-48ff-b9f9-f67395dc407c',
+		contract: '0xc39cB12df2Ab413d4f3D1a2212a09bBF98fF650e',
+		chainSymbol: undefined,
+		symbol: 'TRX'
+	},
+	{
+		assetId: 'eea900a8-b327-488c-8d8d-1428702fe240',
+		contract: '0xE3cb8a2b08A760d4FC04d9C1f609d1c82fB75f60',
+		chainSymbol: undefined,
+		symbol: 'MOB'
+	},
+	{
+		assetId: '4d8c508b-91c5-375b-92b0-ee702ed2dac5',
+		contract: '0x59e0f2E9254dB4D662eF36a02118eC5DBd9f8dfb',
+		chainSymbol: 'ETH',
+		symbol: 'USDT'
+	},
+	{
+		assetId: 'c6d0c728-2624-429b-8e0d-d9d19b6592fa',
+		contract: '0x0e42Ae5649B3a67842AF0F3fC21d09d9b850A694',
+		chainSymbol: undefined,
+		symbol: 'BTC'
+	}
 ];
+
+export const WHITELIST_ASSET_ID = WHITELIST_ASSET.map((item) => item.assetId);
 
 export const networkParams: Record<string, NetworkParam> = {
 	[MAINNET_CHAIN_HEX_ID]: {
