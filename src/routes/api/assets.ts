@@ -47,7 +47,7 @@ export const GET: RequestHandler<Record<string, string>, Asset[]> = async ({
 	const chainIds = [...new Set(assets.map(({ chain_id }) => chain_id))];
 	const chains = await Promise.all(
 		chainIds.map((chainId) => {
-			const chain = assets.find((asset) => asset.asset_id === chainId);
+			const chain = topAssets.find((asset) => asset.asset_id === chainId);
 			if (chain) return chain;
 
 			return assetClient.fetch(chainId);
