@@ -5,14 +5,9 @@
 	import { ASSET_KEY } from '../index@drawer.svelte';
 	import QrCode from '$lib/components/common/qr-code.svelte';
 	import Copy from '$lib/assets/copy.svg?component';
-	import AssetList from './_asset-list.svelte';
-	import Modal from '$lib/components/common/modal/modal.svelte';
 	import SelectedAssetButton from '$lib/components/selected-asset-button.svelte';
 
 	export let asset: Asset;
-
-	let openedSelectModal = false;
-	const toggle = () => (openedSelectModal = !openedSelectModal);
 
 	const updateAsset = (event: CustomEvent<Asset>) => {
 		$page.url.searchParams.set(ASSET_KEY, event.detail.asset_id);
@@ -38,7 +33,7 @@
 </script>
 
 <div class="mx-5 rounded-lg bg-white">
-	<SelectedAssetButton {asset} on:click={toggle} />
+	<SelectedAssetButton {asset} on:callback={updateAsset} />
 	{#each qrcodes as { key, value } (key)}
 		<div class="mx-4 flex flex-col items-center break-all  pb-6">
 			<QrCode
@@ -70,11 +65,3 @@
 		<li>Min deposit: 0.00000001 {asset.symbol}</li>
 	</ul>
 </div>
-
-<Modal
-	isOpen={openedSelectModal}
-	class="!items-end md:!items-center"
-	content={AssetList}
-	on:close={toggle}
-	on:callback={updateAsset}
-/>

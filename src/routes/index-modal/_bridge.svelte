@@ -18,7 +18,6 @@
 	import { bigGte, bigSub, toBigString, toRounding } from '$lib/helpers/big';
 	import LogoCircle from '$lib/assets/logo/logo-circle.svg?component';
 	import Modal from '$lib/components/common/modal/modal.svelte';
-	import AssetList from './_asset-list.svelte';
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
 	import SpinnerModal from '$lib/components/common/spinner-modal.svelte';
@@ -57,9 +56,6 @@
 
 	export let asset: Asset;
 	export let depositMode: boolean;
-
-	let openedSelectModal = false;
-	const toggle = () => (openedSelectModal = !openedSelectModal);
 
 	$: assetId = asset.asset_id;
 
@@ -135,7 +131,7 @@
 		</div>
 	</div>
 	<div class=" divide-y-2 divide-brand-background child:w-full">
-		<SelectedAssetButton {asset} on:click={toggle}
+		<SelectedAssetButton {asset} on:callback={updateAsset}
 			>Balance: {fromBalance ? toBigString(fromBalance) : '...'}</SelectedAssetButton
 		>
 		<input
@@ -162,7 +158,7 @@
 					height={16}
 					alt={asset.chain_name || asset.name}
 				/>
-				<div>{isEthChain ? 'Etheruem' : asset.chain_name || asset.name}</div>
+				<div>{asset.chain_name || asset.name}</div>
 			{/if}
 		</div>
 	</div>
@@ -221,7 +217,7 @@
 
 {#if !depositMode}
 	<div
-		class=" mx-5 mt-3 space-y-2 rounded-lg bg-black bg-opacity-5 p-4 text-xs font-semibold text-black text-opacity-50"
+		class="mx-5 mt-3 space-y-2 rounded-lg bg-black bg-opacity-5 p-4 text-xs font-semibold text-black text-opacity-50"
 	>
 		<div>
 			Withdrawal fee: {$assetWithdrawalFee || '...'}
@@ -243,13 +239,5 @@
 		amount <= 0 ||
 		(!depositMode && !isGteFee)}>{depositMode ? 'Deposit' : 'Withdraw'}</button
 >
-
-<Modal
-	isOpen={openedSelectModal}
-	class="!items-end md:!items-center"
-	content={AssetList}
-	on:close={toggle}
-	on:callback={updateAsset}
-/>
 
 <Modal isOpen={loading} content={SpinnerModal} maskClosable={false} keyboardClosable={false} />

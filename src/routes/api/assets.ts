@@ -4,7 +4,7 @@ import { ETH_ASSET_ID, WHITELIST_ASSET, WHITELIST_ASSET_ID } from '$lib/constant
 import { getBalance } from '$lib/helpers/web3/common';
 import type { Asset } from '$lib/types/asset';
 import { bigGte, bigMul } from '$lib/helpers/big';
-import { getMvmTokens } from '../../lib/helpers/mvm/api';
+import { getMvmTokens } from '$lib/helpers/mvm/api';
 import { utils } from 'ethers';
 
 export const GET: RequestHandler<Record<string, string>, Asset[]> = async ({
@@ -69,6 +69,9 @@ export const GET: RequestHandler<Record<string, string>, Asset[]> = async ({
 		const bBalance = bigMul(b.balance, b.price_usd);
 		return bigGte(aBalance, bBalance) ? -1 : 1;
 	});
+
+	const eth = assets.find((asset) => asset.asset_id === ETH_ASSET_ID);
+	if (eth) eth.name = 'Etheruem';
 
 	return {
 		status: 200,

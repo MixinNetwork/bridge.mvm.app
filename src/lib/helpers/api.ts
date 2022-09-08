@@ -1,6 +1,7 @@
 import { NetworkClient } from '@mixin.dev/mixin-node-sdk';
 import type { Asset } from '../types/asset';
 import type { RegisteredUser } from '../types/user';
+import ExternalClient from '@mixin.dev/mixin-node-sdk/src/client/external';
 
 export const register = async (address: string): Promise<RegisteredUser> => {
 	const response = await fetch('https://bridge.mvm.dev/users', {
@@ -24,3 +25,5 @@ export const fetchAssets = async (
 	const response = await fetch('/api/assets');
 	return await response.json();
 };
+
+export const fetchExchangeRates = ExternalClient().exchangeRates;

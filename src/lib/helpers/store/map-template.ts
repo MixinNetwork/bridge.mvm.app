@@ -6,7 +6,9 @@ export const mapTemplate = <Key, Store extends Stores = never>(build: (key: Key)
 	const template = (key: Key) => {
 		const k = [...cache.keys()].find((k) => isEqual(k, key));
 		if (!k) cache.set(key, build(key));
-		return cache.get(k || key);
+		const store = cache.get(k || key);
+		if (!store) throw new Error('Store not found');
+		return store;
 	};
 
 	return template;

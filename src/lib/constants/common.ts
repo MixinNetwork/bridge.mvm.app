@@ -2,6 +2,7 @@ import toHex from '../helpers/utils';
 import type { NetworkParam } from '../types/network';
 
 export const ETH_ASSET_ID = '43d61dcd-e413-450d-80b8-101d5e903357';
+export const XIN_ASSET_ID = 'c94ac88f-4671-3976-b60a-09064f1811e8';
 export const TRX_ASSET_ID = '25dabac5-056a-48ff-b9f9-f67395dc407c';
 
 export const EOS_ASSET_ID = '6cfe566e-4aad-470b-8c9a-2fd35b49c68d';

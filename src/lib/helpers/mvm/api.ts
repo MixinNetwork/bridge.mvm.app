@@ -7,7 +7,7 @@ export const getMvmTokens = async (address: string) => {
 	return result as {
 		balance: string;
 		contractAddress: string;
-		decimals: number;
+		decimals: string;
 		name: string;
 		symbol: string;
 		type: string;
