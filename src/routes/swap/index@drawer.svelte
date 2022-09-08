@@ -17,6 +17,7 @@
 	import UserInfo from '$lib/components/user-info.svelte';
 	import { format, toPercent } from '$lib/helpers/big';
 	import SelectedAssetButton from '$lib/components/selected-asset-button.svelte';
+	import { slide } from 'svelte/transition';
 
 	export const INPUT_KEY = 'input';
 	export const OUTPUT_KEY = 'output';
@@ -140,7 +141,7 @@
 </script>
 
 <Header class="bg-transparent">
-	<div>Swap</div>
+	<div class="md:hidden">Swap</div>
 	<a href="/" class="md:hidden">
 		<Helper />
 	</a>
@@ -216,6 +217,7 @@
 
 {#if order && +order.amount}
 	<div
+		transition:slide
 		class="mx-5 mt-3 space-y-2 rounded-lg bg-black bg-opacity-5 p-4 text-xs font-semibold text-black text-opacity-50 child:flex child:items-center child:justify-between"
 	>
 		<div>
