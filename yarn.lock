@@ -631,10 +631,10 @@
     estree-walker "^2.0.1"
     picomatch "^2.2.2"
 
-"@square/svelte-store@^0.2.0":
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/@square/svelte-store/-/svelte-store-0.2.0.tgz#f9f41ea28620bb7eaf2c04e2dbafd7c3b18c7fb4"
-  integrity sha512-vQ6C9hHMM6Pw3mk2zrmtntvS5cq9D3J1z5sPYnDJOLrbfdDxnl/SkRKsP+VjVom1G6MlHV1VIoeffGEJweFPew==
+"@square/svelte-store@^0.2.1":
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/@square/svelte-store/-/svelte-store-0.2.1.tgz#8f533501c61256efbedc4234440d2aba23a58b3f"
+  integrity sha512-w2+RoTOoGLlir/W4rTZ6jlPr1YftjPOhMp9mazBh3kZQnYvND4c/UTWmK4i/Qex8p7ZNnzLbZ/NvdZXozOG0SA==
   dependencies:
     svelte "^3.0.0"
 
