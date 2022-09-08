@@ -18,7 +18,7 @@
 		"@mixin.dev/mixin-node-sdk": "^4.6.0",
 		"@playwright/test": "^1.25.2",
 		"@poppanator/sveltekit-svg": "^1.0.0",
-		"@square/svelte-store": "^0.2.0",
+		"@square/svelte-store": "^0.2.1",
 		"@sveltejs/adapter-auto": "^1.0.0-next.71",
 		"@sveltejs/kit": "next",
 		"@types/big.js": "^6.1.5",
