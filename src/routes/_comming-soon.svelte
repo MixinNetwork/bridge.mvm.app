@@ -13,5 +13,5 @@
 
 <div class="flex grow flex-col items-center justify-center">
 	<ComingSoon />
-	<div class="font-bold opacity-20 mt-4">Coming Soon</div>
+	<div class="mt-4 font-bold opacity-20">Coming Soon</div>
 </div>
