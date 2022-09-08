@@ -2,15 +2,16 @@
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import type { Asset } from '$lib/types/asset';
-	import { ASSET_KEY } from '../index@drawer.svelte';
 	import QrCode from '$lib/components/common/qr-code.svelte';
 	import Copy from '$lib/assets/copy.svg?component';
-	import SelectedAssetButton from '$lib/components/selected-asset-button.svelte';
+	import SelectedAssetButton from '$lib/components/base/selected-asset-button.svelte';
+	import { setSearchParam } from '../../helpers/app-store';
+	import { ASSET_KEY } from './export';
 
 	export let asset: Asset;
 
 	const updateAsset = (event: CustomEvent<Asset>) => {
-		$page.url.searchParams.set(ASSET_KEY, event.detail.asset_id);
+		setSearchParam($page, ASSET_KEY, event.detail.asset_id);
 		goto($page.url.href, { keepfocus: true, replaceState: true, noscroll: true });
 	};
 

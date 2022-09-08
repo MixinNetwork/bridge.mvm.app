@@ -1,10 +1,10 @@
 <script lang="ts">
 	import clsx from 'clsx';
-	import type { Asset } from '../types/asset';
+	import type { Asset } from '../../types/asset';
 	import AssetIcon from './asset-icon.svelte';
 	import ChainLabel from './chain-label.svelte';
 	import Arrow from '$lib/assets/arrow.svg?component';
-	import Modal from './common/modal/modal.svelte';
+	import Modal from '../common/modal/modal.svelte';
 	import AssetList from './asset-list.svelte';
 
 	let clazz: string | undefined = undefined;
@@ -16,7 +16,7 @@
 </script>
 
 <button
-	class={clsx('flex w-full items-center justify-between px-4 py-3 space-x-4', clazz)}
+	class={clsx('flex w-full items-center shrink-0 justify-between px-4 py-3 space-x-4', clazz)}
 	on:click={toggle}
 >
 	<div class="flex items-center space-x-3">

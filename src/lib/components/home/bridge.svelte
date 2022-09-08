@@ -7,15 +7,15 @@
 	import clsx from 'clsx';
 	import type { Asset } from '$lib/types/asset';
 	import Eth from '$lib/assets/logo/eth.svg?component';
-	import SelectedAssetButton from '$lib/components/selected-asset-button.svelte';
+	import SelectedAssetButton from '$lib/components/base/selected-asset-button.svelte';
 	import { asyncDerived } from '@square/svelte-store';
 	import { assets, AssetWithdrawalFee } from '$lib/stores/model';
 	import { user } from '$lib/stores/user';
 	import { EOS_ASSET_ID, ETH_ASSET_ID, TRANSACTION_GAS } from '$lib/constants/common';
 	import { getBalance, getERC20Balance } from '$lib/helpers/web3/common';
-	import { ASSET_KEY } from '../index@drawer.svelte';
+	import { ASSET_KEY } from './export';
 	import type { Network } from '$lib/types/network';
-	import { bigGte, bigSub, toBigString, toRounding } from '$lib/helpers/big';
+	import { bigGte, bigSub, format } from '$lib/helpers/big';
 	import LogoCircle from '$lib/assets/logo/logo-circle.svg?component';
 	import Modal from '$lib/components/common/modal/modal.svelte';
 	import { page } from '$app/stores';
@@ -45,7 +45,7 @@
 				network
 			});
 
-			return toRounding(balance, 8);
+			return format({ n: balance, dp: 8, fixed: true });
 		});
 	};
 
@@ -65,9 +65,9 @@
 
 	$: mainnetBalance = buildBalanceStore({ assetId, network: 'mainnet' });
 	$: mvmBalance = buildBalanceStore({ assetId, network: 'mvm' });
-	$: roundedMvmBalance = $mvmBalance ? toRounding($mvmBalance, 8) : undefined;
+	$: roundedMvmBalance = format({ n: $mvmBalance || 0, dp: 8, fixed: true });
 
-	$: cacheMvmBalance = roundedMvmBalance || toRounding(asset.balance, 8);
+	$: cacheMvmBalance = roundedMvmBalance || format({ n: asset.balance, dp: 8, fixed: true });
 
 	$: fromBalance = depositMode ? $mainnetBalance : cacheMvmBalance;
 
@@ -119,7 +119,7 @@
 
 <div class="mx-5 rounded-lg bg-white">
 	<div class="flex items-center justify-between py-5 px-4 pb-3 text-sm font-semibold">
-		<div>Form</div>
+		<div>From</div>
 		<div class="flex items-center space-x-1">
 			{#if depositMode}
 				<Eth height={16} width={16} />
@@ -132,7 +132,7 @@
 	</div>
 	<div class=" divide-y-2 divide-brand-background child:w-full">
 		<SelectedAssetButton {asset} on:callback={updateAsset}
-			>Balance: {fromBalance ? toBigString(fromBalance) : '...'}</SelectedAssetButton
+			>Balance: {fromBalance ? format({ n: fromBalance }) : '...'}</SelectedAssetButton
 		>
 		<input
 			class={clsx('rounded-b-lg  px-4 py-6', inputClasses)}

@@ -73,32 +73,11 @@ export function bigLte(a: BigNumber.Value, b: BigNumber.Value): boolean {
 	return new BigNumber(a).lte(b);
 }
 
-export function toRounding(num: BigNumber.Value, precision: number): string {
-	const _num = isNum(num);
-	const bigNum = new BigNumber(_num);
-	return bigNum.toFixed(precision);
-}
-
-export function toPrecision(num: BigNumber.Value, precision: number): string {
-	const _num = isNum(num);
-	const bigNum = new BigNumber(_num);
-	const res = bigNum.decimalPlaces(precision, BigNumber.ROUND_DOWN);
-	return res.toFixed(precision);
-}
-
-export function toBigString(num: string): string {
-	return num.replace(/(?:\.0*|(\.\d+?)0+)$/, '$1');
-}
-
 export function isNum(num: BigNumber.Value): BigNumber.Value | BigNumber {
 	if (!num || !Number(num)) return 0;
 	if (Number(num) === Infinity) return 0;
 	if (Number(num) === -Infinity) return 0;
 	return num;
-}
-
-export function formatCurrency(num: BigNumber.Value) {
-	return toRounding(num, 2);
 }
 
 /**

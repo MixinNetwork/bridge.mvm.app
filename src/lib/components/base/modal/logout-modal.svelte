@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Close from '$lib/assets/close.svg?component';
-	import { logout } from '../../stores/user';
+	import { logout } from '../../../stores/user';
 
 	export let onClose = () => {
 		//

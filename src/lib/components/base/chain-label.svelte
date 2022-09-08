@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { EOS_ASSET_ID, ETH_ASSET_ID, TRX_ASSET_ID } from '../constants/common';
+	import { EOS_ASSET_ID, ETH_ASSET_ID, TRX_ASSET_ID } from '../../constants/common';
 
 	export let assetId: string;
 	export let chainId: string;

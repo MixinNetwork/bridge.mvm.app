@@ -1,48 +1,33 @@
 <script context="module" lang="ts">
 	import clsx from 'clsx';
-	import Brand from '$lib/components/brand.svelte';
-	import Header from '$lib/components/header.svelte';
+	import Brand from '$lib/components/base/brand.svelte';
+	import Header from '$lib/components/base/header.svelte';
 	import Helper from '$lib/assets/helper.svg?component';
-	import UserInfo from '$lib/components/user-info.svelte';
-	import Balance from '$lib/components/balance.svelte';
+	import UserInfo from '$lib/components/base/user-info.svelte';
+	import Balance from '$lib/components/home/balance.svelte';
 	import Send from '$lib/assets/send.svg?component';
 	import Receive from '$lib/assets/receive.svg?component';
 	import { assets } from '$lib/stores/model';
 	import type { Load } from '@sveltejs/kit';
 	import type { Asset } from '$lib/types/asset';
-	import AssetItem from '$lib/components/asset-item.svelte';
+	import AssetItem from '$lib/components/home/asset-item.svelte';
 	import { browser } from '$app/env';
 	import { fetchAssets } from '$lib/helpers/api';
-	import { derived, get } from '@square/svelte-store';
+	import { get } from '@square/svelte-store';
 	import { page } from '$app/stores';
-	import DepositModal from './index-modal/_deposit-modal.svelte';
+	import DepositModal from '$lib/components/home/deposit-modal.svelte';
 	import { goto } from '$app/navigation';
 	import { ETH_ASSET_ID } from '$lib/constants/common';
 	import Modal from '$lib/components/common/modal/modal.svelte';
-	import WithdrawModal from './index-modal/_withdraw-modal.svelte';
-	import { searchParamStore, setSearchParam } from '$lib/helpers/app-store';
-
-	export type Mode = 'deposit' | 'withdraw';
-	export const MODE_KEY = 'mode';
-	export const DEPOSIT_MODE_KEY = 'deposit-mode';
-	export type DepositMode = 'qrcode' | 'metamask';
-	export const ASSET_KEY = 'asset';
-
-	const selectedAssetId = searchParamStore(ASSET_KEY);
-
-	export const selectedAsset = derived([selectedAssetId, assets], ([$selectedAssetId, $assets]) =>
-		$assets.find((a) => a.asset_id === $selectedAssetId)
-	);
-
-	export const mode = derived(searchParamStore(MODE_KEY), ($mode) => {
-		return ($mode === 'withdraw' ? 'withdraw' : 'deposit') as Mode;
-	});
-
-	export const defaultDepositMode = derived([mode, selectedAsset], ([$mode, $selectedAsset]) => {
-		if ($mode === 'withdraw') return;
-		if (!$selectedAsset) return;
-		return $selectedAsset.chain_id === ETH_ASSET_ID ? 'metamask' : 'qrcode';
-	});
+	import WithdrawModal from '$lib/components/home/withdraw-modal.svelte';
+	import { setSearchParam } from '$lib/helpers/app-store';
+	import {
+		ASSET_KEY,
+		DEPOSIT_MODE_KEY,
+		mode,
+		MODE_KEY,
+		selectedAsset
+	} from '$lib/components/home/export';
 
 	export const load: Load = async ({ fetch }) => {
 		if (browser && get(assets)?.length) {
@@ -62,14 +47,14 @@
 	$: a && assets.set(a);
 
 	$: if (browser && $page.url.pathname === '/') {
-		setSearchParam(ASSET_KEY, $selectedAsset?.asset_id);
+		setSearchParam($page, ASSET_KEY, $selectedAsset?.asset_id);
 		goto($page.url.href, { keepfocus: true, replaceState: true, noscroll: true });
 	}
 
 	const closeModal = () => {
-		$page.url.searchParams.delete(ASSET_KEY);
-		$page.url.searchParams.delete(MODE_KEY);
-		$page.url.searchParams.delete(DEPOSIT_MODE_KEY);
+		setSearchParam($page, ASSET_KEY, undefined);
+		setSearchParam($page, MODE_KEY, undefined);
+		setSearchParam($page, DEPOSIT_MODE_KEY, undefined);
 
 		goto($page.url.href, { keepfocus: true, replaceState: true, noscroll: true });
 	};
