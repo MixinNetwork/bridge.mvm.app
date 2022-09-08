@@ -3,7 +3,7 @@
 	import Close from '$lib/assets/close.svg?component';
 	import AssetIcon from '../base/asset-icon.svelte';
 	import LayoutBottomSheet from '../base/modal/layout-bottom-sheet.svelte';
-	import { ASSET_KEY, MODE_KEY } from '../../../routes/index@drawer.svelte';
+	import { ASSET_KEY, MODE_KEY } from './export';
 
 	export let onClose = () => {
 		//
