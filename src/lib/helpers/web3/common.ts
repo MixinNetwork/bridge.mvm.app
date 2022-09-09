@@ -168,15 +168,12 @@ export const swapAsset = async (
 
 	const trace_id = v4();
 	const swapAction = `3,${user.user_id},${trace_id},${order.fill_asset_id},${order.routes},${minReceived}`;
-	const actionResp = await createAction(
-		{
-			action: swapAction,
-			amount: order.funds,
-			asset_id: order.pay_asset_id,
-			broker_id: ''
-		},
-		user
-	);
+	const actionResp = await createAction({
+		action: swapAction,
+		amount: order.funds,
+		asset_id: order.pay_asset_id,
+		broker_id: ''
+	});
 
 	const codeResp = await fetchCode(actionResp.code);
 	const extra = generateExtra(JSON.stringify({
