@@ -73,6 +73,10 @@
 			inputAmount = outputAmount;
 		}
 
+		const temp = $inputAsset;
+		inputAsset.set($outputAsset);
+		outputAsset.set(temp);
+
 		setSearchParam($page, INPUT_KEY, $outputAsset?.asset_id);
 		setSearchParam($page, OUTPUT_KEY, $inputAsset?.asset_id);
 
@@ -144,9 +148,9 @@
 </Header>
 
 <div
-	class=" mx-5 flex flex-col md:mx-auto md:w-96 lg:w-full lg:flex-row lg:items-start lg:justify-center lg:space-x-5"
+	class=" mx-5 flex flex-col md:mx-auto  lg:w-full lg:flex-row lg:items-start lg:justify-center lg:space-x-5"
 >
-	<div class=" mt-4 flex flex-col items-stretch justify-center">
+	<div class="mt-4 flex flex-col items-stretch justify-center md:w-96">
 		<div class="rounded-lg bg-white">
 			<label for="input" class="opacity-100">
 				<div class="flex items-center justify-between py-5 px-4 pb-3 text-sm font-semibold">
