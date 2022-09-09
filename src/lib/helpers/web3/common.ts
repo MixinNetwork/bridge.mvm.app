@@ -13,9 +13,9 @@ import type { Network } from '../../types/network';
 import type { RegisteredUser } from '$lib/types/user';
 import type { Asset } from '$lib/types/asset';
 import toHex from '../utils';
-import { getWithdrawalExtra } from '../sign';
+import { generateExtra, getWithdrawalExtra } from '../sign';
 import { createAction } from '../4swap/api';
-import { fetchBridgeExtra, fetchCode } from '../api';
+import { fetchCode } from '../api';
 
 export const mainnetProvider = ethers.getDefaultProvider(1);
 export const mvmProvider = ethers.getDefaultProvider(MVM_RPC_URL);
@@ -164,6 +164,8 @@ export const swapAsset = async (
 	inputAsset: Asset,
 	minReceived: string
 ) => {
+	await switchNetwork(provider, 'mvm');
+
 	const trace_id = v4();
 	const swapAction = `3,${user.user_id},${trace_id},${order.fill_asset_id},${order.routes},${minReceived}`;
 	const actionResp = await createAction(
@@ -177,15 +179,11 @@ export const swapAsset = async (
 	);
 
 	const codeResp = await fetchCode(actionResp.code);
-	const extra =
-		'0x' +
-		(await fetchBridgeExtra(
-			JSON.stringify({
-				receivers: codeResp.receivers,
-				threshold: codeResp.threshold,
-				extra: codeResp.memo
-			})
-		));
+	const extra = generateExtra(JSON.stringify({
+		receivers: codeResp.receivers,
+		threshold: codeResp.threshold,
+		extra: codeResp.memo
+	}));
 
 	const signer = provider.getSigner();
 
