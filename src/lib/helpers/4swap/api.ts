@@ -85,7 +85,7 @@ export const createAction = async (params: ActionRequest) => {
 		method: 'POST',
 		body: JSON.stringify(params),
 		headers: {
-			ContentType: 'application/json',
+			ContentType: 'application/json'
 		}
 	});
 	const { data } = await response.json();

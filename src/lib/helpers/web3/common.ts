@@ -176,11 +176,13 @@ export const swapAsset = async (
 	});
 
 	const codeResp = await fetchCode(actionResp.code);
-	const extra = generateExtra(JSON.stringify({
-		receivers: codeResp.receivers,
-		threshold: codeResp.threshold,
-		extra: codeResp.memo
-	}));
+	const extra = generateExtra(
+		JSON.stringify({
+			receivers: codeResp.receivers,
+			threshold: codeResp.threshold,
+			extra: codeResp.memo
+		})
+	);
 
 	const signer = provider.getSigner();
 
@@ -204,7 +206,7 @@ export const swapAsset = async (
 
 		await tokenContract.transferWithExtra(user.contract, value, extra, {
 			gasPrice: 10000000,
-			gasLimit: 450000,
+			gasLimit: 450000
 		});
 		return;
 	}
