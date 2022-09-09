@@ -5,7 +5,7 @@ export function unix(): number {
 	return Math.floor(new Date().getTime() / 1000);
 }
 
-function toBuffer(content: string | Object, encoding: BufferEncoding = 'utf8') {
+function toBuffer(content: string | object, encoding: BufferEncoding = 'utf8') {
 	const msg = typeof content === 'object' ? JSON.stringify(content) : content;
 	return Buffer.from(msg, encoding);
 }
@@ -14,11 +14,11 @@ function base64url(buffer: Buffer) {
 	return buffer.toString('base64').replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_');
 }
 
-function getEd25519Sign(payload: Object, privateKey: Buffer) {
+function getEd25519Sign(payload: object, privateKey: Buffer) {
 	const header = toBuffer({ alg: 'EdDSA', typ: 'JWT' }).toString('base64');
 
-	payload = base64url(toBuffer(payload));
-	const result = [header, payload];
+	const payloadStr = base64url(toBuffer(payload));
+	const result = [header, payloadStr];
 	const sign = base64url(
 		Buffer.from(
 			forge.pki.ed25519.sign({
