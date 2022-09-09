@@ -10,9 +10,12 @@ import {
 	networkParams
 } from '../../constants/common';
 import type { Network } from '../../types/network';
+import type { RegisteredUser } from '$lib/types/user';
 import type { Asset } from '$lib/types/asset';
 import toHex from '../utils';
-import { getWithdrawalExtra } from '../sign';
+import { generateExtra, getWithdrawalExtra } from '../sign';
+import { createAction } from '../4swap/api';
+import { fetchCode } from '../api';
 
 export const mainnetProvider = ethers.getDefaultProvider(1);
 export const mvmProvider = ethers.getDefaultProvider(MVM_RPC_URL);
@@ -149,6 +152,63 @@ export const withdraw = async (
 			gasLimit: 350000,
 			value: feeAmount
 		});
+	}
+
+	throw new Error('Invalid asset');
+};
+
+export const swapAsset = async (
+	provider: ethers.providers.Web3Provider,
+	user: RegisteredUser,
+	order: any,
+	inputAsset: Asset,
+	minReceived: string
+) => {
+	await switchNetwork(provider, 'mvm');
+
+	const trace_id = v4();
+	const swapAction = `3,${user.user_id},${trace_id},${order.fill_asset_id},${order.routes},${minReceived}`;
+	const actionResp = await createAction({
+		action: swapAction,
+		amount: order.funds,
+		asset_id: order.pay_asset_id,
+		broker_id: ''
+	});
+
+	const codeResp = await fetchCode(actionResp.code);
+	const extra = generateExtra(
+		JSON.stringify({
+			receivers: codeResp.receivers,
+			threshold: codeResp.threshold,
+			extra: codeResp.memo
+		})
+	);
+
+	const signer = provider.getSigner();
+
+	if (inputAsset.asset_id === ETH_ASSET_ID) {
+		const bridge = new ethers.Contract(BRIDGE_ADDRESS, BRIDGE_ABI, signer);
+		const assetAmount = ethers.utils.parseEther(Number(order.funds).toFixed(8)).toString();
+
+		await bridge.release(user.contract, extra, {
+			gasPrice: 10000000,
+			gasLimit: 500000,
+			value: assetAmount
+		});
+		return;
+	}
+
+	if (inputAsset.contract) {
+		const tokenAddress = inputAsset.contract;
+		const tokenContract = new ethers.Contract(tokenAddress, MVM_ERC20_ABI, signer);
+		const tokenDecimal = await tokenContract.decimals();
+		const value = ethers.utils.parseUnits(order.funds, tokenDecimal);
+
+		await tokenContract.transferWithExtra(user.contract, value, extra, {
+			gasPrice: 10000000,
+			gasLimit: 450000
+		});
+		return;
 	}
 
 	throw new Error('Invalid asset');

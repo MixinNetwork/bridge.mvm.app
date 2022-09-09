@@ -26,6 +26,9 @@
 		slippage
 	} from '$lib/components/swap/export';
 	import Faq from '$lib/components/swap/faq.svelte';
+	import { swapAsset } from '$lib/helpers/web3/common';
+	import { user } from '$lib/stores/user';
+	import { library } from '$lib/stores/ether';
 	import { ETH_ASSET_ID, XIN_ASSET_ID } from '../lib/constants/common';
 
 	export const load: Load = async ({ fetch }) => {
@@ -95,10 +98,6 @@
 		goto($page.url, { keepfocus: true, replaceState: true, noscroll: true });
 	};
 
-	const swap = () => {
-		// todo
-	};
-
 	$: pairRoutes = new PairRoutes($pairs);
 	let order: ReturnType<typeof pairRoutes.getPreOrder> | undefined;
 
@@ -132,6 +131,10 @@
 
 	$: inputAmountFiat = formatFiat($inputAsset?.price_usd, inputAmount);
 	$: outputAmountFiat = formatFiat($outputAsset?.price_usd, outputAmount);
+
+	const swap = async () => {
+		await swapAsset($library, $user, order, $inputAsset, minReceived);
+	};
 
 	let inputElement: HTMLInputElement | undefined;
 	onMount(() => {
