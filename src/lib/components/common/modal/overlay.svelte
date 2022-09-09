@@ -1,8 +1,8 @@
 <script context="module" lang="ts">
 	import clsx from 'clsx';
-	import { quadOut } from 'svelte/easing';
-	import { fade } from 'svelte/transition';
 	import { focus } from 'focus-svelte';
+	import { fade } from 'svelte/transition';
+	import { tailwind } from '../../../transition/tailwind';
 </script>
 
 <script lang="ts">
@@ -25,20 +25,22 @@
 			onClose();
 		}
 	}
+	fade;
 </script>
 
-<div
-	transition:fade={{ duration: 150, easing: quadOut }}
-	class={clsx(
-		'fixed inset-0 z-20 flex items-center justify-center overflow-auto bg-brand-overlayBg',
-		clazz
-	)}
-	on:click={overLayClicked}
-	bind:this={self}
->
+<div class={clsx('fixed inset-0 z-20 flex items-center justify-center overflow-auto', clazz)}>
+	<div
+		transition:tailwind={{
+			to: '!opacity-100'
+		}}
+		class="absolute inset-0 bg-brand-overlayBg opacity-0"
+		on:click={overLayClicked}
+		bind:this={self}
+	/>
+
 	<div
 		use:focus={true}
-		class="flex h-full w-full items-center justify-center overflow-hidden"
+		class="flex h-full w-full items-center justify-center overflow-hidden child:z-30"
 		bind:this={wrapper}
 	>
 		<slot />
