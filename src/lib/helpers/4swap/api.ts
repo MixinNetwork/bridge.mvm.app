@@ -1,6 +1,6 @@
 import { v4 } from 'uuid';
-import type { RegisteredUser } from "../../types/user";
-import {signAuthenticationToken} from "./sign";
+import type { RegisteredUser } from '../../types/user';
+import { signAuthenticationToken } from './sign';
 
 export interface GetPairParams {
 	base: string;
@@ -92,19 +92,19 @@ export const createAction = async (params: ActionRequest, user: RegisteredUser) 
 		user.key.private_key,
 		'GET',
 		'/me',
-		'',
+		''
 	);
 
 	const response = await fetch('https://api.4swap.org/api/actions/v2', {
 		method: 'POST',
 		body: JSON.stringify(params),
 		headers: {
-			'ContentType': 'application/json',
-			'Authorization': `Bearer ${token}`,
-			'X-Request-Id': trace_id,
+			ContentType: 'application/json',
+			Authorization: `Bearer ${token}`,
+			'X-Request-Id': trace_id
 		}
 	});
 	const { data } = await response.json();
 	if (!data) throw new Error('No data found');
 	return data as ActionResponse;
-}
+};

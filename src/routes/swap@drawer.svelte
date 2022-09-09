@@ -27,7 +27,7 @@
 		SLIPPAGE_KEY
 	} from '$lib/components/swap/export';
 	import Faq from '$lib/components/swap/faq.svelte';
-	import { swapAsset } from "$lib/helpers/web3/common";
+	import { swapAsset } from '$lib/helpers/web3/common';
 	import { user } from '$lib/stores/user';
 	import { library } from '$lib/stores/ether';
 
@@ -127,13 +127,7 @@
 	$: outputAmountFiat = formatFiat($outputAsset?.price_usd, outputAmount);
 
 	const swap = async () => {
-		await swapAsset(
-			$library,
-			$user,
-			order,
-			$inputAsset,
-			minReceived,
-		);
+		await swapAsset($library, $user, order, $inputAsset, minReceived);
 	};
 
 	let inputElement: HTMLInputElement | undefined;

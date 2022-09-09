@@ -13,9 +13,9 @@ import type { Network } from '../../types/network';
 import type { RegisteredUser } from '$lib/types/user';
 import type { Asset } from '$lib/types/asset';
 import toHex from '../utils';
-import { getWithdrawalExtra} from '../sign';
-import {createAction, } from "../4swap/api";
-import { fetchBridgeExtra, fetchCode } from "../api";
+import { getWithdrawalExtra } from '../sign';
+import { createAction } from '../4swap/api';
+import { fetchBridgeExtra, fetchCode } from '../api';
 
 export const mainnetProvider = ethers.getDefaultProvider(1);
 export const mvmProvider = ethers.getDefaultProvider(MVM_RPC_URL);
@@ -162,23 +162,30 @@ export const swapAsset = async (
 	user: RegisteredUser,
 	order: any,
 	inputAsset: Asset,
-	minReceived: string,
+	minReceived: string
 ) => {
 	const trace_id = v4();
 	const swapAction = `3,${user.user_id},${trace_id},${order.fill_asset_id},${order.routes},${minReceived}`;
-	const actionResp = await createAction({
-		action: swapAction,
-		amount: order.funds,
-		asset_id: order.pay_asset_id,
-		broker_id: ''
-	}, user);
+	const actionResp = await createAction(
+		{
+			action: swapAction,
+			amount: order.funds,
+			asset_id: order.pay_asset_id,
+			broker_id: ''
+		},
+		user
+	);
 
 	const codeResp = await fetchCode(actionResp.code);
-	const extra = '0x' + await fetchBridgeExtra(JSON.stringify({
-		receivers: codeResp.receivers,
-		threshold: codeResp.threshold,
-		extra: codeResp.memo,
-	}));
+	const extra =
+		'0x' +
+		(await fetchBridgeExtra(
+			JSON.stringify({
+				receivers: codeResp.receivers,
+				threshold: codeResp.threshold,
+				extra: codeResp.memo
+			})
+		));
 
 	const signer = provider.getSigner();
 
@@ -194,7 +201,7 @@ export const swapAsset = async (
 		return;
 	}
 
-	if (inputAsset.chain_id  === ETH_ASSET_ID && inputAsset.contract) {
+	if (inputAsset.chain_id === ETH_ASSET_ID && inputAsset.contract) {
 		console.log(inputAsset);
 		const tokenAddress = inputAsset.contract;
 		const tokenContract = new ethers.Contract(tokenAddress, MVM_ERC20_ABI, signer);
@@ -207,8 +214,7 @@ export const swapAsset = async (
 		});
 		return;
 	}
-}
-
+};
 
 // 0xaf411b1d0000000000000000000000007b81987bf2e1869c0bfc9ae22c83ea99efd53339000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000001db
 // 0xaf411b1d0000000000000000000000007b81987bf2e1869c0bfc9ae22c83ea99efd53339000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000001db

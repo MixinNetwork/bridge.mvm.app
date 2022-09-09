@@ -1,5 +1,5 @@
 import { NetworkClient, CodeClient } from '@mixin.dev/mixin-node-sdk';
-import type { PaymentRequestResponse } from "@mixin.dev/mixin-node-sdk";
+import type { PaymentRequestResponse } from '@mixin.dev/mixin-node-sdk';
 import type { Asset } from '../types/asset';
 import type { RegisteredUser } from '../types/user';
 import ExternalClient from '@mixin.dev/mixin-node-sdk/src/client/external';
@@ -22,7 +22,7 @@ export const fetchBridgeExtra = async (action: string) => {
 
 	const { extra } = await response.json();
 	return extra as string;
-}
+};
 
 export const fetchWithdrawalFee = async (asset_id: string) => {
 	const networkClient = NetworkClient();
@@ -41,6 +41,6 @@ export const fetchCode = async (code_id: string): Promise<PaymentRequestResponse
 	const client = CodeClient();
 	const response = await client.fetch(code_id);
 	return response as PaymentRequestResponse;
-}
+};
 
 export const fetchExchangeRates = ExternalClient().exchangeRates;
