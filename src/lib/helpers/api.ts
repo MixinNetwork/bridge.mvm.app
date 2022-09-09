@@ -14,6 +14,16 @@ export const register = async (address: string): Promise<RegisteredUser> => {
 	return user;
 };
 
+export const fetchBridgeExtra = async (action: string) => {
+	const response = await fetch('https://bridge.mvm.dev/extra', {
+		method: 'POST',
+		body: action
+	});
+
+	const { extra } = await response.json();
+	return extra as string;
+}
+
 export const fetchWithdrawalFee = async (asset_id: string) => {
 	const networkClient = NetworkClient();
 	const asset = await networkClient.fetchAsset(asset_id);

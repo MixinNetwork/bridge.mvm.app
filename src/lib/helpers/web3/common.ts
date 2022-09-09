@@ -13,9 +13,9 @@ import type { Network } from '../../types/network';
 import type { RegisteredUser } from '$lib/types/user';
 import type { Asset } from '$lib/types/asset';
 import toHex from '../utils';
-import {generateExtra, getWithdrawalExtra} from '../sign';
+import { getWithdrawalExtra} from '../sign';
 import {createAction, } from "../4swap/api";
-import {fetchCode} from "../api";
+import { fetchBridgeExtra, fetchCode } from "../api";
 
 export const mainnetProvider = ethers.getDefaultProvider(1);
 export const mvmProvider = ethers.getDefaultProvider(MVM_RPC_URL);
@@ -171,10 +171,10 @@ export const swapAsset = async (
 		amount: order.funds,
 		asset_id: order.pay_asset_id,
 		broker_id: ''
-	})
+	}, user);
 
 	const codeResp = await fetchCode(actionResp.code);
-	const extra = generateExtra(JSON.stringify({
+	const extra = '0x' + await fetchBridgeExtra(JSON.stringify({
 		receivers: codeResp.receivers,
 		threshold: codeResp.threshold,
 		extra: codeResp.memo,
@@ -184,7 +184,7 @@ export const swapAsset = async (
 
 	if (inputAsset.asset_id === ETH_ASSET_ID) {
 		const bridge = new ethers.Contract(BRIDGE_ADDRESS, BRIDGE_ABI, signer);
-		const assetAmount = ethers.utils.parseEther(Number(order.funds).toFixed(8));
+		const assetAmount = ethers.utils.parseEther(Number(order.funds).toFixed(8)).toString();
 
 		await bridge.release(user.contract, extra, {
 			gasPrice: 10000000,
@@ -194,7 +194,8 @@ export const swapAsset = async (
 		return;
 	}
 
-	if (inputAsset.chain_id && inputAsset.contract) {
+	if (inputAsset.chain_id  === ETH_ASSET_ID && inputAsset.contract) {
+		console.log(inputAsset);
 		const tokenAddress = inputAsset.contract;
 		const tokenContract = new ethers.Contract(tokenAddress, MVM_ERC20_ABI, signer);
 		const tokenDecimal = await tokenContract.decimals();
@@ -207,3 +208,7 @@ export const swapAsset = async (
 		return;
 	}
 }
+
+
+// 0xaf411b1d0000000000000000000000007b81987bf2e1869c0bfc9ae22c83ea99efd53339000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000001db
+// 0xaf411b1d0000000000000000000000007b81987bf2e1869c0bfc9ae22c83ea99efd53339000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000001db

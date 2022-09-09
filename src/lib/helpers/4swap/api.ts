@@ -1,3 +1,7 @@
+import { v4 } from 'uuid';
+import type { RegisteredUser } from "../../types/user";
+import {signAuthenticationToken} from "./sign";
+
 export interface GetPairParams {
 	base: string;
 	quote: string;
@@ -80,12 +84,24 @@ export const fetchPairs = async () => {
 	return data.pairs as Pair[];
 };
 
-export const createAction = async (params: ActionRequest) => {
+export const createAction = async (params: ActionRequest, user: RegisteredUser) => {
+	const trace_id = v4();
+	const token = signAuthenticationToken(
+		user.key.client_id,
+		user.key.session_id,
+		user.key.private_key,
+		'GET',
+		'/me',
+		'',
+	);
+
 	const response = await fetch('https://api.4swap.org/api/actions/v2', {
 		method: 'POST',
 		body: JSON.stringify(params),
 		headers: {
-			'ContentType': 'application/json'
+			'ContentType': 'application/json',
+			'Authorization': `Bearer ${token}`,
+			'X-Request-Id': trace_id,
 		}
 	});
 	const { data } = await response.json();
