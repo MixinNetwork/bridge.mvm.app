@@ -10,7 +10,7 @@
 	import { PairRoutes } from '$lib/helpers/4swap/route';
 	import { fetchAssets } from '$lib/helpers/api';
 	import { setSearchParam } from '$lib/helpers/app-store';
-	import { assets, pairs } from '$lib/stores/model';
+	import { assets, getAsset, pairs } from '$lib/stores/model';
 	import type { Asset } from '$lib/types/asset';
 	import Header from '$lib/components/base/header.svelte';
 	import UserInfo from '$lib/components/base/user-info.svelte';
@@ -23,10 +23,10 @@
 		INPUT_KEY,
 		outputAsset,
 		OUTPUT_KEY,
-		slippage,
-		SLIPPAGE_KEY
+		slippage
 	} from '$lib/components/swap/export';
 	import Faq from '$lib/components/swap/faq.svelte';
+	import { ETH_ASSET_ID, XIN_ASSET_ID } from '../lib/constants/common';
 
 	export const load: Load = async ({ fetch }) => {
 		if (browser && get(assets)?.length && get(pairs)?.length) {
@@ -51,9 +51,16 @@
 
 	$: a && assets.set(a);
 	$: p && pairs.set(p);
+	$: !$inputAsset &&
+		inputAsset.set(
+			getAsset($page.url.searchParams.get(INPUT_KEY) || ETH_ASSET_ID) || getAsset(ETH_ASSET_ID)
+		);
+	$: !$outputAsset &&
+		outputAsset.set(
+			getAsset($page.url.searchParams.get(OUTPUT_KEY) || XIN_ASSET_ID) || getAsset(XIN_ASSET_ID)
+		);
 
 	let lastEdited: 'input' | 'output' | undefined = undefined;
-
 	let inputAmount: number | undefined = undefined;
 	let outputAmount: number | undefined = undefined;
 
@@ -69,29 +76,24 @@
 		setSearchParam($page, INPUT_KEY, $outputAsset?.asset_id);
 		setSearchParam($page, OUTPUT_KEY, $inputAsset?.asset_id);
 
-		goto($page.url.href, { keepfocus: true, replaceState: true, noscroll: true });
+		goto($page.url, { keepfocus: true, replaceState: true, noscroll: true });
 	};
 
 	const handleChangeInputAsset = (event: CustomEvent<Asset>) => {
+		inputAsset.set(event.detail);
 		setSearchParam($page, INPUT_KEY, event.detail.asset_id);
-		goto($page.url.href, { keepfocus: true, replaceState: true, noscroll: true });
+		goto($page.url, { keepfocus: true, replaceState: true, noscroll: true });
 	};
 
 	const handleChangeOutputAsset = (event: CustomEvent<Asset>) => {
+		outputAsset.set(event.detail);
 		setSearchParam($page, OUTPUT_KEY, event.detail.asset_id);
-		goto($page.url.href, { keepfocus: true, replaceState: true, noscroll: true });
+		goto($page.url, { keepfocus: true, replaceState: true, noscroll: true });
 	};
 
 	const swap = () => {
 		// todo
 	};
-
-	$: if (browser && $page.url.pathname === '/swap/') {
-		setSearchParam($page, INPUT_KEY, $inputAsset?.asset_id);
-		setSearchParam($page, OUTPUT_KEY, $outputAsset?.asset_id);
-		setSearchParam($page, SLIPPAGE_KEY, $slippage);
-		goto($page.url.href, { keepfocus: true, replaceState: true, noscroll: true });
-	}
 
 	$: pairRoutes = new PairRoutes($pairs);
 	let order: ReturnType<typeof pairRoutes.getPreOrder> | undefined;

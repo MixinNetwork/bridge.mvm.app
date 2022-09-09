@@ -1,13 +1,19 @@
 <script lang="ts">
 	import Close from '$lib/assets/close.svg?component';
 	import { logout } from '../../../stores/user';
+	import { tailwind } from '../../../transition/tailwind';
 
 	export let onClose = () => {
 		//
 	};
 </script>
 
-<div class="min-w- flex flex-col rounded-2xl bg-white">
+<div
+	transition:tailwind={{
+		to: '!scale-100 !opacity-100'
+	}}
+	class="min-w flex flex-col rounded-2xl bg-white opacity-0 md:scale-90"
+>
 	<button class="mt-6 mr-6 self-end" on:click={onClose}>
 		<Close />
 	</button>

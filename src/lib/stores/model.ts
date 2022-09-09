@@ -1,5 +1,5 @@
 import type { ExchangeRateResponse } from '@mixin.dev/mixin-node-sdk';
-import { asyncReadable, derived } from '@square/svelte-store';
+import { asyncReadable, derived, get } from '@square/svelte-store';
 import { fetchPairs, type Pair } from '../helpers/4swap/api';
 import { fetchWithdrawalFee } from '../helpers/api';
 import { bigAdd, bigMul } from '../helpers/big';
@@ -8,6 +8,12 @@ import { mapTemplate } from '../helpers/store/map-template';
 import type { Asset } from '../types/asset';
 
 export const assets = deepWritable<Asset[]>([]);
+
+export const getAsset = (assetId: string) => {
+	const $assets = get(assets);
+	return $assets.find((a) => a.asset_id === assetId);
+};
+
 export const pairs = deepWritable<Pair[]>([], (set) => {
 	const timer = setInterval(async () => {
 		const pairs = await fetchPairs();
