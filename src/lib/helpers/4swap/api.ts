@@ -59,9 +59,36 @@ export interface PairsRes {
 	ts: number;
 }
 
+interface ActionRequest {
+	action: string;
+	amount: string;
+	asset_id: string;
+	broker_id: string;
+}
+
+export interface ActionResponse {
+	action: string;
+	code: string;
+	code_url: string;
+	follow_id: string;
+}
+
 export const fetchPairs = async () => {
 	const response = await fetch('https://api.4swap.org/api/pairs');
 	const { data } = await response.json();
 	if (!data) throw new Error('No data found');
 	return data.pairs as Pair[];
 };
+
+export const createAction = async (params: ActionRequest) => {
+	const response = await fetch('https://api.4swap.org/api/actions/v2', {
+		method: 'POST',
+		body: JSON.stringify(params),
+		headers: {
+			'ContentType': 'application/json'
+		}
+	});
+	const { data } = await response.json();
+	if (!data) throw new Error('No data found');
+	return data as ActionResponse;
+}

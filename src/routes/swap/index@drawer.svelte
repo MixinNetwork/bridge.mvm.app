@@ -17,6 +17,9 @@
 	import UserInfo from '$lib/components/user-info.svelte';
 	import { format, toPercent } from '$lib/helpers/big';
 	import SelectedAssetButton from '$lib/components/selected-asset-button.svelte';
+	import { swapAsset } from "$lib/helpers/web3/common";
+	import { user } from '$lib/stores/user';
+	import { library } from '$lib/stores/ether';
 
 	export const INPUT_KEY = 'input';
 	export const OUTPUT_KEY = 'output';
@@ -93,10 +96,6 @@
 		goto($page.url.href, { keepfocus: true, replaceState: true, noscroll: true });
 	};
 
-	const swap = () => {
-		// todo
-	};
-
 	$: if (browser && $page.url.pathname === '/swap/') {
 		setSearchParam(INPUT_KEY, $inputAsset?.asset_id);
 		setSearchParam(OUTPUT_KEY, $outputAsset?.asset_id);
@@ -137,6 +136,16 @@
 
 	$: inputAmountFiat = formatFiat($inputAsset?.price_usd, inputAmount);
 	$: outputAmountFiat = formatFiat($outputAsset?.price_usd, outputAmount);
+
+	const swap = async () => {
+		await swapAsset(
+			$library,
+			$user,
+			order,
+			$inputAsset,
+			minReceived,
+		);
+	};
 </script>
 
 <Header class="bg-transparent">
