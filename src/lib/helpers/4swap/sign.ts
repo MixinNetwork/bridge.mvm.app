@@ -6,7 +6,7 @@ export function unix(): number {
 }
 
 function toBuffer(content: string | Object, encoding: BufferEncoding = 'utf8') {
-	let msg = typeof content === 'object' ? JSON.stringify(content) : content;
+	const msg = typeof content === 'object' ? JSON.stringify(content) : content;
 	return Buffer.from(msg, encoding);
 }
 
