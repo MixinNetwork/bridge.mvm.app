@@ -195,7 +195,7 @@ export const swapAsset = async (
 		return;
 	}
 
-	if (inputAsset.chain_id === ETH_ASSET_ID && inputAsset.contract) {
+	if (inputAsset.contract) {
 		const tokenAddress = inputAsset.contract;
 		const tokenContract = new ethers.Contract(tokenAddress, MVM_ERC20_ABI, signer);
 		const tokenDecimal = await tokenContract.decimals();
@@ -206,4 +206,6 @@ export const swapAsset = async (
 		});
 		return;
 	}
+
+	throw new Error('Invalid asset');
 };
