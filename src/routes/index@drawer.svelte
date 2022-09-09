@@ -29,15 +29,13 @@
 		selectedAsset
 	} from '$lib/components/home/export';
 
-	export const load: Load = async ({ fetch, session: { user } }) => {
-		if (!user) return { status: 401 };
-
+	export const load: Load = async ({ fetch }) => {
 		if (browser && get(assets)?.length) {
-			fetchAssets(user).then((a) => assets.set(a));
+			fetchAssets(fetch).then((a) => assets.set(a));
 			return;
 		}
 
-		const a = await fetchAssets(user);
+		const a = await fetchAssets(fetch);
 
 		return { props: { a } };
 	};

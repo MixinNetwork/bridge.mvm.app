@@ -28,15 +28,13 @@
 	} from '$lib/components/swap/export';
 	import Faq from '$lib/components/swap/faq.svelte';
 
-	export const load: Load = async ({ fetch, session: { user } }) => {
-		if (!user) return { status: 401 };
-
+	export const load: Load = async ({ fetch }) => {
 		if (browser && get(assets)?.length && get(pairs)?.length) {
-			fetchAssets(user).then((a) => assets.set(a));
+			fetchAssets(fetch).then((a) => assets.set(a));
 			return;
 		}
 
-		const [a, p] = await Promise.all([fetchAssets(user), fetchPairs()]);
+		const [a, p] = await Promise.all([fetchAssets(fetch), fetchPairs()]);
 
 		return { props: { a, p } };
 	};
