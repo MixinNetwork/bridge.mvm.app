@@ -152,7 +152,7 @@
 </Header>
 
 <div
-	class=" mx-5 flex flex-col md:mx-auto  lg:w-full lg:flex-row lg:items-start lg:justify-center lg:space-x-5"
+	class="mx-5 flex flex-col md:mx-auto md:w-96 lg:w-full lg:flex-row lg:items-start lg:justify-center lg:space-x-5"
 >
 	<div class="mt-4 flex flex-col items-stretch justify-center md:w-96">
 		<div class="rounded-lg bg-white">
