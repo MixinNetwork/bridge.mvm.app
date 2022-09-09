@@ -61,7 +61,7 @@ export interface PairsRes {
 
 interface ActionRequest {
 	action: string;
-	amount: string;
+	amount: number;
 	asset_id: string;
 	broker_id: string;
 }

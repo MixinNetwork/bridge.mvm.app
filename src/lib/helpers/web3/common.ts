@@ -16,6 +16,7 @@ import toHex from '../utils';
 import { generateExtra, getWithdrawalExtra } from '../sign';
 import { createAction } from '../4swap/api';
 import { fetchCode } from '../api';
+import type { Order } from '../4swap/route';
 
 export const mainnetProvider = ethers.getDefaultProvider(1);
 export const mvmProvider = ethers.getDefaultProvider(MVM_RPC_URL);
@@ -160,7 +161,7 @@ export const withdraw = async (
 export const swapAsset = async (
 	provider: ethers.providers.Web3Provider,
 	user: RegisteredUser,
-	order: any,
+	order: Order,
 	inputAsset: Asset,
 	minReceived: string
 ) => {
@@ -202,7 +203,7 @@ export const swapAsset = async (
 		const tokenAddress = inputAsset.contract;
 		const tokenContract = new ethers.Contract(tokenAddress, MVM_ERC20_ABI, signer);
 		const tokenDecimal = await tokenContract.decimals();
-		const value = ethers.utils.parseUnits(order.funds, tokenDecimal);
+		const value = ethers.utils.parseUnits(`${order.funds}`, tokenDecimal);
 
 		await tokenContract.transferWithExtra(user.contract, value, extra, {
 			gasPrice: 10000000,

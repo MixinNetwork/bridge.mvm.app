@@ -31,6 +31,13 @@ export type RoutePair = Pair & {
 	fillPercent: number;
 };
 
+export type Order = RouteCtx & {
+	route_assets: string[];
+	routes: string;
+	fill_asset_id: string;
+	pay_asset_id: string;
+};
+
 const getPairByIds = (pairs: Pair[], id1: string, id2: string) => {
 	// pair's base id is smaller than quote id
 	const [base, quote] = id1 < id2 ? [id1, id2] : [id2, id1];
@@ -155,7 +162,7 @@ export class PairRoutes {
 		return this.pairs.find((p) => p.route_id === id);
 	}
 
-	getFee(order: { funds?: string; route_assets: string[] }) {
+	getFee(order: { funds?: number; route_assets: string[] }) {
 		const { funds = 0, route_assets = [] } = order;
 		// calc fee and fee text
 		let receivePercent = 1;
@@ -196,8 +203,8 @@ export class PairRoutes {
 
 		return {
 			...bestRoute,
-			amount,
-			funds,
+			amount: +amount,
+			funds: +funds,
 			route_assets: bestRoute.routeAssets,
 			routes: new Hashids(HASH_SALT).encode(bestRoute.routeIds),
 			fill_asset_id: outputAsset,

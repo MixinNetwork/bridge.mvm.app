@@ -7,7 +7,7 @@
 	import Switch from '$lib/assets/switch.svg?component';
 	import type { Load } from '@sveltejs/kit';
 	import { fetchPairs, type Pair } from '$lib/helpers/4swap/api';
-	import { PairRoutes } from '$lib/helpers/4swap/route';
+	import { PairRoutes, type Order } from '$lib/helpers/4swap/route';
 	import { fetchAssets } from '$lib/helpers/api';
 	import { setSearchParam } from '$lib/helpers/app-store';
 	import { assets, getAsset, pairs } from '$lib/stores/model';
@@ -99,7 +99,7 @@
 	};
 
 	$: pairRoutes = new PairRoutes($pairs);
-	let order: ReturnType<typeof pairRoutes.getPreOrder> | undefined;
+	let order: Order | undefined;
 
 	// info
 	let fee: string | undefined;
@@ -133,6 +133,7 @@
 	$: outputAmountFiat = formatFiat($outputAsset?.price_usd, outputAmount);
 
 	const swap = async () => {
+		if (!$library || !$user || !order || !$inputAsset || !minReceived) return;
 		await swapAsset($library, $user, order, $inputAsset, minReceived);
 	};
 
