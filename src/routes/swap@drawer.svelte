@@ -221,7 +221,7 @@
 		</div>
 
 		{#if order && +order.amount}
-			<div transition:slide>
+			<div transition:slide|local>
 				<div
 					class="mt-3 space-y-2 rounded-lg bg-black bg-opacity-5 p-4 text-xs font-semibold text-black text-opacity-50 child:flex child:items-center child:justify-between"
 				>
