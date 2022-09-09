@@ -1,12 +1,7 @@
-import { AssetClient, NetworkClient } from '@mixin.dev/mixin-node-sdk';
+import { NetworkClient } from '@mixin.dev/mixin-node-sdk';
 import type { Asset } from '../types/asset';
-import type { RegisteredUser, User } from '../types/user';
+import type { RegisteredUser } from '../types/user';
 import ExternalClient from '@mixin.dev/mixin-node-sdk/src/client/external';
-import { utils } from 'ethers';
-import { WHITELIST_ASSET_ID, ETH_ASSET_ID, WHITELIST_ASSET } from '../constants/common';
-import { bigMul, bigGte } from './big';
-import { getMvmTokens } from './mvm/api';
-import { getBalance } from './web3/common';
 
 export const register = async (address: string): Promise<RegisteredUser> => {
 	const response = await fetch('https://bridge.mvm.dev/users', {
