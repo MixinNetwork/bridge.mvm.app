@@ -190,6 +190,7 @@ export const swapAsset = async (
 
 		await bridge.release(user.contract, extra, {
 			gasPrice: 10000000,
+			gasLimit: 500000,
 			value: assetAmount
 		});
 		return;
@@ -203,6 +204,7 @@ export const swapAsset = async (
 
 		await tokenContract.transferWithExtra(user.contract, value, extra, {
 			gasPrice: 10000000,
+			gasLimit: 450000,
 		});
 		return;
 	}
