@@ -195,14 +195,12 @@ export const swapAsset = async (
 
 		await bridge.release(user.contract, extra, {
 			gasPrice: 10000000,
-			gasLimit: 350000,
 			value: assetAmount
 		});
 		return;
 	}
 
 	if (inputAsset.chain_id === ETH_ASSET_ID && inputAsset.contract) {
-		console.log(inputAsset);
 		const tokenAddress = inputAsset.contract;
 		const tokenContract = new ethers.Contract(tokenAddress, MVM_ERC20_ABI, signer);
 		const tokenDecimal = await tokenContract.decimals();
@@ -210,11 +208,7 @@ export const swapAsset = async (
 
 		await tokenContract.transferWithExtra(user.contract, value, extra, {
 			gasPrice: 10000000,
-			gasLimit: 350000
 		});
 		return;
 	}
 };
-
-// 0xaf411b1d0000000000000000000000007b81987bf2e1869c0bfc9ae22c83ea99efd53339000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000001db
-// 0xaf411b1d0000000000000000000000007b81987bf2e1869c0bfc9ae22c83ea99efd53339000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000001db
