@@ -1,22 +1,20 @@
-import { AssetClient, NetworkClient } from '@mixin.dev/mixin-node-sdk';
+import { AssetClient } from '@mixin.dev/mixin-node-sdk';
 import type { RequestHandler } from '@sveltejs/kit';
-import { ETH_ASSET_ID, WHITELIST_ASSET, WHITELIST_ASSET_ID } from '$lib/constants/common';
-import { getBalance } from '$lib/helpers/web3/common';
-import type { Asset } from '$lib/types/asset';
-import { bigGte, bigMul } from '$lib/helpers/big';
-import { getMvmTokens } from '$lib/helpers/mvm/api';
 import { utils } from 'ethers';
+import { WHITELIST_ASSET_ID, ETH_ASSET_ID, WHITELIST_ASSET } from '../../lib/constants/common';
+import { bigMul, bigGte } from '../../lib/helpers/big';
+import { getMvmTokens } from '../../lib/helpers/mvm/api';
+import { getBalance } from '../../lib/helpers/web3/common';
+import type { Asset } from '../../lib/types/asset';
+import type { User } from '../../lib/types/user';
 
-export const GET: RequestHandler<Record<string, string>, Asset[]> = async ({
-	locals: { user, provider }
-}) => {
-	if (!user || !provider) return { status: 401 };
-
+export const fetchAssets = async (user: User) => {
 	const assetClient = AssetClient({ keystore: { ...user, ...user.key } });
-	const networkClient = NetworkClient();
 
-	const [topAssets, ethBalance, tokens] = await Promise.all([
-		networkClient.topAssets(),
+	const [allAssets, ethBalance, tokens] = await Promise.all([
+		Promise.all(
+			WHITELIST_ASSET_ID.map(async (assetId): Promise<Asset> => assetClient.fetch(assetId))
+		),
 		getBalance({
 			account: user.address,
 			network: 'mvm'
@@ -24,7 +22,7 @@ export const GET: RequestHandler<Record<string, string>, Asset[]> = async ({
 		getMvmTokens(user.address)
 	]);
 
-	let assets: Asset[] = topAssets.filter((asset) => WHITELIST_ASSET_ID.includes(asset.asset_id));
+	let assets: Asset[] = allAssets.filter((asset) => WHITELIST_ASSET_ID.includes(asset.asset_id));
 
 	// balance and set contract
 	assets.map((asset) => {
@@ -47,7 +45,7 @@ export const GET: RequestHandler<Record<string, string>, Asset[]> = async ({
 	const chainIds = [...new Set(assets.map(({ chain_id }) => chain_id))];
 	const chains = await Promise.all(
 		chainIds.map((chainId) => {
-			const chain = topAssets.find((asset) => asset.asset_id === chainId);
+			const chain = allAssets.find((asset) => asset.asset_id === chainId);
 			if (chain) return chain;
 
 			return assetClient.fetch(chainId);
@@ -72,7 +70,14 @@ export const GET: RequestHandler<Record<string, string>, Asset[]> = async ({
 
 	const eth = assets.find((asset) => asset.asset_id === ETH_ASSET_ID);
 	if (eth) eth.name = 'Etheruem';
+	return assets;
+};
 
+export const GET: RequestHandler<Record<string, string>, Asset[]> = async ({
+	locals: { user, provider }
+}) => {
+	if (!user || !provider) return { status: 401 };
+	const assets = await fetchAssets(user);
 	return {
 		status: 200,
 		body: assets

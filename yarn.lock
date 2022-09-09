@@ -631,10 +631,10 @@
     estree-walker "^2.0.1"
     picomatch "^2.2.2"
 
-"@square/svelte-store@^0.2.0":
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/@square/svelte-store/-/svelte-store-0.2.0.tgz#f9f41ea28620bb7eaf2c04e2dbafd7c3b18c7fb4"
-  integrity sha512-vQ6C9hHMM6Pw3mk2zrmtntvS5cq9D3J1z5sPYnDJOLrbfdDxnl/SkRKsP+VjVom1G6MlHV1VIoeffGEJweFPew==
+"@square/svelte-store@^0.2.1":
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/@square/svelte-store/-/svelte-store-0.2.1.tgz#8f533501c61256efbedc4234440d2aba23a58b3f"
+  integrity sha512-w2+RoTOoGLlir/W4rTZ6jlPr1YftjPOhMp9mazBh3kZQnYvND4c/UTWmK4i/Qex8p7ZNnzLbZ/NvdZXozOG0SA==
   dependencies:
     svelte "^3.0.0"
 
@@ -4751,10 +4751,10 @@ typedarray-to-buffer@3.1.5:
   dependencies:
     is-typedarray "^1.0.0"
 
-typescript@*, typescript@^4.8.2:
-  version "4.8.2"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.8.2.tgz#e3b33d5ccfb5914e4eeab6699cf208adee3fd790"
-  integrity sha512-C0I1UsrrDHo2fYI5oaCGbSejwX4ch+9Y5jTQELvovfmFkK3HHSZJB8MSJcWLmCUBzQBchCrZ9rMRV6GuNrvGtw==
+typescript@*, typescript@^4.8.3:
+  version "4.8.3"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.8.3.tgz#d59344522c4bc464a65a730ac695007fdb66dd88"
+  integrity sha512-goMHfm00nWPa8UvR/CPSvykqf6dVV8x/dp0c5mFTMTIu0u0FlGWRioyy7Nn0PGAdHxpJZnuO/ut+PpQ8UiHAig==
 
 update-browserslist-db@^1.0.5:
   version "1.0.5"

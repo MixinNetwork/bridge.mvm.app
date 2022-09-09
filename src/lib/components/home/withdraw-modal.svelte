@@ -1,7 +1,7 @@
 <script>
-	import LayoutModal from '$lib/components/modal/layout-modal.svelte';
-	import { selectedAsset } from '../index@drawer.svelte';
-	import Bridge from './_bridge.svelte';
+	import LayoutModal from '$lib/components/base/modal/layout-modal.svelte';
+	import { selectedAsset } from './export';
+	import Bridge from './bridge.svelte';
 
 	export let onClose = () => {
 		//

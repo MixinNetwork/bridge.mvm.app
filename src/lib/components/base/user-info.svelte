@@ -1,15 +1,15 @@
 <script lang="ts">
 	import clsx from 'clsx';
 
-	import { providerName, providerLogo } from '../stores/provider';
-	import { shortAddress } from '../stores/user';
+	import { providerName, providerLogo } from '../../stores/provider';
+	import { shortAddress } from '../../stores/user';
 
 	import Logout from '$lib/assets/logout.svg?component';
 	import Arrow from '$lib/assets/arrow.svg?component';
 
-	import { totalBalanceUsd } from '../stores/model';
-	import { formatCurrency } from '../helpers/big';
-	import Modal from './common/modal/modal.svelte';
+	import { totalBalanceUsd } from '../../stores/model';
+	import { format } from '../../helpers/big';
+	import Modal from '../common/modal/modal.svelte';
 	import LogoutModal from './modal/logout-modal.svelte';
 
 	let clazz: string | undefined = undefined;
@@ -25,7 +25,7 @@
 >
 	<img src={$providerLogo} alt={$providerName} class="h-14 w-14 md:h-4 md:w-4" />
 	<div class="font-bold md:text-sm md:font-semibold">
-		<div class="text-xl md:hidden">{formatCurrency($totalBalanceUsd || 0)}</div>
+		<div class="text-xl md:hidden">{format({ n: $totalBalanceUsd || 0, dp: 2, fixed: true })}</div>
 		<div class="inline-flex">
 			<span class="sm:hidden md:block">Account&nbsp;</span>
 			<span class="text-sm opacity-30 md:opacity-100">{$shortAddress}</span>

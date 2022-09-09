@@ -1,14 +1,14 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 
-	import { ASSET_KEY, MODE_KEY } from '../../routes/index@drawer.svelte';
+	import { ASSET_KEY, MODE_KEY } from './export';
 
-	import { bigMul, formatCurrency, toBigString, toRounding } from '../helpers/big';
+	import { bigMul, format } from '../../helpers/big';
 
-	import type { Asset } from '../types/asset';
-	import AssetIcon from './asset-icon.svelte';
+	import type { Asset } from '../../types/asset';
+	import AssetIcon from '../base/asset-icon.svelte';
 	import AssetItemModal from './asset-item-modal.svelte';
-	import Modal from './common/modal/modal.svelte';
+	import Modal from '../common/modal/modal.svelte';
 
 	export let asset: Asset;
 
@@ -42,9 +42,9 @@
 			<div class=" text-sm font-semibold opacity-30">{asset.symbol}</div>
 		</div>
 		<div class="flex grow flex-col items-end">
-			<div class="font-bold">{toBigString(toRounding(asset.balance, 8))}</div>
+			<div class="font-bold">{format({ n: asset.balance, dp: 8 })}</div>
 			<div class=" text-sm font-semibold opacity-30">
-				${formatCurrency(bigMul(asset.balance, asset.price_usd))}
+				${format({ n: bigMul(asset.balance, asset.price_usd), dp: 2, fixed: true })}
 			</div>
 		</div>
 	</div>

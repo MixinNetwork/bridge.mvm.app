@@ -30,13 +30,16 @@
 		dispatch('callback', data);
 	};
 
-	const sync = (isOpen: boolean) => {
-		if (!content) return;
+	onDestroy(() => {
+		const currentlyOpen = $modalStore.find(({ node }) => node === content);
+		if (currentlyOpen) onClose();
+	});
 
+	$: if (content) {
 		const $modalStore = get(modalStore);
 		const currentlyOpen = $modalStore.find(({ node }) => node === content);
 
-		if (content && !currentlyOpen && isOpen) {
+		if (content && isOpen) {
 			let props: ModalProps = {
 				onClose,
 				callback,
@@ -50,12 +53,5 @@
 		} else if (currentlyOpen && !isOpen) {
 			onClose();
 		}
-	};
-
-	onDestroy(() => {
-		const currentlyOpen = $modalStore.find(({ node }) => node === content);
-		if (currentlyOpen) onClose();
-	});
-
-	$: sync(isOpen);
+	}
 </script>
