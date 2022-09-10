@@ -144,7 +144,7 @@
 		try {
 			await swapAsset($library, $user, order, $inputAsset, minReceived);
 		} finally {
-			loading = false
+			loading = false;
 		}
 	};
 
