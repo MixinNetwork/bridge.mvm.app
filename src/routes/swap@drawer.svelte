@@ -16,6 +16,8 @@
 	import UserInfo from '$lib/components/base/user-info.svelte';
 	import { bigMul, format, toPercent } from '$lib/helpers/big';
 	import SelectedAssetButton from '$lib/components/base/selected-asset-button.svelte';
+	import Modal from '$lib/components/common/modal/modal.svelte';
+	import SpinnerModal from '$lib/components/common/spinner-modal.svelte';
 	import { slide } from 'svelte/transition';
 	import { onMount } from 'svelte';
 	import {
@@ -26,7 +28,6 @@
 		slippage
 	} from '$lib/components/swap/export';
 	import Faq from '$lib/components/swap/faq.svelte';
-	import { swapAsset } from '$lib/helpers/web3/common';
 	import { user } from '$lib/stores/user';
 	import { library } from '$lib/stores/ether';
 	import { ETH_ASSET_ID, XIN_ASSET_ID } from '../lib/constants/common';
@@ -132,9 +133,19 @@
 	$: inputAmountFiat = formatFiat($inputAsset?.price_usd, inputAmount);
 	$: outputAmountFiat = formatFiat($outputAsset?.price_usd, outputAmount);
 
+	let loading = false;
 	const swap = async () => {
 		if (!$library || !$user || !order || !$inputAsset || !minReceived) return;
-		await swapAsset($library, $user, order, $inputAsset, minReceived);
+
+		loading = true;
+
+		const { swapAsset } = await import('$lib/helpers/web3/common');
+
+		try {
+			await swapAsset($library, $user, order, $inputAsset, minReceived);
+		} finally {
+			loading = false;
+		}
 	};
 
 	let inputElement: HTMLInputElement | undefined;
@@ -260,3 +271,5 @@
 	</div>
 	<Faq />
 </div>
+
+<Modal isOpen={loading} content={SpinnerModal} maskClosable={false} keyboardClosable={false} />
