@@ -29,7 +29,7 @@
 		"@types/prettier": "^2.6.4",
 		"@types/qrcode": "^1.5.0",
 		"@typescript-eslint/eslint-plugin": "^5.36.2",
-		"@typescript-eslint/parser": "^5.36.2",
+		"@typescript-eslint/parser": "^5.37.0",
 		"@walletconnect/web3-provider": "^1.8.0",
 		"autoprefixer": "^10.4.9",
 		"bignumber.js": "^9.1.0",
