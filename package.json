@@ -31,7 +31,7 @@
 		"@typescript-eslint/eslint-plugin": "^5.36.2",
 		"@typescript-eslint/parser": "^5.36.2",
 		"@walletconnect/web3-provider": "^1.8.0",
-		"autoprefixer": "^10.4.8",
+		"autoprefixer": "^10.4.9",
 		"bignumber.js": "^9.1.0",
 		"clsx": "^1.2.1",
 		"eslint": "^8.23.1",
