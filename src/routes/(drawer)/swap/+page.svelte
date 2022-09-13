@@ -5,7 +5,7 @@
 	import Switch from '$lib/assets/switch.svg?component';
 	import { PairRoutes, type Order } from '$lib/helpers/4swap/route';
 	import { setSearchParam } from '$lib/helpers/app-store';
-	import { assets, getAsset, pairs } from '$lib/stores/model';
+	import { assets, getAsset, pairs, updateAssets } from '$lib/stores/model';
 	import type { Asset } from '$lib/types/asset';
 	import Header from '$lib/components/base/header.svelte';
 	import UserInfo from '$lib/components/base/user-info.svelte';
@@ -127,6 +127,7 @@
 
 		try {
 			await swapAsset($library, $user, order, $inputAsset, minReceived);
+			await updateAssets();
 		} finally {
 			loading = false;
 		}

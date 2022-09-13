@@ -11,13 +11,3 @@ export const assetClient = derived(user, ($user) => {
 		}
 	});
 });
-
-// export const externalClient = derived(user, ($user) => {
-// 	if (!$user) return;
-// 	return ExternalClient({
-// 		keystore: {
-// 			...$user,
-// 			...$user.key
-// 		}
-// 	});
-// });

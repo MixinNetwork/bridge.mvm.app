@@ -6,6 +6,7 @@ import type { User } from '../types/user';
 import { account } from './ether';
 import { clearLastProvider } from './provider';
 import { USER_KEY } from '$lib/constants/common';
+import { dedupe } from '../helpers/store/dedupe';
 
 const persistentUser = persistentWritable<User | undefined>(
 	USER_KEY,
@@ -13,7 +14,9 @@ const persistentUser = persistentWritable<User | undefined>(
 	jsonPersistentEncoder
 );
 
-export const user = derived([persistentUser, page], ([$user, $page]) => $user || $page.data.user);
+export const user = dedupe(
+	derived([persistentUser, page], ([$user, $page]) => $user || $page.data.user)
+);
 
 export const registerAndSave = async (address: string) => {
 	const u = await register(address);
