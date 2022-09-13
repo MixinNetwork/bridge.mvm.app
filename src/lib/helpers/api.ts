@@ -1,4 +1,6 @@
+import { CodeClient } from '@mixin.dev/mixin-node-sdk';
 import ExternalClient from '@mixin.dev/mixin-node-sdk/src/client/external';
+import type { PaymentRequestResponse } from '@mixin.dev/mixin-node-sdk';
 import type { Asset, CheckAddressFee } from '../types/asset';
 import type { RegisteredUser } from '../types/user';
 
@@ -57,3 +59,11 @@ export const fetchFeeOnAsset = async (
 
 	return '';
 };
+
+export const fetchCode = async (code_id: string): Promise<PaymentRequestResponse> => {
+	const client = CodeClient();
+	const response = await client.fetch(code_id);
+	return response as PaymentRequestResponse;
+};
+
+export const fetchExchangeRates = ExternalClient().exchangeRates;

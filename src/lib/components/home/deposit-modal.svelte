@@ -1,17 +1,12 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import {
-		defaultDepositMode,
-		DEPOSIT_MODE_KEY,
-		selectedAsset,
-		type DepositMode
-	} from '../index@drawer.svelte';
+	import { defaultDepositMode, DEPOSIT_MODE_KEY, selectedAsset, type DepositMode } from './export';
 	import { browser } from '$app/env';
 	import { goto } from '$app/navigation';
-	import Qrcode from './_qrcode.svelte';
+	import Qrcode from './qrcode.svelte';
 	import { ETH_ASSET_ID } from '$lib/constants/common';
-	import Bridge from './_bridge.svelte';
-	import LayoutModal from '$lib/components/modal/layout-modal.svelte';
+	import Bridge from './bridge.svelte';
+	import LayoutModal from '$lib/components/base/modal/layout-modal.svelte';
 	import { providerName } from '$lib/stores/provider';
 
 	export let onClose = () => {

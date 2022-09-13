@@ -25,7 +25,7 @@
 
 	a,
 	button,
-	label {
+	label:not(.opacity-100) {
 		@apply hover:opacity-80 hover:active:focus:opacity-60 disabled:opacity-20;
 	}
 

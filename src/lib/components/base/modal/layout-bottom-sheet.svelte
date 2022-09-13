@@ -1,12 +1,18 @@
 <script lang="ts">
 	import clsx from 'clsx';
+	import { tailwind } from '../../../transition/tailwind';
 	let clazz: string | undefined = undefined;
 	export { clazz as class };
 </script>
 
 <div
+	transition:tailwind={{
+		duration: 300,
+		to: '!translate-y-0 !scale-100 !opacity-100'
+	}}
 	class={clsx(
 		'flex h-5/6 w-full flex-col self-end rounded-t-2xl bg-white md:h-[560px] md:w-[375px] md:self-center md:rounded-xl',
+		'translate-y-3/4 opacity-0 md:translate-y-0 md:scale-95',
 		clazz
 	)}
 >

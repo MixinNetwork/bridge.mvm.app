@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { assets } from '$lib/stores/model';
-	import AssetIcon from '$lib/components/asset-icon.svelte';
-	import ChainLabel from '$lib/components/chain-label.svelte';
+	import AssetIcon from '$lib/components/base/asset-icon.svelte';
+	import ChainLabel from '$lib/components/base/chain-label.svelte';
 	import type { Asset } from '$lib/types/asset';
-	import ModalHeader from '$lib/components/modal/modal-header.svelte';
-	import LayoutBottomSheet from '$lib/components/modal/layout-bottom-sheet.svelte';
+	import ModalHeader from '$lib/components/base/modal/modal-header.svelte';
+	import LayoutBottomSheet from '$lib/components/base/modal/layout-bottom-sheet.svelte';
 
 	export let onClose = () => {
 		//

@@ -1,52 +1,56 @@
 import { AssetClient } from '@mixin.dev/mixin-node-sdk';
 import type { RequestHandler } from '@sveltejs/kit';
-import { ETH_ASSET_ID, WHITELIST } from '$lib/constants/common';
-import { getBalance, getERC20Balance } from '$lib/helpers/web3/common';
-import { fetchAssetContract } from '$lib/helpers/web3/registry';
-import type { Asset } from '$lib/types/asset';
-import { bigGte, bigMul } from '$lib/helpers/big';
+import { utils } from 'ethers';
+import { WHITELIST_ASSET_ID, ETH_ASSET_ID, WHITELIST_ASSET } from '../../lib/constants/common';
+import { bigMul, bigGte } from '../../lib/helpers/big';
+import { getMvmTokens } from '../../lib/helpers/mvm/api';
+import { getBalance } from '../../lib/helpers/web3/common';
+import type { Asset } from '../../lib/types/asset';
+import type { User } from '../../lib/types/user';
 
-export const GET: RequestHandler<Record<string, string>, Asset[]> = async ({
-	locals: { user, provider }
-}) => {
-	if (!user || !provider) return { status: 401 };
-
+export const fetchAssets = async (user: User) => {
 	const assetClient = AssetClient({ keystore: { ...user, ...user.key } });
 
-	const promises = WHITELIST.map(async (assetId): Promise<Asset> => {
-		const isEth = assetId === ETH_ASSET_ID;
-		const [asset, contract] = await Promise.all([
-			assetClient.fetch(assetId),
-			isEth ? Promise.resolve(undefined) : fetchAssetContract(assetId)
-		]);
+	const [allAssets, ethBalance, tokens] = await Promise.all([
+		Promise.all(
+			WHITELIST_ASSET_ID.map(async (assetId): Promise<Asset> => assetClient.fetch(assetId))
+		),
+		getBalance({
+			account: user.address,
+			network: 'mvm'
+		}),
+		getMvmTokens(user.address)
+	]);
 
-		const balance =
-			!isEth && contract
-				? await getERC20Balance({
-						account: user.address,
-						contractAddress: contract,
-						network: 'mvm'
-				  })
-				: await getBalance({
-						account: user.address,
-						network: 'mvm'
-				  });
+	let assets: Asset[] = allAssets.filter((asset) => WHITELIST_ASSET_ID.includes(asset.asset_id));
 
-		return Object.assign(asset, { contract, balance });
+	// balance and set contract
+	assets.map((asset) => {
+		if (asset.asset_id === ETH_ASSET_ID) {
+			asset.balance = ethBalance;
+			return;
+		}
+
+		asset.contract = WHITELIST_ASSET.find((a) => a.assetId === asset.asset_id)?.contract;
+
+		const token = tokens.find((token) => token.contractAddress === asset.contract);
+		if (!token) {
+			asset.balance = '0';
+			return;
+		}
+		asset.balance = utils.formatUnits(token?.balance, token?.decimals);
 	});
 
-	let assets = await Promise.all(promises);
-
+	// chain
 	const chainIds = [...new Set(assets.map(({ chain_id }) => chain_id))];
 	const chains = await Promise.all(
 		chainIds.map((chainId) => {
-			const chain = assets.find((asset) => asset.asset_id === chainId);
+			const chain = allAssets.find((asset) => asset.asset_id === chainId);
 			if (chain) return chain;
 
 			return assetClient.fetch(chainId);
 		})
 	);
-
 	assets.forEach((asset) => {
 		if (asset.asset_id === asset.chain_id) return;
 
@@ -64,6 +68,16 @@ export const GET: RequestHandler<Record<string, string>, Asset[]> = async ({
 		return bigGte(aBalance, bBalance) ? -1 : 1;
 	});
 
+	const eth = assets.find((asset) => asset.asset_id === ETH_ASSET_ID);
+	if (eth) eth.name = 'Etheruem';
+	return assets;
+};
+
+export const GET: RequestHandler<Record<string, string>, Asset[]> = async ({
+	locals: { user, provider }
+}) => {
+	if (!user || !provider) return { status: 401 };
+	const assets = await fetchAssets(user);
 	return {
 		status: 200,
 		body: assets

@@ -1,5 +1,5 @@
 <script context="module" lang="ts">
-	import Brand from '$lib/components/brand.svelte';
+	import Brand from '$lib/components/base/brand.svelte';
 	import walletConnect from '$lib/assets/logo/wallet-connect.svg';
 	import metamask from '$lib/assets/logo/metamask.svg';
 	import type { ProviderKey } from '$lib/helpers/web3client/type';

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import Drawer from '$lib/components/drawer/drawer.svelte';
+	import Drawer from '$lib/components/base/drawer/drawer.svelte';
 </script>
 
 <div class="drawer drawer-mobile">
