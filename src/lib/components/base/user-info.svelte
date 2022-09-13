@@ -20,12 +20,17 @@
 <div
 	class={clsx(
 		'group relative flex md:h-10 items-center space-x-3 md:py-2 md:px-4 md:rounded-full md:bg-white w-fit transition',
-		clazz
+		clazz,
+		{
+			'!hidden': !$providerLogo && !$providerName
+		}
 	)}
 >
 	<img src={$providerLogo} alt={$providerName} class="h-14 w-14 md:h-4 md:w-4" />
 	<div class="font-bold md:text-sm md:font-semibold">
-		<div class="text-xl md:hidden">{format({ n: $totalBalanceUsd || 0, dp: 2, fixed: true })}</div>
+		<div class="text-xl md:hidden">
+			{format({ n: $totalBalanceUsd || 0, dp: 2, fixed: true })}
+		</div>
 		<div class="inline-flex">
 			<span class="sm:hidden md:block">Account&nbsp;</span>
 			<span class="text-sm opacity-30 md:opacity-100">{$shortAddress}</span>
