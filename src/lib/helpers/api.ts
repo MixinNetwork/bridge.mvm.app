@@ -51,7 +51,7 @@ export const fetchAssets = async (user: User) => {
 
 		asset.contract = WHITELIST_ASSET.find((a) => a.assetId === asset.asset_id)?.contract;
 
-		const token = tokens.find((token) => token.contractAddress === asset.contract);
+		const token = tokens.find((token) => token.contractAddress.toLowerCase() === asset.contract?.toLowerCase());
 		if (!token) {
 			asset.balance = '0';
 			return;
