@@ -7,5 +7,5 @@ export const load: LayoutServerLoad = async ({ locals, url, cookies }) => {
 	if (user && provider) return;
 	cookies.delete(USER_KEY);
 	cookies.delete(PROVIDER_KEY);
-	return redirect(302, `/connect?${LAST_URL}=${url.href.replace(url.origin, '')}`);
+	throw redirect(302, `/connect?${LAST_URL}=${url.href.replace(url.origin, '')}`);
 };

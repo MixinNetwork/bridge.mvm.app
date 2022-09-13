@@ -1,7 +1,7 @@
 import { get } from '@square/svelte-store';
 import { fetchAssets } from '$lib/helpers/api';
 import { assets } from '$lib/stores/model';
-import type { PageLoad } from '../../../.svelte-kit/types/src/routes/$types';
+import type { PageLoad } from './$types';
 
 export const load: PageLoad = async ({ fetch }) => {
 	const cache = get(assets);
