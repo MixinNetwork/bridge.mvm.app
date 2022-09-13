@@ -24,16 +24,3 @@ export const getAsset = (key: string, defaultKey?: string) => {
 export const inputAsset = deepWritable<Asset | undefined>(undefined);
 export const outputAsset = deepWritable<Asset | undefined>(undefined);
 export const slippage = deepWritable<number>(DEFAULT_SLIPPAGE);
-
-// const inputAssetId = searchParamStore(INPUT_KEY);
-// const outputAssetId = searchParamStore(OUTPUT_KEY);
-// export const inputAsset = derived([inputAssetId, assets], ([$assetId, $assets]) =>
-// 	$assets.find((a) => a.asset_id === ($assetId || DEFAULT_INPUT_KEY))
-// );
-// export const outputAsset = derived([outputAssetId, assets], ([$assetId, $assets]) =>
-// 	$assets.find((a) => a.asset_id === ($assetId || DEFAULT_OUTPUT_KEY))
-// );
-// export const slippage = derived(searchParamStore(SLIPPAGE_KEY), ($value) => {
-// 	const nubmer = Number($value);
-// 	return nubmer && !isNaN(nubmer) ? nubmer : DEFAULT_SLIPPAGE;
-// });
