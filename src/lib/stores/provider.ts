@@ -1,16 +1,19 @@
-import { session } from '$app/stores';
 import { derived } from '@square/svelte-store';
-import { PROVIDER_KEY } from '../../hooks';
 import { persistentWritable } from '../helpers/store/persistent';
 import type { ProviderKey } from '../helpers/web3client/type';
 import metaMask from '$lib/assets/logo/metamask.svg';
 import walletConnect from '$lib/assets/logo/wallet-connect.svg';
+import { PROVIDER_KEY } from '$lib/constants/common';
+import { page } from '$app/stores';
+import { dedupe } from '../helpers/store/dedupe';
 
 const persistentProviderKey = persistentWritable<ProviderKey | undefined>(PROVIDER_KEY, undefined);
 
-export const providerKey = derived(
-	[persistentProviderKey, session],
-	([$providerKey, $session]) => $providerKey || $session.provider
+export const providerKey = dedupe(
+	derived(
+		[persistentProviderKey, page],
+		([$providerKey, $page]) => $providerKey || $page.data.provider
+	)
 );
 
 export const setProviderKey = (provider: ProviderKey) => persistentProviderKey.set(provider);

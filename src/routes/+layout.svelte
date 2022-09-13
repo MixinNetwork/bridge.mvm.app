@@ -18,5 +18,4 @@
 />
 
 <slot />
-
 <ModalContainer />

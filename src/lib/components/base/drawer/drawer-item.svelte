@@ -16,7 +16,6 @@
 
 <div class="py-2 px-5">
 	<a
-		sveltekit:prefetch
 		class={clsx(
 			'inline-flex h-11 w-full items-center space-x-4 rounded-xl px-3 py-2 transition hover:bg-brand-primary hover:bg-opacity-5',
 			{

@@ -8,7 +8,7 @@ declare global {
 	namespace App {
 		interface Locals {
 			user?: User;
-			provider?: string;
+			provider?: ProviderKey;
 		}
 
 		// interface Platform {}
@@ -17,10 +17,7 @@ declare global {
 
 		// interface PublicEnv {}
 
-		interface Session {
-			user?: User;
-			provider?: ProviderKey;
-		}
+		// interface Session {}
 
 		// interface Stuff {}
 	}

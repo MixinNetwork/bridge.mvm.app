@@ -1,16 +1,11 @@
-<script context="module" lang="ts">
-	import { browser } from '$app/env';
+<script lang="ts">
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
-	import { get } from '@square/svelte-store';
 	import Helper from '$lib/assets/helper.svg?component';
 	import Switch from '$lib/assets/switch.svg?component';
-	import type { Load } from '@sveltejs/kit';
-	import { fetchPairs, type Pair } from '$lib/helpers/4swap/api';
 	import { PairRoutes, type Order } from '$lib/helpers/4swap/route';
-	import { fetchAssets } from '$lib/helpers/api';
 	import { setSearchParam } from '$lib/helpers/app-store';
-	import { assets, getAsset, pairs } from '$lib/stores/model';
+	import { assets, getAsset, pairs, updateAssets } from '$lib/stores/model';
 	import type { Asset } from '$lib/types/asset';
 	import Header from '$lib/components/base/header.svelte';
 	import UserInfo from '$lib/components/base/user-info.svelte';
@@ -30,31 +25,20 @@
 	import Faq from '$lib/components/swap/faq.svelte';
 	import { user } from '$lib/stores/user';
 	import { library } from '$lib/stores/ether';
-	import { ETH_ASSET_ID, XIN_ASSET_ID } from '../lib/constants/common';
-
-	export const load: Load = async ({ fetch }) => {
-		if (browser && get(assets)?.length && get(pairs)?.length) {
-			fetchAssets(fetch).then((a) => assets.set(a));
-			return;
-		}
-
-		const [a, p] = await Promise.all([fetchAssets(fetch), fetchPairs()]);
-
-		return { props: { a, p } };
-	};
+	import { ETH_ASSET_ID, XIN_ASSET_ID } from '$lib/constants/common';
+	import type { Pair } from '$lib/helpers/4swap/api';
 
 	const formatFiat = (priceUsd: string | undefined, inputAmount: number | undefined) => {
 		if (!priceUsd || !inputAmount) return '0.00';
 		return format({ n: bigMul(priceUsd, inputAmount), dp: 2 });
 	};
-</script>
 
-<script lang="ts">
-	export let a: Asset[] | undefined = undefined;
-	export let p: Pair[] | undefined = undefined;
+	let a: Asset[] | undefined = $page.data.assets;
+	let p: Pair[] | undefined = $page.data.pairs;
 
-	$: a && assets.set(a);
-	$: p && pairs.set(p);
+	$: a && !$assets.length && assets.set(a);
+	$: p && !$pairs.length && pairs.set(p);
+
 	$: !$inputAsset &&
 		inputAsset.set(
 			getAsset($page.url.searchParams.get(INPUT_KEY) || ETH_ASSET_ID) || getAsset(ETH_ASSET_ID)
@@ -143,6 +127,7 @@
 
 		try {
 			await swapAsset($library, $user, order, $inputAsset, minReceived);
+			await updateAssets();
 		} finally {
 			loading = false;
 		}

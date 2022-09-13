@@ -1,11 +1,12 @@
-import { browser } from '$app/env';
+import { browser } from '$app/environment';
 import { page } from '$app/stores';
 import { derived } from '@square/svelte-store';
 import type { Page } from '@sveltejs/kit';
+import { dedupe } from './store/dedupe';
 import { mapTemplate } from './store/map-template';
 
 export const searchParamStore = mapTemplate((key: string) =>
-	derived(page, ($page) => $page.url.searchParams.get(key))
+	dedupe(derived(page, ($page) => $page.url.searchParams.get(key)))
 );
 
 export const setSearchParam = (

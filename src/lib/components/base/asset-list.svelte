@@ -30,7 +30,7 @@
 				/>
 
 				<div>
-					<div class="font-bold">
+					<div class="flex items-center font-bold">
 						<span class="font-bold">
 							{asset.symbol}
 						</span>

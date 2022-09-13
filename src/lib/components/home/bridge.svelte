@@ -160,13 +160,13 @@
 	</div>
 	{#if depositMode}
 		<div class={clsx('break-all px-4 py-3 font-semibold', inputClasses)}>
-			{address}
+			{asset.destination}
 		</div>
 	{:else}
 		<div class="flex border-b-2 border-brand-background">
 			<textarea
 				class={clsx('grow resize-none break-all rounded-lg py-3 pl-4 font-semibold', inputClasses)}
-				placeholder={isEthChain ? $user?.address || '' : 'Address'}
+				placeholder={isEthChain ? $user.address || '' : 'Address'}
 				bind:value={address}
 			/>
 			{#if isEthChain}
