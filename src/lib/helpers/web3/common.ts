@@ -1,4 +1,5 @@
 import { ethers, utils, type BigNumberish } from 'ethers';
+import { v4 } from 'uuid';
 import { BRIDGE_ABI, ERC20_ABI, MVM_ERC20_ABI } from '../../constants/abis';
 import {
 	BRIDGE_ADDRESS,
@@ -177,12 +178,11 @@ export const swapAsset = async (
 		const bridge = new ethers.Contract(BRIDGE_ADDRESS, BRIDGE_ABI, signer);
 		const assetAmount = ethers.utils.parseEther(Number(order.funds).toFixed(8)).toString();
 
-		await bridge.release(user.contract, extra, {
+		return await bridge.release(user.contract, extra, {
 			gasPrice: 10000000,
 			gasLimit: 500000,
 			value: assetAmount
 		});
-		return;
 	}
 
 	if (inputAsset.contract) {
@@ -191,11 +191,10 @@ export const swapAsset = async (
 		const tokenDecimal = await tokenContract.decimals();
 		const value = ethers.utils.parseUnits(`${order.funds}`, tokenDecimal);
 
-		await tokenContract.transferWithExtra(user.contract, value, extra, {
+		return await tokenContract.transferWithExtra(user.contract, value, extra, {
 			gasPrice: 10000000,
 			gasLimit: 450000
 		});
-		return;
 	}
 
 	throw new Error('Invalid asset');

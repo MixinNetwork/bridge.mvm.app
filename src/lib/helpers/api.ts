@@ -1,4 +1,4 @@
-import { NetworkClient, CodeClient, AssetClient } from '@mixin.dev/mixin-node-sdk';
+import { CodeClient, AssetClient } from '@mixin.dev/mixin-node-sdk';
 import type { PaymentRequestResponse } from '@mixin.dev/mixin-node-sdk';
 import type { Asset, CheckAddressFee } from '../types/asset';
 import type { RegisteredUser, User } from '../types/user';
