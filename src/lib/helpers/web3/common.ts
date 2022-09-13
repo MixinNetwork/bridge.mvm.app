@@ -14,7 +14,7 @@ import type { RegisteredUser } from '$lib/types/user';
 import type { Asset } from '$lib/types/asset';
 import toHex from '../utils';
 import { generateExtra, getWithdrawalExtra } from '../sign';
-import { createAction } from '../4swap/api';
+import { checkOrder, createAction } from '../4swap/api';
 import { fetchCode } from '../api';
 import type { Order } from '../4swap/route';
 
@@ -196,6 +196,7 @@ export const swapAsset = async (
 			gasLimit: 500000,
 			value: assetAmount
 		});
+		await checkOrder(actionResp.follow_id, user);
 		return;
 	}
 
@@ -209,6 +210,7 @@ export const swapAsset = async (
 			gasPrice: 10000000,
 			gasLimit: 450000
 		});
+		await checkOrder(actionResp.follow_id, user);
 		return;
 	}
 
