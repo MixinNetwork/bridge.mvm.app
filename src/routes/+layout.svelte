@@ -17,6 +17,7 @@
 	]}
 />
 
-<slot />
-
-<ModalContainer />
+<main data-sveltekit-prefetch>
+	<slot />
+	<ModalContainer />
+</main>

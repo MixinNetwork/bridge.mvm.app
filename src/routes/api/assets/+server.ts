@@ -1,12 +1,12 @@
 import { AssetClient } from '@mixin.dev/mixin-node-sdk';
 import type { RequestHandler } from '@sveltejs/kit';
 import { utils } from 'ethers';
-import { WHITELIST_ASSET_ID, ETH_ASSET_ID, WHITELIST_ASSET } from '../../lib/constants/common';
-import { bigMul, bigGte } from '../../lib/helpers/big';
-import { getMvmTokens } from '../../lib/helpers/mvm/api';
-import { getBalance } from '../../lib/helpers/web3/common';
-import type { Asset } from '../../lib/types/asset';
-import type { User } from '../../lib/types/user';
+import { WHITELIST_ASSET_ID, ETH_ASSET_ID, WHITELIST_ASSET } from '$lib/constants/common';
+import { bigMul, bigGte } from '$lib/helpers/big';
+import { getMvmTokens } from '$lib/helpers/mvm/api';
+import { getBalance } from '$lib/helpers/web3/common';
+import type { Asset } from '$lib/types/asset';
+import type { User } from '$lib/types/user';
 
 export const fetchAssets = async (user: User) => {
 	const assetClient = AssetClient({ keystore: { ...user, ...user.key } });
@@ -73,13 +73,10 @@ export const fetchAssets = async (user: User) => {
 	return assets;
 };
 
-export const GET: RequestHandler<Record<string, string>, Asset[]> = async ({
+export const GET: RequestHandler<Record<string, string>> = async ({
 	locals: { user, provider }
 }) => {
-	if (!user || !provider) return { status: 401 };
+	if (!user || !provider) return new Response(undefined, { status: 401 });
 	const assets = await fetchAssets(user);
-	return {
-		status: 200,
-		body: assets
-	};
+	return new Response(JSON.stringify(assets));
 };

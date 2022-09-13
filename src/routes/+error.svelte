@@ -3,11 +3,10 @@
 	import Brand from '$lib/components/base/brand.svelte';
 	import UserInfo from '$lib/components/base/user-info.svelte';
 	import Error from '$lib/assets/error.svg?component';
-
-	import Layout from './__layout-drawer@guard.svelte';
+	import Drawer from '$lib/components/base/layout/drawer.svelte';
 </script>
 
-<Layout>
+<Drawer>
 	<Header>
 		<Brand class="space-x-2 md:hidden" logoClass="w-6" MVMClass="text-lg" bridgeClass="hidden" />
 		<div />
@@ -18,4 +17,4 @@
 		<Error />
 		<div class=" font-bold opacity-20">Error</div>
 	</div>
-</Layout>
+</Drawer>

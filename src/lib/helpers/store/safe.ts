@@ -1,6 +1,6 @@
 // sandboxedStore.js
 //
-import { browser } from '$app/env';
+import { browser } from '$app/environment';
 import { getStores } from '$app/stores';
 import { v4 } from 'uuid';
 import { get, writable as svelteWritable, type StartStopNotifier } from '@square/svelte-store';
@@ -34,9 +34,9 @@ export const safeWritable = <T>(initialValue: T, start?: StartStopNotifier<T>) =
 
 	function setStore(value: T) {
 		try {
-			const { page: sessionStore } = getStores();
+			const { page: pageStore } = getStores();
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
-			const stuff = get(sessionStore).stuff as any;
+			const stuff = get(pageStore).data as any;
 
 			const store: SandboxedStore<T> | null | undefined = stuff?.[storesKey]?.[key];
 			const currentValue = store ? store.value : initialValue;
@@ -70,7 +70,7 @@ export const safeWritable = <T>(initialValue: T, start?: StartStopNotifier<T>) =
 			try {
 				const { page: sessionStore } = getStores();
 				// eslint-disable-next-line @typescript-eslint/no-explicit-any
-				const stuff = get(sessionStore).stuff as any;
+				const stuff = get(sessionStore).data as any;
 
 				const store: SandboxedStore<T> | null | undefined = stuff?.[storesKey]?.[key];
 				const currentValue = store ? store.value : initialValue;
@@ -95,7 +95,7 @@ export const safeWritable = <T>(initialValue: T, start?: StartStopNotifier<T>) =
 				try {
 					const { page: sessionStore } = getStores();
 					// eslint-disable-next-line @typescript-eslint/no-explicit-any
-					const stuff = get(sessionStore).stuff as any;
+					const stuff = get(sessionStore).data as any;
 					const store: SandboxedStore<T> | null | undefined = stuff?.[storesKey]?.[key];
 
 					if (!store) return;
@@ -113,7 +113,7 @@ export const safeWritable = <T>(initialValue: T, start?: StartStopNotifier<T>) =
 			try {
 				const { page: sessionStore } = getStores();
 				// eslint-disable-next-line @typescript-eslint/no-explicit-any
-				const stuff = get(sessionStore).stuff as any;
+				const stuff = get(sessionStore).data as any;
 				const store: SandboxedStore<T> | null | undefined = stuff?.[storesKey]?.[key];
 				const currentValue = store ? store?.value : initialValue;
 

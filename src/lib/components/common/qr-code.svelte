@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import QRCode from 'qrcode';
-	import { browser } from '$app/env';
+	import { browser } from '$app/environment';
 
 	let value = '';
 	let size: number | undefined = undefined;

@@ -1,4 +1,4 @@
-<script context="module" lang="ts">
+<script lang="ts">
 	import clsx from 'clsx';
 	import Brand from '$lib/components/base/brand.svelte';
 	import Header from '$lib/components/base/header.svelte';
@@ -8,12 +8,8 @@
 	import Send from '$lib/assets/send.svg?component';
 	import Receive from '$lib/assets/receive.svg?component';
 	import { assets } from '$lib/stores/model';
-	import type { Load } from '@sveltejs/kit';
 	import type { Asset } from '$lib/types/asset';
 	import AssetItem from '$lib/components/home/asset-item.svelte';
-	import { browser } from '$app/env';
-	import { fetchAssets } from '$lib/helpers/api';
-	import { get } from '@square/svelte-store';
 	import { page } from '$app/stores';
 	import DepositModal from '$lib/components/home/deposit-modal.svelte';
 	import { goto } from '$app/navigation';
@@ -28,23 +24,11 @@
 		MODE_KEY,
 		selectedAsset
 	} from '$lib/components/home/export';
+	import { browser } from '$app/environment';
 
-	export const load: Load = async ({ fetch }) => {
-		if (browser && get(assets)?.length) {
-			fetchAssets(fetch).then((a) => assets.set(a));
-			return;
-		}
+	let a: Asset[] | undefined = $page.data.assets;
 
-		const a = await fetchAssets(fetch);
-
-		return { props: { a } };
-	};
-</script>
-
-<script lang="ts">
-	export let a: Asset[] | undefined = undefined;
-
-	$: a && assets.set(a);
+	$: a && !$assets.length && assets.set(a);
 
 	$: if (browser && $page.url.pathname === '/') {
 		setSearchParam($page, ASSET_KEY, $selectedAsset?.asset_id);

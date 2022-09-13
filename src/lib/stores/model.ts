@@ -27,7 +27,7 @@ export const pairs = deepWritable<Pair[]>([], (set) => {
 export const exchangeRates = deepWritable<ExchangeRateResponse[]>([]);
 
 export const totalBalanceUsd = derived(assets, ($assets) => {
-	if (!$assets) return;
+	if (!$assets.length) return;
 	return $assets.reduce((total, asset) => {
 		if (!asset.balance) return total;
 		return bigAdd(total, bigMul(asset.balance, asset.price_usd));
@@ -35,7 +35,7 @@ export const totalBalanceUsd = derived(assets, ($assets) => {
 });
 
 export const totalBalanceBtc = derived(assets, ($assets) => {
-	if (!$assets) return;
+	if (!$assets.length) return;
 	return $assets.reduce((total, asset) => {
 		if (!asset.balance) return total;
 		return bigAdd(total, bigMul(asset.balance, asset.price_btc));

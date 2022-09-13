@@ -1,7 +1,5 @@
-<script context="module" lang="ts">
+<script lang="ts">
 	import Brand from '$lib/components/base/brand.svelte';
-	import walletConnect from '$lib/assets/logo/wallet-connect.svg';
-	import metamask from '$lib/assets/logo/metamask.svg';
 	import type { ProviderKey } from '$lib/helpers/web3client/type';
 	import { account, setProvider } from '$lib/stores/ether';
 	import SpinnerModal from '$lib/components/common/spinner-modal.svelte';
@@ -10,33 +8,10 @@
 	import { createWeb3Client } from '$lib/helpers/web3client';
 	import { providerKey as cacheProvider, clearLastProvider } from '$lib/stores/provider';
 	import { page } from '$app/stores';
-	import { LAST_URL } from './__layout-guard@default.svelte';
 	import Modal from '$lib/components/common/modal/modal.svelte';
+	import { providers } from './+page';
+	import { LAST_URL } from '$lib/constants/common';
 
-	interface IProvider {
-		key: ProviderKey;
-		title: string;
-		desc: string;
-		icon: string;
-	}
-
-	const providers: IProvider[] = [
-		{
-			key: 'injected',
-			title: 'Metamask',
-			desc: 'Connect using browser wallet',
-			icon: metamask
-		},
-		{
-			key: 'walletconnect',
-			title: 'WalletConnect',
-			desc: 'Connect using WalletConnect',
-			icon: walletConnect
-		}
-	];
-</script>
-
-<script lang="ts">
 	let loading = false;
 
 	const connect = async (provider: ProviderKey) => {

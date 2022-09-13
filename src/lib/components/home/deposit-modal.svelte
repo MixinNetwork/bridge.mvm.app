@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import { defaultDepositMode, DEPOSIT_MODE_KEY, selectedAsset, type DepositMode } from './export';
-	import { browser } from '$app/env';
+	import { browser } from '$app/environment';
 	import { goto } from '$app/navigation';
 	import Qrcode from './qrcode.svelte';
 	import { ETH_ASSET_ID } from '$lib/constants/common';

@@ -1,9 +1,7 @@
-import type { GetSession, Handle } from '@sveltejs/kit';
+import type { Handle } from '@sveltejs/kit';
 import * as cookie from 'cookie';
 import type { User } from '$lib/types/user';
-
-export const USER_KEY = 'USER';
-export const PROVIDER_KEY = 'PROVIDER';
+import { PROVIDER_KEY, USER_KEY } from '$lib/constants/common';
 
 export const handle: Handle = async ({ event, resolve }) => {
 	const cookies = cookie.parse(event.request.headers.get('cookie') || '');
@@ -20,8 +18,5 @@ export const handle: Handle = async ({ event, resolve }) => {
 	} catch (e) {
 		console.log('hook error', e);
 	}
-
-	return await resolve(event);
+	return resolve(event);
 };
-
-export const getSession: GetSession = ({ locals }) => locals;
