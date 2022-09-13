@@ -251,7 +251,8 @@
 
 		<button
 			class="mt-10 w-fit self-center rounded-full bg-brand-primary px-6 py-4 text-white"
-			on:click={swap}>Swap</button
+			on:click={swap}
+			disabled={!(order && +order.amount)}>Swap</button
 		>
 	</div>
 	<Faq />

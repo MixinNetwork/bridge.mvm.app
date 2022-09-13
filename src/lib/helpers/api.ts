@@ -3,11 +3,11 @@ import type { PaymentRequestResponse } from '@mixin.dev/mixin-node-sdk';
 import type { Asset, CheckAddressFee } from '../types/asset';
 import type { RegisteredUser, User } from '../types/user';
 import ExternalClient from '@mixin.dev/mixin-node-sdk/src/client/external';
-import { utils } from 'ethers'
-import { WHITELIST_ASSET_ID, ETH_ASSET_ID, WHITELIST_ASSET } from '../constants/common'
-import { bigMul, bigGte } from './big'
-import { getMvmTokens } from './mvm/api'
-import { getBalance } from './web3/common'
+import { utils } from 'ethers';
+import { WHITELIST_ASSET_ID, ETH_ASSET_ID, WHITELIST_ASSET } from '../constants/common';
+import { bigMul, bigGte } from './big';
+import { getMvmTokens } from './mvm/api';
+import { getBalance } from './web3/common';
 
 export const register = async (address: string): Promise<RegisteredUser> => {
 	const response = await fetch('https://bridge.mvm.dev/users', {
@@ -30,7 +30,6 @@ export const fetchWithdrawalFee = async (asset_id: string, destination: string) 
 
 	return asset.fee;
 };
-
 
 export const fetchAssets = async (user: User) => {
 	const assetClient = AssetClient({ keystore: { ...user, ...user.key } });
@@ -57,7 +56,9 @@ export const fetchAssets = async (user: User) => {
 
 		asset.contract = WHITELIST_ASSET.find((a) => a.assetId === asset.asset_id)?.contract;
 
-		const token = tokens.find((token) => token.contractAddress === asset.contract);
+		const token = tokens.find(
+			(token) => token.contractAddress.toLowerCase() === asset.contract?.toLowerCase()
+		);
 		if (!token) {
 			asset.balance = '0';
 			return;
