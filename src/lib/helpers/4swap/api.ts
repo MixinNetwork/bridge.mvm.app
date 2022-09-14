@@ -118,14 +118,10 @@ export const fetchOrder = async (order_id: string, user: RegisteredUser) => {
 	return data;
 };
 
-export const checkOrder = async (
-	order_id: string,
-	user: RegisteredUser,
-) => {
+export const checkOrder = async (order_id: string, user: RegisteredUser) => {
 	let counter = 0;
 
 	return new Promise((resolve, reject) => {
-
 		const timer = setInterval(async () => {
 			counter++;
 
@@ -145,5 +141,5 @@ export const checkOrder = async (
 				return;
 			}
 		}, 2000);
-	})
+	});
 };

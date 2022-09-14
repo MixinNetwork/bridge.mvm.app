@@ -163,7 +163,7 @@ export const swapAsset = async (
 	user: RegisteredUser,
 	order: Order,
 	inputAsset: Asset,
-	minReceived: string,
+	minReceived: string
 ) => {
 	await switchNetwork(provider, 'mvm');
 
