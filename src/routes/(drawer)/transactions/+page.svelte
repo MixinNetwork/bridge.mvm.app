@@ -15,13 +15,10 @@
 	const DEFAULT_ICON =
 		'https://images.mixin.one/yH_I5b0GiV2zDmvrXRyr3bK5xusjfy5q7FX3lw3mM2Ryx4Dfuj6Xcw8SHNRnDKm7ZVE3_LvpKlLdcLrlFQUBhds=s128';
 
-	const transactions = deepWritable<Transaction[]>([]);
+	let transactions: Transaction[] = $page.data.transactions;
+	let hasMore = transactions.length >= 30;
 
-	const t: Transaction[] = $page.data.transactions;
-	let hasMore = t.length >= 30;
-	$: t.length && !$transactions.length && transactions.set(t);
-
-	$: txs = $transactions.map((tx) => ({
+	$: txs = transactions.map((tx) => ({
 		...tx,
 		total: +bigAdd(tx.value, tx.fee),
 		date: dayjs.unix(tx.timeStamp).subtract(12, 'hour').format('HH:mm:ss MM-DD-YYYY')
@@ -39,7 +36,7 @@
 		loading = true;
 
 		try {
-			const lastTransaction = $transactions[$transactions.length - 1];
+			const lastTransaction = transactions[transactions.length - 1];
 
 			const result = await fetchTransactions(
 				$user,
@@ -49,7 +46,7 @@
 
 			hasMore = result.length >= 30;
 
-			transactions.set([...$transactions, ...result]);
+			transactions = [...transactions, ...result];
 		} finally {
 			loading = false;
 		}

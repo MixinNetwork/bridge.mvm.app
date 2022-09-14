@@ -100,18 +100,6 @@ export const fetchTransactions: FetchTransactions = async (
 
 	const lastIndex = lastHash ? mvmTransactions.findIndex((tx) => tx.hash === lastHash) : 0;
 
-	console.log(
-		'lastHash',
-		lastHash,
-		'endblock',
-		endblock,
-		'lastIndex',
-		lastIndex,
-		'mvmTransactions.length',
-		mvmTransactions.length,
-		mvmTransactions.slice(30)
-	);
-
 	let transactions = mvmTransactions.map(
 		({
 			blockNumber,
