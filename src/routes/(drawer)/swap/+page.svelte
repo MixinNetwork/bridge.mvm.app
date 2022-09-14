@@ -145,7 +145,10 @@
 				}
 			);
 			await updateAssets();
-		} catch (e) {}
+		} finally {
+			success = false
+			loading = false
+		}
 	};
 
 	let inputElement: HTMLInputElement | undefined;

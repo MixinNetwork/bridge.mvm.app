@@ -140,6 +140,8 @@ export const checkOrder = async (
 				clearInterval(timer);
 				onSuccess();
 			}
-		} catch (e) {}
+		} catch (e) {
+			return;
+		}
 	}, 2000);
 };
