@@ -26,6 +26,7 @@
 	import { ETH_ASSET_ID, XIN_ASSET_ID } from '$lib/constants/common';
 	import type { Pair } from '$lib/helpers/4swap/api';
 	import Spinner from '$lib/components/common/spinner.svelte';
+	import Message from '$lib/components/common/message.svelte';
 
 	const formatFiat = (priceUsd: string | undefined, inputAmount: number | undefined) => {
 		if (!priceUsd || !inputAmount) return '0.00';
@@ -117,6 +118,7 @@
 	$: outputAmountFiat = formatFiat($outputAsset?.price_usd, outputAmount);
 
 	let loading = false;
+	let success = false;
 	const swap = async () => {
 		if (!$library || !$user || !order || !$inputAsset || !minReceived) return;
 
@@ -125,11 +127,17 @@
 		const { swapAsset } = await import('$lib/helpers/web3/common');
 
 		try {
-			await swapAsset($library, $user, order, $inputAsset, minReceived);
+			await swapAsset($library, $user, order, $inputAsset, minReceived, () => {
+				success = true;
+				loading = false;
+				setTimeout(() => {
+					success = false;
+				}, 3000)
+			}, () => {
+				loading = false;
+			});
 			await updateAssets();
-		} finally {
-			// loading = false;
-		}
+		} catch (e) {}
 	};
 
 	let inputElement: HTMLInputElement | undefined;
@@ -261,3 +269,7 @@
 	</div>
 	<Faq />
 </div>
+
+{#if success}
+	<Message />
+{/if}
