@@ -6,7 +6,7 @@ import ExternalClient from '@mixin.dev/mixin-node-sdk/src/client/external';
 import { utils } from 'ethers';
 import { WHITELIST_ASSET_ID, ETH_ASSET_ID, WHITELIST_ASSET } from '../constants/common';
 import { bigMul, bigGte } from './big';
-import { getMvmTokens } from './mvm/api';
+import { fetchMvmTokens } from './mvm/api';
 import { getBalance } from './web3/common';
 
 export const register = async (address: string): Promise<RegisteredUser> => {
@@ -36,7 +36,7 @@ export const fetchAssets = async (user: User) => {
 			account: user.address,
 			network: 'mvm'
 		}),
-		getMvmTokens(user.address)
+		fetchMvmTokens(user.address)
 	]);
 
 	let assets: Asset[] = allAssets.filter((asset) => WHITELIST_ASSET_ID.includes(asset.asset_id));

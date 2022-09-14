@@ -1,4 +1,4 @@
-import toHex from '../helpers/utils';
+import { toHex } from '../helpers/utils';
 import type { NetworkParam } from '../types/network';
 
 export const LAST_URL = 'last-url';

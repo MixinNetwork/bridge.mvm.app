@@ -2,40 +2,18 @@
 	import clsx from 'clsx';
 
 	import Hamburger from '$lib/assets/drawer/hamburger.svg?component';
-	import { onDestroy } from 'svelte';
+	import { scrollableParent } from '../../helpers/action';
 
 	let clazz: string | undefined = undefined;
 
 	export { clazz as class };
 
-	let element: HTMLElement | undefined;
 	let y: number | undefined;
 	let height: number | undefined;
-
-	const findScrollable = (element: HTMLElement): HTMLElement | undefined => {
-		if (element.scrollHeight > element.clientHeight) {
-			return element;
-		}
-
-		if (element.parentElement) {
-			return findScrollable(element.parentElement);
-		}
-
-		return undefined;
+	const updateY = (event: CustomEvent<Element>) => {
+		y = event.detail.scrollTop;
 	};
 
-	const listener = () => {
-		y = scrollable?.scrollTop;
-	};
-
-	$: scrollable = element?.parentElement && findScrollable(element.parentElement);
-	$: if (scrollable) {
-		y = scrollable?.scrollTop;
-		scrollable.addEventListener('scroll', listener);
-		onDestroy(() => {
-			scrollable?.removeEventListener('scroll', listener);
-		});
-	}
 	$: showBackground = y && height && y > height;
 </script>
 
@@ -49,7 +27,8 @@
 		'[&>*:nth-child(n+3)]:float-right'
 	)}
 	bind:clientHeight={height}
-	bind:this={element}
+	use:scrollableParent
+	on:parentScroll={updateY}
 >
 	<label for="drawer-toggle" class="md:hidden">
 		<svelte:component this={Hamburger} class="stroke-black" />

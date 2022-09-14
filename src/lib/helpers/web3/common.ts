@@ -12,7 +12,7 @@ import {
 import type { Network } from '../../types/network';
 import type { RegisteredUser } from '$lib/types/user';
 import type { Asset } from '$lib/types/asset';
-import toHex from '../utils';
+import { toHex } from '../utils';
 import { generateExtra, getWithdrawalExtra } from '../sign';
 import { createAction } from '../4swap/api';
 import { fetchCode } from '../api';
