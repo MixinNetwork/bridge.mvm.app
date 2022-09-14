@@ -146,8 +146,8 @@
 			);
 			await updateAssets();
 		} finally {
-			success = false
-			loading = false
+			success = false;
+			loading = false;
 		}
 	};
 
