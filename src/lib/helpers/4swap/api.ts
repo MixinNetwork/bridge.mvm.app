@@ -112,7 +112,7 @@ export const fetchOrder = async (order_id: string, user: RegisteredUser) => {
 			'X-Request-Id': trace_id
 		}
 	});
-	if (response.status !== 200) throw new Error('wait...');
+	if (response.status === 404) throw new Error('wait...');
 
 	const { data } = await response.json();
 	return data;
@@ -121,27 +121,29 @@ export const fetchOrder = async (order_id: string, user: RegisteredUser) => {
 export const checkOrder = async (
 	order_id: string,
 	user: RegisteredUser,
-	onSuccess: () => void,
-	onError: () => void
 ) => {
 	let counter = 0;
 
-	const timer = setInterval(async () => {
-		counter++;
-		if (counter <= 5) return;
-		if (counter === 20) {
-			clearInterval(timer);
-			onError();
-		}
+	return new Promise((resolve, reject) => {
 
-		try {
-			const res = await fetchOrder(order_id, user);
-			if (res && res.state === 'Done') {
+		const timer = setInterval(async () => {
+			counter++;
+
+			if (counter <= 10) return;
+			if (counter === 30) {
 				clearInterval(timer);
-				onSuccess();
+				reject({ error: 'overtime' });
 			}
-		} catch (e) {
-			return;
-		}
-	}, 2000);
+
+			try {
+				const res = await fetchOrder(order_id, user);
+				if (res && res.state === 'Done') {
+					clearInterval(timer);
+					resolve(res);
+				}
+			} catch (e) {
+				return;
+			}
+		}, 2000);
+	})
 };

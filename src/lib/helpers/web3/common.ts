@@ -164,8 +164,6 @@ export const swapAsset = async (
 	order: Order,
 	inputAsset: Asset,
 	minReceived: string,
-	onSuccess: () => void,
-	onError: () => void
 ) => {
 	await switchNetwork(provider, 'mvm');
 
@@ -198,8 +196,7 @@ export const swapAsset = async (
 			gasLimit: 500000,
 			value: assetAmount
 		});
-		await checkOrder(actionResp.follow_id, user, onSuccess, onError);
-		return;
+		return await checkOrder(actionResp.follow_id, user);
 	}
 
 	if (inputAsset.contract) {
@@ -212,8 +209,7 @@ export const swapAsset = async (
 			gasPrice: 10000000,
 			gasLimit: 450000
 		});
-		await checkOrder(actionResp.follow_id, user, onSuccess, onError);
-		return;
+		return await checkOrder(actionResp.follow_id, user);
 	}
 
 	throw new Error('Invalid asset');

@@ -127,26 +127,22 @@
 		const { swapAsset } = await import('$lib/helpers/web3/common');
 
 		try {
-			await swapAsset(
+			const res = await swapAsset(
 				$library,
 				$user,
 				order,
 				$inputAsset,
 				minReceived,
-				() => {
-					success = true;
-					loading = false;
-					setTimeout(() => {
-						success = false;
-					}, 3000);
-				},
-				() => {
-					loading = false;
-				}
 			);
+			if (!res.error) {
+				success = true;
+				setTimeout(() => {
+					success = false;
+				}, 3000);
+			}
+
 			await updateAssets();
 		} finally {
-			success = false;
 			loading = false;
 		}
 	};
