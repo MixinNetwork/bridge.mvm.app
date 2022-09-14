@@ -129,8 +129,8 @@ export const checkOrder = async (order_id: string, user: RegisteredUser, onSucce
 
 	const timer = setInterval(async () => {
 		counter++;
-		if (counter <= 10) return;
-		if (counter === 30) {
+		if (counter <= 5) return;
+		if (counter === 20) {
 			clearInterval(timer);
 			onError();
 		}
@@ -138,13 +138,10 @@ export const checkOrder = async (order_id: string, user: RegisteredUser, onSucce
 		try {
 			const res = await fetchOrder(order_id, user);
 			if (res && res.state === "Done") {
-				console.log('success');
 				clearInterval(timer);
 				onSuccess();
 			}
-		} catch (e) {
-			console.log(e);
-		}
+		} catch (e) {}
 
 	}, 2000)
 }
