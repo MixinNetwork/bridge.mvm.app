@@ -165,7 +165,7 @@ export const swapAsset = async (
 	inputAsset: Asset,
 	minReceived: string,
 	onSuccess: () => void,
-	onError: () => void,
+	onError: () => void
 ) => {
 	await switchNetwork(provider, 'mvm');
 

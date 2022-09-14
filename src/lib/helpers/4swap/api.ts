@@ -1,6 +1,6 @@
-import { v4 } from "uuid";
-import { signAuthenticationToken } from "@mixin.dev/mixin-node-sdk";
-import type { RegisteredUser } from "../../types/user";
+import { v4 } from 'uuid';
+import { signAuthenticationToken } from '@mixin.dev/mixin-node-sdk';
+import type { RegisteredUser } from '../../types/user';
 
 export interface GetPairParams {
 	base: string;
@@ -99,16 +99,10 @@ export const createAction = async (params: ActionRequest) => {
 
 export const fetchOrder = async (order_id: string, user: RegisteredUser) => {
 	const trace_id = v4();
-	const token = signAuthenticationToken(
-		'GET',
-		`/me`,
-		'',
-		trace_id,
-		{
-			...user,
-			...user.key
-		}
-	);
+	const token = signAuthenticationToken('GET', `/me`, '', trace_id, {
+		...user,
+		...user.key
+	});
 
 	const response = await fetch(`https://api.4swap.org/api/orders/${order_id}`, {
 		method: 'GET',
@@ -122,9 +116,14 @@ export const fetchOrder = async (order_id: string, user: RegisteredUser) => {
 
 	const { data } = await response.json();
 	return data;
-}
+};
 
-export const checkOrder = async (order_id: string, user: RegisteredUser, onSuccess: () => void, onError: () => void) => {
+export const checkOrder = async (
+	order_id: string,
+	user: RegisteredUser,
+	onSuccess: () => void,
+	onError: () => void
+) => {
 	let counter = 0;
 
 	const timer = setInterval(async () => {
@@ -137,11 +136,10 @@ export const checkOrder = async (order_id: string, user: RegisteredUser, onSucce
 
 		try {
 			const res = await fetchOrder(order_id, user);
-			if (res && res.state === "Done") {
+			if (res && res.state === 'Done') {
 				clearInterval(timer);
 				onSuccess();
 			}
 		} catch (e) {}
-
-	}, 2000)
-}
+	}, 2000);
+};

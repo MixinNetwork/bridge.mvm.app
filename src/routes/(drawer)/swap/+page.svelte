@@ -127,15 +127,23 @@
 		const { swapAsset } = await import('$lib/helpers/web3/common');
 
 		try {
-			await swapAsset($library, $user, order, $inputAsset, minReceived, () => {
-				success = true;
-				loading = false;
-				setTimeout(() => {
-					success = false;
-				}, 3000)
-			}, () => {
-				loading = false;
-			});
+			await swapAsset(
+				$library,
+				$user,
+				order,
+				$inputAsset,
+				minReceived,
+				() => {
+					success = true;
+					loading = false;
+					setTimeout(() => {
+						success = false;
+					}, 3000);
+				},
+				() => {
+					loading = false;
+				}
+			);
 			await updateAssets();
 		} catch (e) {}
 	};
@@ -257,14 +265,15 @@
 		{/if}
 
 		<button
-			class="flex justify-center mt-10 mb-6 w-28 self-center rounded-full bg-brand-primary px-6 py-3 text-white"
+			class="mt-10 mb-6 flex w-28 justify-center self-center rounded-full bg-brand-primary px-6 py-3 text-white"
 			on:click={swap}
-			disabled={!(order && +order.amount)}>
-				{#if loading}
-					<Spinner class="stroke-white stroke-2 text-center" />
-				{:else}
-					Swap
-				{/if}
+			disabled={!(order && +order.amount)}
+		>
+			{#if loading}
+				<Spinner class="stroke-white stroke-2 text-center" />
+			{:else}
+				Swap
+			{/if}
 		</button>
 	</div>
 	<Faq />
