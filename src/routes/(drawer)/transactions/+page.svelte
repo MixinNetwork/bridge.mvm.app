@@ -6,7 +6,7 @@
 	import Helper from '$lib/assets/helper.svg?component';
 	import Header from '$lib/components/base/header.svelte';
 	import UserInfo from '$lib/components/base/user-info.svelte';
-	import { bigAdd } from '$lib/helpers/big';
+	import { bigAdd, format } from '$lib/helpers/big';
 	import Spinner from '$lib/components/common/spinner.svelte';
 	import { scrollableParent } from '$lib/helpers/action';
 	import { user } from '$lib/stores/user';
@@ -89,7 +89,7 @@
 							'text-green-500': tx.total > 0
 						})}
 					>
-						{tx.total}
+						{format({ n: tx.total })}
 					</div>
 					<div>
 						{tx.symbol}
