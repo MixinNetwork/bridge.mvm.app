@@ -74,6 +74,7 @@ export interface Transaction {
 	fee: number;
 	value: number;
 	symbol: string;
+	isSend: boolean;
 	icon?: string;
 }
 
@@ -105,7 +106,7 @@ export const fetchTransactions: FetchTransactions = async (
 			blockNumber,
 			hash,
 			timeStamp,
-			to,
+			from,
 			value,
 			gasPrice,
 			gasUsed,
@@ -113,15 +114,16 @@ export const fetchTransactions: FetchTransactions = async (
 			tokenName,
 			tokenSymbol
 		}) => {
-			const isReceive = to.toLowerCase() === user.address.toLowerCase();
+			const isSend = from.toLowerCase() === user.address.toLowerCase();
 			const formattedValue = utils.formatUnits(value, tokenDecimal || 18);
 			return {
 				hash,
 				blockNumber,
 				timeStamp,
 				name: tokenName || 'Etheruem',
-				fee: tokenSymbol || isReceive ? 0 : +utils.formatUnits(bigMul(gasUsed, gasPrice), 18),
-				value: isReceive ? +formattedValue : -formattedValue,
+				fee: tokenSymbol || !isSend ? 0 : +utils.formatUnits(bigMul(gasUsed, gasPrice), 18),
+				value: +formattedValue,
+				isSend,
 				symbol: tokenSymbol || 'ETH'
 			};
 		}

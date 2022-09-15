@@ -18,11 +18,14 @@
 	let transactions: Transaction[] = $page.data.transactions;
 	let hasMore = transactions.length >= 30;
 
-	$: txs = transactions.map((tx) => ({
-		...tx,
-		total: +bigAdd(tx.value, tx.fee),
-		date: dayjs.unix(tx.timeStamp).subtract(12, 'hour').format('HH:mm:ss MM-DD-YYYY')
-	}));
+	$: txs = transactions.map((tx) => {
+		const total = bigAdd(tx.value, tx.fee);
+		return {
+			...tx,
+			total: tx.isSend ? -total : +total,
+			date: dayjs.unix(tx.timeStamp).subtract(12, 'hour').format('HH:mm:ss MM-DD-YYYY')
+		};
+	});
 
 	let loading = false;
 
@@ -76,7 +79,9 @@
 			<div class="flex flex-1 items-center justify-between">
 				<div class="flex flex-1 items-center space-x-3">
 					<img src={tx.icon || DEFAULT_ICON} width="24" height="24" alt={tx.name} />
-					<div class="grow">{tx.total < 0 ? 'Withdrawal' : 'Deposit'}</div>
+					<div class="grow">
+						{tx.total < 0 ? (tx.value !== 0 ? 'Withdrawal' : 'Fee') : 'Deposit'}
+					</div>
 				</div>
 				<div class="flex flex-1 justify-end space-x-2 text-sm md:grow">
 					<div
