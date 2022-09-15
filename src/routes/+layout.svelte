@@ -1,6 +1,7 @@
 <script lang="ts">
 	import '../css/app.css';
 	import ModalContainer from '$lib/components/common/modal/modal-container.svelte';
+	import ToastContainer from '$lib/components/common/toast/toast-container.svelte';
 	import Meta from '$lib/components/common/meta.svelte';
 </script>
 
@@ -19,3 +20,4 @@
 
 <slot />
 <ModalContainer />
+<ToastContainer />

@@ -26,7 +26,8 @@
 	import { ETH_ASSET_ID, XIN_ASSET_ID } from '$lib/constants/common';
 	import type { Pair } from '$lib/helpers/4swap/api';
 	import Spinner from '$lib/components/common/spinner.svelte';
-	import Message from '$lib/components/common/message.svelte';
+	import Toast from '$lib/components/common/toast/toast.svelte';
+	import Success from '$lib/components/common/toast/success.svelte';
 
 	const formatFiat = (priceUsd: string | undefined, inputAmount: number | undefined) => {
 		if (!priceUsd || !inputAmount) return '0.00';
@@ -272,6 +273,4 @@
 	<Faq />
 </div>
 
-{#if success}
-	<Message />
-{/if}
+<Toast isOpen={success} content={Success} />
