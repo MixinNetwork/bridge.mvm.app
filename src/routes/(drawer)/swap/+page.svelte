@@ -129,12 +129,7 @@
 
 		try {
 			const res = await swapAsset($library, $user, order, $inputAsset, minReceived);
-			if (!res.error) {
-				success = true;
-				setTimeout(() => {
-					success = false;
-				}, 3000);
-			}
+			if (!res.error) success = true;
 
 			await updateAssets();
 		} finally {
