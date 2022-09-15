@@ -13,8 +13,6 @@
 
   $: opacity = isOpen ? 'opacity-1' : 'opacity-0';
 
-  fade;
-
   onMount(() => {
     setTimeout(() => {
         isOpen = false;
@@ -23,6 +21,7 @@
 </script>
 
 <div
+    transition:fade
     class={clsx("flex w-44 rounded-full bg-white py-2 px-2 align-middle", opacity, clazz)}
 >
     <slot />
