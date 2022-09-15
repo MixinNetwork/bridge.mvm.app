@@ -178,7 +178,7 @@
 							on:input={() => (lastEdited = 'input')}
 							placeholder="0.0"
 						/>
-						<div class="text-sm font-semibold text-black text-opacity-30">~ ${inputAmountFiat}</div>
+						<div class="text-sm font-semibold text-black text-opacity-30">≈ ${inputAmountFiat}</div>
 					</div>
 				</div>
 			</label>
@@ -217,7 +217,7 @@
 							placeholder="0.0"
 						/>
 						<div class="text-sm font-semibold text-black text-opacity-30">
-							~ ${outputAmountFiat}
+							≈ ${outputAmountFiat}
 						</div>
 					</div>
 				</div>
