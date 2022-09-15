@@ -1,7 +1,6 @@
 <script context="module" lang="ts">
   import clsx from 'clsx';
   import { fade } from 'svelte/transition';
-  import { onMount } from "svelte";
 </script>
 
 <script lang="ts">
@@ -12,12 +11,6 @@
   export { isOpen, clazz as class };
 
   $: opacity = isOpen ? 'opacity-1' : 'opacity-0';
-
-  onMount(() => {
-    setTimeout(() => {
-        isOpen = false;
-    }, 3000)
-  })
 </script>
 
 <div
