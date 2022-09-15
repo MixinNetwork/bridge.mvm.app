@@ -30,8 +30,8 @@
 				/>
 
 				<div>
-					<div class="flex items-center font-bold">
-						<span class="font-bold">
+					<div class="flex items-center space-x-1 font-bold">
+						<span>
 							{asset.symbol}
 						</span>
 						<ChainLabel assetId={asset.asset_id} chainId={asset.chain_id} />
