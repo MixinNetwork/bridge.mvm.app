@@ -1,9 +1,8 @@
 <script lang="ts">
 	import clsx from 'clsx';
-	import { deepWritable } from '$lib/helpers/store/deep';
 	import { fetchTransactions, type Transaction } from '$lib/helpers/mvm/api';
 	import { page } from '$app/stores';
-	import * as dayjs from 'dayjs';
+	import dayjs from 'dayjs';
 	import Helper from '$lib/assets/helper.svg?component';
 	import Header from '$lib/components/base/header.svelte';
 	import UserInfo from '$lib/components/base/user-info.svelte';
