@@ -11,11 +11,7 @@ const getWithdrawalAction = (destination: string, tag: string, amount: string): 
 	const action = {
 		receivers: [import.meta.env.VITE_WITHDRAWAL_BOT_CLIENT_ID],
 		threshold: 1,
-		extra: JSON.stringify({
-			destination,
-			tag,
-			amount
-		})
+		extra: encodeURIComponent(`${destination}~~${tag}~~${amount}`)
 	};
 	return JSON.stringify(action);
 };
