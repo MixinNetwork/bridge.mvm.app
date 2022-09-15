@@ -133,8 +133,8 @@
 				success = true;
 				setTimeout(() => {
 					success = false;
-				}, 3000)
-			};
+				}, 3000);
+			}
 
 			await updateAssets();
 		} finally {
