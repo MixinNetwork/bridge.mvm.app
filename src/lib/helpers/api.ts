@@ -110,7 +110,7 @@ export const fetchFeeOnAsset = async (
 	to: string,
 	amount: string
 ): Promise<string> => {
-	const overChargeAmount = (Number(amount) * 1.01).toString();
+	const overChargeAmount = (Number(amount) * 1.1).toString();
 	if (Number.isNaN(overChargeAmount)) return '0';
 
 	const response = await fetch('https://api.4swap.org/api/orders/pre', {
