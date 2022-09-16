@@ -1,6 +1,6 @@
 import { CodeClient, AssetClient } from '@mixin.dev/mixin-node-sdk';
 import type { PaymentRequestResponse } from '@mixin.dev/mixin-node-sdk';
-import type { Asset, CheckAddressFee } from '../types/asset';
+import type { Asset } from '../types/asset';
 import type { RegisteredUser, User } from '../types/user';
 import ExternalClient from '@mixin.dev/mixin-node-sdk/src/client/external';
 import { utils } from 'ethers';
@@ -23,10 +23,10 @@ export const fetchWithdrawalFee = async (asset_id: string, destination: string) 
 	if (!destination) return '';
 
 	const externalClient = ExternalClient();
-	const asset = (await externalClient.checkAddress({
+	const asset = await externalClient.checkAddress({
 		asset: asset_id,
 		destination
-	})) as CheckAddressFee;
+	});
 
 	return asset.fee;
 };
