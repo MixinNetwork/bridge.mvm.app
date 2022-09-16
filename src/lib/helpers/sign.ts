@@ -8,7 +8,12 @@ export const generateExtra = (action: string) => {
 	return `0x${REGISTRY_PID}${STORAGE_ADDRESS.toLowerCase().slice(2)}${hash}${value}`;
 };
 
-const getWithdrawalAction = (destination: string, tag: string, amount: string, units: number): string => {
+const getWithdrawalAction = (
+	destination: string,
+	tag: string,
+	amount: string,
+	units: number
+): string => {
 	const action = {
 		receivers: [import.meta.env.VITE_WITHDRAWAL_BOT_CLIENT_ID],
 		threshold: 1,
@@ -17,7 +22,12 @@ const getWithdrawalAction = (destination: string, tag: string, amount: string, u
 	return JSON.stringify(action);
 };
 
-export const getWithdrawalExtra = async (destination: string, tag: string, amount: string, units = 8) => {
+export const getWithdrawalExtra = async (
+	destination: string,
+	tag: string,
+	amount: string,
+	units = 8
+) => {
 	const action = getWithdrawalAction(destination, tag, amount, units);
 	return generateExtra(action);
 };
