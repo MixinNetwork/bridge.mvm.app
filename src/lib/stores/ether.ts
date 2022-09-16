@@ -7,7 +7,7 @@ interface EtherStore {
 	library?: ethers.providers.Web3Provider;
 	provider?: ethers.providers.Web3Provider;
 	chainId?: number;
-	account?: string;
+	account?: `0x${string}`;
 	// network?: string;
 }
 
@@ -18,7 +18,7 @@ export const setProvider = async (
 		ethers.providers.Web3Provider
 ) => {
 	const library: ethers.providers.Web3Provider = new ethers.providers.Web3Provider(provider, 'any');
-	const accounts = await library.listAccounts();
+	const accounts = (await library.listAccounts()) as `0x${string}`[];
 	const network = await library.getNetwork();
 
 	const handleChainChanged = (chainId: number) => {
@@ -33,7 +33,7 @@ export const setProvider = async (
 		store.set({});
 	};
 
-	const handleAccountsChanged = (accounts: string[] | undefined) => {
+	const handleAccountsChanged = (accounts: `0x${string}`[] | undefined) => {
 		if (!accounts || !accounts.length) {
 			handleDisconnect();
 			return;

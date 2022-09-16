@@ -1,15 +1,21 @@
 <script lang="ts">
-	import { createEventDispatcher, onDestroy, SvelteComponent } from 'svelte';
+	import { createEventDispatcher, onDestroy, SvelteComponentTyped } from 'svelte';
 	import modalStore, { renderModal, unRenderModal, type ModalProps } from './modal-state';
 	import { get } from '@square/svelte-store';
 
+	type ComponentTyped = $$Generic<typeof SvelteComponentTyped<Record<string, any>>>;
+	type PropsTyped = ComponentTyped extends typeof SvelteComponentTyped<
+		infer T extends Record<string, any>
+	>
+		? T
+		: never;
+
 	let isOpen = false;
-	// type is SvelteComponent
-	let content: unknown;
+	let content: ComponentTyped;
 	let overlayClass: string | undefined = undefined;
 	let maskClosable = true;
 	let keyboardClosable = true;
-	let contentProps: unknown = undefined;
+	let contentProps: PropsTyped | undefined = undefined;
 
 	export {
 		isOpen,
@@ -23,7 +29,7 @@
 
 	const dispatch = createEventDispatcher();
 	let onClose = () => {
-		content && unRenderModal(content as SvelteComponent);
+		content && unRenderModal(content);
 		dispatch('close');
 	};
 	let callback = (data: unknown) => {
@@ -40,10 +46,10 @@
 		const currentlyOpen = $modalStore.find(({ node }) => node === content);
 
 		if (content && isOpen) {
-			let props: ModalProps = {
+			let props: ModalProps<any> = {
 				onClose,
 				callback,
-				node: content as SvelteComponent,
+				node: content,
 				maskClosable,
 				keyboardClosable,
 				overlayClass,
