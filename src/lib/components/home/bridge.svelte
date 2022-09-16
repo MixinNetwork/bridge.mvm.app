@@ -89,7 +89,7 @@
 	});
 
 	$: isGteFee =
-		!depositMode && amount && $assetWithdrawalFee && bigGte(amount, $assetWithdrawalFee) && Number(amount) > 0.0001;
+		!depositMode && amount && $assetWithdrawalFee && bigGte(amount, $assetWithdrawalFee);
 
 	let loading = false;
 	const transfer = async () => {
@@ -229,10 +229,9 @@
 	class="mt-10 self-center rounded-full bg-brand-primary px-6 py-4 text-white"
 	on:click={transfer}
 	disabled={(!isEthChain && !address) ||
-		(!depositMode && !$assetWithdrawalFee) ||
 		!fromBalance ||
 		!amount ||
-		amount <= 0 ||
+		amount < 0.0001 ||
 		(!depositMode && !isGteFee)}>{depositMode ? 'Deposit' : 'Withdraw'}</button
 >
 
