@@ -18,7 +18,7 @@ export const user = dedupe(
 	derived([persistentUser, page], ([$user, $page]) => $user || $page.data.user)
 );
 
-export const registerAndSave = async (address: string) => {
+export const registerAndSave = async (address: `0x${string}`) => {
 	const u = await register(address);
 	return persistentUser.set({
 		...u,

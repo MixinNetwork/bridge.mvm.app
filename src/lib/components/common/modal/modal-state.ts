@@ -1,26 +1,28 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { get, writable } from '@square/svelte-store';
-import type { SvelteComponent } from 'svelte';
+import type { SvelteComponentTyped } from 'svelte';
 
-export interface ModalProps {
+export interface ModalProps<T extends Record<string, any>> {
 	onClose: () => void;
 	callback?: (data: unknown) => void;
-	node: SvelteComponent;
+	node: typeof SvelteComponentTyped<T>;
 	maskClosable: boolean;
 	keyboardClosable: boolean;
 	overlayClass?: string;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	contentProps?: any;
+	contentProps?: T;
 }
 
-export const modalStore = writable<ModalProps[]>([]);
+export const modalStore = writable<ModalProps<any>[]>([]);
 
-export const renderModal = (props: ModalProps) => {
+export const renderModal = <T extends Record<string, any>>(props: ModalProps<T>) => {
 	const $modalStore = get(modalStore);
 	if ($modalStore.find(({ node }) => node === props.node)) return;
 	modalStore.update((state) => [...state, props]);
 };
 
-export const unRenderModal = (contentNode: SvelteComponent) => {
+export const unRenderModal = <T extends Record<string, any>>(
+	contentNode: typeof SvelteComponentTyped<T>
+) => {
 	const $modalStore = get(modalStore);
 	if (!$modalStore.find(({ node }) => node === contentNode)) return;
 
