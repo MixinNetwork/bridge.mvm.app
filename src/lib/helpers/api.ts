@@ -20,7 +20,7 @@ export const register = async (address: string): Promise<RegisteredUser> => {
 };
 
 export const fetchWithdrawalFee = async (asset_id: string, destination: string) => {
-	if (!destination) return '';
+	if (!destination) return undefined;
 
 	const externalClient = ExternalClient();
 	const asset = await externalClient.checkAddress({
