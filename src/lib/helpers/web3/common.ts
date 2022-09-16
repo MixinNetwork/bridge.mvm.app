@@ -113,9 +113,9 @@ export const withdraw = async (
 	await switchNetwork(provider, 'mvm');
 
 	const signer = provider.getSigner();
-	const extra = await getWithdrawalExtra(destination, tag, amount);
 
 	if (asset.asset_id === ETH_ASSET_ID) {
+		const extra = await getWithdrawalExtra(destination, tag, amount);
 		const totalAmount = ethers.utils.parseEther((Number(amount) + Number(fee)).toFixed(8));
 
 		const bridge = new ethers.Contract(BRIDGE_ADDRESS, BRIDGE_ABI, signer);
@@ -130,6 +130,8 @@ export const withdraw = async (
 	if (asset.chain_id === ETH_ASSET_ID && asset.contract) {
 		const tokenContract = new ethers.Contract(asset.contract, MVM_ERC20_ABI, signer);
 		const tokenDecimal = await tokenContract.decimals();
+
+		const extra = await getWithdrawalExtra(destination, tag, amount, tokenDecimal);
 		const value = ethers.utils.parseUnits(
 			(Number(amount) + Number(fee)).toFixed(tokenDecimal).toString(),
 			tokenDecimal
