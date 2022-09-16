@@ -89,7 +89,7 @@
 	});
 
 	$: isGteFee =
-		!depositMode && amount && $assetWithdrawalFee && bigGte(amount, $assetWithdrawalFee);
+		!depositMode && amount && $assetWithdrawalFee && bigGte(amount, $assetWithdrawalFee) && Number(amount) > 0.0001;
 
 	let loading = false;
 	const transfer = async () => {
