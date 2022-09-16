@@ -27,8 +27,10 @@
 			chainName={asset.chain_name}
 		/>
 		<div class="text-start">
-			<div class="flex items-center font-bold">
-				{asset.symbol}
+			<div class="flex items-center space-x-1 font-bold">
+				<span>
+					{asset.symbol}
+				</span>
 				<ChainLabel assetId={asset.asset_id} chainId={asset.chain_id} />
 			</div>
 

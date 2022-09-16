@@ -9,9 +9,11 @@ export const ReadableRegistryContract = new ethers.Contract(
 	mvmProvider
 );
 
-export const fetchAssetContract = (assetId: string): string => {
+export const fetchAssetContract = async (assetId: string): Promise<string | undefined> => {
 	const id = assetId.replaceAll('-', '');
-	return ReadableRegistryContract.contracts(`0x${id}`);
+	const address = await ReadableRegistryContract.contracts(`0x${id}`);
+	if (address === '0x0000000000000000000000000000000000000000') return undefined;
+	return address;
 };
 
 export const fetchUsersContract = (userIds: string[], threshold = 1) => {
