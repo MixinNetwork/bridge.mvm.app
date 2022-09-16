@@ -127,7 +127,7 @@ export const withdraw = async (
 		return;
 	}
 
-	if (asset.chain_id === ETH_ASSET_ID && asset.contract) {
+	if (asset.contract) {
 		const tokenContract = new ethers.Contract(asset.contract, MVM_ERC20_ABI, signer);
 		const tokenDecimal = await tokenContract.decimals();
 
