@@ -76,16 +76,20 @@
 	$: if (fromBalance && amount && bigGte(amount, fromBalance))
 		amount = Number.parseFloat(fromBalance);
 
-	$: assetWithdrawalFee = AssetWithdrawalFee(asset.asset_id);
-
-	$: isGteFee =
-		!depositMode && amount && $assetWithdrawalFee && bigGte(amount, $assetWithdrawalFee);
-
 	let address = '';
 
 	depositMode && (address = $user?.address || '');
 
 	let memo = '';
+
+	$: assetWithdrawalFee = AssetWithdrawalFee({
+		asset_id: asset.asset_id,
+		chain_id: asset.chain_id,
+		destination: address
+	});
+
+	$: isGteFee =
+		!depositMode && amount && $assetWithdrawalFee && bigGte(amount, $assetWithdrawalFee);
 
 	let loading = false;
 	const transfer = async () => {
@@ -101,15 +105,7 @@
 			if (depositMode) {
 				await deposit($library, asset, value);
 			} else {
-				await withdraw(
-					$library,
-					asset,
-					$user.contract,
-					bigSub(value, $assetWithdrawalFee),
-					address || $user?.address,
-					memo,
-					$assetWithdrawalFee
-				);
+				await withdraw($library, asset, $user.contract, value, address, memo, $assetWithdrawalFee);
 			}
 		} finally {
 			loading = false;
@@ -221,7 +217,7 @@
 	>
 		<div>
 			Withdrawal fee: {$assetWithdrawalFee || '...'}
-			{asset.chain_symbol || asset.symbol}
+			{asset.symbol}
 		</div>
 		<div>
 			Gas fee: {TRANSACTION_GAS} ETH
@@ -233,10 +229,9 @@
 	class="mt-10 self-center rounded-full bg-brand-primary px-6 py-4 text-white"
 	on:click={transfer}
 	disabled={(!isEthChain && !address) ||
-		(!depositMode && !$assetWithdrawalFee) ||
 		!fromBalance ||
 		!amount ||
-		amount <= 0 ||
+		amount < 0.0001 ||
 		(!depositMode && !isGteFee)}>{depositMode ? 'Deposit' : 'Withdraw'}</button
 >
 
