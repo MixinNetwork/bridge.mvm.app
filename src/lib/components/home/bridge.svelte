@@ -15,7 +15,7 @@
 	import { getBalance, getERC20Balance } from '$lib/helpers/web3/common';
 	import { ASSET_KEY } from './export';
 	import type { Network } from '$lib/types/network';
-	import { bigGte, bigSub, format } from '$lib/helpers/big';
+	import { bigGte, format } from '$lib/helpers/big';
 	import LogoCircle from '$lib/assets/logo/logo-circle.svg?component';
 	import Modal from '$lib/components/common/modal/modal.svelte';
 	import { page } from '$app/stores';
