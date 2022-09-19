@@ -25,9 +25,10 @@
 		<input
 			use:focus={{ enabled: true }}
 			id="search"
-			type="text"
+			type="search"
 			class="w-full bg-transparent placeholder-black placeholder-opacity-20"
 			placeholder="Name, Symbol or Address"
+			autocomplete="off"
 			bind:value={keyword}
 		/>
 	</label>
