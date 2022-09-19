@@ -27,6 +27,7 @@
 	import type { Pair } from '$lib/helpers/4swap/api';
 	import Spinner from '$lib/components/common/spinner.svelte';
 	import Toast from '$lib/components/common/toast/toast.svelte';
+	import { showToast } from '$lib/components/common/toast/store';
 
 	const formatFiat = (priceUsd: string | undefined, inputAmount: number | undefined) => {
 		if (!priceUsd || !inputAmount) return '0.00';
@@ -132,7 +133,7 @@
 
 		try {
 			const res = await swapAsset($library, $user, order, $inputAsset, minReceived);
-			if (!res.error) success = true;
+			if (!res.error) showToast('success', 'Successful');
 
 			await updateAssets();
 		} finally {
@@ -270,4 +271,4 @@
 	<Faq />
 </div>
 
-<Toast toast-opened={success} toast-type={'success'} toast-duration={3000} toast-close={close} />
+<Toast />
