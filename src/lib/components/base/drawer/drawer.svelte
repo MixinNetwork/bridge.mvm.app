@@ -9,6 +9,7 @@
 	// import Support from '$lib/assets/drawer/support.svg?component';
 	import UserInfo from '../user-info.svelte';
 	import Exporor from '$lib/assets/drawer/explorer.svg?component';
+	import Audit from '$lib/assets/drawer/audit.svg?component';
 </script>
 
 <div class="w-72 rounded-r-2xl bg-white md:w-64 md:rounded-none">
@@ -20,4 +21,10 @@
 	<!-- <DrawerItem logo={GasToken} href="/gas-token/" title="Gas Token" /> -->
 	<!-- <DrawerItem logo={Support} href="/support/" title="Support" /> -->
 	<DrawerItem logo={Exporor} href="https://scan.mvm.dev/" title="Explorer" target="_blank" />
+	<DrawerItem
+		logo={Audit}
+		href="https://github.com/MixinNetwork/audits/"
+		title="Audit"
+		target="_blank"
+	/>
 </div>

@@ -25,6 +25,15 @@
 		switchWithdrawMode
 	} from '$lib/components/home/export';
 	import { derived } from '@square/svelte-store';
+	import SearchBar from '$lib/components/base/search-bar.svelte';
+	import { searchAssets } from '$lib/helpers/utils';
+	import AssetList from '$lib/components/base/asset-list.svelte';
+	import Search from '$lib/assets/search.svg?component';
+	import AssetItemModal from '$lib/components/home/asset-item-modal.svelte';
+	import { fade } from 'svelte/transition';
+	import Empty from '$lib/components/base/empty.svelte';
+
+	const closeModal = () => resetStore();
 
 	let a: Asset[] | undefined = $page.data.assets;
 
@@ -35,8 +44,19 @@
 		$assets.find((asset) => asset.asset_id === ETH_ASSET_ID)
 	);
 
-	const closeModal = () => resetStore();
+	let searchMode = false;
+	const toggleSearchMode = () => (searchMode = !searchMode);
+	let searchAsset: Asset | undefined = undefined;
+
+	let keyword = '';
+	$: filtedAssets = searchAssets(keyword, $assets);
+
+	let innerWidth = 0;
+
+	$: isMd = innerWidth >= 720;
 </script>
+
+<svelte:window bind:innerWidth />
 
 <Header>
 	<Brand class="space-x-2 md:hidden" logoClass="w-6" MVMClass="text-lg" bridgeClass="hidden" />
@@ -81,11 +101,39 @@
 </div>
 
 <div class="my-8 rounded-2xl bg-white last:child:rounded-b-2xl md:mx-5 xl:mx-16">
-	<div class="px-5 py-4 text-lg font-semibold">Assets</div>
+	<div class="flex h-14 items-center justify-between px-5 text-lg font-semibold">
+		<div>Assets</div>
+		<div class="relative grow child:absolute child:top-0 child:bottom-0 child:right-0">
+			{#if searchMode}
+				<SearchBar
+					bind:keyword
+					cancelable={true}
+					on:click={() => {
+						toggleSearchMode();
+						keyword = '';
+					}}
+					class="hidden !p-0 md:flex"
+				/>
+			{/if}
+			{#if !searchMode || !isMd}
+				<button
+					class="flex items-center justify-center space-x-3"
+					on:click={toggleSearchMode}
+					transition:fade
+					><div class="text-black opacity-20">Search</div>
+					<Search />
+				</button>
+			{/if}
+		</div>
+	</div>
 
-	{#each $assets ?? [] as asset (asset.asset_id)}
+	{#each filtedAssets ?? [] as asset (asset.asset_id)}
 		<AssetItem {asset} />
 	{/each}
+
+	{#if !filtedAssets.length}
+		<Empty />
+	{/if}
 </div>
 
 <Modal
@@ -99,3 +147,20 @@
 	this={WithdrawModal}
 	modal-on-close={closeModal}
 />
+
+<Modal
+	modal-opened={searchMode && !isMd}
+	overlay-class="!items-end md:!items-center"
+	this={AssetList}
+	modal-on-close={toggleSearchMode}
+	onSelect={(asset) => (searchAsset = asset)}
+/>
+
+{#if !!searchAsset}
+	<Modal
+		modal-opened={!!searchAsset && !isMd}
+		this={AssetItemModal}
+		modal-on-close={() => (searchAsset = undefined)}
+		asset={searchAsset}
+	/>
+{/if}

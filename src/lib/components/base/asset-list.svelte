@@ -5,11 +5,18 @@
 	import type { Asset } from '$lib/types/asset';
 	import ModalHeader from '$lib/components/base/modal/modal-header.svelte';
 	import LayoutBottomSheet from '$lib/components/base/modal/layout-bottom-sheet.svelte';
+	import { searchAssets } from '../../helpers/utils';
+	import SearchBar from './search-bar.svelte';
+	import Empty from './empty.svelte';
 
 	export let close = () => {
 		//
 	};
 	export let onSelect: ((data: Asset) => void) | undefined = undefined;
+
+	let keyword = '';
+
+	$: filtedAssets = searchAssets(keyword, $assets);
 
 	const click = (asset: Asset) => {
 		onSelect?.(asset);
@@ -18,9 +25,10 @@
 </script>
 
 <LayoutBottomSheet>
-	<ModalHeader class="hidden md:flex" on:click={close}>Assets</ModalHeader>
+	<ModalHeader class="mb-0 hidden md:flex" on:click={close}>Assets</ModalHeader>
+	<SearchBar bind:keyword class="md:pt-0" />
 	<div class="grow overflow-y-auto">
-		{#each $assets || [] as asset (asset.asset_id)}
+		{#each filtedAssets || [] as asset (asset.asset_id)}
 			<button class="flex w-full space-x-3 px-5 py-4 text-start" on:click={() => click(asset)}>
 				<AssetIcon
 					assetIconUrl={asset.icon_url}
@@ -43,5 +51,9 @@
 				</div>
 			</button>
 		{/each}
+
+		{#if !filtedAssets.length}
+			<Empty />
+		{/if}
 	</div>
 </LayoutBottomSheet>
