@@ -17,7 +17,7 @@
 				A decentralized protocol for automated liquidity provision offers over 140 pairs with a TVL
 				of over $100M. Please visit <a href="https://4swap.org/" class="text-brand-primary"
 					>https://4swap.org/</a
-				> for additional information.
+				>for additional information.
 			</p>
 		</div>
 
