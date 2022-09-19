@@ -1121,6 +1121,11 @@
   dependencies:
     "@walletconnect/window-getters" "^1.0.0"
 
+"@yeungkc/svelte-portal@^0.0.2":
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/@yeungkc/svelte-portal/-/svelte-portal-0.0.2.tgz#bba19160033dadbdc6975cac17c6f126451be918"
+  integrity sha512-jZ6wO1iE+aW37xWxHxKWnAgRQ+yTpCfkriVXGfOhPqX3BC+SG6F8qNxUfOVh/KVmvGzGXBCMyQe6X1RGSuPw3A==
+
 abbrev@1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/abbrev/-/abbrev-1.1.1.tgz#f8f2c887ad10bf67f634f005b6987fed3179aac8"

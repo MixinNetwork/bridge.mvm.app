@@ -5,7 +5,7 @@
 	import LayoutBottomSheet from '../base/modal/layout-bottom-sheet.svelte';
 	import { switchDepositMode, switchWithdrawMode } from './export';
 
-	export let onClose = () => {
+	export let close = () => {
 		//
 	};
 	export let asset: Asset;
@@ -26,7 +26,7 @@
 		</div>
 
 		<div class="flex grow justify-end ">
-			<button on:click={onClose}>
+			<button on:click={close}>
 				<Close />
 			</button>
 		</div>
@@ -38,13 +38,13 @@
 		<button
 			on:click={() => {
 				switchDepositMode(asset, undefined);
-				onClose();
+				close();
 			}}>Deposit</button
 		>
 		<button
 			on:click={() => {
 				switchWithdrawMode(asset);
-				onClose();
+				close();
 			}}>Withdraw</button
 		>
 	</div>

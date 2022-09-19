@@ -51,4 +51,9 @@
 	</div>
 </div>
 
-<Modal isOpen={loading} content={SpinnerModal} maskClosable={false} keyboardClosable={false} />
+<Modal
+	modal-opened={loading}
+	this={SpinnerModal}
+	modal-mask-closeable={false}
+	modal-keyboard-closeable={false}
+/>

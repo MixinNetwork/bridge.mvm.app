@@ -1,7 +1,7 @@
 <script lang="ts">
 	import '../css/app.css';
-	import ModalContainer from '$lib/components/common/modal/modal-container.svelte';
 	import Meta from '$lib/components/common/meta.svelte';
+	import { PortalContainer } from '@yeungkc/svelte-portal';
 </script>
 
 <Meta
@@ -18,4 +18,4 @@
 />
 
 <slot />
-<ModalContainer />
+<PortalContainer />

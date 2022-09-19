@@ -89,13 +89,13 @@
 </div>
 
 <Modal
-	isOpen={!!$selectedAsset && $mode === 'deposit'}
-	content={DepositModal}
-	on:close={closeModal}
+	modal-opened={!!$selectedAsset && $mode === 'deposit'}
+	this={DepositModal}
+	modal-on-close={closeModal}
 />
 
 <Modal
-	isOpen={!!$selectedAsset && $mode === 'withdraw'}
-	content={WithdrawModal}
-	on:close={closeModal}
+	modal-opened={!!$selectedAsset && $mode === 'withdraw'}
+	this={WithdrawModal}
+	modal-on-close={closeModal}
 />

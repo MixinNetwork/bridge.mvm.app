@@ -56,11 +56,4 @@
 	</div>
 </div>
 
-<Modal
-	{isOpen}
-	content={AssetItemModal}
-	on:close={close}
-	contentProps={{
-		asset
-	}}
-/>
+<Modal modal-opened={isOpen} this={AssetItemModal} modal-on-close={close} {asset} />

@@ -6,7 +6,7 @@
 	import LayoutModal from '$lib/components/base/modal/layout-modal.svelte';
 	import { providerName } from '$lib/stores/provider';
 
-	export let onClose = () => {
+	export let close = () => {
 		//
 	};
 
@@ -20,7 +20,7 @@
 	$: if (asset && mode === 'metamask') switchDepositMode(asset, 'metamask');
 </script>
 
-<LayoutModal on:click={onClose}>
+<LayoutModal on:click={close}>
 	<div slot="title">Deposit to MVM</div>
 
 	<div

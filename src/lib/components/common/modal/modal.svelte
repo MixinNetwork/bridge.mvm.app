@@ -1,63 +1,53 @@
-<script lang="ts">
-	import { createEventDispatcher, onDestroy, SvelteComponentTyped } from 'svelte';
-	import modalStore, { renderModal, unRenderModal, type ModalProps } from './modal-state';
-	import { get } from '@square/svelte-store';
+<script context="module" lang="ts">
+	import type { BaseProps as OverlayBaseProps } from './overlay.svelte';
+	export type BaseProps = {
+		'modal-opened': boolean;
+		'modal-mask-closeable'?: boolean;
+		'modal-keyboard-closeable'?: boolean;
+		'modal-on-close'?: () => void;
+	} & Pick<OverlayBaseProps, 'overlay-class'>;
+</script>
 
-	type ComponentTyped = $$Generic<typeof SvelteComponentTyped<Record<string, any>>>;
-	type PropsTyped = ComponentTyped extends typeof SvelteComponentTyped<
-		infer T extends Record<string, any>
-	>
+<script lang="ts">
+	import { Portal } from '@yeungkc/svelte-portal';
+	import type { SvelteComponentTyped } from 'svelte';
+	import Overlay from './overlay.svelte';
+	import { omit } from 'lodash-es';
+
+	type Component = $$Generic<typeof SvelteComponentTyped<Record<string, any>>>;
+	type Props = Component extends typeof SvelteComponentTyped<infer T extends Record<string, any>>
 		? T
 		: never;
 
-	let isOpen = false;
-	let content: ComponentTyped;
-	let overlayClass: string | undefined = undefined;
-	let maskClosable = true;
-	let keyboardClosable = true;
-	let contentProps: PropsTyped | undefined = undefined;
+	type $$Props = BaseProps &
+		Props & {
+			this: Component;
+		};
 
-	export {
-		isOpen,
-		content,
-		overlayClass as class,
-		maskClosable,
-		keyboardClosable,
-		callback,
-		contentProps
-	};
+	$: p = $$props as $$Props;
 
-	const dispatch = createEventDispatcher();
-	let onClose = () => {
-		content && unRenderModal(content);
-		dispatch('close');
-	};
-	let callback = (data: unknown) => {
-		dispatch('callback', data);
-	};
+	$: opened = p['modal-opened'];
+	$: maskCloseable = p['modal-mask-closeable'] ?? true;
+	$: keyboardCloseable = p['modal-keyboard-closeable'] ?? true;
+	$: onClose = p['modal-on-close'];
+	$: component = p['this'];
 
-	onDestroy(() => {
-		const currentlyOpen = $modalStore.find(({ node }) => node === content);
-		if (currentlyOpen) onClose();
-	});
-
-	$: if (content) {
-		const $modalStore = get(modalStore);
-		const currentlyOpen = $modalStore.find(({ node }) => node === content);
-
-		if (content && isOpen) {
-			let props: ModalProps<any> = {
-				onClose,
-				callback,
-				node: content,
-				maskClosable,
-				keyboardClosable,
-				overlayClass,
-				contentProps
-			};
-			renderModal(props);
-		} else if (currentlyOpen && !isOpen) {
-			onClose();
-		}
-	}
+	$: props = omit(p, [
+		'modal-opened',
+		'modal-mask-closeable',
+		'modal-keyboard-closeable',
+		'modal-on-close',
+		'this'
+	]);
 </script>
+
+{#if opened}
+	<Portal
+		this={Overlay}
+		overlay-content={component}
+		overlay-on-click={maskCloseable ? onClose : undefined}
+		overlay-on-escape={keyboardCloseable ? onClose : undefined}
+		close={onClose}
+		{...props}
+	/>
+{/if}

@@ -47,8 +47,6 @@
 		});
 	};
 
-	const updateAsset = (event: CustomEvent<Asset>) => selectAsset(event.detail);
-
 	export let asset: Asset;
 	export let depositMode: boolean;
 
@@ -124,7 +122,7 @@
 		</div>
 	</div>
 	<div class=" divide-y-2 divide-brand-background child:w-full">
-		<SelectedAssetButton {asset} on:callback={updateAsset}
+		<SelectedAssetButton {asset} onSelect={selectAsset}
 			>Balance: {fromBalance ? format({ n: fromBalance }) : '...'}</SelectedAssetButton
 		>
 		<input
@@ -232,4 +230,9 @@
 		(!depositMode && !isGteFee)}>{depositMode ? 'Deposit' : 'Withdraw'}</button
 >
 
-<Modal isOpen={loading} content={SpinnerModal} maskClosable={false} keyboardClosable={false} />
+<Modal
+	modal-opened={loading}
+	this={SpinnerModal}
+	modal-mask-closeable={false}
+	modal-keyboard-closeable={false}
+/>

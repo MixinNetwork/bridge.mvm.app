@@ -3,7 +3,7 @@
 	import { selectedAsset } from './export';
 	import Bridge from './bridge.svelte';
 
-	export let onClose = () => {
+	export let close = () => {
 		//
 	};
 
@@ -13,7 +13,7 @@
 	}
 </script>
 
-<LayoutModal on:click={onClose}>
+<LayoutModal on:click={close}>
 	<div slot="title">Withdraw</div>
 	<div class="flex grow flex-col items-stretch overflow-y-auto">
 		{#if asset}

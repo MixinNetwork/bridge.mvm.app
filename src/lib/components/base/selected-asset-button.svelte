@@ -9,7 +9,8 @@
 
 	let clazz: string | undefined = undefined;
 	let asset: Asset;
-	export { clazz as class, asset };
+	let onSelect: (data: Asset) => void;
+	export { clazz as class, asset, onSelect };
 
 	let openedSelectModal = false;
 	const toggle = () => (openedSelectModal = !openedSelectModal);
@@ -43,9 +44,9 @@
 </button>
 
 <Modal
-	isOpen={openedSelectModal}
-	class="!items-end md:!items-center"
-	content={AssetList}
-	on:close={toggle}
-	on:callback
+	modal-opened={openedSelectModal}
+	overlay-class="!items-end md:!items-center"
+	this={AssetList}
+	modal-on-close={toggle}
+	{onSelect}
 />

@@ -1,48 +1,66 @@
 <script context="module" lang="ts">
-	import clsx from 'clsx';
-	import { focus } from 'focus-svelte';
-	import { fade } from 'svelte/transition';
-	import { tailwind } from '../../../transition/tailwind';
+	export type BaseProps = {
+		'overlay-class'?: string;
+		'overlay-on-click'?: () => void;
+		'overlay-on-escape'?: () => void;
+	};
 </script>
 
 <script lang="ts">
-	let clazz: string | undefined = undefined;
-	let onClose = () => {
-		//
+	import type { SvelteComponentTyped } from 'svelte';
+	import clsx from 'clsx';
+	import { focus } from 'focus-svelte';
+	import { tailwind } from '../../../transition/tailwind';
+	import { browser } from '$app/environment';
+	import { omit } from 'lodash-es';
+
+	type Component = $$Generic<typeof SvelteComponentTyped<Record<string, any>>>;
+	type Props = Component extends typeof SvelteComponentTyped<infer T extends Record<string, any>>
+		? T
+		: never;
+
+	type $$Props = {
+		'overlay-content': Component;
+	} & BaseProps &
+		Props;
+
+	$: p = $$props as $$Props;
+
+	$: clazz = p['overlay-class'];
+	$: onClick = p['overlay-on-click'];
+	$: onEscape = p['overlay-on-escape'];
+	$: component = p['overlay-content'];
+
+	$: props = omit(p, ['overlay-class', 'overlay-on-click', 'overlay-on-escape', 'overlay-content']);
+
+	let element: Element;
+	const keyDown = (evt: KeyboardEvent) => {
+		if (!browser) return;
+		if (evt.code !== 'Escape') return;
+		if (element === document.activeElement || element.contains(document.activeElement))
+			onEscape?.();
 	};
-	let maskClosable = false;
-
-	export { onClose, maskClosable, clazz as class };
-
-	let self: HTMLElement | undefined;
-	let wrapper: HTMLElement | undefined;
-
-	function overLayClicked(event: Event) {
-		if (
-			maskClosable &&
-			(event.target === self || event.target === wrapper || event.target === self?.parentElement)
-		) {
-			onClose();
-		}
-	}
-	fade;
 </script>
 
-<div class={clsx('fixed inset-0 z-20 flex items-center justify-center overflow-auto', clazz)}>
+<svelte:window on:keydown={keyDown} />
+
+<div
+	class={clsx('fixed inset-0 z-20 flex items-center justify-center overflow-auto', clazz)}
+	bind:this={element}
+>
 	<div
 		transition:tailwind={{
 			to: '!opacity-100'
 		}}
 		class="absolute inset-0 bg-brand-overlayBg opacity-0"
-		on:click={overLayClicked}
-		bind:this={self}
+		on:click|self={onClick}
 	/>
 
 	<div
-		use:focus={true}
+		use:focus={{ focusable: true, enabled: true }}
 		class="flex h-full w-full items-center justify-center overflow-hidden child:z-30"
-		bind:this={wrapper}
+		on:click|self={onClick}
 	>
-		<slot />
+		<svelte:component this={component} {...props} />
 	</div>
 </div>
