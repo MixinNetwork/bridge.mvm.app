@@ -11,7 +11,8 @@ export const searchAssets = (keyword: string, assets: Asset[]) => {
 		if (!lowerCaseKeyword) return true;
 		return (
 			asset.name.toLowerCase().includes(lowerCaseKeyword) ||
-			asset.symbol.toLowerCase().includes(lowerCaseKeyword)
+			asset.symbol.toLowerCase().includes(lowerCaseKeyword) ||
+			asset.contract?.toLowerCase() === lowerCaseKeyword
 		);
 	});
 };
