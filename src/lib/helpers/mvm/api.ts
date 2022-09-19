@@ -1,4 +1,3 @@
-import { NetworkClient } from '@mixin.dev/mixin-node-sdk';
 import { utils } from 'ethers';
 import { sortBy } from 'lodash-es';
 import type { User } from '../../types/user';
