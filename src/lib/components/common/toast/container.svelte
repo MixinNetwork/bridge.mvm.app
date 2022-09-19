@@ -9,8 +9,7 @@
 		timer: ReturnType<typeof setTimeout>;
 	}
 
-	const map = new Map();
-	const toastStore = writable<Map<number, ToastProps>>(map);
+	const toastStore = writable<Map<number, ToastProps>>(new Map());
 
 	export function showToast(type: ToastType, message: string, duration = 3000) {
 		const index = Date.now();
