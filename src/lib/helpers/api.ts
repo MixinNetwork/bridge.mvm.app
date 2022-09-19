@@ -4,10 +4,12 @@ import type { Asset } from '../types/asset';
 import type { RegisteredUser, User } from '../types/user';
 import ExternalClient from '@mixin.dev/mixin-node-sdk/src/client/external';
 import { utils } from 'ethers';
-import { WHITELIST_ASSET_ID, ETH_ASSET_ID, WHITELIST_ASSET } from '../constants/common';
-import { bigMul, bigGte } from './big';
+import { WHITELIST_ASSET_ID, ETH_ASSET_ID } from '../constants/common';
+import { bigMul } from './big';
 import { fetchMvmTokens } from './mvm/api';
 import { getBalance } from './web3/common';
+import { fetchAssetContract } from './web3/registry';
+import { sortBy } from 'lodash-es';
 
 export const register = async (address: string): Promise<RegisteredUser> => {
 	const response = await fetch('https://bridge.mvm.dev/users', {
@@ -34,9 +36,15 @@ export const fetchWithdrawalFee = async (asset_id: string, destination: string) 
 export const fetchAssets = async (user: User) => {
 	const assetClient = AssetClient({ keystore: { ...user, ...user.key } });
 
-	const [allAssets, ethBalance, tokens] = await Promise.all([
+	const [allAssets, addresses, ethBalance, tokens] = await Promise.all([
 		Promise.all(
 			WHITELIST_ASSET_ID.map(async (assetId): Promise<Asset> => assetClient.fetch(assetId))
+		),
+		Promise.all(
+			WHITELIST_ASSET_ID.map(async (id) => ({
+				id,
+				address: await fetchAssetContract(id)
+			}))
 		),
 		getBalance({
 			account: user.address,
@@ -45,7 +53,11 @@ export const fetchAssets = async (user: User) => {
 		fetchMvmTokens(user.address)
 	]);
 
-	let assets: Asset[] = allAssets.filter((asset) => WHITELIST_ASSET_ID.includes(asset.asset_id));
+	let assets: Asset[] = allAssets;
+
+	assets = assets.filter((asset) =>
+		addresses.find(({ id, address }) => !!address && id === asset.asset_id)
+	);
 
 	// balance and set contract
 	assets.map((asset) => {
@@ -54,7 +66,7 @@ export const fetchAssets = async (user: User) => {
 			return;
 		}
 
-		asset.contract = WHITELIST_ASSET.find((a) => a.assetId === asset.asset_id)?.contract;
+		asset.contract = addresses.find((a) => a.id === asset.asset_id)?.address;
 
 		const token = tokens.find(
 			(token) => token.contractAddress.toLowerCase() === asset.contract?.toLowerCase()
@@ -65,6 +77,8 @@ export const fetchAssets = async (user: User) => {
 		}
 		asset.balance = utils.formatUnits(token?.balance, token?.decimals);
 	});
+
+	assets = assets.filter(({ contract, asset_id }) => contract || asset_id === ETH_ASSET_ID);
 
 	// chain
 	const chainIds = [...new Set(assets.map(({ chain_id }) => chain_id))];
@@ -87,11 +101,12 @@ export const fetchAssets = async (user: User) => {
 		}
 	});
 
-	assets = assets.sort((a, b) => {
-		const aBalance = bigMul(a.balance, a.price_usd);
-		const bBalance = bigMul(b.balance, b.price_usd);
-		return bigGte(aBalance, bBalance) ? -1 : 1;
-	});
+	assets = sortBy(
+		assets,
+		({ balance, price_usd }) => bigMul(balance, price_usd),
+		'balance',
+		({ change_usd }) => -Math.abs(+change_usd)
+	).reverse();
 
 	const eth = assets.find((asset) => asset.asset_id === ETH_ASSET_ID);
 	if (eth) eth.name = 'Etheruem';

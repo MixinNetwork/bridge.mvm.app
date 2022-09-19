@@ -9,6 +9,7 @@
 </script>
 
 <script lang="ts">
+	/* eslint-disable @typescript-eslint/no-explicit-any */
 	import { Portal } from '@yeungkc/svelte-portal';
 	import type { SvelteComponentTyped } from 'svelte';
 	import Overlay from './overlay.svelte';

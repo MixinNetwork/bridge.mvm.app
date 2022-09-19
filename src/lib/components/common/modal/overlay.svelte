@@ -7,6 +7,7 @@
 </script>
 
 <script lang="ts">
+	/* eslint-disable @typescript-eslint/no-explicit-any */
 	import type { SvelteComponentTyped } from 'svelte';
 	import clsx from 'clsx';
 	import { focus } from 'focus-svelte';
