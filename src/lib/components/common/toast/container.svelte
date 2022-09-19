@@ -4,6 +4,7 @@
 	type ToastType = 'success';
 
 	interface ToastProps {
+		index: number;
 		message: string;
 		type: string;
 		timer: ReturnType<typeof setTimeout>;
@@ -23,6 +24,7 @@
 
 		toastStore.update((toasts) => {
 			toasts.set(index, {
+				index,
 				message,
 				type,
 				timer
@@ -56,8 +58,8 @@
 	}
 </script>
 
-<div class="fixed left-1/2 top-2 z-50 flex -translate-x-1/2 justify-center">
-	{#each toastArray as { message, type, timer }}
-		<ToastItem component={toastMap[type]} {timer} {message} />
+<div class="fixed left-1/2 top-2 z-50 flex flex-col -translate-x-1/2 justify-center ">
+	{#each toastArray as item (item.index)}
+		<ToastItem component={toastMap[item.type]} timer={item.timer} message={item.message} />
 	{/each}
 </div>
