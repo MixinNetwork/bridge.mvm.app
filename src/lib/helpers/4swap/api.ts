@@ -125,7 +125,6 @@ export const checkOrder = async (order_id: string, user: RegisteredUser) => {
 		const timer = setInterval(async () => {
 			counter++;
 
-			if (counter <= 10) return;
 			if (counter === 30) {
 				clearInterval(timer);
 				reject({ error: 'overtime' });
@@ -140,6 +139,6 @@ export const checkOrder = async (order_id: string, user: RegisteredUser) => {
 			} catch (e) {
 				return;
 			}
-		}, 2000);
+		}, 5000);
 	});
 };
