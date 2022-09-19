@@ -27,7 +27,7 @@
 	import type { Pair } from '$lib/helpers/4swap/api';
 	import Spinner from '$lib/components/common/spinner.svelte';
 	import Toast from '$lib/components/common/toast/toast.svelte';
-	import { showToast } from '$lib/components/common/toast/store';
+	import { showToast } from '$lib/components/common/toast/container.svelte';
 
 	const formatFiat = (priceUsd: string | undefined, inputAmount: number | undefined) => {
 		if (!priceUsd || !inputAmount) return '0.00';
@@ -255,6 +255,7 @@
 		<button
 			class="mt-10 mb-6 flex w-28 justify-center self-center rounded-full bg-brand-primary px-6 py-3 text-white"
 			on:click={swap}
+			disabled={!(order && +order.amount)}
 		>
 			{#if loading}
 				<Spinner class="stroke-white stroke-2 text-center" />
@@ -263,7 +264,7 @@
 			{/if}
 		</button>
 	</div>
-	<Faq />
+	<Faq/>
 </div>
 
 <Toast />
