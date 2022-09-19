@@ -7,17 +7,18 @@
 <script lang="ts">
 	import clsx from 'clsx';
 	import { fade } from 'svelte/transition';
-	import {SvelteComponentTyped} from "svelte";
-	import {omit} from "lodash-es";
+	import { SvelteComponentTyped } from 'svelte';
+	import { omit } from 'lodash-es';
 
 	type Component = $$Generic<typeof SvelteComponentTyped<Record<string, any>>>;
 	type Props = Component extends typeof SvelteComponentTyped<infer T extends Record<string, any>>
-			? T
-			: never;
+		? T
+		: never;
 
 	type $$Props = {
 		'toast-content': Component;
-	} & BaseProps & Props;
+	} & BaseProps &
+		Props;
 
 	$: p = $$props as $$Props;
 
@@ -28,7 +29,10 @@
 
 <div
 	transition:fade
-	class={clsx('fixed top-2 left-1/2 -translate-x-1/2 flex w-44 rounded-full bg-white py-2 px-2 align-middle', clazz)}
+	class={clsx(
+		'fixed top-2 left-1/2 -translate-x-1/2 flex w-44 rounded-full bg-white py-2 px-2 align-middle',
+		clazz
+	)}
 >
 	<svelte:component this={component} {...props} />
 </div>

@@ -120,7 +120,9 @@
 
 	let loading = false;
 	let success = false;
-	const close = () => { success = false };
+	const close = () => {
+		success = false;
+	};
 
 	const swap = async () => {
 		if (!$library || !$user || !order || !$inputAsset || !minReceived) return;
@@ -269,9 +271,4 @@
 	<Faq />
 </div>
 
-<Toast
-	toast-opened={success}
-	toast-type={'success'}
-	toast-duration={3000}
-	toast-close={close}
-/>
+<Toast toast-opened={success} toast-type={'success'} toast-duration={3000} toast-close={close} />
