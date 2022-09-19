@@ -17,7 +17,7 @@
 				A decentralized protocol for automated liquidity provision offers over 140 pairs with a TVL
 				of over $100M. Please visit <a href="https://4swap.org/" class="text-brand-primary"
 					>https://4swap.org/</a
-				>for additional information.
+				> for additional information.
 			</p>
 		</div>
 
@@ -25,8 +25,10 @@
 			<p class="text-base font-semibold text-black">MixPay</p>
 			<p>
 				A decentralized Web3 payment protocol connects the most liquid exchanges, such as Binance,
-				Huobi, and Gate, to convert almost any cryptocurrency. For more info, please visit
-				<a href="https://mixpay.me/" class="text-brand-primary">https://mixpay.me/</a>.
+				Huobi, and Gate, to convert almost any cryptocurrency. For more info, please visit <a
+					href="https://mixpay.me/"
+					class="text-brand-primary">https://mixpay.me/</a
+				>.
 			</p>
 		</div>
 	</div>
