@@ -120,8 +120,6 @@
 
 	let loading = false;
 	const swap = async () => {
-		showToast('success', '??????');
-		return;
 		if (!$library || !$user || !order || !$inputAsset || !minReceived) return;
 
 		loading = true;
