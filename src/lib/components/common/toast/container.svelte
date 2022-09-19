@@ -6,7 +6,7 @@
 	interface ToastProps {
 		message: string;
 		type: string;
-		timer: NodeJS.Timeout;
+		timer: ReturnType<typeof setTimeout>;
 	}
 
 	const map = new Map();

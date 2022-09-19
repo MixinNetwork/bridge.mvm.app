@@ -9,7 +9,7 @@
 	type $$Props = {
 		'toast-content': Component;
 		'toast-class'?: string;
-		'toast-timer': NodeJS.Timeout;
+		'toast-timer': ReturnType<typeof setTimeout>;
 	};
 
 	$: p = $$props as $$Props;
