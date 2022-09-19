@@ -2,7 +2,7 @@
 	import clsx from 'clsx';
 	import { fade } from 'svelte/transition';
 	import { onDestroy, SvelteComponentTyped } from 'svelte';
-	import { omit } from "lodash-es";
+	import { omit } from 'lodash-es';
 
 	type Component = $$Generic<typeof SvelteComponentTyped<Record<string, any>>>;
 
@@ -24,12 +24,6 @@
 	});
 </script>
 
-<div
-	transition:fade
-	class={clsx(
-		'flex w-44 rounded-full bg-white py-2 px-2 align-middle',
-		clazz
-	)}
->
+<div transition:fade class={clsx('flex w-44 rounded-full bg-white py-2 px-2 align-middle', clazz)}>
 	<svelte:component this={component} {...props} />
 </div>

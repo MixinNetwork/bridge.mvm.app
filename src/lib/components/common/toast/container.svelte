@@ -13,7 +13,6 @@
 	const toastStore = writable<Map<number, ToastProps>>(map);
 
 	export function showToast(type: ToastType, message: string, duration = 3000) {
-		console.log('add');
 		const index = Date.now();
 
 		const timer = setTimeout(() => {
@@ -58,9 +57,7 @@
 	}
 </script>
 
-<div
-	class="fixed left-1/2 -translate-x-1/2 flex justify-center top-2 w-48 z-50"
->
+<div class="fixed left-1/2 top-2 z-50 flex w-48 -translate-x-1/2 justify-center">
 	{#each toastArray as { message, type, timer }}
 		<ToastItem toast-content={toastMap[type]} toast-timer={timer} {message} />
 	{/each}

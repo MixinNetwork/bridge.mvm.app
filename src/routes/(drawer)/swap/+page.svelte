@@ -264,7 +264,7 @@
 			{/if}
 		</button>
 	</div>
-	<Faq/>
+	<Faq />
 </div>
 
 <Toast />
