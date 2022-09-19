@@ -14,7 +14,7 @@
 	export function showToast(type: ToastType, message: string, duration = 3000) {
 		const index = Date.now();
 
-		const timer = setTimeout(() => {
+		const timer: ReturnType<typeof setTimeout> = setTimeout(() => {
 			toastStore.update((toasts) => {
 				toasts.delete(index);
 				return toasts;
@@ -58,6 +58,6 @@
 
 <div class="fixed left-1/2 top-2 z-50 flex w-48 -translate-x-1/2 justify-center">
 	{#each toastArray as { message, type, timer }}
-		<ToastItem toast-content={toastMap[type]} toast-timer={timer} {message} />
+		<ToastItem component={toastMap[type]} timer={timer} message={message} />
 	{/each}
 </div>
