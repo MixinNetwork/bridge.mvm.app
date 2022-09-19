@@ -60,7 +60,9 @@
 
 	$: mainnetBalance = buildBalanceStore({ assetId, network: 'mainnet' });
 	$: mvmBalance = buildBalanceStore({ assetId, network: 'mvm' });
-	$: roundedMvmBalance = format({ n: $mvmBalance || 0, dp: 8, fixed: true });
+	$: roundedMvmBalance = $mvmBalance
+		? format({ n: $mvmBalance || 0, dp: 8, fixed: true })
+		: undefined;
 
 	$: cacheMvmBalance = roundedMvmBalance || format({ n: asset.balance, dp: 8, fixed: true });
 
