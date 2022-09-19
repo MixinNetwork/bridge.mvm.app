@@ -27,7 +27,7 @@
 			id="search"
 			type="text"
 			class="w-full bg-transparent placeholder-black placeholder-opacity-20"
-			placeholder="Search"
+			placeholder="Name, Symbol or Address"
 			bind:value={keyword}
 		/>
 	</label>
