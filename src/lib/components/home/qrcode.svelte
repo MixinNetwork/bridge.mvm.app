@@ -47,7 +47,7 @@
 					<button
 						class="px-3 py-2"
 						on:click={async () => {
-							value && await navigator.clipboard.writeText(value);
+							value && (await navigator.clipboard.writeText(value));
 							showToast('success', 'Copied');
 						}}
 					>

@@ -52,7 +52,7 @@
 	$: toastArray = Array.from($toastStore.values() ?? []);
 </script>
 
-<div class="fixed left-1/2 top-2 z-50 flex flex-col -translate-x-1/2 justify-center">
+<div class="fixed left-1/2 top-2 z-50 flex -translate-x-1/2 flex-col justify-center">
 	{#each toastArray as item (item.index)}
 		<ToastItem component={toastMap[item.type]} timer={item.timer} message={item.message} />
 	{/each}
