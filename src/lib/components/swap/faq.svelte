@@ -12,7 +12,7 @@
 			lower fees, faster transaction speed, and better trading liquidity.
 		</p>
 		<div>
-			<p class="text-black text-base font-semibold">4swap</p>
+			<p class="text-base font-semibold text-black">4swap</p>
 			<p>
 				A decentralized protocol for automated liquidity provision offers over 140 pairs with a TVL
 				of over $100M. Please visit https://4swap.org for additional information.
@@ -20,7 +20,7 @@
 		</div>
 
 		<div>
-			<p class="text-black text-base font-semibold">MixinPay</p>
+			<p class="text-base font-semibold text-black">MixinPay</p>
 			<p>
 				A decentralized Web3 payment protocol connects the most liquid exchanges, such as Binance,
 				Huobi, and Gate, to convert almost any cryptocurrency. For more info, please visit
