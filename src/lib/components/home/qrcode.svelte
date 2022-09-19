@@ -54,7 +54,7 @@
 	{/each}
 
 	<ul class="mx-6 list-outside list-disc pb-6 text-xs font-semibold opacity-50">
-		<li>Deposit expected to take {asset.confirmations} comfirmations.</li>
+		<li>Deposit will arrive {asset.confirmations} block confirmation.</li>
 		<li>Min deposit: 0.00000001 {asset.symbol}</li>
 	</ul>
 </div>
