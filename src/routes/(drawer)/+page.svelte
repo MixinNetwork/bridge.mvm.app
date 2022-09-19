@@ -120,7 +120,7 @@
 					class="flex items-center justify-center space-x-3"
 					on:click={toggleSearchMode}
 					transition:fade
-					><div class="text-black opacity-20">Serach</div>
+					><div class="text-black opacity-20">Search</div>
 					<Search />
 				</button>
 			{/if}
