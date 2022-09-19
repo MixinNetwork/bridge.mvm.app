@@ -22,7 +22,7 @@
 		</div>
 
 		<div>
-			<p class="text-base font-semibold text-black">MixinPay</p>
+			<p class="text-base font-semibold text-black">MixPay</p>
 			<p>
 				A decentralized Web3 payment protocol connects the most liquid exchanges, such as Binance,
 				Huobi, and Gate, to convert almost any cryptocurrency. For more info, please visit
