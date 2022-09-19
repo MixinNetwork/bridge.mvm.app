@@ -10,11 +10,23 @@
 	import Spinner from '$lib/components/common/spinner.svelte';
 	import { scrollableParent } from '$lib/helpers/action';
 	import { user } from '$lib/stores/user';
+	import type { Asset } from '$lib/types/asset';
+	import { assets } from '$lib/stores/model';
+	import { ETH_ASSET_ID } from '$lib/constants/common';
 
 	const DEFAULT_ICON =
 		'https://images.mixin.one/yH_I5b0GiV2zDmvrXRyr3bK5xusjfy5q7FX3lw3mM2Ryx4Dfuj6Xcw8SHNRnDKm7ZVE3_LvpKlLdcLrlFQUBhds=s128';
 
+	let a: Asset[] | undefined = $page.data.assets;
+	$: a && !$assets.length && assets.set(a);
 	let transactions: Transaction[] = $page.data.transactions;
+	$: transactions = transactions.map((tx) => {
+		const asset = $assets.find(({ asset_id, contract }) => {
+			if (tx.contract) return contract?.toLowerCase() === tx.contract?.toLowerCase();
+			return asset_id === ETH_ASSET_ID;
+		});
+		return { ...tx, icon: asset?.icon_url };
+	});
 	let hasMore = transactions.length >= 30;
 
 	$: txs = transactions.map((tx) => {

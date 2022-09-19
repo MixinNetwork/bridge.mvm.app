@@ -67,6 +67,7 @@ const fetchMvmTokenTransactions = async (address: string, endblock?: number) => 
 };
 
 export interface Transaction {
+	contract?: `0x${string}`;
 	hash: `0x${string}`;
 	blockNumber: number;
 	timeStamp: number;
@@ -88,10 +89,9 @@ export const fetchTransactions: FetchTransactions = async (
 	endblock?: number,
 	lastHash?: `0x${string}`
 ) => {
-	const [tx, tokenTx, assets] = await Promise.all([
+	const [tx, tokenTx] = await Promise.all([
 		fetchMvmTransactions(user.address, endblock),
-		fetchMvmTokenTransactions(user.address, endblock),
-		NetworkClient().topAssets()
+		fetchMvmTokenTransactions(user.address, endblock)
 	]);
 
 	const mvmTransactions: (Partial<MvmTokenTransfer> & MvmTransaction)[] = sortBy(
@@ -112,7 +112,8 @@ export const fetchTransactions: FetchTransactions = async (
 			gasUsed,
 			tokenDecimal,
 			tokenName,
-			tokenSymbol
+			tokenSymbol,
+			contractAddress
 		}) => {
 			const isSend = from.toLowerCase() === user.address.toLowerCase();
 			const formattedValue = utils.formatUnits(value, tokenDecimal || 18);
@@ -124,7 +125,8 @@ export const fetchTransactions: FetchTransactions = async (
 				fee: tokenSymbol || !isSend ? 0 : +utils.formatUnits(bigMul(gasUsed, gasPrice), 18),
 				value: +formattedValue,
 				isSend,
-				symbol: tokenSymbol || 'ETH'
+				symbol: tokenSymbol || 'ETH',
+				contract: tokenSymbol ? contractAddress : undefined
 			};
 		}
 	);
@@ -134,12 +136,5 @@ export const fetchTransactions: FetchTransactions = async (
 		.filter((tx) => tx.hash !== lastHash)
 		.slice(0, 30);
 
-	return transactions.map((tx) => {
-		const asset = assets.find((asset) => asset.symbol === tx.symbol);
-		if (!asset) return tx;
-		return {
-			...tx,
-			icon: asset?.icon_url
-		};
-	});
+	return transactions;
 };
