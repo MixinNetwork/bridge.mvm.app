@@ -55,12 +55,22 @@ export const initStore = () => {
 };
 
 export const switchDepositMode = (asset: Asset, _depositMode: DepositMode | undefined) => {
+	const $selectedAsset = get(selectedAsset);
+	const isEth = asset?.chain_id === ETH_ASSET_ID || asset?.asset_id === ETH_ASSET_ID;
+	const changedAsset = $selectedAsset?.asset_id !== asset.asset_id;
+
 	mode.set('deposit');
 	selectedAsset.set(asset);
-	const isEth = asset?.chain_id === ETH_ASSET_ID || asset?.asset_id === ETH_ASSET_ID;
-	if (_depositMode && isEth) depositMode.set(_depositMode);
-	else if (isEth) depositMode.set('metamask');
-	else depositMode.set('qrcode');
+
+	if (changedAsset || !_depositMode) {
+		if (isEth) {
+			depositMode.set('metamask');
+		} else {
+			depositMode.set('qrcode');
+		}
+	} else {
+		depositMode.set(_depositMode);
+	}
 
 	const $page = get(page);
 	setSearchParam($page, ASSET_KEY, asset.asset_id);
@@ -97,8 +107,16 @@ export const resetStore = () => {
 };
 
 export const selectAsset = (asset: Asset) => {
-	selectedAsset.set(asset);
-	const $page = get(page);
-	setSearchParam($page, ASSET_KEY, asset.asset_id);
-	goto($page.url, { keepfocus: true, replaceState: true, noscroll: true });
+	const $mode = get(mode);
+	if (!$mode) {
+		resetStore();
+		return;
+	}
+
+	if ($mode === 'deposit') {
+		switchDepositMode(asset, get(depositMode));
+		return;
+	}
+
+	switchWithdrawMode(asset);
 };

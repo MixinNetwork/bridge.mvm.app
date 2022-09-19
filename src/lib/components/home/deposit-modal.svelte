@@ -14,12 +14,10 @@
 	$: if ($selectedAsset) asset = $selectedAsset;
 
 	let mode = $depositMode;
-	$: if ($depositMode) {
-		if (asset && mode === 'qrcode') switchDepositMode(asset, 'qrcode');
-		if (asset && mode === 'metamask') switchDepositMode(asset, 'metamask');
+	$: if ($depositMode) mode = $depositMode;
 
-		mode = $depositMode;
-	}
+	$: if (asset && mode === 'qrcode') switchDepositMode(asset, 'qrcode');
+	$: if (asset && mode === 'metamask') switchDepositMode(asset, 'metamask');
 </script>
 
 <LayoutModal on:click={onClose}>
