@@ -119,11 +119,6 @@
 	$: outputAmountFiat = formatFiat($outputAsset?.price_usd, outputAmount);
 
 	let loading = false;
-	let success = false;
-	const close = () => {
-		success = false;
-	};
-
 	const swap = async () => {
 		if (!$library || !$user || !order || !$inputAsset || !minReceived) return;
 

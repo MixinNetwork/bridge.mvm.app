@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { get } from 'svelte/store';
+	import { get } from '@square/svelte-store';
 	import { Portal } from '@yeungkc/svelte-portal';
 	import ToastItem from './toast-item.svelte';
 	import { toastStore } from './store.ts';

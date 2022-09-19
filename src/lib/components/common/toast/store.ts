@@ -16,6 +16,7 @@ export interface ToastProps<T extends Record<string, any>> {
 	index: number;
 	message: string;
 	component: Component;
+	props?: T;
 }
 
 export const toastStore = writable<ToastProps<any>[]>([]);
