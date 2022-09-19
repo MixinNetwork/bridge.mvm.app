@@ -120,6 +120,8 @@
 
 	let loading = false;
 	let success = false;
+	const close = () => { success = false };
+
 	const swap = async () => {
 		if (!$library || !$user || !order || !$inputAsset || !minReceived) return;
 
@@ -129,12 +131,7 @@
 
 		try {
 			const res = await swapAsset($library, $user, order, $inputAsset, minReceived);
-			if (!res.error) {
-				success = true;
-				setTimeout(() => {
-					success = false;
-				}, 3000);
-			}
+			if (!res.error) success = true;
 
 			await updateAssets();
 		} finally {
@@ -261,7 +258,6 @@
 		<button
 			class="mt-10 mb-6 flex w-28 justify-center self-center rounded-full bg-brand-primary px-6 py-3 text-white"
 			on:click={swap}
-			disabled={!(order && +order.amount)}
 		>
 			{#if loading}
 				<Spinner class="stroke-white stroke-2 text-center" />
@@ -273,4 +269,9 @@
 	<Faq />
 </div>
 
-<Toast isOpen={success} content={Success} />
+<Toast
+	toast-opened={success}
+	toast-type={'success'}
+	toast-duration={3000}
+	toast-close={close}
+/>

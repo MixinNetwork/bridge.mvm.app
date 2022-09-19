@@ -1,20 +1,34 @@
 <script context="module" lang="ts">
-	import clsx from 'clsx';
-	import { fade } from 'svelte/transition';
+	export type BaseProps = {
+		'toast-class'?: string;
+	};
 </script>
 
 <script lang="ts">
-	let clazz: string | undefined = undefined;
-	let isOpen = false;
+	import clsx from 'clsx';
+	import { fade } from 'svelte/transition';
+	import {SvelteComponentTyped} from "svelte";
+	import {omit} from "lodash-es";
 
-	export { isOpen, clazz as class };
+	type Component = $$Generic<typeof SvelteComponentTyped<Record<string, any>>>;
+	type Props = Component extends typeof SvelteComponentTyped<infer T extends Record<string, any>>
+			? T
+			: never;
 
-	$: opacity = isOpen ? 'opacity-1' : 'opacity-0';
+	type $$Props = {
+		'toast-content': Component;
+	} & BaseProps & Props;
+
+	$: p = $$props as $$Props;
+
+	$: component = p['toast-content'];
+	$: clazz = p['toast-class'];
+	$: props = omit(p, ['toast-class', 'toast-content']);
 </script>
 
 <div
 	transition:fade
-	class={clsx('flex w-44 rounded-full bg-white py-2 px-2 align-middle', opacity, clazz)}
+	class={clsx('fixed top-2 left-1/2 -translate-x-1/2 flex w-44 rounded-full bg-white py-2 px-2 align-middle', clazz)}
 >
-	<slot />
+	<svelte:component this={component} {...props} />
 </div>
