@@ -19,6 +19,6 @@
 	});
 </script>
 
-<div transition:fade class={clsx('flex w-44 rounded-full bg-white py-2 px-2 align-middle', clazz)}>
+<div transition:fade class={clsx('flex rounded-full bg-white py-2 pl-2 pr-8 align-middle', clazz)}>
 	<svelte:component this={component} message={message} />
 </div>

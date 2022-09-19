@@ -3,6 +3,8 @@
 	import QrCode from '$lib/components/common/qr-code.svelte';
 	import Copy from '$lib/assets/copy.svg?component';
 	import SelectedAssetButton from '$lib/components/base/selected-asset-button.svelte';
+	import Toast from '$lib/components/common/toast/toast.svelte';
+	import { showToast } from '$lib/components/common/toast/container.svelte';
 	import { selectAsset } from './export';
 
 	export let asset: Asset;
@@ -45,7 +47,9 @@
 					<button
 						class="px-3 py-2"
 						on:click={() => {
-							value && navigator.clipboard.writeText(value);
+							value && navigator.clipboard.writeText(value).then(() => {
+								showToast('success', 'Copied');
+							});
 						}}
 					>
 						<Copy />
@@ -56,7 +60,9 @@
 	{/each}
 
 	<ul class="mx-6 list-outside list-disc pb-6 text-xs font-semibold opacity-50">
-		<li>Deposit expected to take {asset.confirmations} comfirmations.</li>
+		<li>Deposit expected to take {asset.confirmations} confirmations.</li>
 		<li>Min deposit: 0.00000001 {asset.symbol}</li>
 	</ul>
 </div>
+
+<Toast />
