@@ -80,7 +80,7 @@
 	$: assetWithdrawalFee = AssetWithdrawalFee({
 		asset_id: asset.asset_id,
 		chain_id: asset.chain_id,
-		destination: address
+		destination: address || (isEthChain && $user.address) || undefined
 	});
 
 	$: isGteFee =
