@@ -60,8 +60,8 @@
 	</div>
 
 	<Modal
-		isOpen={logoutModalOpen}
-		content={LogoutModal}
-		on:close={() => (logoutModalOpen = !logoutModalOpen)}
+		modal-opened={logoutModalOpen}
+		this={LogoutModal}
+		modal-on-close={() => (logoutModalOpen = !logoutModalOpen)}
 	/>
 </div>

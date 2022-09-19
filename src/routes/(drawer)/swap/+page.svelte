@@ -72,15 +72,15 @@
 		goto($page.url, { keepfocus: true, replaceState: true, noscroll: true });
 	};
 
-	const handleChangeInputAsset = (event: CustomEvent<Asset>) => {
-		inputAsset.set(event.detail);
-		setSearchParam($page, INPUT_KEY, event.detail.asset_id);
+	const handleChangeInputAsset = (asset: Asset) => {
+		inputAsset.set(asset);
+		setSearchParam($page, INPUT_KEY, asset.asset_id);
 		goto($page.url, { keepfocus: true, replaceState: true, noscroll: true });
 	};
 
-	const handleChangeOutputAsset = (event: CustomEvent<Asset>) => {
-		outputAsset.set(event.detail);
-		setSearchParam($page, OUTPUT_KEY, event.detail.asset_id);
+	const handleChangeOutputAsset = (asset: Asset) => {
+		outputAsset.set(asset);
+		setSearchParam($page, OUTPUT_KEY, asset.asset_id);
 		goto($page.url, { keepfocus: true, replaceState: true, noscroll: true });
 	};
 
@@ -174,7 +174,7 @@
 						<SelectedAssetButton
 							class=" w-fit"
 							asset={$inputAsset}
-							on:callback={handleChangeInputAsset}
+							onSelect={handleChangeInputAsset}
 						/>
 					{/if}
 					<div class="flex grow flex-col items-end pr-4">
@@ -213,7 +213,7 @@
 						<SelectedAssetButton
 							class=" w-fit"
 							asset={$outputAsset}
-							on:callback={handleChangeOutputAsset}
+							onSelect={handleChangeOutputAsset}
 						/>
 					{/if}
 					<div class="flex grow flex-col items-end pr-4">

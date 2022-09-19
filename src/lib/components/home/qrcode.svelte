@@ -1,19 +1,13 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
-	import { page } from '$app/stores';
 	import type { Asset } from '$lib/types/asset';
 	import QrCode from '$lib/components/common/qr-code.svelte';
 	import Copy from '$lib/assets/copy.svg?component';
 	import SelectedAssetButton from '$lib/components/base/selected-asset-button.svelte';
-	import { setSearchParam } from '../../helpers/app-store';
-	import { ASSET_KEY } from './export';
+	import { selectAsset } from './export';
 
 	export let asset: Asset;
 
-	const updateAsset = (event: CustomEvent<Asset>) => {
-		setSearchParam($page, ASSET_KEY, event.detail.asset_id);
-		goto($page.url.href, { keepfocus: true, replaceState: true, noscroll: true });
-	};
+	const updateAsset = (event: CustomEvent<Asset>) => selectAsset(event.detail);
 
 	$: address = asset?.deposit_entries[0].destination;
 	$: memo = asset?.deposit_entries[0].tag;

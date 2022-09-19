@@ -1,7 +1,5 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
-
-	import { ASSET_KEY, MODE_KEY } from './export';
+	import { switchDepositMode, switchWithdrawMode } from './export';
 
 	import { bigMul, format } from '../../helpers/big';
 
@@ -25,7 +23,7 @@
 
 <div
 	on:click={() => {
-		if (isLg) return goto(`/?${ASSET_KEY}=${asset.asset_id}`);
+		if (isLg) return switchDepositMode(asset, undefined);
 		isOpen = true;
 	}}
 	class="flex w-full cursor-pointer items-center  bg-brand-primary bg-opacity-0 p-5 hover:bg-opacity-5"
@@ -52,17 +50,10 @@
 	<div
 		class="hidden flex-1 justify-end space-x-4 font-semibold child:flex child:h-10 child:w-[102px] child:items-center child:justify-center child:rounded-full child:bg-white lg:flex"
 	>
-		<a href={`/?${ASSET_KEY}=${asset.asset_id}&${MODE_KEY}=deposit`}>Deposit</a>
-		<a href={`/?${ASSET_KEY}=${asset.asset_id}&${MODE_KEY}=withdraw`}>Withdraw</a>
+		<button on:click={() => switchDepositMode(asset, undefined)}>Deposit</button>
+		<button on:click={() => switchWithdrawMode(asset)}>Withdraw</button>
 		<!-- <button>Swap</button> -->
 	</div>
 </div>
 
-<Modal
-	{isOpen}
-	content={AssetItemModal}
-	on:close={close}
-	contentProps={{
-		asset
-	}}
-/>
+<Modal modal-opened={isOpen} this={AssetItemModal} modal-on-close={close} {asset} />

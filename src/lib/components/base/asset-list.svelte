@@ -6,19 +6,19 @@
 	import ModalHeader from '$lib/components/base/modal/modal-header.svelte';
 	import LayoutBottomSheet from '$lib/components/base/modal/layout-bottom-sheet.svelte';
 
-	export let onClose = () => {
+	export let close = () => {
 		//
 	};
-	export let callback: ((data: Asset) => void) | undefined = undefined;
+	export let onSelect: ((data: Asset) => void) | undefined = undefined;
 
 	const click = (asset: Asset) => {
-		callback?.(asset);
-		onClose();
+		onSelect?.(asset);
+		close();
 	};
 </script>
 
 <LayoutBottomSheet>
-	<ModalHeader class="hidden md:flex" on:click={onClose}>Assets</ModalHeader>
+	<ModalHeader class="hidden md:flex" on:click={close}>Assets</ModalHeader>
 	<div class="grow overflow-y-auto">
 		{#each $assets || [] as asset (asset.asset_id)}
 			<button class="flex w-full space-x-3 px-5 py-4 text-start" on:click={() => click(asset)}>

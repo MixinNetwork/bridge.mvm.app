@@ -13,17 +13,15 @@
 	import { user } from '$lib/stores/user';
 	import { EOS_ASSET_ID, ETH_ASSET_ID, TRANSACTION_GAS } from '$lib/constants/common';
 	import { getBalance, getERC20Balance } from '$lib/helpers/web3/common';
-	import { ASSET_KEY } from './export';
 	import type { Network } from '$lib/types/network';
-	import { bigGte, bigSub, format } from '$lib/helpers/big';
+	import { bigGte, format } from '$lib/helpers/big';
 	import LogoCircle from '$lib/assets/logo/logo-circle.svg?component';
 	import Modal from '$lib/components/common/modal/modal.svelte';
-	import { page } from '$app/stores';
-	import { goto } from '$app/navigation';
 	import SpinnerModal from '$lib/components/common/spinner-modal.svelte';
 	import { library } from '$lib/stores/ether';
 	import Paste from '$lib/assets/paste.svg?component';
 	import { providerLogo, providerName } from '$lib/stores/provider';
+	import { selectAsset } from './export';
 
 	const buildBalanceStore = ({ assetId, network }: { assetId: string; network: Network }) => {
 		return asyncDerived([assets, user], async ([$assets, $user]) => {
@@ -49,11 +47,6 @@
 		});
 	};
 
-	const updateAsset = (event: CustomEvent<Asset>) => {
-		$page.url.searchParams.set(ASSET_KEY, event.detail.asset_id);
-		goto($page.url.href, { keepfocus: true, replaceState: true, noscroll: true });
-	};
-
 	export let asset: Asset;
 	export let depositMode: boolean;
 
@@ -65,7 +58,9 @@
 
 	$: mainnetBalance = buildBalanceStore({ assetId, network: 'mainnet' });
 	$: mvmBalance = buildBalanceStore({ assetId, network: 'mvm' });
-	$: roundedMvmBalance = format({ n: $mvmBalance || 0, dp: 8, fixed: true });
+	$: roundedMvmBalance = $mvmBalance
+		? format({ n: $mvmBalance || 0, dp: 8, fixed: true })
+		: undefined;
 
 	$: cacheMvmBalance = roundedMvmBalance || format({ n: asset.balance, dp: 8, fixed: true });
 
@@ -76,16 +71,20 @@
 	$: if (fromBalance && amount && bigGte(amount, fromBalance))
 		amount = Number.parseFloat(fromBalance);
 
-	$: assetWithdrawalFee = AssetWithdrawalFee(asset.asset_id);
-
-	$: isGteFee =
-		!depositMode && amount && $assetWithdrawalFee && bigGte(amount, $assetWithdrawalFee);
-
 	let address = '';
 
 	depositMode && (address = $user?.address || '');
 
 	let memo = '';
+
+	$: assetWithdrawalFee = AssetWithdrawalFee({
+		asset_id: asset.asset_id,
+		chain_id: asset.chain_id,
+		destination: address || (isEthChain && $user.address) || undefined
+	});
+
+	$: isGteFee =
+		!depositMode && amount && $assetWithdrawalFee && bigGte(amount, $assetWithdrawalFee);
 
 	let loading = false;
 	const transfer = async () => {
@@ -101,15 +100,7 @@
 			if (depositMode) {
 				await deposit($library, asset, value);
 			} else {
-				await withdraw(
-					$library,
-					asset,
-					$user.contract,
-					bigSub(value, $assetWithdrawalFee),
-					address || $user?.address,
-					memo,
-					$assetWithdrawalFee
-				);
+				await withdraw($library, asset, $user.contract, value, address, memo, $assetWithdrawalFee);
 			}
 		} finally {
 			loading = false;
@@ -131,7 +122,7 @@
 		</div>
 	</div>
 	<div class=" divide-y-2 divide-brand-background child:w-full">
-		<SelectedAssetButton {asset} on:callback={updateAsset}
+		<SelectedAssetButton {asset} onSelect={selectAsset}
 			>Balance: {fromBalance ? format({ n: fromBalance }) : '...'}</SelectedAssetButton
 		>
 		<input
@@ -221,7 +212,7 @@
 	>
 		<div>
 			Withdrawal fee: {$assetWithdrawalFee || '...'}
-			{asset.chain_symbol || asset.symbol}
+			{asset.symbol}
 		</div>
 		<div>
 			Gas fee: {TRANSACTION_GAS} ETH
@@ -233,11 +224,15 @@
 	class="mt-10 self-center rounded-full bg-brand-primary px-6 py-4 text-white"
 	on:click={transfer}
 	disabled={(!isEthChain && !address) ||
-		(!depositMode && !$assetWithdrawalFee) ||
 		!fromBalance ||
 		!amount ||
-		amount <= 0 ||
+		amount < 0.0001 ||
 		(!depositMode && !isGteFee)}>{depositMode ? 'Deposit' : 'Withdraw'}</button
 >
 
-<Modal isOpen={loading} content={SpinnerModal} maskClosable={false} keyboardClosable={false} />
+<Modal
+	modal-opened={loading}
+	this={SpinnerModal}
+	modal-mask-closeable={false}
+	modal-keyboard-closeable={false}
+/>

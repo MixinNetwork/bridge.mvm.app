@@ -1,12 +1,12 @@
 <script lang="ts">
-	import type { SvelteComponent } from 'svelte';
+	import type { ComponentType } from 'svelte';
 
 	import { page } from '$app/stores';
 	import clsx from 'clsx';
 
 	import Arrow from '$lib/assets/arrow.svg?component';
 
-	export let logo: SvelteComponent;
+	export let logo: ComponentType;
 	export let title: string;
 	export let href: string;
 	export let target: string | undefined = undefined;

@@ -3,9 +3,9 @@
 	import Close from '$lib/assets/close.svg?component';
 	import AssetIcon from '../base/asset-icon.svelte';
 	import LayoutBottomSheet from '../base/modal/layout-bottom-sheet.svelte';
-	import { ASSET_KEY, MODE_KEY } from './export';
+	import { switchDepositMode, switchWithdrawMode } from './export';
 
-	export let onClose = () => {
+	export let close = () => {
 		//
 	};
 	export let asset: Asset;
@@ -26,7 +26,7 @@
 		</div>
 
 		<div class="flex grow justify-end ">
-			<button on:click={onClose}>
+			<button on:click={close}>
 				<Close />
 			</button>
 		</div>
@@ -35,8 +35,17 @@
 	<div
 		class=" mt-5 flex flex-col items-center space-y-2 child:mx-8 child:w-full child:rounded-xl child:bg-brand-background child:py-4 child:text-center"
 	>
-		<a href={`/?${ASSET_KEY}=${asset.asset_id}&${MODE_KEY}=deposit`} on:click={onClose}>Deposit</a>
-		<a href={`/?${ASSET_KEY}=${asset.asset_id}&${MODE_KEY}=withdraw`} on:click={onClose}>Withdraw</a
+		<button
+			on:click={() => {
+				switchDepositMode(asset, undefined);
+				close();
+			}}>Deposit</button
+		>
+		<button
+			on:click={() => {
+				switchWithdrawMode(asset);
+				close();
+			}}>Withdraw</button
 		>
 	</div>
 </LayoutBottomSheet>

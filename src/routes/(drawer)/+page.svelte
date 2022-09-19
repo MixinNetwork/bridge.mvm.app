@@ -12,36 +12,30 @@
 	import AssetItem from '$lib/components/home/asset-item.svelte';
 	import { page } from '$app/stores';
 	import DepositModal from '$lib/components/home/deposit-modal.svelte';
-	import { goto } from '$app/navigation';
 	import { ETH_ASSET_ID } from '$lib/constants/common';
 	import Modal from '$lib/components/common/modal/modal.svelte';
 	import WithdrawModal from '$lib/components/home/withdraw-modal.svelte';
-	import { setSearchParam } from '$lib/helpers/app-store';
 	import {
-		ASSET_KEY,
-		DEPOSIT_MODE_KEY,
 		mode,
-		MODE_KEY,
-		selectedAsset
+		selectedAsset,
+		depositMode,
+		initStore,
+		resetStore,
+		switchDepositMode,
+		switchWithdrawMode
 	} from '$lib/components/home/export';
-	import { browser } from '$app/environment';
+	import { derived } from '@square/svelte-store';
 
 	let a: Asset[] | undefined = $page.data.assets;
 
 	$: a && !$assets.length && assets.set(a);
 
-	$: if (browser && $page.url.pathname === '/') {
-		setSearchParam($page, ASSET_KEY, $selectedAsset?.asset_id);
-		goto($page.url.href, { keepfocus: true, replaceState: true, noscroll: true });
-	}
+	$: !$selectedAsset && !$mode && !$depositMode && initStore();
+	$: ethAsset = derived(assets, ($assets) =>
+		$assets.find((asset) => asset.asset_id === ETH_ASSET_ID)
+	);
 
-	const closeModal = () => {
-		setSearchParam($page, ASSET_KEY, undefined);
-		setSearchParam($page, MODE_KEY, undefined);
-		setSearchParam($page, DEPOSIT_MODE_KEY, undefined);
-
-		goto($page.url.href, { keepfocus: true, replaceState: true, noscroll: true });
-	};
+	const closeModal = () => resetStore();
 </script>
 
 <Header>
@@ -74,14 +68,14 @@
 				' [&>*:nth-child(n+2)]:before:content-[""]'
 			)}
 		>
-			<a href={`/?${ASSET_KEY}=${ETH_ASSET_ID}&${MODE_KEY}=deposit&${DEPOSIT_MODE_KEY}=metamask`}>
+			<button on:click={() => $ethAsset && switchDepositMode($ethAsset, undefined)}>
 				<svelte:component this={Send} />
 				<span>Deposit</span>
-			</a>
-			<a href={`/?${ASSET_KEY}=${ETH_ASSET_ID}&${MODE_KEY}=withdraw`}>
+			</button>
+			<button on:click={() => $ethAsset && switchWithdrawMode($ethAsset)}>
 				<svelte:component this={Receive} />
 				<span>Withdraw</span>
-			</a>
+			</button>
 		</div>
 	</div>
 </div>
@@ -95,13 +89,13 @@
 </div>
 
 <Modal
-	isOpen={!!$selectedAsset && $mode === 'deposit'}
-	content={DepositModal}
-	on:close={closeModal}
+	modal-opened={!!$selectedAsset && $mode === 'deposit'}
+	this={DepositModal}
+	modal-on-close={closeModal}
 />
 
 <Modal
-	isOpen={!!$selectedAsset && $mode === 'withdraw'}
-	content={WithdrawModal}
-	on:close={closeModal}
+	modal-opened={!!$selectedAsset && $mode === 'withdraw'}
+	this={WithdrawModal}
+	modal-on-close={closeModal}
 />
