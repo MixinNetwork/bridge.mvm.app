@@ -10,9 +10,7 @@
 	let message: string;
 	let clazz: string | undefined = undefined;
 
-	export {
-		component, timer, message, clazz as class
-	}
+	export { component, timer, message, clazz as class };
 
 	onDestroy(() => {
 		if (timer) clearTimeout(timer);
@@ -20,5 +18,5 @@
 </script>
 
 <div transition:fade class={clsx('flex rounded-full bg-white py-2 pl-2 pr-8 align-middle', clazz)}>
-	<svelte:component this={component} message={message} />
+	<svelte:component this={component} {message} />
 </div>

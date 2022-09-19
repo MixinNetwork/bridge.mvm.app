@@ -58,6 +58,6 @@
 
 <div class="fixed left-1/2 top-2 z-50 flex -translate-x-1/2 justify-center">
 	{#each toastArray as { message, type, timer }}
-		<ToastItem component={toastMap[type]} timer={timer} message={message} />
+		<ToastItem component={toastMap[type]} {timer} {message} />
 	{/each}
 </div>
