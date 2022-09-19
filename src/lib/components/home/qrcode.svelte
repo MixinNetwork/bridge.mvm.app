@@ -7,8 +7,6 @@
 
 	export let asset: Asset;
 
-	const updateAsset = (event: CustomEvent<Asset>) => selectAsset(event.detail);
-
 	$: address = asset?.deposit_entries[0].destination;
 	$: memo = asset?.deposit_entries[0].tag;
 	$: qrcodes = [
@@ -28,7 +26,7 @@
 </script>
 
 <div class="mx-5 rounded-lg bg-white">
-	<SelectedAssetButton {asset} on:callback={updateAsset} />
+	<SelectedAssetButton {asset} onSelect={selectAsset} />
 	{#each qrcodes as { key, value } (key)}
 		<div class="mx-4 flex flex-col items-center break-all  pb-6">
 			<QrCode
