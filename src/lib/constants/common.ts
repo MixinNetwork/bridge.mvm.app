@@ -215,6 +215,11 @@ export const WHITELIST_ASSET = [
 		id: '14693c1a-d835-3572-b9b4-e0cbb62099e5',
 		symbol: 'PINK',
 		chain: 'EOS'
+	},
+	{
+		id: '0c79a53f-9caf-3e7c-a3ce-1edcba33301f',
+		symbol: 'FTT',
+		chain: 'ETH'
 	}
 ];
 
