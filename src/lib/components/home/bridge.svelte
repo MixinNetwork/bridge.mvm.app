@@ -13,17 +13,15 @@
 	import { user } from '$lib/stores/user';
 	import { EOS_ASSET_ID, ETH_ASSET_ID, TRANSACTION_GAS } from '$lib/constants/common';
 	import { getBalance, getERC20Balance } from '$lib/helpers/web3/common';
-	import { ASSET_KEY } from './export';
 	import type { Network } from '$lib/types/network';
 	import { bigGte, format } from '$lib/helpers/big';
 	import LogoCircle from '$lib/assets/logo/logo-circle.svg?component';
 	import Modal from '$lib/components/common/modal/modal.svelte';
-	import { page } from '$app/stores';
-	import { goto } from '$app/navigation';
 	import SpinnerModal from '$lib/components/common/spinner-modal.svelte';
 	import { library } from '$lib/stores/ether';
 	import Paste from '$lib/assets/paste.svg?component';
 	import { providerLogo, providerName } from '$lib/stores/provider';
+	import { selectAsset } from './export';
 
 	const buildBalanceStore = ({ assetId, network }: { assetId: string; network: Network }) => {
 		return asyncDerived([assets, user], async ([$assets, $user]) => {
@@ -49,10 +47,7 @@
 		});
 	};
 
-	const updateAsset = (event: CustomEvent<Asset>) => {
-		$page.url.searchParams.set(ASSET_KEY, event.detail.asset_id);
-		goto($page.url.href, { keepfocus: true, replaceState: true, noscroll: true });
-	};
+	const updateAsset = (event: CustomEvent<Asset>) => selectAsset(event.detail);
 
 	export let asset: Asset;
 	export let depositMode: boolean;

@@ -27,7 +27,8 @@ export const updateAssets = async () => {
 	assets.set($assets);
 };
 
-export const getAsset = (assetId: string) => {
+export const getAsset = (assetId: string | null) => {
+	if (!assetId) return;
 	const $assets = get(assets);
 	return $assets.find((a) => a.asset_id === assetId);
 };

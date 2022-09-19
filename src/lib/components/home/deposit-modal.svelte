@@ -1,8 +1,5 @@
 <script lang="ts">
-	import { page } from '$app/stores';
-	import { defaultDepositMode, DEPOSIT_MODE_KEY, selectedAsset, type DepositMode } from './export';
-	import { browser } from '$app/environment';
-	import { goto } from '$app/navigation';
+	import { selectedAsset, switchDepositMode, depositMode } from './export';
 	import Qrcode from './qrcode.svelte';
 	import { ETH_ASSET_ID } from '$lib/constants/common';
 	import Bridge from './bridge.svelte';
@@ -14,19 +11,14 @@
 	};
 
 	let asset = $selectedAsset;
+	$: if ($selectedAsset) asset = $selectedAsset;
 
-	let depositMode =
-		($page.url.searchParams.get(DEPOSIT_MODE_KEY) || $defaultDepositMode) === 'metamask'
-			? 'metamask'
-			: ('qrcode' as DepositMode);
+	let mode = $depositMode;
+	$: {
+		if (asset && mode === 'qrcode') switchDepositMode(asset, 'qrcode');
+		if (asset && mode === 'metamask') switchDepositMode(asset, 'metamask');
 
-	$: if ($selectedAsset && depositMode && browser) {
-		$page.url.searchParams.set(DEPOSIT_MODE_KEY, depositMode);
-		goto($page.url.href, { keepfocus: true, replaceState: true, noscroll: true });
-	}
-
-	$: if ($selectedAsset) {
-		asset = $selectedAsset;
+		mode = $depositMode;
 	}
 </script>
 
@@ -37,7 +29,7 @@
 		class="mx-5 mb-3 grid grid-cols-2 rounded-md bg-black bg-opacity-5 p-1 text-center text-sm font-bold leading-7 child:z-0 child:!opacity-100 descendant:transition-all"
 	>
 		<label class="relative">
-			<input type="radio" class="peer hidden" value="qrcode" bind:group={depositMode} />
+			<input type="radio" class="peer hidden" value="qrcode" bind:group={mode} />
 
 			<div
 				class="h-full text-black opacity-50 peer-checked:text-brand-primary peer-checked:opacity-100"
@@ -51,7 +43,7 @@
 		</label>
 
 		<label>
-			<input type="radio" class="peer hidden" value="metamask" bind:group={depositMode} />
+			<input type="radio" class="peer hidden" value="metamask" bind:group={mode} />
 			<div class="text-black opacity-50 peer-checked:text-brand-primary peer-checked:opacity-100">
 				{$providerName}
 			</div>
@@ -59,9 +51,9 @@
 	</div>
 
 	<div class="flex grow flex-col items-stretch overflow-y-auto">
-		{#if depositMode === 'qrcode' && asset}
+		{#if mode === 'qrcode' && asset}
 			<Qrcode {asset} />
-		{:else if depositMode === 'metamask' && asset?.chain_id === ETH_ASSET_ID}
+		{:else if mode === 'metamask' && asset?.chain_id === ETH_ASSET_ID}
 			<Bridge {asset} depositMode={true} />
 		{:else}
 			<div class="flex grow items-center self-center font-semibold opacity-30">
