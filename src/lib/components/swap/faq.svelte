@@ -5,19 +5,27 @@
 </script>
 
 <div class={clsx('mt-4 rounded-lg bg-white pt-3 pb-10 px-5 lg:w-60', clazz)}>
-	<p class=" mb-6 text-xl font-bold">Why use MixPay</p>
+	<p class=" mb-6 text-xl font-bold">How does it work?</p>
 	<div class=" space-y-6 text-sm font-medium text-black text-opacity-50">
 		<p>
-			MixPay simplifies and improves Web3 Payments with the power of Mixin Network. Accept any
-			crypto with instant exchange.
+			MVM Bridge provides a cross-chain Convert service through 4swap and MixPay, which delivers
+			lower fees, faster transaction speed, and better trading liquidity.
 		</p>
-		<p>
-			You want to accept and send payments worldwide, peer-to-peer in a decentralized,
-			anti-censorship and fraud-resistant way?
-		</p>
-		<p>
-			We are providing innovative, blockchain-based solutions to do so. It's easy to integrate and
-			easy to use. Perform and manage Web3 payments today.
-		</p>
+		<div>
+			<p class="text-black text-base font-semibold">4swap</p>
+			<p>
+				A decentralized protocol for automated liquidity provision offers over 140 pairs with a TVL
+				of over $100M. Please visit https://4swap.org for additional information.
+			</p>
+		</div>
+
+		<div>
+			<p class="text-black text-base font-semibold">MixinPay</p>
+			<p>
+				A decentralized Web3 payment protocol connects the most liquid exchanges, such as Binance,
+				Huobi, and Gate, to convert almost any cryptocurrency. For more info, please visit
+				https://mixpay.me.
+			</p>
+		</div>
 	</div>
 </div>
