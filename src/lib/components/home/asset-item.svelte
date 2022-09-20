@@ -22,7 +22,7 @@
 <svelte:window bind:innerWidth />
 
 <div
-	on:click={() => {
+	on:click|self={() => {
 		if (isLg) return switchDepositMode(asset, undefined);
 		isOpen = true;
 	}}
@@ -50,8 +50,8 @@
 	<div
 		class="hidden flex-1 justify-end space-x-4 font-semibold child:flex child:h-10 child:w-[102px] child:items-center child:justify-center child:rounded-full child:bg-white lg:flex"
 	>
-		<button on:click={() => switchDepositMode(asset, undefined)}>Deposit</button>
-		<button on:click={() => switchWithdrawMode(asset)}>Withdraw</button>
+		<button on:click|self={() => switchDepositMode(asset, undefined)}>Deposit</button>
+		<button on:click|self={() => switchWithdrawMode(asset)}>Withdraw</button>
 		<!-- <button>Swap</button> -->
 	</div>
 </div>
