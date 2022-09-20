@@ -27,6 +27,7 @@
 	import type { Pair } from '$lib/helpers/4swap/api';
 	import Spinner from '$lib/components/common/spinner.svelte';
 	import { showToast } from '$lib/components/common/toast/toast-container.svelte';
+	import { focus } from 'focus-svelte';
 
 	const formatFiat = (priceUsd: string | undefined, inputAmount: number | undefined) => {
 		if (!priceUsd || !inputAmount) return '0.00';
@@ -135,11 +136,6 @@
 			loading = false;
 		}
 	};
-
-	let inputElement: HTMLInputElement | undefined;
-	onMount(() => {
-		inputElement?.focus();
-	});
 </script>
 
 <Header class="bg-transparent">
@@ -176,8 +172,8 @@
 							id="input"
 							type="number"
 							class="w-full text-right font-bold text-black"
+							use:focus={{ enabled: true, focusable: true, focusDelay: 100 }}
 							bind:value={inputAmount}
-							bind:this={inputElement}
 							on:input={() => (lastEdited = 'input')}
 							placeholder="0.0"
 						/>
