@@ -8,10 +8,6 @@ module.exports = {
 			lg: '1024px',
 			xl: '1280px'
 		},
-		// textColor: {
-		// 	warningPrice: '#F29D4E',
-		// 	forbiddenPrice: '#F24E4E'
-		// },
 		extend: {
 			colors: {
 				brand: {
