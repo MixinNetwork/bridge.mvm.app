@@ -10,6 +10,7 @@ const ConnectToWalletConnect = async () => {
 		qrcodeModalOptions: undefined
 	});
 
+	await provider.disconnect();
 	await provider.enable();
 	return provider;
 };
