@@ -12,7 +12,6 @@
 	import { bigMul, format, toPercent } from '$lib/helpers/big';
 	import SelectedAssetButton from '$lib/components/base/selected-asset-button.svelte';
 	import { slide } from 'svelte/transition';
-	import { onMount } from 'svelte';
 	import {
 		inputAsset,
 		INPUT_KEY,
