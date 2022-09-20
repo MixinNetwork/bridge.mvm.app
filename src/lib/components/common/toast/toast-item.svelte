@@ -1,11 +1,13 @@
-<script lang="ts">
+<script context="module" lang="ts">
 	import clsx from 'clsx';
+	import { onDestroy, type ComponentType, type SvelteComponentTyped } from 'svelte';
 	import { fade } from 'svelte/transition';
-	import { onDestroy, SvelteComponentTyped } from 'svelte';
 
-	type Component = $$Generic<typeof SvelteComponentTyped<Record<string, any>>>;
+	export type ToastItemComponent = ComponentType<SvelteComponentTyped<{ message: string }>>;
+</script>
 
-	let component: Component;
+<script lang="ts">
+	let component: ToastItemComponent;
 	let timer: ReturnType<typeof setTimeout>;
 	let message: string;
 	let clazz: string | undefined = undefined;

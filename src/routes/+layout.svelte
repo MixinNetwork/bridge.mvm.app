@@ -2,6 +2,7 @@
 	import '../css/app.css';
 	import Meta from '$lib/components/common/meta.svelte';
 	import { PortalContainer } from '@yeungkc/svelte-portal';
+	import ToastContainer from '$lib/components/common/toast/toast-container.svelte';
 </script>
 
 <Meta
@@ -19,3 +20,4 @@
 
 <slot />
 <PortalContainer />
+<ToastContainer />

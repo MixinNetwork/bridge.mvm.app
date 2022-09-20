@@ -3,8 +3,7 @@
 	import QrCode from '$lib/components/common/qr-code.svelte';
 	import Copy from '$lib/assets/copy.svg?component';
 	import SelectedAssetButton from '$lib/components/base/selected-asset-button.svelte';
-	import Toast from '$lib/components/common/toast/toast.svelte';
-	import { showToast } from '$lib/components/common/toast/container.svelte';
+	import { showToast } from '$lib/components/common/toast/toast-container.svelte';
 	import { selectAsset } from './export';
 
 	export let asset: Asset;
@@ -61,5 +60,3 @@
 		<li>Min deposit: 0.00000001 {asset.symbol}</li>
 	</ul>
 </div>
-
-<Toast />
