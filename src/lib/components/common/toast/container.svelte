@@ -48,7 +48,6 @@
 		success: Success
 	};
 
-	$toastStore = get(toastStore);
 	$: toastArray = Array.from($toastStore.values() ?? []);
 </script>
 
