@@ -232,13 +232,15 @@
 					</div>
 					<div>
 						<div>Price Impact</div>
-						<div class={
-							order?.priceImpact > 0.1
-							? 'text-brand-forbiddenPrice'
-							: order?.priceImpact > 0.01
+						<div
+							class={order?.priceImpact > 0.1
+								? 'text-brand-forbiddenPrice'
+								: order?.priceImpact > 0.01
 								? 'text-brand-warningPrice'
-								: ''
-						}>{toPercent({ n: order?.priceImpact })}</div>
+								: ''}
+						>
+							{toPercent({ n: order?.priceImpact })}
+						</div>
 					</div>
 				</div>
 			</div>
