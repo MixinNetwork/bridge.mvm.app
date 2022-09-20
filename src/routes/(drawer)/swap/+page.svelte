@@ -9,7 +9,7 @@
 	import type { Asset } from '$lib/types/asset';
 	import Header from '$lib/components/base/header.svelte';
 	import UserInfo from '$lib/components/base/user-info.svelte';
-	import { bigMul, format, toPercent } from '$lib/helpers/big';
+	import { format, toPercent } from '$lib/helpers/big';
 	import SelectedAssetButton from '$lib/components/base/selected-asset-button.svelte';
 	import { slide } from 'svelte/transition';
 	import { DEFAULT_SLIPPAGE, INPUT_KEY, OUTPUT_KEY, formatFiat } from '$lib/components/swap/export';
@@ -21,26 +21,23 @@
 	import Spinner from '$lib/components/common/spinner.svelte';
 	import { showToast } from '$lib/components/common/toast/toast-container.svelte';
 	import { focus } from 'focus-svelte';
-	import { deepWritable } from '$lib/helpers/store/deep';
-
-	const inputAsset = deepWritable<Asset | undefined>(undefined);
-	const outputAsset = deepWritable<Asset | undefined>(undefined);
-	const slippage = deepWritable<number>(DEFAULT_SLIPPAGE);
 
 	let a: Asset[] | undefined = $page.data.assets;
 	let p: Pair[] | undefined = $page.data.pairs;
 
+	let inputAsset: Asset | undefined = undefined;
+	let outputAsset: Asset | undefined = undefined;
+	let slippage = DEFAULT_SLIPPAGE;
+
 	$: a && !$assets.length && assets.set(a);
 	$: p && !$pairs.length && pairs.set(p);
 
-	$: !$inputAsset &&
-		inputAsset.set(
-			getAsset($page.url.searchParams.get(INPUT_KEY) || ETH_ASSET_ID) || getAsset(ETH_ASSET_ID)
-		);
-	$: !$outputAsset &&
-		outputAsset.set(
-			getAsset($page.url.searchParams.get(OUTPUT_KEY) || XIN_ASSET_ID) || getAsset(XIN_ASSET_ID)
-		);
+	$: !inputAsset &&
+		(inputAsset =
+			getAsset($page.url.searchParams.get(INPUT_KEY) || ETH_ASSET_ID) || getAsset(ETH_ASSET_ID));
+	$: !outputAsset &&
+		(outputAsset =
+			getAsset($page.url.searchParams.get(OUTPUT_KEY) || XIN_ASSET_ID) || getAsset(XIN_ASSET_ID));
 
 	let lastEdited: 'input' | 'output' | undefined = undefined;
 	let inputAmount: number | undefined = undefined;
@@ -55,24 +52,24 @@
 			inputAmount = outputAmount;
 		}
 
-		const temp = $inputAsset;
-		inputAsset.set($outputAsset);
-		outputAsset.set(temp);
+		const temp = inputAsset;
+		inputAsset = outputAsset;
+		outputAsset = temp;
 
-		setSearchParam($page, INPUT_KEY, $outputAsset?.asset_id);
-		setSearchParam($page, OUTPUT_KEY, $inputAsset?.asset_id);
+		setSearchParam($page, INPUT_KEY, outputAsset?.asset_id);
+		setSearchParam($page, OUTPUT_KEY, inputAsset?.asset_id);
 
 		goto($page.url, { keepfocus: true, replaceState: true, noscroll: true });
 	};
 
 	const handleChangeInputAsset = (asset: Asset) => {
-		inputAsset.set(asset);
+		inputAsset = asset;
 		setSearchParam($page, INPUT_KEY, asset.asset_id);
 		goto($page.url, { keepfocus: true, replaceState: true, noscroll: true });
 	};
 
 	const handleChangeOutputAsset = (asset: Asset) => {
-		outputAsset.set(asset);
+		outputAsset = asset;
 		setSearchParam($page, OUTPUT_KEY, asset.asset_id);
 		goto($page.url, { keepfocus: true, replaceState: true, noscroll: true });
 	};
@@ -85,18 +82,18 @@
 	let price: string | undefined;
 	let minReceived: string | undefined;
 
-	$: if ($inputAsset && $outputAsset && lastEdited && (inputAmount || outputAmount)) {
+	$: if (inputAsset && outputAsset && lastEdited && (inputAmount || outputAmount)) {
 		try {
 			order = pairRoutes.getPreOrder({
-				inputAsset: $inputAsset?.asset_id,
-				outputAsset: $outputAsset?.asset_id,
+				inputAsset: inputAsset?.asset_id,
+				outputAsset: outputAsset?.asset_id,
 				inputAmount: lastEdited === 'input' ? `${inputAmount}` : undefined,
 				outputAmount: lastEdited === 'output' ? `${outputAmount}` : undefined
 			});
 
 			fee = format({ n: pairRoutes.getFee(order), dp: 8 });
 			price = format({ n: +order.amount / +order.funds, dp: 8 });
-			minReceived = format({ n: +order.amount * +$slippage });
+			minReceived = format({ n: +order.amount * +slippage });
 		} catch (e) {
 			order = undefined;
 		}
@@ -108,12 +105,12 @@
 		}
 	} else order = undefined;
 
-	$: inputAmountFiat = formatFiat($inputAsset?.price_usd, inputAmount);
-	$: outputAmountFiat = formatFiat($outputAsset?.price_usd, outputAmount);
+	$: inputAmountFiat = formatFiat(inputAsset?.price_usd, inputAmount);
+	$: outputAmountFiat = formatFiat(outputAsset?.price_usd, outputAmount);
 
 	let loading = false;
 	const swap = async () => {
-		if (!$library || !$user || !order || !$inputAsset || !minReceived) return;
+		if (!$library || !$user || !order || !inputAsset || !minReceived) return;
 
 		loading = true;
 
@@ -121,7 +118,7 @@
 
 		try {
 			if (!$user.contract) await registerAndSave($user.address);
-			const res = await swapAsset($library, $user, order, $inputAsset, minReceived);
+			const res = await swapAsset($library, $user, order, inputAsset, minReceived);
 			if (res && res.state === 'Done') showToast('success', 'Successful');
 
 			await updateAssets();
@@ -148,15 +145,15 @@
 				<div class="flex items-center justify-between py-5 px-4 pb-3 text-sm font-semibold">
 					<div>From</div>
 					<div class=" text-xs text-black text-opacity-50">
-						Balance: {format({ n: $inputAsset?.balance ?? '0' })}
-						{$inputAsset?.symbol}
+						Balance: {format({ n: inputAsset?.balance ?? '0' })}
+						{inputAsset?.symbol}
 					</div>
 				</div>
 				<div class="flex items-center">
-					{#if $inputAsset}
+					{#if inputAsset}
 						<SelectedAssetButton
 							class=" w-fit"
-							asset={$inputAsset}
+							asset={inputAsset}
 							onSelect={handleChangeInputAsset}
 						/>
 					{/if}
@@ -187,15 +184,15 @@
 				<div class="flex items-center justify-between py-5 px-4 pb-3 text-sm font-semibold">
 					<div>To</div>
 					<div class=" text-xs text-black text-opacity-50">
-						Balance: {format({ n: $outputAsset?.balance ?? '0' })}
-						{$outputAsset?.symbol}
+						Balance: {format({ n: outputAsset?.balance ?? '0' })}
+						{outputAsset?.symbol}
 					</div>
 				</div>
 				<div class="flex items-center">
-					{#if $outputAsset}
+					{#if outputAsset}
 						<SelectedAssetButton
 							class=" w-fit"
-							asset={$outputAsset}
+							asset={outputAsset}
 							onSelect={handleChangeOutputAsset}
 						/>
 					{/if}
@@ -223,15 +220,15 @@
 				>
 					<div>
 						<div>Price:</div>
-						<div>1 {$inputAsset?.symbol} ≈ {price} {$outputAsset?.symbol}</div>
+						<div>1 {inputAsset?.symbol} ≈ {price} {outputAsset?.symbol}</div>
 					</div>
 					<div>
 						<div>Min Recevied</div>
-						<div>{minReceived} {$outputAsset?.symbol}</div>
+						<div>{minReceived} {outputAsset?.symbol}</div>
 					</div>
 					<div>
 						<div>Fee:</div>
-						<div>{fee} {$inputAsset?.symbol}</div>
+						<div>{fee} {inputAsset?.symbol}</div>
 					</div>
 					<div>
 						<div>Price Impact</div>
