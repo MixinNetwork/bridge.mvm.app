@@ -12,13 +12,7 @@
 	import { bigMul, format, toPercent } from '$lib/helpers/big';
 	import SelectedAssetButton from '$lib/components/base/selected-asset-button.svelte';
 	import { slide } from 'svelte/transition';
-	import {
-		inputAsset,
-		INPUT_KEY,
-		outputAsset,
-		OUTPUT_KEY,
-		slippage
-	} from '$lib/components/swap/export';
+	import { DEFAULT_SLIPPAGE, INPUT_KEY, OUTPUT_KEY, formatFiat } from '$lib/components/swap/export';
 	import Faq from '$lib/components/swap/faq.svelte';
 	import { registerAndSave, user } from '$lib/stores/user';
 	import { library } from '$lib/stores/ether';
@@ -27,11 +21,11 @@
 	import Spinner from '$lib/components/common/spinner.svelte';
 	import { showToast } from '$lib/components/common/toast/toast-container.svelte';
 	import { focus } from 'focus-svelte';
+	import { deepWritable } from '$lib/helpers/store/deep';
 
-	const formatFiat = (priceUsd: string | undefined, inputAmount: number | undefined) => {
-		if (!priceUsd || !inputAmount) return '0.00';
-		return format({ n: bigMul(priceUsd, inputAmount), dp: 2 });
-	};
+	const inputAsset = deepWritable<Asset | undefined>(undefined);
+	const outputAsset = deepWritable<Asset | undefined>(undefined);
+	const slippage = deepWritable<number>(DEFAULT_SLIPPAGE);
 
 	let a: Asset[] | undefined = $page.data.assets;
 	let p: Pair[] | undefined = $page.data.pairs;
