@@ -103,6 +103,10 @@
 			} else {
 				await withdraw($library, asset, $user.contract, value, address, memo, $assetWithdrawalFee);
 				showToast('success', 'Successful');
+
+				amount = '';
+				address = '';
+				memo = '';
 			}
 		} finally {
 			loading = false;
