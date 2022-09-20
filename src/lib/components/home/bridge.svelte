@@ -21,7 +21,7 @@
 	import Paste from '$lib/assets/paste.svg?component';
 	import { providerLogo, providerName } from '$lib/stores/provider';
 	import { selectAsset } from './export';
-	import { showToast } from "../common/toast/toast-container.svelte";
+	import { showToast } from '../common/toast/toast-container.svelte';
 
 	const buildBalanceStore = ({ assetId, network }: { assetId: string; network: Network }) => {
 		return asyncDerived([assets, user], async ([$assets, $user]) => {
@@ -226,7 +226,7 @@
 {/if}
 
 <button
-	class="flex justify-center mt-10 self-center rounded-full bg-brand-primary px-6 py-4 text-white w-28"
+	class="mt-10 flex w-28 justify-center self-center rounded-full bg-brand-primary px-6 py-4 text-white"
 	on:click={transfer}
 	disabled={(!isEthChain && !address) ||
 		!fromBalance ||
@@ -239,5 +239,4 @@
 	{:else}
 		{depositMode ? 'Deposit' : 'Withdraw'}
 	{/if}
-</button
->
+</button>
