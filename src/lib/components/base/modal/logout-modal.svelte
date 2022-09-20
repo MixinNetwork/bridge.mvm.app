@@ -9,7 +9,7 @@
 </script>
 
 <div
-	transition:tailwind={{
+	transition:tailwind|local={{
 		to: '!scale-100 !opacity-100'
 	}}
 	class="min-w flex flex-col rounded-2xl bg-white opacity-0 md:scale-90"

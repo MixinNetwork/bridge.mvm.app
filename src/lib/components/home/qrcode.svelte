@@ -9,8 +9,6 @@
 
 	export let asset: Asset;
 
-	const updateAsset = (event: CustomEvent<Asset>) => selectAsset(event.detail);
-
 	$: address = asset?.deposit_entries[0].destination;
 	$: memo = asset?.deposit_entries[0].tag;
 	$: qrcodes = [
@@ -30,7 +28,7 @@
 </script>
 
 <div class="mx-5 rounded-lg bg-white">
-	<SelectedAssetButton {asset} on:callback={updateAsset} />
+	<SelectedAssetButton {asset} onSelect={selectAsset} />
 	{#each qrcodes as { key, value } (key)}
 		<div class="mx-4 flex flex-col items-center break-all  pb-6">
 			<QrCode
@@ -59,7 +57,7 @@
 	{/each}
 
 	<ul class="mx-6 list-outside list-disc pb-6 text-xs font-semibold opacity-50">
-		<li>Deposit expected to take {asset.confirmations} confirmations.</li>
+		<li>Deposit will arrive {asset.confirmations} block confirmation.</li>
 		<li>Min deposit: 0.00000001 {asset.symbol}</li>
 	</ul>
 </div>

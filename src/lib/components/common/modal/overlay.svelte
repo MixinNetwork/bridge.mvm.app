@@ -50,7 +50,7 @@
 	bind:this={element}
 >
 	<div
-		transition:tailwind={{
+		transition:tailwind|local={{
 			to: '!opacity-100'
 		}}
 		class="absolute inset-0 bg-brand-overlayBg opacity-0"

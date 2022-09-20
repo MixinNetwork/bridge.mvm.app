@@ -11,7 +11,7 @@
 </script>
 
 <div
-	transition:fade
+	transition:fade|local
 	class={clsx(
 		'flex items-center justify-center space-x-4 px-5 pt-4 pb-2 text-base font-semibold',
 		clazz
@@ -25,9 +25,10 @@
 		<input
 			use:focus={{ enabled: true }}
 			id="search"
-			type="text"
+			type="search"
 			class="w-full bg-transparent placeholder-black placeholder-opacity-20"
 			placeholder="Name, Symbol or Address"
+			autocomplete="off"
 			bind:value={keyword}
 		/>
 	</label>

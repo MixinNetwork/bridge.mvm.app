@@ -6,7 +6,7 @@
 </script>
 
 <div
-	transition:tailwind={{
+	transition:tailwind|local={{
 		duration: 300,
 		to: '!translate-y-0 !scale-100 !opacity-100'
 	}}
