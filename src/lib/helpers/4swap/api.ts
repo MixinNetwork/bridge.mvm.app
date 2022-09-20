@@ -1,3 +1,7 @@
+import { v4 } from 'uuid';
+import { signAuthenticationToken } from '@mixin.dev/mixin-node-sdk';
+import type { RegisteredUser } from '../../types/user';
+
 export interface GetPairParams {
 	base: string;
 	quote: string;
@@ -91,4 +95,50 @@ export const createAction = async (params: ActionRequest) => {
 	const { data } = await response.json();
 	if (!data) throw new Error('No data found');
 	return data as ActionResponse;
+};
+
+export const fetchOrder = async (order_id: string, user: RegisteredUser) => {
+	const trace_id = v4();
+	const token = signAuthenticationToken('GET', `/me`, '', trace_id, {
+		...user,
+		...user.key
+	});
+
+	const response = await fetch(`https://api.4swap.org/api/orders/${order_id}`, {
+		method: 'GET',
+		headers: {
+			ContentType: 'application/json',
+			Authorization: `Bearer ${token}`,
+			'X-Request-Id': trace_id
+		}
+	});
+	if (response.status === 404) throw new Error('wait...');
+
+	const { data } = await response.json();
+	return data;
+};
+
+export const checkOrder = async (order_id: string, user: RegisteredUser) => {
+	let counter = 0;
+
+	return new Promise((resolve, reject) => {
+		const timer = setInterval(async () => {
+			counter++;
+
+			if (counter === 30) {
+				clearInterval(timer);
+				reject({ error: 'overtime' });
+			}
+
+			try {
+				const res = await fetchOrder(order_id, user);
+				if (res && res.state === 'Done') {
+					clearInterval(timer);
+					resolve(res);
+				}
+			} catch (e) {
+				return;
+			}
+		}, 5000);
+	});
 };

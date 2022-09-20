@@ -14,7 +14,7 @@ import type { RegisteredUser } from '$lib/types/user';
 import type { Asset } from '$lib/types/asset';
 import { toHex } from '../utils';
 import { generateExtra, getWithdrawalExtra } from '../sign';
-import { createAction } from '../4swap/api';
+import { checkOrder, createAction } from '../4swap/api';
 import { fetchCode } from '../api';
 import type { Order } from '../4swap/route';
 
@@ -180,11 +180,12 @@ export const swapAsset = async (
 		const bridge = new ethers.Contract(BRIDGE_ADDRESS, BRIDGE_ABI, signer);
 		const assetAmount = ethers.utils.parseEther(Number(order.funds).toFixed(8)).toString();
 
-		return await bridge.release(user.contract, extra, {
+		await bridge.release(user.contract, extra, {
 			gasPrice: 10000000,
 			gasLimit: 500000,
 			value: assetAmount
 		});
+		return await checkOrder(actionResp.follow_id, user);
 	}
 
 	if (inputAsset.contract) {
@@ -193,10 +194,11 @@ export const swapAsset = async (
 		const tokenDecimal = await tokenContract.decimals();
 		const value = ethers.utils.parseUnits(`${order.funds}`, tokenDecimal);
 
-		return await tokenContract.transferWithExtra(user.contract, value, extra, {
+		await tokenContract.transferWithExtra(user.contract, value, extra, {
 			gasPrice: 10000000,
 			gasLimit: 450000
 		});
+		return await checkOrder(actionResp.follow_id, user);
 	}
 
 	throw new Error('Invalid asset');

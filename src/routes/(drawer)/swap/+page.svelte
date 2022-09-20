@@ -11,8 +11,6 @@
 	import UserInfo from '$lib/components/base/user-info.svelte';
 	import { bigMul, format, toPercent } from '$lib/helpers/big';
 	import SelectedAssetButton from '$lib/components/base/selected-asset-button.svelte';
-	import Modal from '$lib/components/common/modal/modal.svelte';
-	import SpinnerModal from '$lib/components/common/spinner-modal.svelte';
 	import { slide } from 'svelte/transition';
 	import { onMount } from 'svelte';
 	import {
@@ -27,6 +25,9 @@
 	import { library } from '$lib/stores/ether';
 	import { ETH_ASSET_ID, XIN_ASSET_ID } from '$lib/constants/common';
 	import type { Pair } from '$lib/helpers/4swap/api';
+	import Spinner from '$lib/components/common/spinner.svelte';
+	import Toast from '$lib/components/common/toast/toast.svelte';
+	import { showToast } from '$lib/components/common/toast/container.svelte';
 
 	const formatFiat = (priceUsd: string | undefined, inputAmount: number | undefined) => {
 		if (!priceUsd || !inputAmount) return '0.00';
@@ -126,7 +127,9 @@
 		const { swapAsset } = await import('$lib/helpers/web3/common');
 
 		try {
-			await swapAsset($library, $user, order, $inputAsset, minReceived);
+			const res = await swapAsset($library, $user, order, $inputAsset, minReceived);
+			if (!res.error) showToast('success', 'Successful');
+
 			await updateAssets();
 		} finally {
 			loading = false;
@@ -250,17 +253,18 @@
 		{/if}
 
 		<button
-			class="mt-10 w-fit self-center rounded-full bg-brand-primary px-6 py-4 text-white"
+			class="mt-10 mb-6 flex w-28 justify-center self-center rounded-full bg-brand-primary px-6 py-3 text-white"
 			on:click={swap}
-			disabled={!(order && +order.amount)}>Swap</button
+			disabled={!(order && +order.amount)}
 		>
+			{#if loading}
+				<Spinner class="stroke-white stroke-2 text-center" />
+			{:else}
+				Swap
+			{/if}
+		</button>
 	</div>
 	<Faq />
 </div>
 
-<Modal
-	modal-opened={loading}
-	this={SpinnerModal}
-	modal-mask-closeable={false}
-	modal-keyboard-closeable={false}
-/>
+<Toast />
