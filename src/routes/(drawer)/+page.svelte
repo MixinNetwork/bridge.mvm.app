@@ -119,7 +119,7 @@
 				<button
 					class="flex items-center justify-center space-x-3"
 					on:click={toggleSearchMode}
-					transition:fade
+					transition:fade|local
 					><div class="text-black opacity-20">Search</div>
 					<Search />
 				</button>

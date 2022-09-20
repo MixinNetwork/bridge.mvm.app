@@ -5,7 +5,7 @@
 </script>
 
 <div
-	transition:tailwind={{
+	transition:tailwind|local={{
 		duration: 200,
 		to: '!translate-x-0 !scale-100 !opacity-100'
 	}}

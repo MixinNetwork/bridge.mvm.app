@@ -5,7 +5,7 @@
 </script>
 
 <div
-	transition:tailwind={{
+	transition:tailwind|local={{
 		to: '!opacity-70'
 	}}
 	class="rounded-xl bg-black p-7 opacity-0"

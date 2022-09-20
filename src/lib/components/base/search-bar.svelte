@@ -11,7 +11,7 @@
 </script>
 
 <div
-	transition:fade
+	transition:fade|local
 	class={clsx(
 		'flex items-center justify-center space-x-4 px-5 pt-4 pb-2 text-base font-semibold',
 		clazz
