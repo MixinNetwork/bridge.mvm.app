@@ -3,8 +3,8 @@
 	import type { ProviderKey } from '$lib/helpers/web3client/type';
 	import { account, setProvider } from '$lib/stores/ether';
 	import SpinnerModal from '$lib/components/common/spinner-modal.svelte';
-	import { logout, registerAndSave, user } from '$lib/stores/user';
-	import { goto, invalidateAll } from '$app/navigation';
+	import { logout, registerAndSave } from '$lib/stores/user';
+	import { goto } from '$app/navigation';
 	import { createWeb3Client } from '$lib/helpers/web3client';
 	import { providerKey as cacheProvider } from '$lib/stores/provider';
 	import { page } from '$app/stores';
@@ -12,6 +12,7 @@
 	import { providers } from './+page';
 	import { LAST_URL } from '$lib/constants/common';
 	import { onMount } from 'svelte';
+	import { assets } from '$lib/stores/model';
 
 	let loading = false;
 
@@ -31,7 +32,10 @@
 			loading = false;
 		}
 	};
-	onMount(() => logout());
+	onMount(() => {
+		logout();
+		assets.set([]);
+	});
 </script>
 
 <div class="flex flex-col items-center pt-12">
