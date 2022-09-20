@@ -232,7 +232,13 @@
 					</div>
 					<div>
 						<div>Price Impact</div>
-						<div>{toPercent({ n: order?.priceImpact })}</div>
+						<div class={
+							order?.priceImpact > 0.1
+							? 'text-brand-forbiddenPrice'
+							: order?.priceImpact > 0.01
+								? 'text-brand-warningPrice'
+								: ''
+						}>{toPercent({ n: order?.priceImpact })}</div>
 					</div>
 				</div>
 			</div>
@@ -241,7 +247,7 @@
 		<button
 			class="mt-10 mb-6 flex w-28 justify-center self-center rounded-full bg-brand-primary px-6 py-3 text-white"
 			on:click={swap}
-			disabled={!(order && +order.amount)}
+			disabled={!(order && +order.amount) || order?.priceImpact > 0.15}
 		>
 			{#if loading}
 				<Spinner class="stroke-white stroke-2 text-center" />
