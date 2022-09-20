@@ -9,6 +9,7 @@ import { USER_KEY } from '$lib/constants/common';
 import { dedupe } from '../helpers/store/dedupe';
 import { invalidateAll } from '$app/navigation';
 import { assets } from './model';
+import { browser } from '$app/environment';
 
 const persistentUser = persistentWritable<User | undefined>(
 	USER_KEY,
@@ -29,6 +30,8 @@ export const registerAndSave = async (address: `0x${string}`) => {
 };
 
 export const logout = async () => {
+	// remove walletconnect cache provider
+	browser && localStorage.removeItem('walletconnect');
 	await invalidateAll();
 	persistentUser.set(undefined);
 	assets.set([]);
