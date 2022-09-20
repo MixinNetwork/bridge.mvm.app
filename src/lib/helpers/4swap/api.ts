@@ -150,7 +150,10 @@ export const fetchOrder = async (order_id: string, user: RegisteredUser) => {
 	return data as OrderResponse;
 };
 
-export const checkOrder = async (order_id: string, user: RegisteredUser): Promise<OrderResponse> => {
+export const checkOrder = async (
+	order_id: string,
+	user: RegisteredUser
+): Promise<OrderResponse> => {
 	let counter = 0;
 
 	return new Promise((resolve, reject) => {
