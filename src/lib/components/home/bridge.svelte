@@ -22,6 +22,7 @@
 	import Paste from '$lib/assets/paste.svg?component';
 	import { providerLogo, providerName } from '$lib/stores/provider';
 	import { selectAsset } from './export';
+	import { showToast } from "../common/toast/toast-container.svelte";
 
 	const buildBalanceStore = ({ assetId, network }: { assetId: string; network: Network }) => {
 		return asyncDerived([assets, user], async ([$assets, $user]) => {
@@ -101,6 +102,7 @@
 				await deposit($library, asset, value);
 			} else {
 				await withdraw($library, asset, $user.contract, value, address, memo, $assetWithdrawalFee);
+				showToast('success', 'Successful');
 			}
 		} finally {
 			loading = false;
