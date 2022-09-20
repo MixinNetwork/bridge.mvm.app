@@ -1,5 +1,5 @@
 export interface RegisteredUser {
-	contract: string;
+	contract?: string;
 	created_at: string;
 	full_name: string;
 	user_id: string;

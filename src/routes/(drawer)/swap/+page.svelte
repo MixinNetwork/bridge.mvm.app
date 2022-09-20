@@ -21,7 +21,7 @@
 		slippage
 	} from '$lib/components/swap/export';
 	import Faq from '$lib/components/swap/faq.svelte';
-	import { user } from '$lib/stores/user';
+	import { registerAndSave, user } from '$lib/stores/user';
 	import { library } from '$lib/stores/ether';
 	import { ETH_ASSET_ID, XIN_ASSET_ID } from '$lib/constants/common';
 	import type { Pair } from '$lib/helpers/4swap/api';
@@ -126,6 +126,7 @@
 		const { swapAsset } = await import('$lib/helpers/web3/common');
 
 		try {
+			if (!$user.contract) await registerAndSave($user.address);
 			const res = await swapAsset($library, $user, order, $inputAsset, minReceived);
 			if (res && res.state === 'Done') showToast('success', 'Successful');
 

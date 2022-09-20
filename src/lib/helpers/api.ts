@@ -34,7 +34,10 @@ export const fetchWithdrawalFee = async (asset_id: string, destination: string) 
 };
 
 export const fetchAssets = async (user: User) => {
-	const assetClient = AssetClient({ keystore: { ...user, ...user.key } });
+	const assetClient = AssetClient({
+		keystore: { ...user, ...user.key },
+		requestConfig: { timeout: 1000 * 60 }
+	});
 
 	const [allAssets, addresses, ethBalance, tokens] = await Promise.all([
 		Promise.all(
