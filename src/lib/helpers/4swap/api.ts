@@ -63,6 +63,38 @@ export interface PairsRes {
 	ts: number;
 }
 
+interface Transaction {
+	id: string;
+	created_at: string;
+	user_id: string;
+	type: 'Swap';
+	base_asset_id: string;
+	quote_asset_id: string;
+	base_amount: string;
+	quote_amount: string;
+	fee_asset_id: string;
+	fee_amount: string;
+	pay_asset_id: string;
+	filled_asset_id: string;
+	funds: string;
+	amount: string;
+}
+
+interface OrderResponse {
+	id: string;
+	created_at: string;
+	user_id: string;
+	state: 'Trading' | 'Rejected' | 'Done';
+	pay_asset_id: string;
+	fill_asset_id: string;
+	pay_amount: string;
+	fill_amount: string;
+	min_amount: string;
+	routes: string;
+	route_assets: string[];
+	transactions: Transaction;
+}
+
 interface ActionRequest {
 	action: string;
 	amount: number;
@@ -115,10 +147,10 @@ export const fetchOrder = async (order_id: string, user: RegisteredUser) => {
 	if (response.status === 404) throw new Error('wait...');
 
 	const { data } = await response.json();
-	return data;
+	return data as OrderResponse;
 };
 
-export const checkOrder = async (order_id: string, user: RegisteredUser) => {
+export const checkOrder = async (order_id: string, user: RegisteredUser): Promise<OrderResponse> => {
 	let counter = 0;
 
 	return new Promise((resolve, reject) => {

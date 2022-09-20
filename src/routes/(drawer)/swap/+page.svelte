@@ -127,7 +127,7 @@
 
 		try {
 			const res = await swapAsset($library, $user, order, $inputAsset, minReceived);
-			if (!res.error) showToast('success', 'Successful');
+			if (res && res.state === 'Done') showToast('success', 'Successful');
 
 			await updateAssets();
 		} finally {
