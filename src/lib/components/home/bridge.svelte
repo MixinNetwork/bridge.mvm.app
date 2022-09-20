@@ -16,8 +16,7 @@
 	import type { Network } from '$lib/types/network';
 	import { bigGte, format } from '$lib/helpers/big';
 	import LogoCircle from '$lib/assets/logo/logo-circle.svg?component';
-	import Modal from '$lib/components/common/modal/modal.svelte';
-	import SpinnerModal from '$lib/components/common/spinner-modal.svelte';
+	import Spinner from '$lib/components/common/spinner.svelte';
 	import { library } from '$lib/stores/ether';
 	import Paste from '$lib/assets/paste.svg?component';
 	import { providerLogo, providerName } from '$lib/stores/provider';
@@ -227,18 +226,18 @@
 {/if}
 
 <button
-	class="mt-10 self-center rounded-full bg-brand-primary px-6 py-4 text-white"
+	class="flex justify-center mt-10 self-center rounded-full bg-brand-primary px-6 py-4 text-white w-28"
 	on:click={transfer}
 	disabled={(!isEthChain && !address) ||
 		!fromBalance ||
 		!amount ||
 		amount < 0.0001 ||
-		(!depositMode && !isGteFee)}>{depositMode ? 'Deposit' : 'Withdraw'}</button
+		(!depositMode && !isGteFee)}
 >
-
-<Modal
-	modal-opened={loading}
-	this={SpinnerModal}
-	modal-mask-closeable={false}
-	modal-keyboard-closeable={false}
-/>
+	{#if loading && !depositMode}
+		<Spinner class="stroke-white stroke-2 text-center" />
+	{:else}
+		{depositMode ? 'Deposit' : 'Withdraw'}
+	{/if}
+</button
+>
