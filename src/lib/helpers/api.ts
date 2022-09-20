@@ -5,11 +5,14 @@ import type { RegisteredUser, User } from '../types/user';
 import ExternalClient from '@mixin.dev/mixin-node-sdk/src/client/external';
 import { utils } from 'ethers';
 import { WHITELIST_ASSET_ID, ETH_ASSET_ID } from '../constants/common';
-import { bigMul } from './big';
+import {bigMul, format} from './big';
 import { fetchMvmTokens } from './mvm/api';
 import { getBalance } from './web3/common';
 import { fetchAssetContract } from './web3/registry';
 import { sortBy } from 'lodash-es';
+import type { PairRoutes, SwapParams } from "./4swap/route";
+import type { EstimatedPaymentResponse } from './mixpay/api';
+import { fetchEstimatedPayment } from "./mixpay/api";
 
 export const register = async (address: string): Promise<RegisteredUser> => {
 	const response = await fetch('https://bridge.mvm.dev/users', {
@@ -157,3 +160,33 @@ export const fetchCode = async (code_id: string): Promise<PaymentRequestResponse
 };
 
 export const fetchExchangeRates = ExternalClient().exchangeRates;
+
+export const fetchSwapPreOrder = async (site: string, pairRoutes: PairRoutes, { inputAsset, outputAsset, inputAmount, outputAmount }: SwapParams) => {
+	try {
+		if (site === 'MixPay') {
+			const response = await fetchEstimatedPayment({
+				inputAsset, outputAsset, inputAmount, outputAmount
+			});
+
+			if (response.status === 200) {
+				const { data } = await response.json();
+				console.log(data);
+				return data as EstimatedPaymentResponse;
+			}
+
+			if (response.status === 422) {
+				site = '4swap';
+			}
+		}
+
+		if (site === '4swap') {
+			return pairRoutes.getPreOrder({
+				inputAsset, outputAsset, inputAmount, outputAmount
+			});
+		}
+
+		return undefined;
+	} catch (e) {
+		return undefined
+	}
+}

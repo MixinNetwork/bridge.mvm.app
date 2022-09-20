@@ -32,6 +32,13 @@ export const MVM_CHAIN_ID = 73927;
 export const MAINNET_CHAIN_HEX_ID = toHex(MAINNET_CHAIN_ID);
 export const MVM_CHAIN_HEX_ID = toHex(MVM_CHAIN_ID);
 
+export const WHITELIST_ASSET_4SWAP = [
+	XIN_ASSET_ID,
+	EOS_ASSET_ID,
+	'eea900a8-b327-488c-8d8d-1428702fe240', // MOB
+	'f5ef6b5d-cc5a-3d90-b2c0-a2fd386e7a3c', // BOX
+]
+
 export const WHITELIST_ASSET = [
 	{
 		id: 'c6d0c728-2624-429b-8e0d-d9d19b6592fa',

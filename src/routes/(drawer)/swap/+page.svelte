@@ -23,10 +23,11 @@
 	import Faq from '$lib/components/swap/faq.svelte';
 	import { registerAndSave, user } from '$lib/stores/user';
 	import { library } from '$lib/stores/ether';
-	import { ETH_ASSET_ID, XIN_ASSET_ID } from '$lib/constants/common';
+	import { ETH_ASSET_ID, WHITELIST_ASSET_4SWAP, XIN_ASSET_ID } from '$lib/constants/common';
 	import type { Pair } from '$lib/helpers/4swap/api';
 	import Spinner from '$lib/components/common/spinner.svelte';
 	import { showToast } from '$lib/components/common/toast/toast-container.svelte';
+	import {fetchEstimatedPayment} from "../../../lib/helpers/mixpay/api";
 
 	const formatFiat = (priceUsd: string | undefined, inputAmount: number | undefined) => {
 		if (!priceUsd || !inputAmount) return '0.00';
@@ -90,20 +91,38 @@
 	let fee: string | undefined;
 	let price: string | undefined;
 	let minReceived: string | undefined;
+	let site = 'MixPay';
 
 	$: if ($inputAsset && $outputAsset && lastEdited && (inputAmount || outputAmount)) {
-		try {
-			order = pairRoutes.getPreOrder({
-				inputAsset: $inputAsset?.asset_id,
-				outputAsset: $outputAsset?.asset_id,
-				inputAmount: lastEdited === 'input' ? `${inputAmount}` : undefined,
-				outputAmount: lastEdited === 'output' ? `${outputAmount}` : undefined
-			});
+		if (
+			WHITELIST_ASSET_4SWAP.includes($inputAsset.asset_id) ||
+			WHITELIST_ASSET_4SWAP.includes($outputAsset.asset_id)
+		) site = '4swap';
 
-			fee = format({ n: pairRoutes.getFee(order), dp: 8 });
-			price = format({ n: +order.amount / +order.funds, dp: 8 });
-			minReceived = format({ n: +order.amount * +$slippage });
+		try {
+			if (site === 'MixPay') {
+				fetchEstimatedPayment({
+					inputAsset: $inputAsset?.asset_id,
+					outputAsset: $outputAsset?.asset_id,
+					inputAmount: lastEdited === 'input' ? `${inputAmount}` : undefined,
+					outputAmount: lastEdited === 'output' ? `${outputAmount}` : undefined
+				}).catch(e => console.log('catch', e));
+			}
+
+			if (site === '4swap') {
+				order = pairRoutes.getPreOrder({
+					inputAsset: $inputAsset?.asset_id,
+					outputAsset: $outputAsset?.asset_id,
+					inputAmount: lastEdited === 'input' ? `${inputAmount}` : undefined,
+					outputAmount: lastEdited === 'output' ? `${outputAmount}` : undefined
+				});
+
+				fee = format({ n: pairRoutes.getFee(order), dp: 8 });
+				price = format({ n: +order.amount / +order.funds, dp: 8 });
+				minReceived = format({ n: +order.amount * +$slippage });
+			}
 		} catch (e) {
+			console.log('order', e)
 			order = undefined;
 		}
 

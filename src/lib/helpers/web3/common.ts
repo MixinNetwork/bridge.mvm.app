@@ -7,7 +7,7 @@ import {
 	MAINNET_CHAIN_ID,
 	MVM_CHAIN_ID,
 	MVM_RPC_URL,
-	networkParams
+	networkParams, WHITELIST_ASSET_4SWAP
 } from '../../constants/common';
 import type { Network } from '../../types/network';
 import type { RegisteredUser } from '$lib/types/user';
@@ -155,6 +155,7 @@ export const swapAsset = async (
 	minReceived: string
 ) => {
 	await switchNetwork(provider, 'mvm');
+
 
 	const trace_id = v4();
 	const swapAction = `3,${user.user_id},${trace_id},${order.fill_asset_id},${order.routes},${minReceived}`;
