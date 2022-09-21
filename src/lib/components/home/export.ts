@@ -56,21 +56,17 @@ export const initStore = () => {
 };
 
 export const switchDepositMode = (asset: Asset, _depositMode: DepositMode | undefined) => {
-	const $selectedAsset = get(selectedAsset);
 	const isEth = asset?.chain_id === ETH_ASSET_ID || asset?.asset_id === ETH_ASSET_ID;
-	const changedAsset = $selectedAsset?.asset_id !== asset.asset_id;
 
 	mode.set('deposit');
 	selectedAsset.set(asset);
 
-	if (changedAsset || !_depositMode) {
-		if (isEth) {
-			depositMode.set('metamask');
-		} else {
-			depositMode.set('qrcode');
-		}
-	} else {
+	if (_depositMode) {
 		depositMode.set(_depositMode);
+	} else if (isEth) {
+		depositMode.set('metamask');
+	} else {
+		depositMode.set('qrcode');
 	}
 
 	const $page = get(page);

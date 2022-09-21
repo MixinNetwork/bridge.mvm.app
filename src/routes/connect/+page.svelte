@@ -3,23 +3,23 @@
 	import type { ProviderKey } from '$lib/helpers/web3client/type';
 	import { account, setProvider } from '$lib/stores/ether';
 	import SpinnerModal from '$lib/components/common/spinner-modal.svelte';
-	import { registerAndSave } from '$lib/stores/user';
+	import { logout, registerAndSave } from '$lib/stores/user';
 	import { goto } from '$app/navigation';
 	import { createWeb3Client } from '$lib/helpers/web3client';
-	import { providerKey as cacheProvider, clearLastProvider } from '$lib/stores/provider';
+	import { providerKey as cacheProvider } from '$lib/stores/provider';
 	import { page } from '$app/stores';
 	import Modal from '$lib/components/common/modal/modal.svelte';
 	import { providers } from './+page';
 	import { LAST_URL } from '$lib/constants/common';
+	import { onMount } from 'svelte';
+	import { assets } from '$lib/stores/model';
 
 	let loading = false;
 
 	const connect = async (provider: ProviderKey) => {
 		try {
 			loading = true;
-
 			const web3Client = await createWeb3Client(provider);
-			clearLastProvider();
 			const p = await web3Client.connect();
 			await setProvider(p);
 
@@ -32,6 +32,10 @@
 			loading = false;
 		}
 	};
+	onMount(() => {
+		logout();
+		assets.set([]);
+	});
 </script>
 
 <div class="flex flex-col items-center pt-12">

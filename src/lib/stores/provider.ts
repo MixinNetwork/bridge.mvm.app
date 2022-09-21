@@ -6,6 +6,7 @@ import walletConnect from '$lib/assets/logo/wallet-connect.svg';
 import { PROVIDER_KEY } from '$lib/constants/common';
 import { page } from '$app/stores';
 import { dedupe } from '../helpers/store/dedupe';
+import { browser } from '$app/environment';
 
 const persistentProviderKey = persistentWritable<ProviderKey | undefined>(PROVIDER_KEY, undefined);
 
@@ -17,7 +18,11 @@ export const providerKey = dedupe(
 );
 
 export const setProviderKey = (provider: ProviderKey) => persistentProviderKey.set(provider);
-export const clearLastProvider = () => persistentProviderKey.set(undefined);
+export const clearLastProvider = () => {
+	// remove walletconnect cache provider
+	browser && localStorage.removeItem('walletconnect');
+	persistentProviderKey.set(undefined);
+};
 
 export const providerName = derived(providerKey, ($providerKey) => {
 	if ($providerKey === 'injected') return 'MetaMask';

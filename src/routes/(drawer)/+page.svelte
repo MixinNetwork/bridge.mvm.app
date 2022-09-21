@@ -33,8 +33,6 @@
 	import { fade } from 'svelte/transition';
 	import Empty from '$lib/components/base/empty.svelte';
 
-	const closeModal = () => resetStore();
-
 	let a: Asset[] | undefined = $page.data.assets;
 
 	$: a && !$assets.length && assets.set(a);
@@ -139,13 +137,13 @@
 <Modal
 	modal-opened={!!$selectedAsset && $mode === 'deposit'}
 	this={DepositModal}
-	modal-on-close={closeModal}
+	modal-on-close={resetStore}
 />
 
 <Modal
 	modal-opened={!!$selectedAsset && $mode === 'withdraw'}
 	this={WithdrawModal}
-	modal-on-close={closeModal}
+	modal-on-close={resetStore}
 />
 
 <Modal
