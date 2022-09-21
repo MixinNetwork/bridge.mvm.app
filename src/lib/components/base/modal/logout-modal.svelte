@@ -10,9 +10,10 @@
 
 <div
 	transition:tailwind|local={{
-		to: '!scale-100 !opacity-100'
+		from: 'opacity-0 md:scale-90',
+		to: 'scale-100 opacity-100'
 	}}
-	class="min-w flex flex-col rounded-2xl bg-white opacity-0 md:scale-90"
+	class="min-w flex flex-col rounded-2xl bg-white"
 >
 	<button class="mt-6 mr-6 self-end" on:click={close}>
 		<Close />

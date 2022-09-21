@@ -51,9 +51,10 @@
 >
 	<div
 		transition:tailwind|local={{
+			from: 'opacity-0',
 			to: '!opacity-100'
 		}}
-		class="absolute inset-0 bg-brand-overlayBg opacity-0"
+		class="absolute inset-0 bg-brand-overlayBg"
 		on:click|self={onClick}
 	/>
 
