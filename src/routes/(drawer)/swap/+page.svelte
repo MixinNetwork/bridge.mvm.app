@@ -245,7 +245,9 @@
 				</div>
 			</div>
 			{#if order?.priceImpact > 0.15}
-				<div class="mt-3 self-center text-xs font-semibold opacity-50">Lack of liquidity, please decrease swap amount</div>
+				<div class="mt-3 self-center text-xs font-semibold opacity-50">
+					Lack of liquidity, please decrease swap amount
+				</div>
 			{/if}
 		{/if}
 
