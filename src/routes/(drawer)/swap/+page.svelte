@@ -1,5 +1,5 @@
 <script lang="ts">
-	import clsx from "clsx";
+	import clsx from 'clsx';
 	import { fade } from 'svelte/transition';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
@@ -23,7 +23,7 @@
 	import Spinner from '$lib/components/common/spinner.svelte';
 	import { showToast } from '$lib/components/common/toast/toast-container.svelte';
 	import { focus } from 'focus-svelte';
-	import {tick} from "svelte";
+	import { tick } from 'svelte';
 
 	let a: Asset[] | undefined = $page.data.assets;
 	let p: Pair[] | undefined = $page.data.pairs;
@@ -104,7 +104,7 @@
 		} else if (lastEdited === 'output') {
 			inputAmount = Number(order?.funds) || undefined;
 		}
-	}
+	};
 
 	$: if (inputAsset && outputAsset && lastEdited && (inputAmount || outputAmount)) {
 		try {
@@ -243,11 +243,11 @@
 						<div>Price Impact</div>
 						<div
 							transition:fade
-							class="{clsx({
+							class={clsx({
 								'text-brand-forbiddenPrice': order?.priceImpact >= 0.1,
 								'text-brand-warningPrice': order?.priceImpact >= 0.01 && order?.priceImpact < 0.1,
-							  	'text-black text-opacity-50': order?.priceImpact < 0.01
-							})}"
+								'text-black text-opacity-50': order?.priceImpact < 0.01
+							})}
 						>
 							{toPercent({ n: order?.priceImpact })}
 						</div>

@@ -32,9 +32,7 @@ export const fetchWithdrawalFee = async (asset_id: string, destination: string, 
 			tag
 		});
 		return asset.fee;
-	} catch (e) {
-	}
-
+	} catch (e) {}
 };
 
 export const fetchAssets = async (user: User) => {

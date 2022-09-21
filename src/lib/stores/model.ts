@@ -62,7 +62,7 @@ export const totalBalanceBtc = derived(assets, ($assets) => {
 });
 
 export const AssetWithdrawalFee = mapTemplate(
-	(parameters: { asset_id: string; chain_id: string; destination: string, tag: string }) =>
+	(parameters: { asset_id: string; chain_id: string; destination: string; tag: string }) =>
 		asyncReadable(
 			undefined,
 			async () => {
