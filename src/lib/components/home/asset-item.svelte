@@ -37,11 +37,11 @@
 		/>
 		<div>
 			<div class=" font-bold">{asset.name}</div>
-			<div class=" text-sm font-semibold opacity-30">{asset.symbol}</div>
+			<div class=" text-sm font-semibold opacity-20">{asset.symbol}</div>
 		</div>
 		<div class="flex grow flex-col items-end">
 			<div class="font-bold">{format({ n: asset.balance, dp: 8 })}</div>
-			<div class=" text-sm font-semibold opacity-30">
+			<div class=" text-sm font-semibold opacity-20">
 				${format({ n: bigMul(asset.balance, asset.price_usd), dp: 2, fixed: true })}
 			</div>
 		</div>
