@@ -161,28 +161,46 @@ export const fetchCode = async (code_id: string): Promise<PaymentRequestResponse
 
 export const fetchExchangeRates = ExternalClient().exchangeRates;
 
-export const fetchSwapPreOrder = async (site: string, pairRoutes: PairRoutes, { inputAsset, outputAsset, inputAmount, outputAmount }: SwapParams) => {
+export const fetchSwapPreOrderInfo = async (site: string, pairRoutes: PairRoutes, slippage: number, { inputAsset, outputAsset, inputAmount, outputAmount }: SwapParams) => {
 	try {
 		if (site === 'MixPay') {
 			const response = await fetchEstimatedPayment({
 				inputAsset, outputAsset, inputAmount, outputAmount
 			});
 
-			if (response.status === 200) {
-				const { data } = await response.json();
-				console.log(data);
-				return data as EstimatedPaymentResponse;
+			if (response.success) {
+				const order = {
+					funds: Number(response.data.paymentAmount),
+					amount: Number(response.data.estimatedSettlementAmount),
+					fill_asset_id: outputAsset,
+					pay_asset_id: inputAsset,
+					priceImpact: 0,
+					routeAssets: [''],
+					routeIds: [''],
+					route_assets: [''],
+					routes: ''
+				};
+				return {
+					order,
+					fee: '0',
+					price: response.data.price,
+					minReceived: order.amount
+				};
 			}
 
-			if (response.status === 422) {
-				site = '4swap';
-			}
+			site = '4swap';
 		}
 
 		if (site === '4swap') {
-			return pairRoutes.getPreOrder({
+			const order = pairRoutes.getPreOrder({
 				inputAsset, outputAsset, inputAmount, outputAmount
 			});
+			return {
+				order,
+				fee: format({ n: pairRoutes.getFee(order), dp: 8 }),
+				price: format({ n: +order.amount / +order.funds, dp: 8 }),
+				minReceived: format({ n: +order.amount * +slippage })
+			}
 		}
 
 		return undefined;

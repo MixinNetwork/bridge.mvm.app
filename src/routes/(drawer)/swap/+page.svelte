@@ -21,7 +21,7 @@
 	import Spinner from '$lib/components/common/spinner.svelte';
 	import { showToast } from '$lib/components/common/toast/toast-container.svelte';
 	import { focus } from 'focus-svelte';
-	import { fetchEstimatedPayment } from "../../../lib/helpers/mixpay/api";
+	import {fetchSwapPreOrderInfo} from "$lib/helpers/api";
 
 	let a: Asset[] | undefined = $page.data.assets;
 	let p: Pair[] | undefined = $page.data.pairs;
@@ -84,44 +84,32 @@
 	let minReceived: string | undefined;
 	let site = 'MixPay';
 
-	$: if ($inputAsset && $outputAsset && lastEdited && (inputAmount || outputAmount)) {
+	const updateSwapInfo = async () => {
 		if (
-			WHITELIST_ASSET_4SWAP.includes($inputAsset.asset_id) ||
-			WHITELIST_ASSET_4SWAP.includes($outputAsset.asset_id)
+				WHITELIST_ASSET_4SWAP.includes(inputAsset.asset_id) ||
+				WHITELIST_ASSET_4SWAP.includes(outputAsset.asset_id)
 		) site = '4swap';
 
-		try {
-			if (site === 'MixPay') {
-				fetchEstimatedPayment({
-					inputAsset: $inputAsset?.asset_id,
-					outputAsset: $outputAsset?.asset_id,
-					inputAmount: lastEdited === 'input' ? `${inputAmount}` : undefined,
-					outputAmount: lastEdited === 'output' ? `${outputAmount}` : undefined
-				}).catch(e => console.log('catch', e));
-			}
-
-			if (site === '4swap') {
-				order = pairRoutes.getPreOrder({
-					inputAsset: $inputAsset?.asset_id,
-					outputAsset: $outputAsset?.asset_id,
-					inputAmount: lastEdited === 'input' ? `${inputAmount}` : undefined,
-					outputAmount: lastEdited === 'output' ? `${outputAmount}` : undefined
-				});
-
-				fee = format({ n: pairRoutes.getFee(order), dp: 8 });
-				price = format({ n: +order.amount / +order.funds, dp: 8 });
-				minReceived = format({ n: +order.amount * +$slippage });
-			}
-		} catch (e) {
-			console.log('order', e)
-			order = undefined;
-		}
+		const info = await fetchSwapPreOrderInfo(site, pairRoutes, slippage, {
+			inputAsset: inputAsset?.asset_id,
+			outputAsset: outputAsset?.asset_id,
+			inputAmount: lastEdited === 'input' ? `${inputAmount}` : undefined,
+			outputAmount: lastEdited === 'output' ? `${outputAmount}` : undefined
+		});
+		order = info.order;
+		fee = info.fee;
+		price = info.price;
+		minReceived = info.minReceived;
 
 		if (lastEdited === 'input') {
 			outputAmount = Number(order?.amount) || undefined;
 		} else if (lastEdited === 'output') {
 			inputAmount = Number(order?.funds) || undefined;
 		}
+	};
+
+	$: if (inputAsset && outputAsset && lastEdited && (inputAmount || outputAmount)) {
+		updateSwapInfo();
 	} else order = undefined;
 
 	$: inputAmountFiat = formatFiat(inputAsset?.price_usd, inputAmount);

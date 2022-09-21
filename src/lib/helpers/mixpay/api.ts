@@ -1,8 +1,6 @@
-import qs from 'qs';
-import type {RegisteredUser} from "../../types/user";
-import type {SwapParams} from "../4swap/route";
-
-const BASE_URI = 'https://api.mixpay.me/v1';
+import axios, { type AxiosResponse } from 'axios';
+import type { RegisteredUser } from "../../types/user";
+import type { SwapParams } from "../4swap/route";
 
 interface EstimatedPaymentRequest {
   paymentAssetId: string;
@@ -31,7 +29,22 @@ export interface EstimatedPaymentResponse {
   timestampMs: number;
 }
 
-export const fetchEstimatedPayment = async ({ inputAsset, outputAsset, inputAmount, outputAmount }: SwapParams) => {
+axios.defaults.headers.post['Content-Type'] = 'application/json';
+axios.defaults.headers.put['Content-Type'] = 'application/json';
+axios.defaults.headers.patch['Content-Type'] = 'application/json';
+
+const ins = axios.create({
+  baseURL: 'https://api.mixpay.me/v1',
+  timeout: 3000,
+});
+
+ins.interceptors.response.use(async (res: AxiosResponse) => {
+  return res.data;
+}, async (e: any) => {
+  return e.response.data;
+});
+
+export const fetchEstimatedPayment = async ({ inputAsset, outputAsset, inputAmount, outputAmount }: SwapParams): Promise<EstimatedPaymentResponse> => {
   const params: EstimatedPaymentRequest = {
     paymentAssetId: inputAsset,
     settlementAssetId: outputAsset,
@@ -40,9 +53,7 @@ export const fetchEstimatedPayment = async ({ inputAsset, outputAsset, inputAmou
   if (inputAmount) params.paymentAmount = inputAmount;
   if (outputAmount) params.quoteAmount = outputAmount;
 
-  return await fetch(BASE_URI + '/payments_estimated?' + qs.stringify(params), {
-    method: 'GET',
-  });
+  return await ins.get('/payments_estimated', { params });
 }
 
 export const generatePayment = async (
@@ -51,12 +62,8 @@ export const generatePayment = async (
   outputAsset: string,
   inputAmount: string
 ) => {
-  const response = await fetch('https://api.mixpay.me/v1/payments', {
-    method: 'POST',
-    body: JSON.stringify({
+  const response = await ins.post('https://api.mixpay.me/v1/payments', {
       payeeId: user.user_id,
 
     })
-  });
-
 }
