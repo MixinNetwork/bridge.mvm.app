@@ -21,16 +21,20 @@ export const register = async (address: string): Promise<RegisteredUser> => {
 	return user;
 };
 
-export const fetchWithdrawalFee = async (asset_id: string, destination: string) => {
+export const fetchWithdrawalFee = async (asset_id: string, destination: string, tag: string) => {
 	if (!destination) return undefined;
 
 	const externalClient = ExternalClient();
-	const asset = await externalClient.checkAddress({
-		asset: asset_id,
-		destination
-	});
+	try {
+		const asset = await externalClient.checkAddress({
+			asset: asset_id,
+			destination,
+			tag
+		});
+		return asset.fee;
+	} catch (e) {
+	}
 
-	return asset.fee;
 };
 
 export const fetchAssets = async (user: User) => {

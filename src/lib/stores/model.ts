@@ -62,12 +62,12 @@ export const totalBalanceBtc = derived(assets, ($assets) => {
 });
 
 export const AssetWithdrawalFee = mapTemplate(
-	(parameters: { asset_id: string; chain_id: string; destination: string }) =>
+	(parameters: { asset_id: string; chain_id: string; destination: string, tag: string }) =>
 		asyncReadable(
 			undefined,
 			async () => {
-				const { asset_id, chain_id, destination } = parameters;
-				const fee = await fetchWithdrawalFee(asset_id, destination);
+				const { asset_id, chain_id, destination, tag } = parameters;
+				const fee = await fetchWithdrawalFee(asset_id, destination, tag);
 
 				if (!fee || Number(fee) === 0 || asset_id === chain_id) return fee;
 
