@@ -642,10 +642,10 @@
     estree-walker "^2.0.1"
     picomatch "^2.2.2"
 
-"@square/svelte-store@^0.2.2":
-  version "0.2.2"
-  resolved "https://registry.yarnpkg.com/@square/svelte-store/-/svelte-store-0.2.2.tgz#0ed985c57737fb3476d6d5e825df967c18e7b67d"
-  integrity sha512-jO77s+GyU1/AAo2E1eLTmMIajAe0egHYUiyxXIVdRD7W2bhdlGBT9XAfeHnBYslIM+ZOhJIbtSd8qKaQbygF7g==
+"@square/svelte-store@^0.2.3":
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/@square/svelte-store/-/svelte-store-0.2.3.tgz#cc337dc42ae50e9036704c261f9369e8352fced5"
+  integrity sha512-afz3sF04NQEfQXM8/OCzMdvOXuUEF71ng2rwgjlvP7k2dFt8V08/KjLFrhas4ghXpm8KMSn5ndd9Kk85Fn2bgw==
   dependencies:
     svelte "^3.0.0"
 
