@@ -182,14 +182,14 @@ export class PairRoutes {
 		let amount = outputAmount;
 
 		if (inputAmount) {
-			if (+inputAmount <= 0) throw 'swap.error.input-amount-invalid';
+			if (+inputAmount <= 0) return;
 
 			bestRoute = this.getRoutes(inputAsset, outputAsset, +inputAmount);
 			amount = new BigNumber(bestRoute?.amount ?? 0)
 				.decimalPlaces(precision, BigNumber.ROUND_DOWN)
 				.toString();
 		} else if (outputAmount) {
-			if (+outputAmount <= 0) throw 'swap.error.output-amount-invalid';
+			if (+outputAmount <= 0) return;
 
 			bestRoute = this.getRoutesReverse(inputAsset, outputAsset, +outputAmount);
 			funds = new BigNumber(bestRoute?.funds ?? 0)

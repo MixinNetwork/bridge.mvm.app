@@ -1,4 +1,6 @@
 <script lang="ts">
+	import clsx from "clsx";
+	import { fade } from 'svelte/transition';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import Helper from '$lib/assets/helper.svg?component';
@@ -21,6 +23,7 @@
 	import Spinner from '$lib/components/common/spinner.svelte';
 	import { showToast } from '$lib/components/common/toast/toast-container.svelte';
 	import { focus } from 'focus-svelte';
+	import {tick} from "svelte";
 
 	let a: Asset[] | undefined = $page.data.assets;
 	let p: Pair[] | undefined = $page.data.pairs;
@@ -82,26 +85,32 @@
 	let price: string | undefined;
 	let minReceived: string | undefined;
 
-	$: if (inputAsset && outputAsset && lastEdited && (inputAmount || outputAmount)) {
-		try {
-			order = pairRoutes.getPreOrder({
-				inputAsset: inputAsset?.asset_id,
-				outputAsset: outputAsset?.asset_id,
-				inputAmount: lastEdited === 'input' ? `${inputAmount}` : undefined,
-				outputAmount: lastEdited === 'output' ? `${outputAmount}` : undefined
-			});
+	const updateSwapInfo = async () => {
+		order = pairRoutes.getPreOrder({
+			inputAsset: inputAsset?.asset_id,
+			outputAsset: outputAsset?.asset_id,
+			inputAmount: lastEdited === 'input' ? `${inputAmount}` : undefined,
+			outputAmount: lastEdited === 'output' ? `${outputAmount}` : undefined
+		});
+		if (!order) return;
 
-			fee = format({ n: pairRoutes.getFee(order), dp: 8 });
-			price = format({ n: +order.amount / +order.funds, dp: 8 });
-			minReceived = format({ n: +order.amount * +slippage });
-		} catch (e) {
-			order = undefined;
-		}
+		await tick();
+		fee = format({ n: pairRoutes.getFee(order), dp: 8 });
+		price = format({ n: +order.amount / +order.funds, dp: 8 });
+		minReceived = format({ n: +order.amount * +slippage });
 
 		if (lastEdited === 'input') {
 			outputAmount = Number(order?.amount) || undefined;
 		} else if (lastEdited === 'output') {
 			inputAmount = Number(order?.funds) || undefined;
+		}
+	}
+
+	$: if (inputAsset && outputAsset && lastEdited && (inputAmount || outputAmount)) {
+		try {
+			updateSwapInfo();
+		} catch (e) {
+			order = undefined;
 		}
 	} else order = undefined;
 
@@ -233,11 +242,12 @@
 					<div>
 						<div>Price Impact</div>
 						<div
-							class={order?.priceImpact > 0.1
-								? 'text-brand-forbiddenPrice'
-								: order?.priceImpact > 0.01
-								? 'text-brand-warningPrice'
-								: ''}
+							transition:fade
+							class="{clsx({
+								'text-brand-forbiddenPrice': order?.priceImpact >= 0.1,
+								'text-brand-warningPrice': order?.priceImpact >= 0.01 && order?.priceImpact < 0.1,
+							  	'text-black text-opacity-50': order?.priceImpact < 0.01
+							})}"
 						>
 							{toPercent({ n: order?.priceImpact })}
 						</div>
