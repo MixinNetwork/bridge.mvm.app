@@ -8,12 +8,9 @@
 	import type { Asset } from '$lib/types/asset';
 	import Eth from '$lib/assets/logo/eth.svg?component';
 	import SelectedAssetButton from '$lib/components/base/selected-asset-button.svelte';
-	import { asyncDerived } from '@square/svelte-store';
-	import { assets, AssetWithdrawalFee, updateAssets } from '$lib/stores/model';
+	import { AssetWithdrawalFee, updateAssets, buildBalanceStore } from '$lib/stores/model';
 	import { user } from '$lib/stores/user';
 	import { EOS_ASSET_ID, ETH_ASSET_ID, TRANSACTION_GAS } from '$lib/constants/common';
-	import { getBalance, getERC20Balance } from '$lib/helpers/web3/common';
-	import type { Network } from '$lib/types/network';
 	import { bigGte, format } from '$lib/helpers/big';
 	import LogoCircle from '$lib/assets/logo/logo-circle.svg?component';
 	import Spinner from '$lib/components/common/spinner.svelte';
@@ -22,30 +19,6 @@
 	import { providerLogo, providerName } from '$lib/stores/provider';
 	import { selectAsset } from './export';
 	import { showToast } from '../common/toast/toast-container.svelte';
-
-	const buildBalanceStore = ({ assetId, network }: { assetId: string; network: Network }) => {
-		return asyncDerived([assets, user], async ([$assets, $user]) => {
-			if (!$user) return undefined;
-
-			if (assetId === ETH_ASSET_ID)
-				return getBalance({
-					account: $user.address,
-					network
-				});
-
-			const asset = $assets.find((a) => a.asset_id === assetId);
-			const contract = network === 'mvm' ? asset?.contract : asset?.asset_key;
-			if (!contract) return undefined;
-
-			const balance = await getERC20Balance({
-				account: $user.address,
-				contractAddress: contract,
-				network
-			});
-
-			return format({ n: balance, dp: 8, fixed: true });
-		});
-	};
 
 	export let asset: Asset;
 	export let depositMode: boolean;

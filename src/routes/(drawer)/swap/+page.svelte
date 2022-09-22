@@ -7,7 +7,7 @@
 	import Switch from '$lib/assets/switch.svg?component';
 	import { PairRoutes, type Order } from '$lib/helpers/4swap/route';
 	import { setSearchParam } from '$lib/helpers/app-store';
-	import { assets, getAsset, pairs, updateAssets } from '$lib/stores/model';
+	import { assets, getAsset, pairs, updateAssets, buildBalanceStore } from '$lib/stores/model';
 	import type { Asset } from '$lib/types/asset';
 	import Header from '$lib/components/base/header.svelte';
 	import UserInfo from '$lib/components/base/user-info.svelte';
@@ -30,6 +30,8 @@
 
 	let inputAsset: Asset | undefined = undefined;
 	let outputAsset: Asset | undefined = undefined;
+	let inputAssetBalance: string | undefined = undefined;
+	let outputAssetBalance: string | undefined = undefined;
 	let slippage = DEFAULT_SLIPPAGE;
 
 	$: a && !$assets.length && assets.set(a);
@@ -41,6 +43,13 @@
 	$: !outputAsset &&
 		(outputAsset =
 			getAsset($page.url.searchParams.get(OUTPUT_KEY) || XIN_ASSET_ID) || getAsset(XIN_ASSET_ID));
+	$: inputAssetBalance = inputAsset?.balance;
+	$: outputAssetBalance = outputAsset?.balance;
+
+	$: inputBalance = buildBalanceStore({ assetId: inputAsset?.asset_id, network: 'mvm' });
+	$: outputBalance = buildBalanceStore({ assetId: outputAsset?.asset_id, network: 'mvm' });
+	$: if ($inputBalance) inputAssetBalance = $inputBalance;
+	$: if ($outputBalance) outputAssetBalance = $outputBalance;
 
 	let lastEdited: 'input' | 'output' | undefined = undefined;
 	let inputAmount: number | undefined = undefined;
@@ -130,8 +139,11 @@
 			const res = await swapAsset($library, $user, order, inputAsset, minReceived);
 			if (res && res.state === 'Done') showToast('success', 'Successful');
 
-			await updateAssets();
+			inputAmount = undefined;
+			outputAmount = undefined;
+
 		} finally {
+			await updateAssets();
 			loading = false;
 		}
 	};
@@ -154,7 +166,7 @@
 				<div class="flex items-center justify-between py-5 px-4 pb-3 text-sm font-semibold">
 					<div>From</div>
 					<div class=" text-xs text-black text-opacity-50">
-						Balance: {format({ n: inputAsset?.balance ?? '0' })}
+						Balance: {format({ n: inputAssetBalance ?? '0' })}
 						{inputAsset?.symbol}
 					</div>
 				</div>
@@ -193,7 +205,7 @@
 				<div class="flex items-center justify-between py-5 px-4 pb-3 text-sm font-semibold">
 					<div>To</div>
 					<div class=" text-xs text-black text-opacity-50">
-						Balance: {format({ n: outputAsset?.balance ?? '0' })}
+						Balance: {format({ n: outputAssetBalance ?? '0' })}
 						{outputAsset?.symbol}
 					</div>
 				</div>
