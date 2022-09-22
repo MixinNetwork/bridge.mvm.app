@@ -31,15 +31,13 @@
 	$: isEthChain = asset.chain_id === ETH_ASSET_ID;
 	$: isEosChain = asset.chain_id === EOS_ASSET_ID;
 
-	$: mainnetBalance = buildBalanceStore({ assetId, network: 'mainnet' });
+	$: mainnetBalance = buildBalanceStore({ assetId, network: 'mainnet' }) || '...';
 	$: mvmBalance = buildBalanceStore({ assetId, network: 'mvm' });
 	$: roundedMvmBalance = $mvmBalance
 		? format({ n: $mvmBalance || 0, dp: 8, fixed: true })
-		: undefined;
+		: format({ n: asset.balance, dp: 8, fixed: true });
 
-	$: cacheMvmBalance = roundedMvmBalance || format({ n: asset.balance, dp: 8, fixed: true });
-
-	$: fromBalance = depositMode ? $mainnetBalance : cacheMvmBalance;
+	$: fromBalance = depositMode ? $mainnetBalance! : roundedMvmBalance;
 
 	let amount: number | undefined | string;
 
@@ -75,7 +73,8 @@
 			} else {
 				await withdraw($library, asset, $user.contract, value, address, memo, $assetWithdrawalFee);
 				await updateAssets();
-				fromBalance = await getAssetBalance($assets, asset.asset_id, $user.address, 'mvm');
+				fromBalance =
+					(await getAssetBalance($assets, asset.asset_id, $user.address, 'mvm')) ?? '...';
 				showToast('success', 'Successful');
 
 				amount = '';

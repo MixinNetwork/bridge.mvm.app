@@ -7,7 +7,7 @@
 	import Switch from '$lib/assets/switch.svg?component';
 	import { PairRoutes, type Order } from '$lib/helpers/4swap/route';
 	import { setSearchParam } from '$lib/helpers/app-store';
-	import { assets, getAsset, pairs, updateAssets, buildBalanceStore } from '$lib/stores/model';
+	import { assets, getAsset, pairs, updateAssets } from '$lib/stores/model';
 	import type { Asset } from '$lib/types/asset';
 	import Header from '$lib/components/base/header.svelte';
 	import UserInfo from '$lib/components/base/user-info.svelte';
@@ -99,8 +99,8 @@
 	const updateSwapInfo = async () => {
 		try {
 			order = pairRoutes.getPreOrder({
-				inputAsset: inputAsset?.asset_id,
-				outputAsset: outputAsset?.asset_id,
+				inputAsset: inputAsset!.asset_id,
+				outputAsset: outputAsset!.asset_id,
 				inputAmount: lastEdited === 'input' ? `${inputAmount}` : undefined,
 				outputAmount: lastEdited === 'output' ? `${outputAmount}` : undefined
 			});

@@ -80,7 +80,7 @@ export const AssetWithdrawalFee = mapTemplate(
 
 export const buildBalanceStore = ({ assetId, network }: { assetId: string; network: Network }) => {
 	return asyncDerived([assets, user], async ([$assets, $user]) => {
-		if (!$user) return undefined;
+		if (!$user) throw 'model.error.no-user';
 
 		return getAssetBalance($assets, assetId, $user.address, network);
 	});
