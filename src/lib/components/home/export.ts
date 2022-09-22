@@ -5,7 +5,8 @@ import { get } from '@square/svelte-store';
 import { ETH_ASSET_ID } from '../../constants/common';
 import { setSearchParam } from '../../helpers/app-store';
 import { deepWritable } from '../../helpers/store/deep';
-import { assets, getAsset } from '../../stores/model';
+import { assets } from '../../stores/model';
+import { getAsset } from '../../helpers/utils';
 import type { Asset } from '../../types/asset';
 
 const MODE_KEY = 'mode';

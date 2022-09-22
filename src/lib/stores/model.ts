@@ -29,11 +29,6 @@ export const updateAssets = async () => {
 	assets.set($assets);
 };
 
-export const getAsset = (assetId: string | null, assets: Asset[]) => {
-	if (!assetId) return;
-	return assets.find((a) => a.asset_id === assetId);
-};
-
 export const pairs = deepWritable<Pair[]>([], (set) => {
 	const timer = setInterval(async () => {
 		const pairs = await fetchPairs();
@@ -81,7 +76,6 @@ export const AssetWithdrawalFee = mapTemplate(
 export const buildBalanceStore = ({ assetId, network }: { assetId: string; network: Network }) => {
 	return asyncDerived([assets, user], async ([$assets, $user]) => {
 		if (!$user) return '0';
-
 		return getAssetBalance($assets, assetId, $user.address, network);
 	});
 };

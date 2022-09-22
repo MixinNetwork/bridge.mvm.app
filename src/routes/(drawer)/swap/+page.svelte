@@ -7,7 +7,8 @@
 	import Switch from '$lib/assets/switch.svg?component';
 	import { PairRoutes, type Order } from '$lib/helpers/4swap/route';
 	import { setSearchParam } from '$lib/helpers/app-store';
-	import { assets, getAsset, pairs, updateAssets } from '$lib/stores/model';
+	import { assets, pairs, updateAssets } from '$lib/stores/model';
+	import { getAsset } from '$lib/helpers/utils';
 	import type { Asset } from '$lib/types/asset';
 	import Header from '$lib/components/base/header.svelte';
 	import UserInfo from '$lib/components/base/user-info.svelte';
@@ -18,38 +19,25 @@
 	import Faq from '$lib/components/swap/faq.svelte';
 	import { registerAndSave, user } from '$lib/stores/user';
 	import { library } from '$lib/stores/ether';
-	import { ETH_ASSET_ID, XIN_ASSET_ID } from '$lib/constants/common';
 	import type { Pair } from '$lib/helpers/4swap/api';
 	import Spinner from '$lib/components/common/spinner.svelte';
 	import { showToast } from '$lib/components/common/toast/toast-container.svelte';
 	import { focus } from 'focus-svelte';
 	import { tick } from 'svelte';
+	import {ETH_ASSET_ID, XIN_ASSET_ID} from "../../../lib/constants/common";
 
 	let a: Asset[] | undefined = $page.data.assets;
 	let p: Pair[] | undefined = $page.data.pairs;
 
 	let inputAsset: Asset | undefined = undefined;
 	let outputAsset: Asset | undefined = undefined;
-	let inputAssetId: string | undefined = undefined;
-	let outputAssetId: string | undefined = undefined;
 	let slippage = DEFAULT_SLIPPAGE;
 
 	$: a && !$assets.length && assets.set(a);
 	$: p && !$pairs.length && pairs.set(p);
 
-	$: !inputAssetId &&
-		(inputAssetId = (
-			getAsset($page.url.searchParams.get(INPUT_KEY) || ETH_ASSET_ID, $assets) ||
-			getAsset(ETH_ASSET_ID, $assets)
-		)?.asset_id);
-	$: !outputAssetId &&
-		(outputAssetId = (
-			getAsset($page.url.searchParams.get(OUTPUT_KEY) || XIN_ASSET_ID, $assets) ||
-			getAsset(XIN_ASSET_ID, $assets)
-		)?.asset_id);
-
-	$: !inputAsset && inputAssetId && (inputAsset = getAsset(inputAssetId, $assets));
-	$: !outputAsset && outputAssetId && (outputAsset = getAsset(outputAssetId, $assets));
+	$: !inputAsset && (inputAsset = getAsset($page.url.searchParams.get(INPUT_KEY) || ETH_ASSET_ID, $assets));
+	$: !outputAsset && (outputAsset = getAsset($page.url.searchParams.get(OUTPUT_KEY) || XIN_ASSET_ID, $assets));
 
 	let lastEdited: 'input' | 'output' | undefined = undefined;
 	let inputAmount: number | undefined = undefined;
