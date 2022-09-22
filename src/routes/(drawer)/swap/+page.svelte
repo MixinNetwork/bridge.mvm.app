@@ -37,9 +37,9 @@
 	$: p && !$pairs.length && pairs.set(p);
 
 	$: !inputAsset &&
-		(inputAsset = getAsset($page.url.searchParams.get(INPUT_KEY) || ETH_ASSET_ID, $assets));
+		(inputAsset = getAsset($page.url.searchParams.get(INPUT_KEY) || ETH_ASSET_ID, $assets) || getAsset(ETH_ASSET_ID, $assets));
 	$: !outputAsset &&
-		(outputAsset = getAsset($page.url.searchParams.get(OUTPUT_KEY) || XIN_ASSET_ID, $assets));
+		(outputAsset = getAsset($page.url.searchParams.get(OUTPUT_KEY) || XIN_ASSET_ID, $assets) || getAsset(XIN_ASSET_ID, $assets));
 
 	let lastEdited: 'input' | 'output' | undefined = undefined;
 	let inputAmount: number | undefined = undefined;
@@ -86,15 +86,19 @@
 	let price: string | undefined;
 	let minReceived: string | undefined;
 
-	const updateSwapInfo = async () => {
-		if (!inputAsset || !outputAsset) return undefined;
-
+	const updateSwapInfo = async (
+			inputAsset: Asset,
+			outputAsset: Asset,
+			lastEdited: 'input' | 'output',
+			inputValue?: number,
+			outputValue?: number
+	) => {
 		try {
 			order = pairRoutes.getPreOrder({
 				inputAsset: inputAsset.asset_id,
 				outputAsset: outputAsset.asset_id,
-				inputAmount: lastEdited === 'input' ? `${inputAmount}` : undefined,
-				outputAmount: lastEdited === 'output' ? `${outputAmount}` : undefined
+				inputAmount: lastEdited === 'input' ? `${inputValue}` : undefined,
+				outputAmount: lastEdited === 'output' ? `${outputValue}` : undefined
 			});
 		} catch (e) {
 			order = undefined;
@@ -114,7 +118,7 @@
 	};
 
 	$: if (inputAsset && outputAsset && lastEdited && (inputAmount || outputAmount)) {
-		updateSwapInfo();
+		updateSwapInfo(inputAsset, outputAsset, lastEdited, inputAmount, outputAmount);
 	} else order = undefined;
 
 	$: inputAmountFiat = formatFiat(inputAsset?.price_usd, inputAmount);
@@ -133,8 +137,7 @@
 			const res = await swapAsset($library, $user, order, inputAsset, minReceived);
 
 			await updateAssets();
-			inputAsset = undefined;
-			outputAsset = undefined;
+			inputAsset = getAsset($page.url.searchParams.get(INPUT_KEY) || ETH_ASSET_ID, $assets);
 
 			if (res && res.state === 'Done') showToast('success', 'Successful');
 
