@@ -19,7 +19,7 @@
 	import { providerLogo, providerName } from '$lib/stores/provider';
 	import { selectAsset } from './export';
 	import { showToast } from '../common/toast/toast-container.svelte';
-	import { getTokenBalance } from '../../helpers/web3/common';
+	import { getAssetBalance } from '../../helpers/web3/common';
 
 	export let asset: Asset;
 	export let depositMode: boolean;
@@ -75,7 +75,7 @@
 			} else {
 				await withdraw($library, asset, $user.contract, value, address, memo, $assetWithdrawalFee);
 				await updateAssets();
-				fromBalance = await getTokenBalance($assets, asset.asset_id, $user.address, 'mvm');
+				fromBalance = await getAssetBalance($assets, asset.asset_id, $user.address, 'mvm');
 				showToast('success', 'Successful');
 
 				amount = '';

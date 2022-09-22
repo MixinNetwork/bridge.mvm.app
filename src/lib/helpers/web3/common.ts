@@ -52,7 +52,7 @@ export const getERC20Balance = async ({
 	return utils.formatUnits(balance, decimals);
 };
 
-export const getTokenBalance = async (
+export const getAssetBalance = async (
 	assets: Asset[],
 	assetId: string,
 	address: string,

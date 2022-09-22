@@ -5,7 +5,7 @@ import { fetchAssets, fetchFeeOnAsset, fetchWithdrawalFee } from '../helpers/api
 import { bigAdd, bigMul } from '../helpers/big';
 import { deepWritable } from '../helpers/store/deep';
 import { mapTemplate } from '../helpers/store/map-template';
-import { getTokenBalance } from '../helpers/web3/common';
+import { getAssetBalance } from '../helpers/web3/common';
 import type { Asset } from '../types/asset';
 import type { Network } from '../types/network';
 import { user } from './user';
@@ -82,6 +82,6 @@ export const buildBalanceStore = ({ assetId, network }: { assetId: string; netwo
 	return asyncDerived([assets, user], async ([$assets, $user]) => {
 		if (!$user) return undefined;
 
-		return getTokenBalance($assets, assetId, $user.address, network);
+		return getAssetBalance($assets, assetId, $user.address, network);
 	});
 };
