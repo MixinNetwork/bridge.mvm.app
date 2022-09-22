@@ -51,6 +51,7 @@
 		"qrcode": "^1.5.1",
 		"rollup-plugin-polyfill-node": "^0.10.2",
 		"svelte": "^3.50.1",
+		"svelte-adapter-appengine": "^0.9.1",
 		"svelte-check": "^2.9.0",
 		"svelte-preprocess": "^4.10.7",
 		"svelte-virtual-scroll-list": "^1.1.0",
