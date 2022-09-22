@@ -139,12 +139,13 @@
 		try {
 			if (!$user.contract) await registerAndSave($user.address);
 			const res = await swapAsset($library, $user, order, inputAsset, minReceived);
+			await updateAssets();
+
 			if (res && res.state === 'Done') showToast('success', 'Successful');
 
 			inputAmount = undefined;
 			outputAmount = undefined;
 		} finally {
-			await updateAssets();
 			loading = false;
 		}
 	};
