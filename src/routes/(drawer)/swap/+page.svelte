@@ -82,7 +82,7 @@
 	let fee: string | undefined;
 	let price: string | undefined;
 	let minReceived: string | undefined;
-	let site = 'MixPay';
+	let site: '4swap' | 'MixPay' = 'MixPay';
 
 	const updateSwapInfo = async () => {
 		if (
@@ -125,7 +125,7 @@
 
 		try {
 			if (!$user.contract) await registerAndSave($user.address);
-			const res = await swapAsset($library, $user, order, inputAsset, minReceived);
+			const res = await swapAsset($library, $user, site, order, inputAsset, minReceived);
 			if (res && res.state === 'Done') showToast('success', 'Successful');
 
 			await updateAssets();

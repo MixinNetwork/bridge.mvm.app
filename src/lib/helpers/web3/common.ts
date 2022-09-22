@@ -13,9 +13,8 @@ import type { Network } from '../../types/network';
 import type { RegisteredUser } from '$lib/types/user';
 import type { Asset } from '$lib/types/asset';
 import { toHex } from '../utils';
-import { generateExtra, getWithdrawalExtra } from '../sign';
-import { checkOrder, createAction } from '../4swap/api';
-import { fetchCode } from '../api';
+import { getWithdrawalExtra } from '../sign';
+import { checkOrder, generate4SwapInfo } from '../4swap/api';
 import type { Order } from '../4swap/route';
 
 export const mainnetProvider = ethers.getDefaultProvider(1);
@@ -150,30 +149,15 @@ export const withdraw = async (
 export const swapAsset = async (
 	provider: ethers.providers.Web3Provider,
 	user: RegisteredUser,
+	site: '4swap' | 'MixPay',
 	order: Order,
 	inputAsset: Asset,
 	minReceived: string
 ) => {
 	await switchNetwork(provider, 'mvm');
 
-
 	const trace_id = v4();
-	const swapAction = `3,${user.user_id},${trace_id},${order.fill_asset_id},${order.routes},${minReceived}`;
-	const actionResp = await createAction({
-		action: swapAction,
-		amount: order.funds,
-		asset_id: order.pay_asset_id,
-		broker_id: ''
-	});
-
-	const codeResp = await fetchCode(actionResp.code);
-	const extra = generateExtra(
-		JSON.stringify({
-			receivers: codeResp.receivers,
-			threshold: codeResp.threshold,
-			extra: codeResp.memo
-		})
-	);
+	const { extra, follow_id } = await generate4SwapInfo(user.user_id, trace_id, order, minReceived);
 
 	const signer = provider.getSigner();
 
@@ -186,7 +170,7 @@ export const swapAsset = async (
 			gasLimit: 500000,
 			value: assetAmount
 		});
-		return await checkOrder(actionResp.follow_id, user);
+		return await checkOrder(follow_id, user);
 	}
 
 	if (inputAsset.contract) {
@@ -199,7 +183,7 @@ export const swapAsset = async (
 			gasPrice: 10000000,
 			gasLimit: 450000
 		});
-		return await checkOrder(actionResp.follow_id, user);
+		return await checkOrder(follow_id, user);
 	}
 
 	throw new Error('Invalid asset');

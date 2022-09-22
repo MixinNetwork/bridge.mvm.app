@@ -11,7 +11,6 @@ import { getBalance } from './web3/common';
 import { fetchAssetContract } from './web3/registry';
 import { sortBy } from 'lodash-es';
 import type { PairRoutes, SwapParams } from "./4swap/route";
-import type { EstimatedPaymentResponse } from './mixpay/api';
 import { fetchEstimatedPayment } from "./mixpay/api";
 
 export const register = async (address: string): Promise<RegisteredUser> => {

@@ -1,8 +1,14 @@
 import axios, { type AxiosResponse } from 'axios';
-import type { RegisteredUser } from "../../types/user";
-import type { SwapParams } from "../4swap/route";
+import type { Order, SwapParams } from "../4swap/route";
 
-interface EstimatedPaymentRequest {
+interface MixPayBaseResponse {
+  code: number;
+  success: boolean;
+  message: string;
+  timestampMs: number;
+}
+
+interface MixPayEstimatedPaymentRequest {
   paymentAssetId: string;
   settlementAssetId: string;
   quoteAssetId: string;
@@ -10,10 +16,7 @@ interface EstimatedPaymentRequest {
   quoteAmount?: string;
 }
 
-export interface EstimatedPaymentResponse {
-  code: number;
-  success: boolean;
-  message: string;
+export interface MixPayEstimatedPaymentResponse extends MixPayBaseResponse {
   data: {
     price: string; // paymentAmount/quoteAmount
     estimatedSettlementAmount: string;
@@ -26,7 +29,30 @@ export interface EstimatedPaymentResponse {
     quoteAssetId: string;
     quoteAmount: string;
   };
-  timestampMs: number;
+}
+
+interface MixPayPaymentResponse extends MixPayBaseResponse {
+  data: {
+    isChain: boolean;
+    expire: number;
+    seconds: number;
+
+    traceId: string;
+    memo: string;
+    recipient: string;
+    destination: string;
+    tag: string;
+
+    quoteAmount: string;
+    paymentAmount: string;
+    estimatedSettlementAmount: string;
+    settlementAssetId: string;
+    settlementAssetSymbol: string;
+    paymentAssetId: string;
+    paymentAssetSymbol: string;
+    quoteAssetSymbol: string;
+    quoteAssetId: string;
+  }
 }
 
 axios.defaults.headers.post['Content-Type'] = 'application/json';
@@ -44,8 +70,8 @@ ins.interceptors.response.use(async (res: AxiosResponse) => {
   return e.response.data;
 });
 
-export const fetchEstimatedPayment = async ({ inputAsset, outputAsset, inputAmount, outputAmount }: SwapParams): Promise<EstimatedPaymentResponse> => {
-  const params: EstimatedPaymentRequest = {
+export const fetchMixPayEstimatedPayment = async ({ inputAsset, outputAsset, inputAmount, outputAmount }: SwapParams): Promise<MixPayEstimatedPaymentResponse> => {
+  const params: MixPayEstimatedPaymentRequest = {
     paymentAssetId: inputAsset,
     settlementAssetId: outputAsset,
     quoteAssetId: outputAsset,
@@ -56,14 +82,35 @@ export const fetchEstimatedPayment = async ({ inputAsset, outputAsset, inputAmou
   return await ins.get('/payments_estimated', { params });
 }
 
-export const generatePayment = async (
-  user: RegisteredUser,
+export const fetchMixPayPayment = async (
+  user_id: string,
+  trace_id: string,
   inputAsset: string,
   outputAsset: string,
   inputAmount: string
-) => {
-  const response = await ins.post('https://api.mixpay.me/v1/payments', {
-      payeeId: user.user_id,
-
+): Promise<MixPayPaymentResponse> => {
+  return await ins.post('https://api.mixpay.me/v1/payments', {
+      payeeId: user_id,
+      traceId: trace_id,
+      paymentAssetId: inputAsset,
+      settlementAssetId: outputAsset,
+      quoteAssetId: outputAsset,
+      paymentAmount: inputAmount,
+      isChain: false,
     })
+}
+
+export const generate4SwapInfo = async (
+  user_id: string,
+  trace_id: string,
+  order: Order,
+) => {
+  const response = await fetchMixPayPayment(
+    user_id,
+    trace_id,
+    order.pay_asset_id,
+    order.fill_asset_id,
+    String(order.funds)
+  );
+  console.log(response);
 }
