@@ -121,9 +121,7 @@
 		}
 	};
 
-	$: if (inputAsset && outputAsset && lastEdited && (inputAmount || outputAmount)) {
-		updateSwapInfo(inputAsset, outputAsset, lastEdited, inputAmount, outputAmount);
-	} else order = undefined;
+	$: updateSwapInfo(inputAsset, outputAsset, lastEdited, inputAmount, outputAmount);
 
 	$: inputAmountFiat = formatFiat(inputAsset?.price_usd, inputAmount);
 	$: outputAmountFiat = formatFiat(outputAsset?.price_usd, outputAmount);
