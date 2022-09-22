@@ -83,6 +83,6 @@ export const buildBalanceStore = ({ assetId, network }: { assetId: string; netwo
 	return asyncDerived([assets, user], async ([$assets, $user]) => {
 		if (!$user) return undefined;
 
-		return getTokenBalance(assetId, $user.address, network);
+		return getTokenBalance($assets, assetId, $user.address, network);
 	});
 };
