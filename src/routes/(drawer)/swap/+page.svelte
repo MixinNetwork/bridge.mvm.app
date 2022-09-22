@@ -141,7 +141,6 @@
 
 			inputAmount = undefined;
 			outputAmount = undefined;
-
 		} finally {
 			await updateAssets();
 			loading = false;

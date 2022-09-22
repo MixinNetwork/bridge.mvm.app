@@ -199,10 +199,7 @@
 <button
 	class="mt-10 flex w-28 justify-center self-center rounded-full bg-brand-primary px-6 py-4 text-white"
 	on:click={transfer}
-	disabled={(!isEthChain && !address) ||
-		!fromBalance ||
-		!amount ||
-		amount < 0.0001}
+	disabled={(!isEthChain && !address) || !fromBalance || !amount || amount < 0.0001}
 >
 	{#if loading && !depositMode}
 		<Spinner class="stroke-white stroke-2 text-center" />

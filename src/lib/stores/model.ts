@@ -5,11 +5,11 @@ import { fetchAssets, fetchFeeOnAsset, fetchWithdrawalFee } from '../helpers/api
 import { bigAdd, bigMul, format } from '../helpers/big';
 import { deepWritable } from '../helpers/store/deep';
 import { mapTemplate } from '../helpers/store/map-template';
-import { getBalance, getERC20Balance } from "../helpers/web3/common";
+import { getBalance, getERC20Balance } from '../helpers/web3/common';
 import type { Asset } from '../types/asset';
-import type { Network } from "../types/network";
+import type { Network } from '../types/network';
 import { user } from './user';
-import { ETH_ASSET_ID } from "../constants/common";
+import { ETH_ASSET_ID } from '../constants/common';
 
 export const assets = deepWritable<Asset[]>([], (set) => {
 	const timer = setInterval(async () => {
@@ -79,7 +79,6 @@ export const AssetWithdrawalFee = mapTemplate(
 			false
 		)
 );
-
 
 export const buildBalanceStore = ({ assetId, network }: { assetId: string; network: Network }) => {
 	return asyncDerived([assets, user], async ([$assets, $user]) => {
