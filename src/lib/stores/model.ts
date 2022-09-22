@@ -1,11 +1,13 @@
 import type { ExchangeRateResponse } from '@mixin.dev/mixin-node-sdk';
-import { asyncReadable, derived, get } from '@square/svelte-store';
+import { asyncDerived, asyncReadable, derived, get } from '@square/svelte-store';
 import { fetchPairs, type Pair } from '../helpers/4swap/api';
 import { fetchAssets, fetchFeeOnAsset, fetchWithdrawalFee } from '../helpers/api';
 import { bigAdd, bigMul } from '../helpers/big';
 import { deepWritable } from '../helpers/store/deep';
 import { mapTemplate } from '../helpers/store/map-template';
+import { getTokenBalance } from '../helpers/web3/common';
 import type { Asset } from '../types/asset';
+import type { Network } from '../types/network';
 import { user } from './user';
 
 export const assets = deepWritable<Asset[]>([], (set) => {
@@ -62,12 +64,12 @@ export const totalBalanceBtc = derived(assets, ($assets) => {
 });
 
 export const AssetWithdrawalFee = mapTemplate(
-	(parameters: { asset_id: string; chain_id: string; destination: string }) =>
+	(parameters: { asset_id: string; chain_id: string; destination: string; tag: string }) =>
 		asyncReadable(
 			undefined,
 			async () => {
-				const { asset_id, chain_id, destination } = parameters;
-				const fee = await fetchWithdrawalFee(asset_id, destination);
+				const { asset_id, chain_id, destination, tag } = parameters;
+				const fee = await fetchWithdrawalFee(asset_id, destination, tag);
 
 				if (!fee || Number(fee) === 0 || asset_id === chain_id) return fee;
 
@@ -76,3 +78,11 @@ export const AssetWithdrawalFee = mapTemplate(
 			false
 		)
 );
+
+export const buildBalanceStore = ({ assetId, network }: { assetId: string; network: Network }) => {
+	return asyncDerived([assets, user], async ([$assets, $user]) => {
+		if (!$user) return undefined;
+
+		return getTokenBalance($assets, assetId, $user.address, network);
+	});
+};

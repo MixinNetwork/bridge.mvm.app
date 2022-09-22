@@ -1,11 +1,13 @@
 <script lang="ts">
+	import clsx from 'clsx';
+	import { fade } from 'svelte/transition';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import Helper from '$lib/assets/helper.svg?component';
 	import Switch from '$lib/assets/switch.svg?component';
 	import { PairRoutes, type Order } from '$lib/helpers/4swap/route';
 	import { setSearchParam } from '$lib/helpers/app-store';
-	import { assets, getAsset, pairs, updateAssets } from '$lib/stores/model';
+	import { assets, getAsset, pairs, updateAssets, buildBalanceStore } from '$lib/stores/model';
 	import type { Asset } from '$lib/types/asset';
 	import Header from '$lib/components/base/header.svelte';
 	import UserInfo from '$lib/components/base/user-info.svelte';
@@ -21,12 +23,15 @@
 	import Spinner from '$lib/components/common/spinner.svelte';
 	import { showToast } from '$lib/components/common/toast/toast-container.svelte';
 	import { focus } from 'focus-svelte';
+	import { tick } from 'svelte';
 
 	let a: Asset[] | undefined = $page.data.assets;
 	let p: Pair[] | undefined = $page.data.pairs;
 
 	let inputAsset: Asset | undefined = undefined;
 	let outputAsset: Asset | undefined = undefined;
+	let inputAssetBalance: string | undefined = undefined;
+	let outputAssetBalance: string | undefined = undefined;
 	let slippage = DEFAULT_SLIPPAGE;
 
 	$: a && !$assets.length && assets.set(a);
@@ -38,6 +43,13 @@
 	$: !outputAsset &&
 		(outputAsset =
 			getAsset($page.url.searchParams.get(OUTPUT_KEY) || XIN_ASSET_ID) || getAsset(XIN_ASSET_ID));
+	$: inputAssetBalance = inputAsset?.balance;
+	$: outputAssetBalance = outputAsset?.balance;
+
+	$: inputBalance = buildBalanceStore({ assetId: inputAsset?.asset_id, network: 'mvm' });
+	$: outputBalance = buildBalanceStore({ assetId: outputAsset?.asset_id, network: 'mvm' });
+	$: if ($inputBalance) inputAssetBalance = $inputBalance;
+	$: if ($outputBalance) outputAssetBalance = $outputBalance;
 
 	let lastEdited: 'input' | 'output' | undefined = undefined;
 	let inputAmount: number | undefined = undefined;
@@ -84,26 +96,32 @@
 	let price: string | undefined;
 	let minReceived: string | undefined;
 
-	$: if (inputAsset && outputAsset && lastEdited && (inputAmount || outputAmount)) {
-		try {
-			order = pairRoutes.getPreOrder({
-				inputAsset: inputAsset?.asset_id,
-				outputAsset: outputAsset?.asset_id,
-				inputAmount: lastEdited === 'input' ? `${inputAmount}` : undefined,
-				outputAmount: lastEdited === 'output' ? `${outputAmount}` : undefined
-			});
+	const updateSwapInfo = async () => {
+		order = pairRoutes.getPreOrder({
+			inputAsset: inputAsset?.asset_id,
+			outputAsset: outputAsset?.asset_id,
+			inputAmount: lastEdited === 'input' ? `${inputAmount}` : undefined,
+			outputAmount: lastEdited === 'output' ? `${outputAmount}` : undefined
+		});
+		if (!order) return;
 
-			fee = format({ n: pairRoutes.getFee(order), dp: 8 });
-			price = format({ n: +order.amount / +order.funds, dp: 8 });
-			minReceived = format({ n: +order.amount * +slippage });
-		} catch (e) {
-			order = undefined;
-		}
+		await tick();
+		fee = format({ n: pairRoutes.getFee(order), dp: 8 });
+		price = format({ n: +order.amount / +order.funds, dp: 8 });
+		minReceived = format({ n: +order.amount * +slippage });
 
 		if (lastEdited === 'input') {
 			outputAmount = Number(order?.amount) || undefined;
 		} else if (lastEdited === 'output') {
 			inputAmount = Number(order?.funds) || undefined;
+		}
+	};
+
+	$: if (inputAsset && outputAsset && lastEdited && (inputAmount || outputAmount)) {
+		try {
+			updateSwapInfo();
+		} catch (e) {
+			order = undefined;
 		}
 	} else order = undefined;
 
@@ -121,9 +139,12 @@
 		try {
 			if (!$user.contract) await registerAndSave($user.address);
 			const res = await swapAsset($library, $user, order, inputAsset, minReceived);
+			await updateAssets();
+
 			if (res && res.state === 'Done') showToast('success', 'Successful');
 
-			await updateAssets();
+			inputAmount = undefined;
+			outputAmount = undefined;
 		} finally {
 			loading = false;
 		}
@@ -147,7 +168,7 @@
 				<div class="flex items-center justify-between py-5 px-4 pb-3 text-sm font-semibold">
 					<div>From</div>
 					<div class=" text-xs text-black text-opacity-50">
-						Balance: {format({ n: inputAsset?.balance ?? '0' })}
+						Balance: {format({ n: inputAssetBalance ?? '0' })}
 						{inputAsset?.symbol}
 					</div>
 				</div>
@@ -186,7 +207,7 @@
 				<div class="flex items-center justify-between py-5 px-4 pb-3 text-sm font-semibold">
 					<div>To</div>
 					<div class=" text-xs text-black text-opacity-50">
-						Balance: {format({ n: outputAsset?.balance ?? '0' })}
+						Balance: {format({ n: outputAssetBalance ?? '0' })}
 						{outputAsset?.symbol}
 					</div>
 				</div>
@@ -234,16 +255,30 @@
 					</div>
 					<div>
 						<div>Price Impact</div>
-						<div>{toPercent({ n: order?.priceImpact })}</div>
+						<div
+							transition:fade
+							class={clsx({
+								'text-brand-forbiddenPrice': order?.priceImpact >= 0.1,
+								'text-brand-warningPrice': order?.priceImpact >= 0.01 && order?.priceImpact < 0.1,
+								'text-black text-opacity-50': order?.priceImpact < 0.01
+							})}
+						>
+							{toPercent({ n: order?.priceImpact })}
+						</div>
 					</div>
 				</div>
 			</div>
+			{#if order?.priceImpact > 0.15}
+				<div class="mt-3 self-center text-xs font-semibold opacity-50">
+					Lack of liquidity, please decrease swap amount
+				</div>
+			{/if}
 		{/if}
 
 		<button
 			class="mt-10 mb-6 flex w-28 justify-center self-center rounded-full bg-brand-primary px-6 py-3 text-white"
 			on:click={swap}
-			disabled={!(order && +order.amount)}
+			disabled={!(order && +order.amount) || order?.priceImpact > 0.15}
 		>
 			{#if loading}
 				<Spinner class="stroke-white stroke-2 text-center" />

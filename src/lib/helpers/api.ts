@@ -4,7 +4,7 @@ import type { Asset } from '../types/asset';
 import type { RegisteredUser, User } from '../types/user';
 import ExternalClient from '@mixin.dev/mixin-node-sdk/src/client/external';
 import { utils } from 'ethers';
-import { WHITELIST_ASSET_ID, ETH_ASSET_ID } from '../constants/common';
+import { WHITELIST_ASSET_ID, ETH_ASSET_ID, EOS_ASSET_ID } from '../constants/common';
 import { bigMul } from './big';
 import { fetchMvmTokens } from './mvm/api';
 import { getBalance } from './web3/common';
@@ -21,16 +21,21 @@ export const register = async (address: string): Promise<RegisteredUser> => {
 	return user;
 };
 
-export const fetchWithdrawalFee = async (asset_id: string, destination: string) => {
+export const fetchWithdrawalFee = async (asset_id: string, destination: string, tag: string) => {
 	if (!destination) return undefined;
 
 	const externalClient = ExternalClient();
-	const asset = await externalClient.checkAddress({
-		asset: asset_id,
-		destination
-	});
-
-	return asset.fee;
+	try {
+		const asset = await externalClient.checkAddress({
+			asset: asset_id,
+			destination,
+			tag
+		});
+		return asset.fee;
+	} catch (e) {
+		if (asset_id === EOS_ASSET_ID) return '0.5';
+		return '';
+	}
 };
 
 export const fetchAssets = async (user: User) => {

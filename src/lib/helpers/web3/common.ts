@@ -17,6 +17,7 @@ import { generateExtra, getWithdrawalExtra } from '../sign';
 import { checkOrder, createAction } from '../4swap/api';
 import { fetchCode } from '../api';
 import type { Order } from '../4swap/route';
+import { format } from '../big';
 
 export const mainnetProvider = ethers.getDefaultProvider(1);
 export const mvmProvider = ethers.getDefaultProvider(MVM_RPC_URL);
@@ -49,6 +50,27 @@ export const getERC20Balance = async ({
 	const decimals = await contract.decimals();
 	const balance = await contract.balanceOf(account);
 	return utils.formatUnits(balance, decimals);
+};
+
+export const getTokenBalance = async (
+	assets: Asset[],
+	assetId: string,
+	address: string,
+	network: Network
+) => {
+	if (assetId === ETH_ASSET_ID) return getBalance({ account: address, network });
+
+	const asset = assets.find((a) => a.asset_id === assetId);
+	const contract = network === 'mvm' ? asset?.contract : asset?.asset_key;
+	if (!contract) return undefined;
+
+	const balance = await getERC20Balance({
+		account: address,
+		contractAddress: contract,
+		network
+	});
+
+	return format({ n: balance, dp: 8, fixed: true });
 };
 
 export const switchNetwork = async (provider: ethers.providers.Web3Provider, network: Network) => {

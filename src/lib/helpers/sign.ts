@@ -1,6 +1,6 @@
 import { ethers } from 'ethers';
 import { base64RawURLEncode } from '@mixin.dev/mixin-node-sdk';
-import { REGISTRY_PID, STORAGE_ADDRESS } from '../constants/common';
+import { REGISTRY_PID, STORAGE_ADDRESS, WITHDRAW_BOT_ID } from '../constants/common';
 
 export const generateExtra = (action: string) => {
 	const value = Buffer.from(action).toString('hex');
@@ -15,7 +15,7 @@ const getWithdrawalAction = (
 	units: number
 ): string => {
 	const action = {
-		receivers: [import.meta.env.VITE_WITHDRAWAL_BOT_CLIENT_ID],
+		receivers: [WITHDRAW_BOT_ID],
 		threshold: 1,
 		extra: base64RawURLEncode(`${destination}~~${tag}~~${Number(amount).toFixed(units)}`)
 	};
