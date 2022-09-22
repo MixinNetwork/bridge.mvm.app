@@ -181,7 +181,7 @@ export const checkOrder = async (
 	});
 };
 
-export const generate4SwapInfo = async (user_id: string, trace_id: string, order: Order, minReceived: string) => {
+export const fetch4SwapTxInfo = async (user_id: string, trace_id: string, order: Order, minReceived: string) => {
 	const swapAction = `3,${user_id},${trace_id},${order.fill_asset_id},${order.routes},${minReceived}`;
 
 	const actionResp = await createAction({

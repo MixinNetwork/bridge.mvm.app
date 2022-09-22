@@ -100,7 +100,7 @@ export const fetchMixPayPayment = async (
     })
 }
 
-export const generate4SwapInfo = async (
+export const fetchMixPayTxInfo = async (
   user_id: string,
   trace_id: string,
   order: Order,

@@ -14,7 +14,7 @@ import type { RegisteredUser } from '$lib/types/user';
 import type { Asset } from '$lib/types/asset';
 import { toHex } from '../utils';
 import { getWithdrawalExtra } from '../sign';
-import { checkOrder, generate4SwapInfo } from '../4swap/api';
+import { checkOrder, fetch4SwapTxInfo } from '../4swap/api';
 import type { Order } from '../4swap/route';
 
 export const mainnetProvider = ethers.getDefaultProvider(1);
@@ -157,7 +157,7 @@ export const swapAsset = async (
 	await switchNetwork(provider, 'mvm');
 
 	const trace_id = v4();
-	const { extra, follow_id } = await generate4SwapInfo(user.user_id, trace_id, order, minReceived);
+	const { extra, follow_id } = await fetch4SwapTxInfo(user.user_id, trace_id, order, minReceived);
 
 	const signer = provider.getSigner();
 
