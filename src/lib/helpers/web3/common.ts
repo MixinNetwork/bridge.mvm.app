@@ -52,7 +52,7 @@ export const getERC20Balance = async ({
 	return utils.formatUnits(balance, decimals);
 };
 
-export const getTokenBalance = async (
+export const getAssetBalance = async (
 	assets: Asset[],
 	assetId: string,
 	address: string,
@@ -62,7 +62,7 @@ export const getTokenBalance = async (
 
 	const asset = assets.find((a) => a.asset_id === assetId);
 	const contract = network === 'mvm' ? asset?.contract : asset?.asset_key;
-	if (!contract) return undefined;
+	if (!contract) return '0';
 
 	const balance = await getERC20Balance({
 		account: address,

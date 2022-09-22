@@ -8,7 +8,7 @@
 	import type { Asset } from '$lib/types/asset';
 	import Eth from '$lib/assets/logo/eth.svg?component';
 	import SelectedAssetButton from '$lib/components/base/selected-asset-button.svelte';
-	import { assets, AssetWithdrawalFee, updateAssets, buildBalanceStore } from '$lib/stores/model';
+	import { AssetWithdrawalFee, updateAssets, buildBalanceStore } from '$lib/stores/model';
 	import { user } from '$lib/stores/user';
 	import { EOS_ASSET_ID, ETH_ASSET_ID, TRANSACTION_GAS } from '$lib/constants/common';
 	import { bigGte, format } from '$lib/helpers/big';
@@ -19,11 +19,10 @@
 	import { providerLogo, providerName } from '$lib/stores/provider';
 	import { selectAsset } from './export';
 	import { showToast } from '../common/toast/toast-container.svelte';
-	import { getTokenBalance } from '../../helpers/web3/common';
+	import { tick } from 'svelte';
 
 	export let asset: Asset;
 	export let depositMode: boolean;
-	let fromBalance: string;
 
 	$: assetId = asset.asset_id;
 
@@ -35,11 +34,9 @@
 	$: mvmBalance = buildBalanceStore({ assetId, network: 'mvm' });
 	$: roundedMvmBalance = $mvmBalance
 		? format({ n: $mvmBalance || 0, dp: 8, fixed: true })
-		: undefined;
+		: format({ n: asset.balance, dp: 8, fixed: true });
 
-	$: cacheMvmBalance = roundedMvmBalance || format({ n: asset.balance, dp: 8, fixed: true });
-
-	$: fromBalance = depositMode ? $mainnetBalance : cacheMvmBalance;
+	$: fromBalance = depositMode ? $mainnetBalance : roundedMvmBalance;
 
 	let amount: number | undefined | string;
 
@@ -75,7 +72,9 @@
 			} else {
 				await withdraw($library, asset, $user.contract, value, address, memo, $assetWithdrawalFee);
 				await updateAssets();
-				fromBalance = await getTokenBalance($assets, asset.asset_id, $user.address, 'mvm');
+				await mvmBalance.reload?.();
+				await tick();
+
 				showToast('success', 'Successful');
 
 				amount = '';

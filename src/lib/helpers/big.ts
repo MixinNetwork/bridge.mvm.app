@@ -122,7 +122,7 @@ export function format(opts: {
  * }} opts
  * @return {*}
  */
-export function toPercent(opts: { n: BigNumber.Value; symbol?: boolean; dp?: number }) {
+export function toPercent(opts: { n: BigNumber.Value; symbol?: boolean; dp?: number }): string {
 	const { dp = 2, n, symbol = false } = opts;
 	const bn = new BigNumber(n);
 	const s = symbol ? (bn.gte(0) ? '+' : '') : '';

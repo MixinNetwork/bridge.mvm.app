@@ -7,7 +7,8 @@
 	import Switch from '$lib/assets/switch.svg?component';
 	import { PairRoutes, type Order } from '$lib/helpers/4swap/route';
 	import { setSearchParam } from '$lib/helpers/app-store';
-	import { assets, getAsset, pairs, updateAssets, buildBalanceStore } from '$lib/stores/model';
+	import { assets, pairs, updateAssets } from '$lib/stores/model';
+	import { getAsset } from '$lib/helpers/utils';
 	import type { Asset } from '$lib/types/asset';
 	import Header from '$lib/components/base/header.svelte';
 	import UserInfo from '$lib/components/base/user-info.svelte';
@@ -18,20 +19,17 @@
 	import Faq from '$lib/components/swap/faq.svelte';
 	import { registerAndSave, user } from '$lib/stores/user';
 	import { library } from '$lib/stores/ether';
-	import { ETH_ASSET_ID, XIN_ASSET_ID } from '$lib/constants/common';
 	import type { Pair } from '$lib/helpers/4swap/api';
 	import Spinner from '$lib/components/common/spinner.svelte';
 	import { showToast } from '$lib/components/common/toast/toast-container.svelte';
 	import { focus } from 'focus-svelte';
-	import { tick } from 'svelte';
+	import { ETH_ASSET_ID, XIN_ASSET_ID } from '$lib/constants/common';
 
 	let a: Asset[] | undefined = $page.data.assets;
 	let p: Pair[] | undefined = $page.data.pairs;
 
 	let inputAsset: Asset | undefined = undefined;
 	let outputAsset: Asset | undefined = undefined;
-	let inputAssetBalance: string | undefined = undefined;
-	let outputAssetBalance: string | undefined = undefined;
 	let slippage = DEFAULT_SLIPPAGE;
 
 	$: a && !$assets.length && assets.set(a);
@@ -39,17 +37,12 @@
 
 	$: !inputAsset &&
 		(inputAsset =
-			getAsset($page.url.searchParams.get(INPUT_KEY) || ETH_ASSET_ID) || getAsset(ETH_ASSET_ID));
+			getAsset($page.url.searchParams.get(INPUT_KEY) || ETH_ASSET_ID, $assets) ||
+			getAsset(ETH_ASSET_ID, $assets));
 	$: !outputAsset &&
 		(outputAsset =
-			getAsset($page.url.searchParams.get(OUTPUT_KEY) || XIN_ASSET_ID) || getAsset(XIN_ASSET_ID));
-	$: inputAssetBalance = inputAsset?.balance;
-	$: outputAssetBalance = outputAsset?.balance;
-
-	$: inputBalance = buildBalanceStore({ assetId: inputAsset?.asset_id, network: 'mvm' });
-	$: outputBalance = buildBalanceStore({ assetId: outputAsset?.asset_id, network: 'mvm' });
-	$: if ($inputBalance) inputAssetBalance = $inputBalance;
-	$: if ($outputBalance) outputAssetBalance = $outputBalance;
+			getAsset($page.url.searchParams.get(OUTPUT_KEY) || XIN_ASSET_ID, $assets) ||
+			getAsset(XIN_ASSET_ID, $assets));
 
 	let lastEdited: 'input' | 'output' | undefined = undefined;
 	let inputAmount: number | undefined = undefined;
@@ -96,16 +89,25 @@
 	let price: string | undefined;
 	let minReceived: string | undefined;
 
-	const updateSwapInfo = async () => {
-		order = pairRoutes.getPreOrder({
-			inputAsset: inputAsset?.asset_id,
-			outputAsset: outputAsset?.asset_id,
-			inputAmount: lastEdited === 'input' ? `${inputAmount}` : undefined,
-			outputAmount: lastEdited === 'output' ? `${outputAmount}` : undefined
-		});
+	const updateSwapInfo = async (
+		inputAsset: Asset,
+		outputAsset: Asset,
+		lastEdited: 'input' | 'output',
+		inputValue?: number,
+		outputValue?: number
+	) => {
+		try {
+			order = pairRoutes.getPreOrder({
+				inputAsset: inputAsset.asset_id,
+				outputAsset: outputAsset.asset_id,
+				inputAmount: lastEdited === 'input' ? `${inputValue}` : undefined,
+				outputAmount: lastEdited === 'output' ? `${outputValue}` : undefined
+			});
+		} catch (e) {
+			order = undefined;
+		}
 		if (!order) return;
 
-		await tick();
 		fee = format({ n: pairRoutes.getFee(order), dp: 8 });
 		price = format({ n: +order.amount / +order.funds, dp: 8 });
 		minReceived = format({ n: +order.amount * +slippage });
@@ -118,11 +120,7 @@
 	};
 
 	$: if (inputAsset && outputAsset && lastEdited && (inputAmount || outputAmount)) {
-		try {
-			updateSwapInfo();
-		} catch (e) {
-			order = undefined;
-		}
+		updateSwapInfo(inputAsset, outputAsset, lastEdited, inputAmount, outputAmount);
 	} else order = undefined;
 
 	$: inputAmountFiat = formatFiat(inputAsset?.price_usd, inputAmount);
@@ -139,7 +137,9 @@
 		try {
 			if (!$user.contract) await registerAndSave($user.address);
 			const res = await swapAsset($library, $user, order, inputAsset, minReceived);
+
 			await updateAssets();
+			inputAsset = getAsset(inputAsset.asset_id, $assets);
 
 			if (res && res.state === 'Done') showToast('success', 'Successful');
 
@@ -168,7 +168,7 @@
 				<div class="flex items-center justify-between py-5 px-4 pb-3 text-sm font-semibold">
 					<div>From</div>
 					<div class=" text-xs text-black text-opacity-50">
-						Balance: {format({ n: inputAssetBalance ?? '0' })}
+						Balance: {format({ n: inputAsset?.balance ?? '0' })}
 						{inputAsset?.symbol}
 					</div>
 				</div>
@@ -207,7 +207,7 @@
 				<div class="flex items-center justify-between py-5 px-4 pb-3 text-sm font-semibold">
 					<div>To</div>
 					<div class=" text-xs text-black text-opacity-50">
-						Balance: {format({ n: outputAssetBalance ?? '0' })}
+						Balance: {format({ n: outputAsset?.balance ?? '0' })}
 						{outputAsset?.symbol}
 					</div>
 				</div>
@@ -269,7 +269,7 @@
 				</div>
 			</div>
 			{#if order?.priceImpact > 0.15}
-				<div class="mt-3 self-center text-xs font-semibold opacity-50">
+				<div transition:slide class="mt-3 self-center text-xs font-semibold opacity-50">
 					Lack of liquidity, please decrease swap amount
 				</div>
 			{/if}

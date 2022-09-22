@@ -5,7 +5,7 @@ import { fetchAssets, fetchFeeOnAsset, fetchWithdrawalFee } from '../helpers/api
 import { bigAdd, bigMul } from '../helpers/big';
 import { deepWritable } from '../helpers/store/deep';
 import { mapTemplate } from '../helpers/store/map-template';
-import { getTokenBalance } from '../helpers/web3/common';
+import { getAssetBalance } from '../helpers/web3/common';
 import type { Asset } from '../types/asset';
 import type { Network } from '../types/network';
 import { user } from './user';
@@ -27,12 +27,6 @@ export const updateAssets = async () => {
 	if (!$user) return;
 	const $assets = await fetchAssets($user);
 	assets.set($assets);
-};
-
-export const getAsset = (assetId: string | null) => {
-	if (!assetId) return;
-	const $assets = get(assets);
-	return $assets.find((a) => a.asset_id === assetId);
 };
 
 export const pairs = deepWritable<Pair[]>([], (set) => {
@@ -81,8 +75,7 @@ export const AssetWithdrawalFee = mapTemplate(
 
 export const buildBalanceStore = ({ assetId, network }: { assetId: string; network: Network }) => {
 	return asyncDerived([assets, user], async ([$assets, $user]) => {
-		if (!$user) return undefined;
-
-		return getTokenBalance($assets, assetId, $user.address, network);
+		if (!$user) return '0';
+		return getAssetBalance($assets, assetId, $user.address, network);
 	});
 };
