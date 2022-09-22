@@ -84,13 +84,9 @@
 		tag: memo
 	});
 
-	$: isGteFee =
-		!depositMode && amount && $assetWithdrawalFee && bigGte(amount, $assetWithdrawalFee);
-
 	let loading = false;
 	const transfer = async () => {
 		if (!amount || !$library || !$user || !$assetWithdrawalFee) return;
-		if (!depositMode && !isGteFee) return;
 
 		loading = true;
 
@@ -233,8 +229,7 @@
 	disabled={(!isEthChain && !address) ||
 		!fromBalance ||
 		!amount ||
-		amount < 0.0001 ||
-		(!depositMode && !isGteFee)}
+		amount < 0.0001}
 >
 	{#if loading && !depositMode}
 		<Spinner class="stroke-white stroke-2 text-center" />
