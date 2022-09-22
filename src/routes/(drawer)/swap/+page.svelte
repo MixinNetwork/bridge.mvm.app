@@ -24,7 +24,7 @@
 	import { showToast } from '$lib/components/common/toast/toast-container.svelte';
 	import { focus } from 'focus-svelte';
 	import { tick } from 'svelte';
-	import {ETH_ASSET_ID, XIN_ASSET_ID} from "../../../lib/constants/common";
+	import { ETH_ASSET_ID, XIN_ASSET_ID } from '$lib/constants/common';
 
 	let a: Asset[] | undefined = $page.data.assets;
 	let p: Pair[] | undefined = $page.data.pairs;
@@ -36,8 +36,10 @@
 	$: a && !$assets.length && assets.set(a);
 	$: p && !$pairs.length && pairs.set(p);
 
-	$: !inputAsset && (inputAsset = getAsset($page.url.searchParams.get(INPUT_KEY) || ETH_ASSET_ID, $assets));
-	$: !outputAsset && (outputAsset = getAsset($page.url.searchParams.get(OUTPUT_KEY) || XIN_ASSET_ID, $assets));
+	$: !inputAsset &&
+		(inputAsset = getAsset($page.url.searchParams.get(INPUT_KEY) || ETH_ASSET_ID, $assets));
+	$: !outputAsset &&
+		(outputAsset = getAsset($page.url.searchParams.get(OUTPUT_KEY) || XIN_ASSET_ID, $assets));
 
 	let lastEdited: 'input' | 'output' | undefined = undefined;
 	let inputAmount: number | undefined = undefined;
