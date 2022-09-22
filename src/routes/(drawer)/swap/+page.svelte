@@ -23,7 +23,6 @@
 	import Spinner from '$lib/components/common/spinner.svelte';
 	import { showToast } from '$lib/components/common/toast/toast-container.svelte';
 	import { focus } from 'focus-svelte';
-	import { tick } from 'svelte';
 	import { ETH_ASSET_ID, XIN_ASSET_ID } from '$lib/constants/common';
 
 	let a: Asset[] | undefined = $page.data.assets;
@@ -109,7 +108,6 @@
 		}
 		if (!order) return;
 
-		await tick();
 		fee = format({ n: pairRoutes.getFee(order), dp: 8 });
 		price = format({ n: +order.amount / +order.funds, dp: 8 });
 		minReceived = format({ n: +order.amount * +slippage });
@@ -271,7 +269,7 @@
 				</div>
 			</div>
 			{#if order?.priceImpact > 0.15}
-				<div class="mt-3 self-center text-xs font-semibold opacity-50">
+				<div transition:slide class="mt-3 self-center text-xs font-semibold opacity-50">
 					Lack of liquidity, please decrease swap amount
 				</div>
 			{/if}
