@@ -2,14 +2,13 @@ import type { ExchangeRateResponse } from '@mixin.dev/mixin-node-sdk';
 import { asyncDerived, asyncReadable, derived, get } from '@square/svelte-store';
 import { fetchPairs, type Pair } from '../helpers/4swap/api';
 import { fetchAssets, fetchFeeOnAsset, fetchWithdrawalFee } from '../helpers/api';
-import { bigAdd, bigMul, format } from '../helpers/big';
+import { bigAdd, bigMul } from '../helpers/big';
 import { deepWritable } from '../helpers/store/deep';
 import { mapTemplate } from '../helpers/store/map-template';
-import { getBalance, getERC20Balance } from '../helpers/web3/common';
+import { getTokenBalance } from '../helpers/web3/common';
 import type { Asset } from '../types/asset';
 import type { Network } from '../types/network';
 import { user } from './user';
-import { ETH_ASSET_ID } from '../constants/common';
 
 export const assets = deepWritable<Asset[]>([], (set) => {
 	const timer = setInterval(async () => {
@@ -84,22 +83,6 @@ export const buildBalanceStore = ({ assetId, network }: { assetId: string; netwo
 	return asyncDerived([assets, user], async ([$assets, $user]) => {
 		if (!$user) return undefined;
 
-		if (assetId === ETH_ASSET_ID)
-			return getBalance({
-				account: $user.address,
-				network
-			});
-
-		const asset = $assets.find((a) => a.asset_id === assetId);
-		const contract = network === 'mvm' ? asset?.contract : asset?.asset_key;
-		if (!contract) return undefined;
-
-		const balance = await getERC20Balance({
-			account: $user.address,
-			contractAddress: contract,
-			network
-		});
-
-		return format({ n: balance, dp: 8, fixed: true });
+		return getTokenBalance(assetId, $user.address, network);
 	});
 };

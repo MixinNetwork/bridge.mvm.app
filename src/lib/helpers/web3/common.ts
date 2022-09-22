@@ -1,5 +1,6 @@
 import { ethers, utils, type BigNumberish } from 'ethers';
 import { v4 } from 'uuid';
+import { get } from "@square/svelte-store";
 import { BRIDGE_ABI, ERC20_ABI, MVM_ERC20_ABI } from '../../constants/abis';
 import {
 	BRIDGE_ADDRESS,
@@ -17,6 +18,9 @@ import { generateExtra, getWithdrawalExtra } from '../sign';
 import { checkOrder, createAction } from '../4swap/api';
 import { fetchCode } from '../api';
 import type { Order } from '../4swap/route';
+import { format } from "../big";
+import { assets } from '$lib/stores/model';
+
 
 export const mainnetProvider = ethers.getDefaultProvider(1);
 export const mvmProvider = ethers.getDefaultProvider(MVM_RPC_URL);
@@ -50,6 +54,22 @@ export const getERC20Balance = async ({
 	const balance = await contract.balanceOf(account);
 	return utils.formatUnits(balance, decimals);
 };
+
+export const getTokenBalance = async (assetId: string, address: string, network: Network) => {
+	if (assetId === ETH_ASSET_ID) return getBalance({ account: address, network });
+
+	const asset = get(assets).find((a) => a.asset_id === assetId);
+	const contract = network === 'mvm' ? asset?.contract : asset?.asset_key;
+	if (!contract) return undefined;
+
+	const balance = await getERC20Balance({
+		account: address,
+		contractAddress: contract,
+		network
+	});
+
+	return format({ n: balance, dp: 8, fixed: true });
+}
 
 export const switchNetwork = async (provider: ethers.providers.Web3Provider, network: Network) => {
 	const request = provider.provider.request;
