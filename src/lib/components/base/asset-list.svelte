@@ -53,7 +53,7 @@
 		{/each}
 
 		{#if !filtedAssets.length}
-			<Empty />
+			<Empty class="h-full w-full items-center justify-center" />
 		{/if}
 	</div>
 </LayoutBottomSheet>

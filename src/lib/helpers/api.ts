@@ -110,7 +110,7 @@ export const fetchAssets = async (user: User) => {
 
 	assets = sortBy(
 		assets,
-		({ balance, price_usd }) => bigMul(balance, price_usd),
+		({ balance, price_usd }) => +bigMul(balance, price_usd),
 		'balance',
 		({ change_usd }) => -Math.abs(+change_usd)
 	).reverse();

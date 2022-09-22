@@ -26,7 +26,7 @@
 			use:focus={{ enabled: true }}
 			id="search"
 			type="search"
-			class="w-full bg-transparent placeholder-black placeholder-opacity-20"
+			class="w-full text-ellipsis bg-transparent placeholder-black placeholder-opacity-20"
 			placeholder="Name, Symbol or Address"
 			autocomplete="off"
 			bind:value={keyword}

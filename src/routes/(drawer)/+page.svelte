@@ -33,8 +33,6 @@
 	import { fade } from 'svelte/transition';
 	import Empty from '$lib/components/base/empty.svelte';
 
-	const closeModal = () => resetStore();
-
 	let a: Asset[] | undefined = $page.data.assets;
 
 	$: a && !$assets.length && assets.set(a);
@@ -67,7 +65,7 @@
 </Header>
 
 <div
-	class="flex flex-col items-center justify-center pt-4 md:items-start md:px-5 md:pt-10 lg:mt-10 lg:h-auto lg:flex-row lg:items-center lg:justify-between xl:px-16"
+	class="flex flex-col items-center justify-center pt-4 md:items-start md:px-5 md:pt-10 lg:h-auto lg:flex-row lg:items-center lg:justify-between xl:px-16"
 >
 	<Balance />
 	<div class="mt-6 w-full px-11 md:w-80 md:p-0">
@@ -89,11 +87,11 @@
 			)}
 		>
 			<button on:click={() => $ethAsset && switchDepositMode($ethAsset, undefined)}>
-				<svelte:component this={Send} />
+				<Send />
 				<span>Deposit</span>
 			</button>
 			<button on:click={() => $ethAsset && switchWithdrawMode($ethAsset)}>
-				<svelte:component this={Receive} />
+				<Receive />
 				<span>Withdraw</span>
 			</button>
 		</div>
@@ -120,7 +118,7 @@
 					class="flex items-center justify-center space-x-3"
 					on:click={toggleSearchMode}
 					transition:fade|local
-					><div class="text-black opacity-20">Search</div>
+					><div class="font-semibold text-black opacity-20">Search</div>
 					<Search />
 				</button>
 			{/if}
@@ -139,13 +137,13 @@
 <Modal
 	modal-opened={!!$selectedAsset && $mode === 'deposit'}
 	this={DepositModal}
-	modal-on-close={closeModal}
+	modal-on-close={resetStore}
 />
 
 <Modal
 	modal-opened={!!$selectedAsset && $mode === 'withdraw'}
 	this={WithdrawModal}
-	modal-on-close={closeModal}
+	modal-on-close={resetStore}
 />
 
 <Modal

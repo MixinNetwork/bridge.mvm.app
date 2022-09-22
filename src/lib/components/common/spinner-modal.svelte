@@ -6,9 +6,10 @@
 
 <div
 	transition:tailwind|local={{
+		from: 'opacity-0',
 		to: '!opacity-70'
 	}}
-	class="rounded-xl bg-black p-7 opacity-0"
+	class="rounded-xl bg-black p-7"
 >
 	<Spinner class="stroke-white" />
 </div>

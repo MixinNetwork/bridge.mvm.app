@@ -1,11 +1,12 @@
 import type { TransitionConfig } from 'svelte/types/runtime/transition';
 import { linear } from 'svelte/easing';
+import { tick } from 'svelte';
 
 export interface ClassesParams {
 	delay?: number;
 	duration?: 75 | 100 | 150 | 200 | 300 | 500 | 700 | 1000;
-	from?: string;
-	to?: string;
+	from: string;
+	to: string;
 }
 
 const convertDurationClass = (duration: ClassesParams['duration']) => {
@@ -35,34 +36,57 @@ const convertClasses = (clazz: string) => clazz.split(' ').filter(Boolean);
 
 export function tailwind(
 	node: Element,
-	{ delay = 0, duration = 150, from = '', to = '' }: ClassesParams = {}
+	{ delay = 0, duration = 150, from, to }: ClassesParams
 ): TransitionConfig {
 	const durationClass = convertDurationClass(duration);
 
 	const fromClasses = convertClasses(from);
 	const toClasses = convertClasses(to);
 
-	fromClasses.length && node.classList.add(...fromClasses);
-	node.classList.add(durationClass);
+	let lastT: number | undefined = undefined;
+	let lastIsForward: boolean | undefined = undefined;
+	let isForward: boolean | undefined = undefined;
 
-	let lastT = 0;
-	let isForward = true;
+	const play = (callback: () => void) => {
+		if (node.classList.contains(durationClass)) {
+			callback();
+			return;
+		}
+		tick().then(() => {
+			node.classList.add(durationClass);
+			callback();
+		});
+	};
 
 	return {
 		delay,
 		duration,
 		easing: linear,
 		tick: (t) => {
-			if (t > lastT && !isForward) {
-				fromClasses.length && node.classList.remove(...fromClasses);
-				toClasses.length && node.classList.add(...toClasses);
-			} else if (t < lastT && isForward) {
-				toClasses.length && node.classList.remove(...toClasses);
-				fromClasses.length && node.classList.add(...fromClasses);
+			if (lastT === undefined) {
+				isForward = t === 0;
+			} else {
+				isForward = t > lastT;
 			}
 
-			isForward = t > lastT;
+			if (lastIsForward != isForward) {
+				if (isForward === true) {
+					fromClasses.length && node.classList.add(...fromClasses);
+					play(() => {
+						fromClasses.length && node.classList.remove(...fromClasses);
+						toClasses.length && node.classList.add(...toClasses);
+					});
+				} else if (isForward === false) {
+					toClasses.length && node.classList.add(...toClasses);
+					play(() => {
+						toClasses.length && node.classList.remove(...toClasses);
+						fromClasses.length && node.classList.add(...fromClasses);
+					});
+				}
+			}
+
 			lastT = t;
+			lastIsForward = isForward;
 		}
 	};
 }

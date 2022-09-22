@@ -22,7 +22,7 @@
 <svelte:window bind:innerWidth />
 
 <div
-	on:click|self={() => {
+	on:click={() => {
 		if (isLg) return switchDepositMode(asset, undefined);
 		isOpen = true;
 	}}
@@ -37,11 +37,11 @@
 		/>
 		<div>
 			<div class=" font-bold">{asset.name}</div>
-			<div class=" text-sm font-semibold opacity-30">{asset.symbol}</div>
+			<div class=" text-sm font-semibold opacity-20">{asset.symbol}</div>
 		</div>
 		<div class="flex grow flex-col items-end">
 			<div class="font-bold">{format({ n: asset.balance, dp: 8 })}</div>
-			<div class=" text-sm font-semibold opacity-30">
+			<div class=" text-sm font-semibold opacity-20">
 				${format({ n: bigMul(asset.balance, asset.price_usd), dp: 2, fixed: true })}
 			</div>
 		</div>
@@ -50,8 +50,8 @@
 	<div
 		class="hidden flex-1 justify-end space-x-4 font-semibold child:flex child:h-10 child:w-[102px] child:items-center child:justify-center child:rounded-full child:bg-white lg:flex"
 	>
-		<button on:click|self={() => switchDepositMode(asset, undefined)}>Deposit</button>
-		<button on:click|self={() => switchWithdrawMode(asset)}>Withdraw</button>
+		<button on:click|stopPropagation={() => switchDepositMode(asset, undefined)}>Deposit</button>
+		<button on:click|stopPropagation={() => switchWithdrawMode(asset)}>Withdraw</button>
 		<!-- <button>Swap</button> -->
 	</div>
 </div>
