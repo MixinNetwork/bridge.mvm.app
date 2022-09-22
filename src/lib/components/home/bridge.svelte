@@ -19,7 +19,7 @@
 	import { providerLogo, providerName } from '$lib/stores/provider';
 	import { selectAsset } from './export';
 	import { showToast } from '../common/toast/toast-container.svelte';
-	import { tick } from "svelte";
+	import { tick } from 'svelte';
 
 	export let asset: Asset;
 	export let depositMode: boolean;
@@ -73,7 +73,7 @@
 				await withdraw($library, asset, $user.contract, value, address, memo, $assetWithdrawalFee);
 				await updateAssets();
 				await mvmBalance.reload?.();
-				await tick()
+				await tick();
 
 				showToast('success', 'Successful');
 

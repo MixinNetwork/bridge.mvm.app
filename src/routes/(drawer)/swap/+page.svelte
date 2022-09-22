@@ -37,9 +37,13 @@
 	$: p && !$pairs.length && pairs.set(p);
 
 	$: !inputAsset &&
-		(inputAsset = getAsset($page.url.searchParams.get(INPUT_KEY) || ETH_ASSET_ID, $assets) || getAsset(ETH_ASSET_ID, $assets));
+		(inputAsset =
+			getAsset($page.url.searchParams.get(INPUT_KEY) || ETH_ASSET_ID, $assets) ||
+			getAsset(ETH_ASSET_ID, $assets));
 	$: !outputAsset &&
-		(outputAsset = getAsset($page.url.searchParams.get(OUTPUT_KEY) || XIN_ASSET_ID, $assets) || getAsset(XIN_ASSET_ID, $assets));
+		(outputAsset =
+			getAsset($page.url.searchParams.get(OUTPUT_KEY) || XIN_ASSET_ID, $assets) ||
+			getAsset(XIN_ASSET_ID, $assets));
 
 	let lastEdited: 'input' | 'output' | undefined = undefined;
 	let inputAmount: number | undefined = undefined;
@@ -87,11 +91,11 @@
 	let minReceived: string | undefined;
 
 	const updateSwapInfo = async (
-			inputAsset: Asset,
-			outputAsset: Asset,
-			lastEdited: 'input' | 'output',
-			inputValue?: number,
-			outputValue?: number
+		inputAsset: Asset,
+		outputAsset: Asset,
+		lastEdited: 'input' | 'output',
+		inputValue?: number,
+		outputValue?: number
 	) => {
 		try {
 			order = pairRoutes.getPreOrder({
