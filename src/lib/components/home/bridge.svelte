@@ -69,8 +69,10 @@
 			const value = amount.toString();
 			if (depositMode) {
 				await deposit($library, asset, value);
+				await updateAssets();
 			} else {
 				await withdraw($library, asset, $user.contract, value, address, memo, $assetWithdrawalFee);
+				await updateAssets();
 				showToast('success', 'Successful');
 
 				amount = '';
@@ -78,7 +80,6 @@
 				memo = '';
 			}
 		} finally {
-			await updateAssets();
 			loading = false;
 		}
 	};
