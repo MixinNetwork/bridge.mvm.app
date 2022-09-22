@@ -9,7 +9,7 @@
 	import Eth from '$lib/assets/logo/eth.svg?component';
 	import SelectedAssetButton from '$lib/components/base/selected-asset-button.svelte';
 	import { asyncDerived } from '@square/svelte-store';
-	import { assets, AssetWithdrawalFee } from '$lib/stores/model';
+	import { assets, AssetWithdrawalFee, updateAssets } from '$lib/stores/model';
 	import { user } from '$lib/stores/user';
 	import { EOS_ASSET_ID, ETH_ASSET_ID, TRANSACTION_GAS } from '$lib/constants/common';
 	import { getBalance, getERC20Balance } from '$lib/helpers/web3/common';
@@ -109,6 +109,7 @@
 				memo = '';
 			}
 		} finally {
+			await updateAssets();
 			loading = false;
 		}
 	};
