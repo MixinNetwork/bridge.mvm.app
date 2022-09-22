@@ -31,13 +31,13 @@
 	$: isEthChain = asset.chain_id === ETH_ASSET_ID;
 	$: isEosChain = asset.chain_id === EOS_ASSET_ID;
 
-	$: mainnetBalance = buildBalanceStore({ assetId, network: 'mainnet' }) || '...';
+	$: mainnetBalance = buildBalanceStore({ assetId, network: 'mainnet' });
 	$: mvmBalance = buildBalanceStore({ assetId, network: 'mvm' });
 	$: roundedMvmBalance = $mvmBalance
 		? format({ n: $mvmBalance || 0, dp: 8, fixed: true })
 		: format({ n: asset.balance, dp: 8, fixed: true });
 
-	$: fromBalance = depositMode ? $mainnetBalance! : roundedMvmBalance;
+	$: fromBalance = depositMode ? $mainnetBalance : roundedMvmBalance;
 
 	let amount: number | undefined | string;
 

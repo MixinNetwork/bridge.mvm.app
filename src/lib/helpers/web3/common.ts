@@ -62,7 +62,7 @@ export const getAssetBalance = async (
 
 	const asset = assets.find((a) => a.asset_id === assetId);
 	const contract = network === 'mvm' ? asset?.contract : asset?.asset_key;
-	if (!contract) return undefined;
+	if (!contract) return '0';
 
 	const balance = await getERC20Balance({
 		account: address,

@@ -97,10 +97,12 @@
 	let minReceived: string | undefined;
 
 	const updateSwapInfo = async () => {
+		if (!inputAsset || !outputAsset) return undefined;
+
 		try {
 			order = pairRoutes.getPreOrder({
-				inputAsset: inputAsset!.asset_id,
-				outputAsset: outputAsset!.asset_id,
+				inputAsset: inputAsset.asset_id,
+				outputAsset: outputAsset.asset_id,
 				inputAmount: lastEdited === 'input' ? `${inputAmount}` : undefined,
 				outputAmount: lastEdited === 'output' ? `${outputAmount}` : undefined
 			});
