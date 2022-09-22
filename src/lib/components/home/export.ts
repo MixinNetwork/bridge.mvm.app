@@ -5,7 +5,7 @@ import { get } from '@square/svelte-store';
 import { ETH_ASSET_ID } from '../../constants/common';
 import { setSearchParam } from '../../helpers/app-store';
 import { deepWritable } from '../../helpers/store/deep';
-import { getAsset } from '../../stores/model';
+import { assets, getAsset } from '../../stores/model';
 import type { Asset } from '../../types/asset';
 
 const MODE_KEY = 'mode';
@@ -21,8 +21,9 @@ export const depositMode = deepWritable<DepositMode | undefined>(undefined);
 
 export const initStore = () => {
 	const $page = get(page);
+	const $assets = get(assets);
 
-	selectedAsset.set(getAsset($page.url.searchParams.get(ASSET_KEY)));
+	selectedAsset.set(getAsset($page.url.searchParams.get(ASSET_KEY), $assets));
 
 	const modeString = $page.url.searchParams.get(MODE_KEY);
 	mode.set(
