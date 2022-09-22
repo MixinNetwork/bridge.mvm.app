@@ -38,13 +38,15 @@
 	$: p && !$pairs.length && pairs.set(p);
 
 	$: !inputAssetId &&
-	(inputAssetId = (
-			getAsset($page.url.searchParams.get(INPUT_KEY) || ETH_ASSET_ID, $assets) || getAsset(ETH_ASSET_ID, $assets)
-	)?.asset_id);
+		(inputAssetId = (
+			getAsset($page.url.searchParams.get(INPUT_KEY) || ETH_ASSET_ID, $assets) ||
+			getAsset(ETH_ASSET_ID, $assets)
+		)?.asset_id);
 	$: !outputAssetId &&
-	(outputAssetId = (
-			getAsset($page.url.searchParams.get(OUTPUT_KEY) || XIN_ASSET_ID, $assets) || getAsset(XIN_ASSET_ID, $assets)
-	)?.asset_id);
+		(outputAssetId = (
+			getAsset($page.url.searchParams.get(OUTPUT_KEY) || XIN_ASSET_ID, $assets) ||
+			getAsset(XIN_ASSET_ID, $assets)
+		)?.asset_id);
 
 	$: !inputAsset && inputAssetId && (inputAsset = getAsset(inputAssetId, $assets));
 	$: !outputAsset && outputAssetId && (outputAsset = getAsset(outputAssetId, $assets));
