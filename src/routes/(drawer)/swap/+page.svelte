@@ -30,26 +30,24 @@
 
 	let inputAsset: Asset | undefined = undefined;
 	let outputAsset: Asset | undefined = undefined;
-	let inputAssetBalance: string | undefined = undefined;
-	let outputAssetBalance: string | undefined = undefined;
+	let inputAssetId: string | undefined = undefined;
+	let outputAssetId: string | undefined = undefined;
 	let slippage = DEFAULT_SLIPPAGE;
 
 	$: a && !$assets.length && assets.set(a);
 	$: p && !$pairs.length && pairs.set(p);
 
-	$: !inputAsset &&
-		(inputAsset =
-			getAsset($page.url.searchParams.get(INPUT_KEY) || ETH_ASSET_ID) || getAsset(ETH_ASSET_ID));
-	$: !outputAsset &&
-		(outputAsset =
-			getAsset($page.url.searchParams.get(OUTPUT_KEY) || XIN_ASSET_ID) || getAsset(XIN_ASSET_ID));
-	$: inputAssetBalance = inputAsset?.balance;
-	$: outputAssetBalance = outputAsset?.balance;
+	$: !inputAssetId &&
+	(inputAssetId = (
+			getAsset($page.url.searchParams.get(INPUT_KEY) || ETH_ASSET_ID, $assets) || getAsset(ETH_ASSET_ID, $assets)
+	)?.asset_id);
+	$: !outputAssetId &&
+	(outputAssetId = (
+			getAsset($page.url.searchParams.get(OUTPUT_KEY) || XIN_ASSET_ID, $assets) || getAsset(XIN_ASSET_ID, $assets)
+	)?.asset_id);
 
-	$: inputBalance = buildBalanceStore({ assetId: inputAsset?.asset_id, network: 'mvm' });
-	$: outputBalance = buildBalanceStore({ assetId: outputAsset?.asset_id, network: 'mvm' });
-	$: if ($inputBalance) inputAssetBalance = $inputBalance;
-	$: if ($outputBalance) outputAssetBalance = $outputBalance;
+	$: !inputAsset && inputAssetId && (inputAsset = getAsset(inputAssetId, $assets));
+	$: !outputAsset && outputAssetId && (outputAsset = getAsset(outputAssetId, $assets));
 
 	let lastEdited: 'input' | 'output' | undefined = undefined;
 	let inputAmount: number | undefined = undefined;
@@ -97,12 +95,16 @@
 	let minReceived: string | undefined;
 
 	const updateSwapInfo = async () => {
-		order = pairRoutes.getPreOrder({
-			inputAsset: inputAsset?.asset_id,
-			outputAsset: outputAsset?.asset_id,
-			inputAmount: lastEdited === 'input' ? `${inputAmount}` : undefined,
-			outputAmount: lastEdited === 'output' ? `${outputAmount}` : undefined
-		});
+		try {
+			order = pairRoutes.getPreOrder({
+				inputAsset: inputAsset?.asset_id,
+				outputAsset: outputAsset?.asset_id,
+				inputAmount: lastEdited === 'input' ? `${inputAmount}` : undefined,
+				outputAmount: lastEdited === 'output' ? `${outputAmount}` : undefined
+			});
+		} catch (e) {
+			order = undefined;
+		}
 		if (!order) return;
 
 		await tick();
@@ -118,11 +120,7 @@
 	};
 
 	$: if (inputAsset && outputAsset && lastEdited && (inputAmount || outputAmount)) {
-		try {
-			updateSwapInfo();
-		} catch (e) {
-			order = undefined;
-		}
+		updateSwapInfo();
 	} else order = undefined;
 
 	$: inputAmountFiat = formatFiat(inputAsset?.price_usd, inputAmount);
@@ -139,7 +137,10 @@
 		try {
 			if (!$user.contract) await registerAndSave($user.address);
 			const res = await swapAsset($library, $user, order, inputAsset, minReceived);
+
 			await updateAssets();
+			inputAsset = undefined;
+			outputAsset = undefined;
 
 			if (res && res.state === 'Done') showToast('success', 'Successful');
 
@@ -168,7 +169,7 @@
 				<div class="flex items-center justify-between py-5 px-4 pb-3 text-sm font-semibold">
 					<div>From</div>
 					<div class=" text-xs text-black text-opacity-50">
-						Balance: {format({ n: inputAssetBalance ?? '0' })}
+						Balance: {format({ n: inputAsset?.balance ?? '0' })}
 						{inputAsset?.symbol}
 					</div>
 				</div>
@@ -207,7 +208,7 @@
 				<div class="flex items-center justify-between py-5 px-4 pb-3 text-sm font-semibold">
 					<div>To</div>
 					<div class=" text-xs text-black text-opacity-50">
-						Balance: {format({ n: outputAssetBalance ?? '0' })}
+						Balance: {format({ n: outputAsset?.balance ?? '0' })}
 						{outputAsset?.symbol}
 					</div>
 				</div>

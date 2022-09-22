@@ -29,10 +29,9 @@ export const updateAssets = async () => {
 	assets.set($assets);
 };
 
-export const getAsset = (assetId: string | null) => {
+export const getAsset = (assetId: string | null, assets: Asset[]) => {
 	if (!assetId) return;
-	const $assets = get(assets);
-	return $assets.find((a) => a.asset_id === assetId);
+	return assets.find((a) => a.asset_id === assetId);
 };
 
 export const pairs = deepWritable<Pair[]>([], (set) => {
