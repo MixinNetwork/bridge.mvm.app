@@ -176,15 +176,15 @@ export const fetchSwapPreOrderInfo = async (site: string, pairRoutes: PairRoutes
 					pay_asset_id: inputAsset,
 					priceImpact: 0,
 					routeAssets: [''],
-					routeIds: [''],
+					routeIds: [0],
 					route_assets: [''],
 					routes: ''
 				};
 				return {
 					order,
 					fee: '0',
-					price: response.data.price,
-					minReceived: order.amount
+					price: format({ n: order.amount / order.funds, dp: 8 }),
+					minReceived: format({ n: order.amount})
 				};
 			}
 
@@ -195,6 +195,7 @@ export const fetchSwapPreOrderInfo = async (site: string, pairRoutes: PairRoutes
 			const order = pairRoutes.getPreOrder({
 				inputAsset, outputAsset, inputAmount, outputAmount
 			});
+
 			return {
 				order,
 				fee: format({ n: pairRoutes.getFee(order), dp: 8 }),
