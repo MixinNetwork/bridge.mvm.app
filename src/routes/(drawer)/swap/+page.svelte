@@ -141,7 +141,7 @@
 			const res = await swapAsset($library, $user, order, inputAsset, minReceived);
 
 			await updateAssets();
-			inputAsset = getAsset($page.url.searchParams.get(INPUT_KEY) || ETH_ASSET_ID, $assets);
+			inputAsset = getAsset(inputAsset.asset_id, $assets);
 
 			if (res && res.state === 'Done') showToast('success', 'Successful');
 
