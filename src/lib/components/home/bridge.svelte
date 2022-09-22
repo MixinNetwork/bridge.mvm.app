@@ -19,7 +19,7 @@
 	import { providerLogo, providerName } from '$lib/stores/provider';
 	import { selectAsset } from './export';
 	import { showToast } from '../common/toast/toast-container.svelte';
-	import { getTokenBalance } from "../../helpers/web3/common";
+	import { getTokenBalance } from '../../helpers/web3/common';
 
 	export let asset: Asset;
 	export let depositMode: boolean;
