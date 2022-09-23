@@ -1,6 +1,8 @@
 import { toHex } from '../helpers/utils';
 import type { NetworkParam } from '../types/network';
 
+export const WITHDRAW_BOT_ID = '131a0774-59a1-4e3d-9af2-e1b43aa37936';
+
 export const LAST_URL = 'last-url';
 export const USER_KEY = 'USER';
 export const PROVIDER_KEY = 'PROVIDER';

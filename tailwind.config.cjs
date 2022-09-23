@@ -17,7 +17,9 @@ module.exports = {
 					bgFrom: '#DDDEF5',
 					bgTo: '#F6F7FA',
 					background: '#EFF0F9',
-					overlayBg: '#13132D80'
+					overlayBg: '#13132D80',
+					warningPrice: '#F29D4E',
+					forbiddenPrice: '#F24E4E'
 				}
 			}
 		}

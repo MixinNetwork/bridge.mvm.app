@@ -16,3 +16,8 @@ export const searchAssets = (keyword: string, assets: Asset[]) => {
 		);
 	});
 };
+
+export const getAsset = (assetId: string | null, assets: Asset[]) => {
+	if (!assetId) return;
+	return assets.find((a) => a.asset_id === assetId);
+};

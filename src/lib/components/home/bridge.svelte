@@ -8,44 +8,18 @@
 	import type { Asset } from '$lib/types/asset';
 	import Eth from '$lib/assets/logo/eth.svg?component';
 	import SelectedAssetButton from '$lib/components/base/selected-asset-button.svelte';
-	import { asyncDerived } from '@square/svelte-store';
-	import { assets, AssetWithdrawalFee } from '$lib/stores/model';
+	import { AssetWithdrawalFee, updateAssets, buildBalanceStore } from '$lib/stores/model';
 	import { user } from '$lib/stores/user';
 	import { EOS_ASSET_ID, ETH_ASSET_ID, TRANSACTION_GAS } from '$lib/constants/common';
-	import { getBalance, getERC20Balance } from '$lib/helpers/web3/common';
-	import type { Network } from '$lib/types/network';
 	import { bigGte, format } from '$lib/helpers/big';
 	import LogoCircle from '$lib/assets/logo/logo-circle.svg?component';
-	import Modal from '$lib/components/common/modal/modal.svelte';
-	import SpinnerModal from '$lib/components/common/spinner-modal.svelte';
+	import Spinner from '$lib/components/common/spinner.svelte';
 	import { library } from '$lib/stores/ether';
 	import Paste from '$lib/assets/paste.svg?component';
 	import { providerLogo, providerName } from '$lib/stores/provider';
 	import { selectAsset } from './export';
-
-	const buildBalanceStore = ({ assetId, network }: { assetId: string; network: Network }) => {
-		return asyncDerived([assets, user], async ([$assets, $user]) => {
-			if (!$user) return undefined;
-
-			if (assetId === ETH_ASSET_ID)
-				return getBalance({
-					account: $user.address,
-					network
-				});
-
-			const asset = $assets.find((a) => a.asset_id === assetId);
-			const contract = network === 'mvm' ? asset?.contract : asset?.asset_key;
-			if (!contract) return undefined;
-
-			const balance = await getERC20Balance({
-				account: $user.address,
-				contractAddress: contract,
-				network
-			});
-
-			return format({ n: balance, dp: 8, fixed: true });
-		});
-	};
+	import { showToast } from '../common/toast/toast-container.svelte';
+	import { tick } from 'svelte';
 
 	export let asset: Asset;
 	export let depositMode: boolean;
@@ -60,11 +34,9 @@
 	$: mvmBalance = buildBalanceStore({ assetId, network: 'mvm' });
 	$: roundedMvmBalance = $mvmBalance
 		? format({ n: $mvmBalance || 0, dp: 8, fixed: true })
-		: undefined;
+		: format({ n: asset.balance, dp: 8, fixed: true });
 
-	$: cacheMvmBalance = roundedMvmBalance || format({ n: asset.balance, dp: 8, fixed: true });
-
-	$: fromBalance = depositMode ? $mainnetBalance : cacheMvmBalance;
+	$: fromBalance = depositMode ? $mainnetBalance : roundedMvmBalance;
 
 	let amount: number | undefined | string;
 
@@ -80,16 +52,13 @@
 	$: assetWithdrawalFee = AssetWithdrawalFee({
 		asset_id: asset.asset_id,
 		chain_id: asset.chain_id,
-		destination: address || (isEthChain && $user.address) || undefined
+		destination: address || (isEthChain && $user.address) || undefined,
+		tag: memo
 	});
-
-	$: isGteFee =
-		!depositMode && amount && $assetWithdrawalFee && bigGte(amount, $assetWithdrawalFee);
 
 	let loading = false;
 	const transfer = async () => {
 		if (!amount || !$library || !$user || !$assetWithdrawalFee) return;
-		if (!depositMode && !isGteFee) return;
 
 		loading = true;
 
@@ -99,8 +68,18 @@
 			const value = amount.toString();
 			if (depositMode) {
 				await deposit($library, asset, value);
+				await updateAssets();
 			} else {
 				await withdraw($library, asset, $user.contract, value, address, memo, $assetWithdrawalFee);
+				await updateAssets();
+				await mvmBalance.reload?.();
+				await tick();
+
+				showToast('success', 'Successful');
+
+				amount = '';
+				address = '';
+				memo = '';
 			}
 		} finally {
 			loading = false;
@@ -221,18 +200,13 @@
 {/if}
 
 <button
-	class="mt-10 self-center rounded-full bg-brand-primary px-6 py-4 text-white"
+	class="mt-10 flex w-28 justify-center self-center rounded-full bg-brand-primary px-6 py-4 text-white"
 	on:click={transfer}
-	disabled={(!isEthChain && !address) ||
-		!fromBalance ||
-		!amount ||
-		amount < 0.0001 ||
-		(!depositMode && !isGteFee)}>{depositMode ? 'Deposit' : 'Withdraw'}</button
+	disabled={(!isEthChain && !address) || !fromBalance || !amount || amount < 0.0001}
 >
-
-<Modal
-	modal-opened={loading}
-	this={SpinnerModal}
-	modal-mask-closeable={false}
-	modal-keyboard-closeable={false}
-/>
+	{#if loading && !depositMode}
+		<Spinner class="stroke-white stroke-2 text-center" />
+	{:else}
+		{depositMode ? 'Deposit' : 'Withdraw'}
+	{/if}
+</button>

@@ -4,14 +4,14 @@ import type { Asset } from '../types/asset';
 import type { RegisteredUser, User } from '../types/user';
 import ExternalClient from '@mixin.dev/mixin-node-sdk/src/client/external';
 import { utils } from 'ethers';
-import { WHITELIST_ASSET_ID, ETH_ASSET_ID } from '../constants/common';
-import {bigMul, format} from './big';
+import { WHITELIST_ASSET_ID, ETH_ASSET_ID, EOS_ASSET_ID } from '../constants/common';
+import { bigMul, format } from './big';
 import { fetchMvmTokens } from './mvm/api';
 import { getBalance } from './web3/common';
 import { fetchAssetContract } from './web3/registry';
 import { sortBy } from 'lodash-es';
 import type { PairRoutes, SwapParams } from "./4swap/route";
-import { fetchEstimatedPayment } from "./mixpay/api";
+import { fetchMixPayEstimatedPayment } from "./mixpay/api";
 
 export const register = async (address: string): Promise<RegisteredUser> => {
 	const response = await fetch('https://bridge.mvm.dev/users', {
@@ -23,16 +23,21 @@ export const register = async (address: string): Promise<RegisteredUser> => {
 	return user;
 };
 
-export const fetchWithdrawalFee = async (asset_id: string, destination: string) => {
+export const fetchWithdrawalFee = async (asset_id: string, destination: string, tag: string) => {
 	if (!destination) return undefined;
 
 	const externalClient = ExternalClient();
-	const asset = await externalClient.checkAddress({
-		asset: asset_id,
-		destination
-	});
-
-	return asset.fee;
+	try {
+		const asset = await externalClient.checkAddress({
+			asset: asset_id,
+			destination,
+			tag
+		});
+		return asset.fee;
+	} catch (e) {
+		if (asset_id === EOS_ASSET_ID) return '0.5';
+		return '';
+	}
 };
 
 export const fetchAssets = async (user: User) => {
@@ -108,7 +113,7 @@ export const fetchAssets = async (user: User) => {
 
 	assets = sortBy(
 		assets,
-		({ balance, price_usd }) => bigMul(balance, price_usd),
+		({ balance, price_usd }) => +bigMul(balance, price_usd),
 		'balance',
 		({ change_usd }) => -Math.abs(+change_usd)
 	).reverse();
@@ -163,7 +168,7 @@ export const fetchExchangeRates = ExternalClient().exchangeRates;
 export const fetchSwapPreOrderInfo = async (site: string, pairRoutes: PairRoutes, slippage: number, { inputAsset, outputAsset, inputAmount, outputAmount }: SwapParams) => {
 	try {
 		if (site === 'MixPay') {
-			const response = await fetchEstimatedPayment({
+			const response = await fetchMixPayEstimatedPayment({
 				inputAsset, outputAsset, inputAmount, outputAmount
 			});
 

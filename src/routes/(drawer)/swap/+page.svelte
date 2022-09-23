@@ -1,11 +1,14 @@
 <script lang="ts">
+	import clsx from 'clsx';
+	import { fade } from 'svelte/transition';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import Helper from '$lib/assets/helper.svg?component';
 	import Switch from '$lib/assets/switch.svg?component';
 	import { PairRoutes, type Order } from '$lib/helpers/4swap/route';
 	import { setSearchParam } from '$lib/helpers/app-store';
-	import { assets, getAsset, pairs, updateAssets } from '$lib/stores/model';
+	import { assets, pairs, updateAssets } from '$lib/stores/model';
+	import { getAsset } from '$lib/helpers/utils';
 	import type { Asset } from '$lib/types/asset';
 	import Header from '$lib/components/base/header.svelte';
 	import UserInfo from '$lib/components/base/user-info.svelte';
@@ -21,7 +24,7 @@
 	import Spinner from '$lib/components/common/spinner.svelte';
 	import { showToast } from '$lib/components/common/toast/toast-container.svelte';
 	import { focus } from 'focus-svelte';
-	import {fetchSwapPreOrderInfo} from "$lib/helpers/api";
+	import { fetchSwapPreOrderInfo } from "$lib/helpers/api";
 
 	let a: Asset[] | undefined = $page.data.assets;
 	let p: Pair[] | undefined = $page.data.pairs;
@@ -35,10 +38,12 @@
 
 	$: !inputAsset &&
 		(inputAsset =
-			getAsset($page.url.searchParams.get(INPUT_KEY) || ETH_ASSET_ID) || getAsset(ETH_ASSET_ID));
+			getAsset($page.url.searchParams.get(INPUT_KEY) || ETH_ASSET_ID, $assets) ||
+			getAsset(ETH_ASSET_ID, $assets));
 	$: !outputAsset &&
 		(outputAsset =
-			getAsset($page.url.searchParams.get(OUTPUT_KEY) || XIN_ASSET_ID) || getAsset(XIN_ASSET_ID));
+			getAsset($page.url.searchParams.get(OUTPUT_KEY) || XIN_ASSET_ID, $assets) ||
+			getAsset(XIN_ASSET_ID, $assets));
 
 	let lastEdited: 'input' | 'output' | undefined = undefined;
 	let inputAmount: number | undefined = undefined;
@@ -64,12 +69,14 @@
 	};
 
 	const handleChangeInputAsset = (asset: Asset) => {
+		if (outputAsset?.asset_id === asset.asset_id) return;
 		inputAsset = asset;
 		setSearchParam($page, INPUT_KEY, asset.asset_id);
 		goto($page.url, { keepfocus: true, replaceState: true, noscroll: true });
 	};
 
 	const handleChangeOutputAsset = (asset: Asset) => {
+		if (inputAsset?.asset_id === asset.asset_id) return;
 		outputAsset = asset;
 		setSearchParam($page, OUTPUT_KEY, asset.asset_id);
 		goto($page.url, { keepfocus: true, replaceState: true, noscroll: true });
@@ -84,7 +91,13 @@
 	let minReceived: string | undefined;
 	let site: '4swap' | 'MixPay' = 'MixPay';
 
-	const updateSwapInfo = async () => {
+	const updateSwapInfo = async (
+		inputAsset: Asset,
+		outputAsset: Asset,
+		lastEdited: 'input' | 'output',
+		inputValue?: number,
+		outputValue?: number
+	) => {
 		if (
 				WHITELIST_ASSET_4SWAP.includes(inputAsset.asset_id) ||
 				WHITELIST_ASSET_4SWAP.includes(outputAsset.asset_id)
@@ -93,9 +106,11 @@
 		const info = await fetchSwapPreOrderInfo(site, pairRoutes, slippage, {
 			inputAsset: inputAsset?.asset_id,
 			outputAsset: outputAsset?.asset_id,
-			inputAmount: lastEdited === 'input' ? `${inputAmount}` : undefined,
-			outputAmount: lastEdited === 'output' ? `${outputAmount}` : undefined
+			inputAmount: lastEdited === 'input' ? `${inputValue}` : undefined,
+			outputAmount: lastEdited === 'output' ? `${outputValue}` : undefined
 		});
+		if (!info) return;
+
 		order = info.order;
 		fee = info.fee;
 		price = info.price;
@@ -109,7 +124,7 @@
 	};
 
 	$: if (inputAsset && outputAsset && lastEdited && (inputAmount || outputAmount)) {
-		updateSwapInfo();
+		updateSwapInfo(inputAsset, outputAsset, lastEdited, inputAmount, outputAmount);
 	} else order = undefined;
 
 	$: inputAmountFiat = formatFiat(inputAsset?.price_usd, inputAmount);
@@ -126,9 +141,14 @@
 		try {
 			if (!$user.contract) await registerAndSave($user.address);
 			const res = await swapAsset($library, $user, site, order, inputAsset, minReceived);
-			if (res && res.state === 'Done') showToast('success', 'Successful');
 
 			await updateAssets();
+			inputAsset = getAsset(inputAsset.asset_id, $assets);
+
+			if (res && res.state === 'Done') showToast('success', 'Successful');
+
+			inputAmount = undefined;
+			outputAmount = undefined;
 		} finally {
 			loading = false;
 		}
@@ -239,16 +259,30 @@
 					</div>
 					<div>
 						<div>Price Impact</div>
-						<div>{toPercent({ n: order?.priceImpact })}</div>
+						<div
+							transition:fade
+							class={clsx({
+								'text-brand-forbiddenPrice': order?.priceImpact >= 0.1,
+								'text-brand-warningPrice': order?.priceImpact >= 0.01 && order?.priceImpact < 0.1,
+								'text-black text-opacity-50': order?.priceImpact < 0.01
+							})}
+						>
+							{toPercent({ n: order?.priceImpact })}
+						</div>
 					</div>
 				</div>
 			</div>
+			{#if order?.priceImpact > 0.15}
+				<div transition:slide class="mt-3 self-center text-xs font-semibold opacity-50">
+					Lack of liquidity, please decrease swap amount
+				</div>
+			{/if}
 		{/if}
 
 		<button
 			class="mt-10 mb-6 flex w-28 justify-center self-center rounded-full bg-brand-primary px-6 py-3 text-white"
 			on:click={swap}
-			disabled={!(order && +order.amount)}
+			disabled={!(order && +order.amount) || order?.priceImpact > 0.15}
 		>
 			{#if loading}
 				<Spinner class="stroke-white stroke-2 text-center" />
