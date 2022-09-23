@@ -1,6 +1,5 @@
 import { utils } from 'ethers';
 import { sortBy } from 'lodash-es';
-import type { User } from '../../types/user';
 import { bigMul } from '../big';
 
 export const fetchMvmTokens = async (address: `0x${string}`) => {
