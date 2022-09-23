@@ -13,6 +13,7 @@
 	import type { Asset } from '$lib/types/asset';
 	import { assets } from '$lib/stores/model';
 	import { ETH_ASSET_ID } from '$lib/constants/common';
+	import { onMount, onDestroy } from 'svelte';
 
 	const DEFAULT_ICON =
 		'https://images.mixin.one/yH_I5b0GiV2zDmvrXRyr3bK5xusjfy5q7FX3lw3mM2Ryx4Dfuj6Xcw8SHNRnDKm7ZVE3_LvpKlLdcLrlFQUBhds=s128';
@@ -52,11 +53,11 @@
 		try {
 			const lastTransaction = transactions[transactions.length - 1];
 
-			const result = await fetchTransactions(
-				$user,
-				lastTransaction?.blockNumber,
-				lastTransaction?.hash
-			);
+			const result = await fetchTransactions({
+				user: $user,
+				endblock: lastTransaction?.blockNumber,
+				lastHash: lastTransaction?.hash
+			});
 
 			hasMore = result.length >= 30;
 
@@ -65,6 +66,25 @@
 			loading = false;
 		}
 	};
+
+	const updateTtransactions = async () => {
+		if (!transactions.length) return;
+
+		const startblock = transactions[0].blockNumber;
+		const firstHash = transactions[0].hash;
+
+		const txs = await fetchTransactions({
+			user: $user,
+			startblock,
+			firstHash
+		});
+
+		transactions = [...txs, ...transactions];
+	};
+
+	let timer: ReturnType<typeof setInterval> | undefined;
+	onMount(async () => (timer = setInterval(updateTtransactions, 1000 * 5)));
+	onDestroy(() => timer && clearInterval(timer));
 </script>
 
 <Header>

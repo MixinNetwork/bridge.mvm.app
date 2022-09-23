@@ -47,19 +47,41 @@ interface MvmTokenTransfer extends MvmTransaction {
 	tokenSymbol: string;
 }
 
-const fetchMvmTransactions = async (address: `0x${string}`, endblock?: number) => {
-	const response = await fetch(
-		`https://scan.mvm.dev/api?module=account&action=txlist&address=${address}&endblock=${endblock}`
-	);
+const fetchMvmTransactions = async ({
+	address,
+	startblock,
+	endblock
+}: {
+	address: `0x${string}`;
+	startblock?: number;
+	endblock?: number;
+}) => {
+	const url = new URL('https://scan.mvm.dev/api?module=account&action=txlist');
+	url.searchParams.set('address', address);
+	startblock && url.searchParams.set('startblock', `${startblock}`);
+	endblock && url.searchParams.set('endblock', `${endblock}`);
+
+	const response = await fetch(url.href);
 	const { result, status } = await response.json();
 	if (!status) throw new Error('No result');
 	return result as MvmTransaction[];
 };
 
-const fetchMvmTokenTransactions = async (address: string, endblock?: number) => {
-	const response = await fetch(
-		`https://scan.mvm.dev/api?module=account&action=tokentx&address=${address}&endblock=${endblock}`
-	);
+const fetchMvmTokenTransactions = async ({
+	address,
+	startblock,
+	endblock
+}: {
+	address: `0x${string}`;
+	startblock?: number;
+	endblock?: number;
+}) => {
+	const url = new URL('https://scan.mvm.dev/api?module=account&action=tokentx');
+	url.searchParams.set('address', address);
+	startblock && url.searchParams.set('startblock', `${startblock}`);
+	endblock && url.searchParams.set('endblock', `${endblock}`);
+
+	const response = await fetch(url.href);
 	const { result, status } = await response.json();
 	if (!status) throw new Error('No result');
 	return result as MvmTokenTransfer[];
@@ -78,27 +100,33 @@ export interface Transaction {
 	icon?: string;
 }
 
-interface FetchTransactions {
-	(user: User): Promise<Transaction[]>;
-	(user: User, endblock: number, lastHash: `0x${string}`): Promise<Transaction[]>;
+interface TransactionParams {
+	user: User;
 }
 
-export const fetchTransactions: FetchTransactions = async (
-	user: User,
-	endblock?: number,
-	lastHash?: `0x${string}`
-) => {
+interface TransactionParamsWithEndblock extends TransactionParams {
+	lastHash: `0x${string}`;
+	endblock: number;
+}
+
+interface TransactionParamsWithStartblock extends TransactionParams {
+	firstHash: `0x${string}`;
+	startblock: number;
+}
+
+export const fetchTransactions = async ({
+	user,
+	...params
+}: TransactionParams | TransactionParamsWithEndblock | TransactionParamsWithStartblock) => {
 	const [tx, tokenTx] = await Promise.all([
-		fetchMvmTransactions(user.address, endblock),
-		fetchMvmTokenTransactions(user.address, endblock)
+		fetchMvmTransactions({ address: user.address, ...params }),
+		fetchMvmTokenTransactions({ address: user.address, ...params })
 	]);
 
 	const mvmTransactions: (Partial<MvmTokenTransfer> & MvmTransaction)[] = sortBy(
 		[...tx, ...tokenTx],
 		(tx) => -tx.timeStamp
 	);
-
-	const lastIndex = lastHash ? mvmTransactions.findIndex((tx) => tx.hash === lastHash) : 0;
 
 	let transactions = mvmTransactions.map(
 		({
@@ -130,10 +158,22 @@ export const fetchTransactions: FetchTransactions = async (
 		}
 	);
 
-	transactions = transactions
-		.slice(lastIndex)
-		.filter((tx) => tx.hash !== lastHash)
-		.slice(0, 30);
+	if ('lastHash' in params) {
+		const lastHash = params.lastHash;
+		const lastIndex = lastHash ? mvmTransactions.findIndex((tx) => tx.hash === lastHash) : 0;
+
+		transactions = transactions
+			.slice(lastIndex)
+			.filter((tx) => tx.hash !== lastHash)
+			.slice(0, 30);
+	}
+
+	if ('firstHash' in params) {
+		const firstHash = params.firstHash;
+		const firstIndex = firstHash ? mvmTransactions.findIndex((tx) => tx.hash === firstHash) : 0;
+
+		transactions = transactions.slice(0, firstIndex);
+	}
 
 	return transactions;
 };
