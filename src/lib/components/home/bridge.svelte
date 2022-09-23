@@ -70,7 +70,15 @@
 				await deposit($library, asset, value);
 				await updateAssets();
 			} else {
-				await withdraw($library, asset, $user.contract, value, address, memo, $assetWithdrawalFee);
+				await withdraw(
+					$library,
+					asset,
+					$user.contract,
+					value,
+					address || $user.address,
+					memo,
+					$assetWithdrawalFee
+				);
 				await updateAssets();
 				await mvmBalance.reload?.();
 				await tick();
