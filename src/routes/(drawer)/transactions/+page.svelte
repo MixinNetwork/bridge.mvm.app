@@ -54,7 +54,7 @@
 			const lastTransaction = transactions[transactions.length - 1];
 
 			const result = await fetchTransactions({
-				user: $user,
+				address: $user.address,
 				endblock: lastTransaction?.blockNumber,
 				lastHash: lastTransaction?.hash
 			});
@@ -74,7 +74,7 @@
 		const firstHash = transactions[0].hash;
 
 		const txs = await fetchTransactions({
-			user: $user,
+			address: $user.address,
 			startblock,
 			firstHash
 		});

@@ -101,7 +101,7 @@ export interface Transaction {
 }
 
 interface TransactionParams {
-	user: User;
+	address: `0x${string}`;
 }
 
 interface TransactionParamsWithEndblock extends TransactionParams {
@@ -115,12 +115,11 @@ interface TransactionParamsWithStartblock extends TransactionParams {
 }
 
 export const fetchTransactions = async ({
-	user,
 	...params
 }: TransactionParams | TransactionParamsWithEndblock | TransactionParamsWithStartblock) => {
 	const [tx, tokenTx] = await Promise.all([
-		fetchMvmTransactions({ address: user.address, ...params }),
-		fetchMvmTokenTransactions({ address: user.address, ...params })
+		fetchMvmTransactions(params),
+		fetchMvmTokenTransactions(params)
 	]);
 
 	const mvmTransactions: (Partial<MvmTokenTransfer> & MvmTransaction)[] = sortBy(
@@ -142,7 +141,7 @@ export const fetchTransactions = async ({
 			tokenSymbol,
 			contractAddress
 		}) => {
-			const isSend = from.toLowerCase() === user.address.toLowerCase();
+			const isSend = from.toLowerCase() === params.address.toLowerCase();
 			const formattedValue = utils.formatUnits(value, tokenDecimal || 18);
 			return {
 				hash,
@@ -172,7 +171,7 @@ export const fetchTransactions = async ({
 		const firstHash = params.firstHash;
 		const firstIndex = firstHash ? mvmTransactions.findIndex((tx) => tx.hash === firstHash) : 0;
 
-		transactions = transactions.slice(0, firstIndex);
+		transactions = transactions.slice(0, firstIndex).slice(-30);
 	}
 
 	return transactions;

@@ -10,7 +10,7 @@ export const load: PageLoad = async ({ fetch, parent }) => {
 
 	const [a, t] = await Promise.all([
 		(cacheAssets.length && cacheAssets) || dependAssets(fetch),
-		fetchTransactions({ user: user })
+		fetchTransactions({ address: user.address })
 	]);
 
 	return { assets: a, transactions: t };
