@@ -98,10 +98,10 @@
 		inputValue?: number,
 		outputValue?: number
 	) => {
-		if (
+		site = (
 				WHITELIST_ASSET_4SWAP.includes(inputAsset.asset_id) ||
 				WHITELIST_ASSET_4SWAP.includes(outputAsset.asset_id)
-		) site = '4swap';
+		) ? '4swap' : 'MixPay';
 
 		const info = await fetchSwapPreOrderInfo(site, pairRoutes, slippage, {
 			inputAsset: inputAsset?.asset_id,

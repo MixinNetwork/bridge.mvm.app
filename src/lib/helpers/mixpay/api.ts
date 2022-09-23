@@ -1,5 +1,6 @@
 import axios, { type AxiosResponse } from 'axios';
 import type { Order, SwapParams } from "../4swap/route";
+import {generateExtra} from "../sign";
 
 interface MixPayBaseResponse {
   code: number;
@@ -78,7 +79,6 @@ export const fetchMixPayEstimatedPayment = async ({ inputAsset, outputAsset, inp
   };
   if (inputAmount) params.paymentAmount = inputAmount;
   if (outputAmount) params.quoteAmount = outputAmount;
-
   return await ins.get('/payments_estimated', { params });
 }
 
@@ -96,7 +96,7 @@ export const fetchMixPayPayment = async (
       settlementAssetId: outputAsset,
       quoteAssetId: outputAsset,
       paymentAmount: inputAmount,
-      isChain: false,
+      isChain: true,
     })
 }
 
@@ -112,5 +112,18 @@ export const fetchMixPayTxInfo = async (
     order.fill_asset_id,
     String(order.funds)
   );
-  console.log(response);
+
+  const extra = generateExtra(
+    JSON.stringify({
+      // receivers: [response.data.recipient],
+      // threshold: 1,
+      destination: response.data.destination,
+      tag: response.data.tag,
+      extra: response.data.memo
+    })
+  );
+  return {
+    extra,
+    follow_id: response.data.traceId
+  }
 }
