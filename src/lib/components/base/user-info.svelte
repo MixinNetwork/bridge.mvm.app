@@ -11,6 +11,7 @@
 	import { format } from '../../helpers/big';
 	import Modal from '../common/modal/modal.svelte';
 	import LogoutModal from './modal/logout-modal.svelte';
+	import LL from '$i18n/i18n-svelte';
 
 	let clazz: string | undefined = undefined;
 	export { clazz as class };
@@ -54,7 +55,7 @@
 			on:click={() => (logoutModalOpen = !logoutModalOpen)}
 		>
 			<Logout />
-			<div class="grow text-start">Log out</div>
+			<div class="grow text-start">{$LL.logOut.title()}</div>
 			<Arrow />
 		</button>
 	</div>

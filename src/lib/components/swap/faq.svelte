@@ -1,34 +1,31 @@
 <script lang="ts">
 	import clsx from 'clsx';
+	import LL from '$i18n/i18n-svelte';
 	let clazz: string | undefined = undefined;
 	export { clazz as class };
 </script>
 
 <div class={clsx('mt-4 rounded-lg bg-white pt-3 pb-10 px-5 lg:w-60', clazz)}>
-	<p class=" mb-6 text-xl font-bold">How does it work?</p>
+	<p class=" mb-6 text-xl font-bold">{$LL.swapPage.faq.description1()}</p>
 	<div class=" space-y-6 text-sm font-medium text-black text-opacity-50">
 		<p>
-			MVM Bridge provides a cross-chain convert service through 4swap and MixPay, which delivers
-			lower fees, faster transaction speed, and better trading liquidity.
+			{$LL.swapPage.faq.description2()}
 		</p>
 		<div>
-			<p class="text-base font-semibold text-black">4swap</p>
+			<p class="text-base font-semibold text-black">{$LL.swapPage.faq.description3()}</p>
 			<p>
-				A decentralized protocol for automated liquidity provision offers over 140 pairs with a TVL
-				of over $100M. Please visit <a href="https://4swap.org/" class="text-brand-primary"
+				{$LL.swapPage.faq.description4()}<a href="https://4swap.org/" class="text-brand-primary"
 					>https://4swap.org/</a
-				> for additional information.
+				>{$LL.swapPage.faq.description5()}
 			</p>
 		</div>
 
 		<div>
-			<p class="text-base font-semibold text-black">MixPay</p>
+			<p class="text-base font-semibold text-black">{$LL.swapPage.faq.description6()}</p>
 			<p>
-				A decentralized Web3 payment protocol connects the most liquid exchanges, such as Binance,
-				Huobi, and Gate, to convert almost any cryptocurrency. For more info, please visit <a
-					href="https://mixpay.me/"
-					class="text-brand-primary">https://mixpay.me/</a
-				>.
+				{$LL.swapPage.faq.description7()}<a href="https://mixpay.me/" class="text-brand-primary"
+					>https://mixpay.me/</a
+				>{$LL.swapPage.faq.description8()}
 			</p>
 		</div>
 	</div>

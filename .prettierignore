@@ -11,3 +11,13 @@ node_modules
 pnpm-lock.yaml
 package-lock.json
 yarn.lock
+
+# app engine
+app.yaml
+
+# i18n
+src/i18n/i18n-svelte.ts
+src/i18n/i18n-types.ts
+src/i18n/i18n-util.async.ts
+src/i18n/i18n-util.sync.ts
+src/i18n/i18n-util.ts

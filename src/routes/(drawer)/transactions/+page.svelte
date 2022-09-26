@@ -14,6 +14,7 @@
 	import { assets } from '$lib/stores/model';
 	import { ETH_ASSET_ID } from '$lib/constants/common';
 	import { onMount, onDestroy } from 'svelte';
+	import LL from '$i18n/i18n-svelte';
 
 	const DEFAULT_ICON =
 		'https://images.mixin.one/yH_I5b0GiV2zDmvrXRyr3bK5xusjfy5q7FX3lw3mM2Ryx4Dfuj6Xcw8SHNRnDKm7ZVE3_LvpKlLdcLrlFQUBhds=s128';
@@ -88,7 +89,7 @@
 </script>
 
 <Header>
-	<div class="md:hidden">All Transactions</div>
+	<div class="md:hidden">{$LL.allTransactions()}</div>
 	<a href="/" class="md:hidden">
 		<Helper />
 	</a>
@@ -100,7 +101,7 @@
 	use:scrollableParent
 	on:parentScroll={onScroll}
 >
-	<div class="hidden px-5 py-4 text-lg font-semibold md:block">All Transactions</div>
+	<div class="hidden px-5 py-4 text-lg font-semibold md:block">{$LL.allTransactions()}</div>
 	{#each txs as tx (tx.hash + tx.symbol)}
 		<a
 			class="flex h-[72px] items-center justify-between space-x-3 p-5 font-semibold"
@@ -111,7 +112,7 @@
 				<div class="flex flex-1 items-center space-x-3">
 					<img src={tx.icon || DEFAULT_ICON} width="24" height="24" alt={tx.name} />
 					<div class="grow">
-						{tx.total < 0 ? (tx.value !== 0 ? 'Withdrawal' : 'Fee') : 'Deposit'}
+						{tx.total < 0 ? (tx.value !== 0 ? $LL.withdraw() : $LL.fee()) : $LL.deposit()}
 					</div>
 				</div>
 				<div class="flex flex-1 justify-end space-x-2 text-sm md:grow">

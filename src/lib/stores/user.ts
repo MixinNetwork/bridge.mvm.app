@@ -5,14 +5,22 @@ import { jsonPersistentEncoder, persistentWritable } from '../helpers/store/pers
 import type { User } from '../types/user';
 import { account } from './ether';
 import { clearLastProvider } from './provider';
-import { USER_KEY } from '$lib/constants/common';
+import { LANG, USER_KEY } from '$lib/constants/common';
 import { dedupe } from '../helpers/store/dedupe';
 import { invalidateAll } from '$app/navigation';
+import type { Locales } from '$i18n/i18n-types';
 
 const persistentUser = persistentWritable<User | undefined>(
 	USER_KEY,
 	undefined,
 	jsonPersistentEncoder
+);
+
+const persistentLang = persistentWritable<Locales | undefined>(LANG, undefined);
+
+export const lang = derived(
+	[persistentLang, page],
+	([$lang, $page]) => $lang || ($page.data && $page.data.lang)
 );
 
 export const user = dedupe(

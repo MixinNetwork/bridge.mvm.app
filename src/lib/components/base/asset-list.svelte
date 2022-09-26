@@ -8,6 +8,7 @@
 	import { searchAssets } from '../../helpers/utils';
 	import SearchBar from './search-bar.svelte';
 	import Empty from './empty.svelte';
+	import LL from '$i18n/i18n-svelte';
 
 	export let close = () => {
 		//
@@ -25,7 +26,7 @@
 </script>
 
 <LayoutBottomSheet>
-	<ModalHeader class="mb-0 hidden md:flex" on:click={close}>Assets</ModalHeader>
+	<ModalHeader class="mb-0 hidden md:flex" on:click={close}>{$LL.assets()}</ModalHeader>
 	<SearchBar bind:keyword class="md:pt-0" />
 	<div class="grow overflow-y-auto">
 		{#each filtedAssets || [] as asset (asset.asset_id)}
