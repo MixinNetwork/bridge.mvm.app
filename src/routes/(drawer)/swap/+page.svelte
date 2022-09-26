@@ -45,16 +45,16 @@
 			getAsset(XIN_ASSET_ID, $assets));
 
 	let lastEdited: 'input' | 'output' | undefined = undefined;
-	let inputAmount: number | undefined = undefined;
-	let outputAmount: number | undefined = undefined;
+	let inputAmount: number | string | undefined = undefined;
+	let outputAmount: number | string | undefined = undefined;
 
 	const handleSwitch = () => {
-		if (lastEdited === 'input') {
+		if (lastEdited === 'input' && inputAmount) {
 			lastEdited = 'output';
-			outputAmount = inputAmount;
-		} else if (lastEdited === 'output') {
+			outputAmount = format({ n: inputAmount });
+		} else if (lastEdited === 'output' && outputAmount) {
 			lastEdited = 'input';
-			inputAmount = outputAmount;
+			inputAmount = format({ n: outputAmount });
 		}
 
 		const temp = inputAsset;
@@ -113,18 +113,24 @@
 		minReceived = format({ n: +order.amount * +slippage });
 
 		if (lastEdited === 'input') {
-			outputAmount = Number(order?.amount) || undefined;
+			outputAmount = (order.amount && format({ n: order.amount })) || undefined;
 		} else if (lastEdited === 'output') {
-			inputAmount = Number(order?.funds) || undefined;
+			inputAmount = (order.funds && format({ n: order.funds })) || undefined;
 		}
 	};
 
 	$: if (inputAsset && outputAsset && lastEdited && (inputAmount || outputAmount)) {
-		updateSwapInfo(inputAsset, outputAsset, lastEdited, inputAmount, outputAmount);
+		updateSwapInfo(
+			inputAsset,
+			outputAsset,
+			lastEdited,
+			(inputAmount && Number(inputAmount)) || undefined,
+			(outputAmount && Number(outputAmount)) || undefined
+		);
 	} else order = undefined;
 
-	$: inputAmountFiat = formatFiat(inputAsset?.price_usd, inputAmount);
-	$: outputAmountFiat = formatFiat(outputAsset?.price_usd, outputAmount);
+	$: inputAmountFiat = formatFiat(inputAsset?.price_usd, (inputAmount && +inputAmount) || 0);
+	$: outputAmountFiat = formatFiat(outputAsset?.price_usd, (outputAmount && +outputAmount) || 0);
 
 	let loading = false;
 	const swap = async () => {
