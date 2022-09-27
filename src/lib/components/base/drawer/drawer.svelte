@@ -38,7 +38,7 @@
 	/>
 
 	<LogoutButton
-		class="mt-4 flex items-center justify-start space-x-4 p-2 pl-8 font-semibold md:hidden"
+		class="mt-5 flex items-center justify-start space-x-4 p-2 pl-8 font-semibold md:hidden"
 	>
 		<Logout />
 		<div>

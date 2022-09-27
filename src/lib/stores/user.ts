@@ -33,6 +33,8 @@ export const switchLang = async (lang: Locales) => {
 	document.querySelector('html')?.setAttribute('lang', lang);
 };
 
+export const lang = derived(persistentLang, (lang) => lang);
+
 export const user = dedupe(
 	derived([persistentUser, page], ([$user, $page]) => $user || $page.data.user)
 );
