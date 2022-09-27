@@ -65,6 +65,6 @@
 	"dependencies": {
 		"@fontsource/fira-mono": "^4.5.0",
 		"cookie": "^0.5.0",
-		"typesafe-i18n": "^5.13.0"
+		"typesafe-i18n": "^5.13.1"
 	}
 }
