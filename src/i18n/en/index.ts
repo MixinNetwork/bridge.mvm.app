@@ -20,7 +20,7 @@ const en: BaseTranslation = {
 	swap: 'Swap',
 	explorer: 'Explorer',
 	audit: 'Audit',
-	logOut: {
+	logout: {
 		title: 'Log Out',
 		description: 'Are you sure want to logout?'
 	},
@@ -71,6 +71,11 @@ const en: BaseTranslation = {
 				'A decentralized Web3 payment protocol connects the most liquid exchanges, such as Binance, Huobi, and Gate, to convert almost any cryptocurrency. For more info, please visit ',
 			description8: '.'
 		}
+	},
+	login: {
+		title: 'Login',
+		connectBrowserWalletDescription: 'Connect using browser wallet',
+		connectWalletConnectDescription: 'Connect using WalletConnect'
 	}
 };
 

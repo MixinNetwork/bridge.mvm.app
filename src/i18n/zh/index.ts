@@ -20,7 +20,7 @@ const zh: Translation = {
 	swap: '兑换',
 	explorer: '浏览器',
 	audit: '审计',
-	logOut: {
+	logout: {
 		title: '登出',
 		description: '您确定要登出吗？'
 	},
@@ -70,6 +70,11 @@ const zh: Translation = {
 				'去中心化 Web3 支付协议，支持几乎任意币种兑换，对接币安、 火币、Gate 等流动性最好的交易所，访问 ',
 			description8: ' 了解更多。'
 		}
+	},
+	login: {
+		title: '登录',
+		connectBrowserWalletDescription: '使用浏览器钱包连接',
+		connectWalletConnectDescription: '使用 WalletConnect 连接'
 	}
 };
 

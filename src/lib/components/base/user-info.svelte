@@ -55,7 +55,7 @@
 			on:click={() => (logoutModalOpen = !logoutModalOpen)}
 		>
 			<Logout />
-			<div class="grow text-start">{$LL.logOut.title()}</div>
+			<div class="grow text-start">{$LL.logout.title()}</div>
 			<Arrow />
 		</button>
 	</div>

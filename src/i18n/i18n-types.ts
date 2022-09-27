@@ -72,7 +72,7 @@ type RootTranslation = {
 	 * Audit
 	 */
 	audit: string
-	logOut: {
+	logout: {
 		/**
 		 * Log Out
 		 */
@@ -229,6 +229,20 @@ type RootTranslation = {
 			description8: string
 		}
 	}
+	login: {
+		/**
+		 * Login
+		 */
+		title: string
+		/**
+		 * Connect using browser wallet
+		 */
+		connectBrowserWalletDescription: string
+		/**
+		 * Connect using WalletConnect
+		 */
+		connectWalletConnectDescription: string
+	}
 }
 
 export type TranslationFunctions = {
@@ -290,7 +304,7 @@ export type TranslationFunctions = {
 	 * Audit
 	 */
 	audit: () => LocalizedString
-	logOut: {
+	logout: {
 		/**
 		 * Log Out
 		 */
@@ -439,6 +453,20 @@ export type TranslationFunctions = {
 			 */
 			description8: () => LocalizedString
 		}
+	}
+	login: {
+		/**
+		 * Login
+		 */
+		title: () => LocalizedString
+		/**
+		 * Connect using browser wallet
+		 */
+		connectBrowserWalletDescription: () => LocalizedString
+		/**
+		 * Connect using WalletConnect
+		 */
+		connectWalletConnectDescription: () => LocalizedString
 	}
 }
 
