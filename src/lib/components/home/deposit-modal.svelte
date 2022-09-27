@@ -5,6 +5,7 @@
 	import Bridge from './bridge.svelte';
 	import LayoutModal from '$lib/components/base/modal/layout-modal.svelte';
 	import { providerName } from '$lib/stores/provider';
+	import LL from '$i18n/i18n-svelte';
 
 	export let close = () => {
 		//
@@ -21,7 +22,7 @@
 </script>
 
 <LayoutModal on:click={close}>
-	<div slot="title">Deposit to MVM</div>
+	<div slot="title">{$LL.depositModal.title()}</div>
 
 	<div
 		class="mx-5 mb-3 grid grid-cols-2 rounded-md bg-black bg-opacity-5 p-1 text-center text-sm font-bold leading-7 child:z-0 child:!opacity-100 descendant:transition-all"
@@ -32,7 +33,7 @@
 			<div
 				class="h-full text-black opacity-50 peer-checked:text-brand-primary peer-checked:opacity-100"
 			>
-				QR Code
+				{$LL.depositModal.qrCode()}
 			</div>
 
 			<div

@@ -6,7 +6,9 @@ import type { LayoutLoad } from './$types';
 
 export const load: LayoutLoad = async ({ parent }) => {
 	const data = await parent();
+
 	if (!Object.keys(data).length && browser) {
+		console.log('layout load', data);
 		return {
 			user: get(user),
 			provider: get(providerKey)

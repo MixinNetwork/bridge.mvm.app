@@ -4,6 +4,7 @@
 	import UserInfo from '$lib/components/base/user-info.svelte';
 	import Error from '$lib/assets/error.svg?component';
 	import Drawer from '$lib/components/base/layout/drawer.svelte';
+	import LL from '$i18n/i18n-svelte';
 </script>
 
 <Drawer>
@@ -15,6 +16,6 @@
 
 	<div class="flex grow flex-col items-center justify-center">
 		<Error />
-		<div class=" font-bold opacity-20">Error</div>
+		<div class="font-bold opacity-20">{$LL.error.tips()}</div>
 	</div>
 </Drawer>

@@ -32,6 +32,7 @@
 	import AssetItemModal from '$lib/components/home/asset-item-modal.svelte';
 	import { fade } from 'svelte/transition';
 	import Empty from '$lib/components/base/empty.svelte';
+	import LL from '$i18n/i18n-svelte';
 
 	let a: Asset[] | undefined = $page.data.assets;
 
@@ -88,11 +89,11 @@
 		>
 			<button on:click={() => $ethAsset && switchDepositMode($ethAsset, undefined)}>
 				<Send />
-				<span>Deposit</span>
+				<span>{$LL.deposit()}</span>
 			</button>
 			<button on:click={() => $ethAsset && switchWithdrawMode($ethAsset)}>
 				<Receive />
-				<span>Withdraw</span>
+				<span>{$LL.withdraw()}</span>
 			</button>
 		</div>
 	</div>
@@ -100,7 +101,7 @@
 
 <div class="my-8 rounded-2xl bg-white last:child:rounded-b-2xl md:mx-5 xl:mx-16">
 	<div class="flex h-14 items-center justify-between px-5 text-lg font-semibold">
-		<div>Assets</div>
+		<div>{$LL.assets()}</div>
 		<div class="relative grow child:absolute child:top-0 child:bottom-0 child:right-0">
 			{#if searchMode}
 				<SearchBar
@@ -118,7 +119,7 @@
 					class="flex items-center justify-center space-x-3"
 					on:click={toggleSearchMode}
 					transition:fade|local
-					><div class="font-semibold text-black opacity-20">Search</div>
+					><div class="font-semibold text-black opacity-20">{$LL.searchBar.title()}</div>
 					<Search />
 				</button>
 			{/if}

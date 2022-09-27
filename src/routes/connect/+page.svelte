@@ -1,3 +1,12 @@
+<script context="module" lang="ts">
+	interface IProvider {
+		key: ProviderKey;
+		title: string;
+		desc: string;
+		icon: string;
+	}
+</script>
+
 <script lang="ts">
 	import Brand from '$lib/components/base/brand.svelte';
 	import type { ProviderKey } from '$lib/helpers/web3client/type';
@@ -9,10 +18,27 @@
 	import { providerKey as cacheProvider } from '$lib/stores/provider';
 	import { page } from '$app/stores';
 	import Modal from '$lib/components/common/modal/modal.svelte';
-	import { providers } from './+page';
 	import { LAST_URL } from '$lib/constants/common';
 	import { onMount } from 'svelte';
 	import { assets } from '$lib/stores/model';
+	import LL from '$i18n/i18n-svelte';
+	import walletConnect from '$lib/assets/logo/wallet-connect.svg';
+	import metamask from '$lib/assets/logo/metamask.svg';
+
+	const providers: IProvider[] = [
+		{
+			key: 'injected',
+			title: 'Metamask',
+			desc: $LL.login.connectBrowserWalletDescription(),
+			icon: metamask
+		},
+		{
+			key: 'walletconnect',
+			title: 'WalletConnect',
+			desc: $LL.login.connectWalletConnectDescription(),
+			icon: walletConnect
+		}
+	];
 
 	let loading = false;
 
@@ -41,7 +67,7 @@
 <div class="flex flex-col items-center pt-12">
 	<Brand />
 	<div class=" mt-14 flex flex-col items-start space-y-9 rounded-2xl bg-white pt-8 pb-12 shadow-md">
-		<div class="self-center text-xl font-bold">Login</div>
+		<div class="self-center text-xl font-bold">{$LL.login.title()}</div>
 
 		{#each providers as { title, desc, icon, key } (key)}
 			<button class="flex space-x-3 px-8" on:click={() => connect(key)}>

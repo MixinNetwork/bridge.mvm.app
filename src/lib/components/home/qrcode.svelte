@@ -5,6 +5,7 @@
 	import SelectedAssetButton from '$lib/components/base/selected-asset-button.svelte';
 	import { showToast } from '$lib/components/common/toast/toast-container.svelte';
 	import { selectAsset } from './export';
+	import LL from '$i18n/i18n-svelte';
 
 	export let asset: Asset;
 
@@ -14,13 +15,13 @@
 		...(memo
 			? [
 					{
-						key: 'Memo',
+						key: $LL.memo(),
 						value: memo
 					}
 			  ]
 			: []),
 		{
-			key: 'Address',
+			key: $LL.address(),
 			value: address
 		}
 	];
@@ -56,7 +57,7 @@
 	{/each}
 
 	<ul class="mx-6 list-outside list-disc pb-6 text-xs font-semibold opacity-50">
-		<li>Deposit will arrive {asset.confirmations} block confirmation.</li>
-		<li>Min deposit: 0.00000001 {asset.symbol}</li>
+		<li>{$LL.depositModal.tips1(asset.confirmations)}</li>
+		<li>{$LL.depositModal.tips2(asset.symbol)}</li>
 	</ul>
 </div>

@@ -10,6 +10,9 @@ const production = process.env.NODE_ENV === 'production';
 
 /** @type {import('vite').UserConfig} */
 const config = {
+	define: {
+		__version__: JSON.stringify(process.env.npm_package_version)
+	},
 	resolve: {
 		alias: {
 			path: 'path-browserify',
