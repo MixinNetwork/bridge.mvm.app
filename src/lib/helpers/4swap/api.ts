@@ -83,7 +83,7 @@ interface Transaction {
 	amount: string;
 }
 
-interface OrderResponse {
+export interface OrderResponse {
 	id: string;
 	created_at: string;
 	user_id: string;
@@ -132,7 +132,7 @@ export const createAction = async (params: ActionRequest) => {
 	return data as ActionResponse;
 };
 
-export const fetchOrder = async (order_id: string, user: RegisteredUser) => {
+export const fetch4SwapOrder = async (order_id: string, user: RegisteredUser) => {
 	const trace_id = v4();
 	const token = signAuthenticationToken('GET', `/me`, '', trace_id, {
 		...user,
@@ -153,36 +153,8 @@ export const fetchOrder = async (order_id: string, user: RegisteredUser) => {
 	return data as OrderResponse;
 };
 
-export const checkOrder = async (
-	order_id: string,
-	user: RegisteredUser
-): Promise<OrderResponse> => {
-	let counter = 0;
-
-	return new Promise((resolve, reject) => {
-		const timer = setInterval(async () => {
-			counter++;
-
-			if (counter === 30) {
-				clearInterval(timer);
-				reject({ error: 'overtime' });
-			}
-
-			try {
-				const res = await fetchOrder(order_id, user);
-				if (res && res.state === 'Done') {
-					clearInterval(timer);
-					resolve(res);
-				}
-			} catch (e) {
-				return;
-			}
-		}, 5000);
-	});
-};
-
-export const fetch4SwapTxInfo = async (user_id: string, trace_id: string, order: Order, minReceived: string) => {
-	const swapAction = `3,${user_id},${trace_id},${order.fill_asset_id},${order.routes},${minReceived}`;
+export const fetch4SwapTxInfo = async (user: RegisteredUser, trace_id: string, order: Order, minReceived: string) => {
+	const swapAction = `3,${user.user_id},${trace_id},${order.fill_asset_id},${order.routes},${minReceived}`;
 
 	const actionResp = await createAction({
 		action: swapAction,
@@ -202,6 +174,7 @@ export const fetch4SwapTxInfo = async (user_id: string, trace_id: string, order:
 
 	return {
 		extra,
-		follow_id: actionResp.follow_id
+		follow_id: actionResp.follow_id,
+		destination: user.contract!
 	}
 }

@@ -12,12 +12,13 @@ import {
 import type { Network } from '../../types/network';
 import type { RegisteredUser } from '$lib/types/user';
 import type { Asset } from '$lib/types/asset';
+import type { Order } from '../4swap/route';
 import { toHex } from '../utils';
 import { getWithdrawalExtra } from '../sign';
-import { checkOrder, fetch4SwapTxInfo } from '../4swap/api';
-import type { Order } from '../4swap/route';
+import { fetch4SwapTxInfo } from '../4swap/api';
+import { checkOrder } from '../api';
+import { fetchMixPayTxInfo } from "../mixpay/api";
 import { format } from '../big';
-import {fetchMixPayTxInfo} from "../mixpay/api";
 
 export const mainnetProvider = ethers.getDefaultProvider(1);
 export const mvmProvider = ethers.getDefaultProvider(MVM_RPC_URL);
@@ -184,9 +185,10 @@ export const swapAsset = async (
 	let info: {
 		extra: string;
 		follow_id: string;
+		destination: string;
 	};
-	if (site === '4swap') info = await fetch4SwapTxInfo(user.user_id, trace_id, order, minReceived);
-	else info = await fetchMixPayTxInfo(user.user_id, trace_id, order);
+	if (site === '4swap') info = await fetch4SwapTxInfo(user, trace_id, order, minReceived);
+	else info = await fetchMixPayTxInfo(user, trace_id, order);
 
 	const signer = provider.getSigner();
 
@@ -194,12 +196,12 @@ export const swapAsset = async (
 		const bridge = new ethers.Contract(BRIDGE_ADDRESS, BRIDGE_ABI, signer);
 		const assetAmount = ethers.utils.parseEther(Number(order.funds).toFixed(8)).toString();
 
-		await bridge.release(user.contract, info.extra, {
+		await bridge.release(info.destination, info.extra, {
 			gasPrice: 10000000,
 			gasLimit: 500000,
 			value: assetAmount
 		});
-		return await checkOrder(info.follow_id, user);
+		return await checkOrder(site, info.follow_id, user);
 	}
 
 	if (inputAsset.contract) {
@@ -208,11 +210,11 @@ export const swapAsset = async (
 		const tokenDecimal = await tokenContract.decimals();
 		const value = ethers.utils.parseUnits(`${order.funds}`, tokenDecimal);
 
-		await tokenContract.transferWithExtra(user.contract, value, info.extra, {
+		await tokenContract.transferWithExtra(info.destination, value, info.extra, {
 			gasPrice: 10000000,
 			gasLimit: 450000
 		});
-		return await checkOrder(info.follow_id, user);
+		return await checkOrder(site, info.follow_id, user);
 	}
 
 	throw new Error('Invalid asset');

@@ -1,6 +1,7 @@
 import axios, { type AxiosResponse } from 'axios';
 import type { Order, SwapParams } from "../4swap/route";
-import {generateExtra} from "../sign";
+import type { RegisteredUser } from "../../types/user";
+import { generateExtra } from "../sign";
 
 interface MixPayBaseResponse {
   code: number;
@@ -56,6 +57,31 @@ interface MixPayPaymentResponse extends MixPayBaseResponse {
   }
 }
 
+export interface MixPayPaymentResult extends MixPayBaseResponse {
+  data: {
+    traceId: string;
+    status: `unpaid` | `pending` | `failed` | `success`;
+
+    surplusAmount: string;
+    surplusStatus: 'no' | 'pending' | 'sending' | 'success';
+    quoteAmount: string;
+    quoteAssetSymbol: string;
+    paymentAmount: string;
+    paymentAssetSymbol: string;
+    payableAmount: string;
+    payee: string;
+    payeeMixinNumber: string;
+    payeeAvatarUrl: string;
+
+    txid: string;
+    date: string;
+    confirmations: number;
+    failureCode: string;
+    failureReason: string;
+    returnTo: string;
+  }
+}
+
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 axios.defaults.headers.put['Content-Type'] = 'application/json';
 axios.defaults.headers.patch['Content-Type'] = 'application/json';
@@ -74,7 +100,7 @@ ins.interceptors.response.use(async (res: AxiosResponse) => {
 export const fetchMixPayEstimatedPayment = async ({ inputAsset, outputAsset, inputAmount, outputAmount }: SwapParams): Promise<MixPayEstimatedPaymentResponse> => {
   const params: MixPayEstimatedPaymentRequest = {
     paymentAssetId: inputAsset,
-    settlementAssetId: outputAsset,
+    settlementAssetId: inputAsset,
     quoteAssetId: outputAsset,
   };
   if (inputAmount) params.paymentAmount = inputAmount;
@@ -89,41 +115,47 @@ export const fetchMixPayPayment = async (
   outputAsset: string,
   inputAmount: string
 ): Promise<MixPayPaymentResponse> => {
-  return await ins.post('https://api.mixpay.me/v1/payments', {
+  return await ins.post('/payments', {
       payeeId: user_id,
       traceId: trace_id,
       paymentAssetId: inputAsset,
-      settlementAssetId: outputAsset,
+      settlementAssetId: inputAsset,
       quoteAssetId: outputAsset,
       paymentAmount: inputAmount,
-      isChain: true,
+      isChain: false,
     })
 }
 
 export const fetchMixPayTxInfo = async (
-  user_id: string,
+  user: RegisteredUser,
   trace_id: string,
   order: Order,
 ) => {
   const response = await fetchMixPayPayment(
-    user_id,
+    user.user_id,
     trace_id,
     order.pay_asset_id,
     order.fill_asset_id,
     String(order.funds)
   );
 
-  const extra = generateExtra(
-    JSON.stringify({
-      // receivers: [response.data.recipient],
-      // threshold: 1,
-      destination: response.data.destination,
-      tag: response.data.tag,
-      extra: response.data.memo
-    })
-  );
+  const extra = generateExtra(JSON.stringify({
+    receivers: [response.data.recipient],
+    threshold: 1,
+    extra: response.data.memo
+  }));
+
   return {
     extra,
-    follow_id: response.data.traceId
+    follow_id: response.data.traceId,
+    destination: user.contract!
   }
+}
+
+export const fetchMixPayOrder = async (trace_id: string): Promise<MixPayPaymentResult> => {
+  return await ins.get('/payments_result', {
+    params: {
+      traceId: trace_id
+    }
+  });
 }
