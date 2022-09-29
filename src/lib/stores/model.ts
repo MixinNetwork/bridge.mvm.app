@@ -16,7 +16,7 @@ export const assets = deepWritable<Asset[]>([], (set) => {
 		if (!$user) return;
 		const assets = await fetchAssets($user);
 		set(assets);
-	}, 15000);
+	}, 5000);
 	return () => {
 		clearInterval(timer);
 	};

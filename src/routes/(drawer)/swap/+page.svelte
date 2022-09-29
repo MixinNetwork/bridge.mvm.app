@@ -191,6 +191,7 @@
 							id="input"
 							type="number"
 							class="w-full text-right font-bold text-black"
+							autocomplete="off"
 							use:focus={{ enabled: true, focusable: true, focusDelay: 100 }}
 							bind:value={inputAmount}
 							on:input={() => (lastEdited = 'input')}
@@ -229,6 +230,7 @@
 							id="output"
 							type="number"
 							class="w-full text-right font-bold text-black"
+							autocomplete="off"
 							bind:value={outputAmount}
 							on:input={() => (lastEdited = 'output')}
 							placeholder="0.0"
