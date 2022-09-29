@@ -14,6 +14,9 @@ const config = {
 
 	kit: {
 		adapter: process.env.APP_ENGINE ? appEngine() : adapter(),
+		alias: {
+			$i18n: 'src/i18n'
+		},
 		// Override http methods in the Todo forms
 		// methodOverride: {
 		// 	allowed: ['PATCH', 'DELETE']

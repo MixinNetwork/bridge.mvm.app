@@ -4,6 +4,7 @@
 	import AssetIcon from '../base/asset-icon.svelte';
 	import LayoutBottomSheet from '../base/modal/layout-bottom-sheet.svelte';
 	import { switchDepositMode, switchWithdrawMode } from './export';
+	import LL from '$i18n/i18n-svelte';
 
 	export let close = () => {
 		//
@@ -39,13 +40,13 @@
 			on:click={() => {
 				switchDepositMode(asset, undefined);
 				close();
-			}}>Deposit</button
+			}}>{$LL.deposit()}</button
 		>
 		<button
 			on:click={() => {
 				switchWithdrawMode(asset);
 				close();
-			}}>Withdraw</button
+			}}>{$LL.withdraw()}</button
 		>
 	</div>
 </LayoutBottomSheet>

@@ -3,6 +3,7 @@
 	import { focus } from 'focus-svelte';
 	import Search from '$lib/assets/search.svg?component';
 	import { fade } from 'svelte/transition';
+	import LL from '$i18n/i18n-svelte';
 
 	let clazz: string | undefined = undefined;
 	let keyword: string;
@@ -27,13 +28,13 @@
 			id="search"
 			type="search"
 			class="w-full text-ellipsis bg-transparent placeholder-black placeholder-opacity-20"
-			placeholder="Name, Symbol or Address"
+			placeholder={$LL.searchBar.placeholder()}
 			autocomplete="off"
 			bind:value={keyword}
 		/>
 	</label>
 
 	{#if cancelable}
-		<button on:click>Cancel</button>
+		<button on:click>{$LL.cancel()}</button>
 	{/if}
 </div>

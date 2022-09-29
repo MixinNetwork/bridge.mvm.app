@@ -25,6 +25,7 @@
 	import { showToast } from '$lib/components/common/toast/toast-container.svelte';
 	import { focus } from 'focus-svelte';
 	import { fetchSwapPreOrderInfo } from "$lib/helpers/api";
+	import LL from '$i18n/i18n-svelte';
 
 	let a: Asset[] | undefined = $page.data.assets;
 	let p: Pair[] | undefined = $page.data.pairs;
@@ -46,16 +47,16 @@
 			getAsset(XIN_ASSET_ID, $assets));
 
 	let lastEdited: 'input' | 'output' | undefined = undefined;
-	let inputAmount: number | undefined = undefined;
-	let outputAmount: number | undefined = undefined;
+	let inputAmount: number | string | undefined = undefined;
+	let outputAmount: number | string | undefined = undefined;
 
 	const handleSwitch = () => {
-		if (lastEdited === 'input') {
+		if (lastEdited === 'input' && inputAmount) {
 			lastEdited = 'output';
-			outputAmount = inputAmount;
-		} else if (lastEdited === 'output') {
+			outputAmount = format({ n: inputAmount });
+		} else if (lastEdited === 'output' && outputAmount) {
 			lastEdited = 'input';
-			inputAmount = outputAmount;
+			inputAmount = format({ n: outputAmount });
 		}
 
 		const temp = inputAsset;
@@ -117,18 +118,24 @@
 		minReceived = info.minReceived;
 
 		if (lastEdited === 'input') {
-			outputAmount = Number(order?.amount) || undefined;
+			outputAmount = (order.amount && format({ n: order.amount })) || undefined;
 		} else if (lastEdited === 'output') {
-			inputAmount = Number(order?.funds) || undefined;
+			inputAmount = (order.funds && format({ n: order.funds })) || undefined;
 		}
 	};
 
 	$: if (inputAsset && outputAsset && lastEdited && (inputAmount || outputAmount)) {
-		updateSwapInfo(inputAsset, outputAsset, lastEdited, inputAmount, outputAmount);
+		updateSwapInfo(
+			inputAsset,
+			outputAsset,
+			lastEdited,
+			(inputAmount && Number(inputAmount)) || undefined,
+			(outputAmount && Number(outputAmount)) || undefined
+		);
 	} else order = undefined;
 
-	$: inputAmountFiat = formatFiat(inputAsset?.price_usd, inputAmount);
-	$: outputAmountFiat = formatFiat(outputAsset?.price_usd, outputAmount);
+	$: inputAmountFiat = formatFiat(inputAsset?.price_usd, (inputAmount && +inputAmount) || 0);
+	$: outputAmountFiat = formatFiat(outputAsset?.price_usd, (outputAmount && +outputAmount) || 0);
 
 	let loading = false;
 	const swap = async () => {
@@ -156,7 +163,7 @@
 </script>
 
 <Header class="bg-transparent">
-	<div class="md:hidden">Swap</div>
+	<div class="md:hidden">{$LL.swap()}</div>
 	<a href="/" class="md:hidden">
 		<Helper />
 	</a>
@@ -170,10 +177,9 @@
 		<div class="rounded-lg bg-white">
 			<label for="input" class="opacity-100">
 				<div class="flex items-center justify-between py-5 px-4 pb-3 text-sm font-semibold">
-					<div>From</div>
+					<div>{$LL.from()}</div>
 					<div class=" text-xs text-black text-opacity-50">
-						Balance: {format({ n: inputAsset?.balance ?? '0' })}
-						{inputAsset?.symbol}
+						{$LL.balanceOf(format({ n: inputAsset?.balance ?? '0' }), inputAsset?.symbol || '')}
 					</div>
 				</div>
 				<div class="flex items-center">
@@ -209,10 +215,9 @@
 			</div>
 			<label for="output" class="opacity-100">
 				<div class="flex items-center justify-between py-5 px-4 pb-3 text-sm font-semibold">
-					<div>To</div>
+					<div>{$LL.to()}</div>
 					<div class=" text-xs text-black text-opacity-50">
-						Balance: {format({ n: outputAsset?.balance ?? '0' })}
-						{outputAsset?.symbol}
+						{$LL.balanceOf(format({ n: outputAsset?.balance ?? '0' }), outputAsset?.symbol || '')}
 					</div>
 				</div>
 				<div class="flex items-center">
@@ -246,19 +251,19 @@
 					class="mt-3 space-y-2 rounded-lg bg-black bg-opacity-5 p-4 text-xs font-semibold text-black text-opacity-50 child:flex child:items-center child:justify-between"
 				>
 					<div>
-						<div>Price:</div>
+						<div>{$LL.swapPage.tips.price()}</div>
 						<div>1 {inputAsset?.symbol} ≈ {price} {outputAsset?.symbol}</div>
 					</div>
 					<div>
-						<div>Min Recevied</div>
+						<div>{$LL.swapPage.tips.minReceived()}</div>
 						<div>{minReceived} {outputAsset?.symbol}</div>
 					</div>
 					<div>
-						<div>Fee:</div>
+						<div>{$LL.swapPage.tips.fee()}</div>
 						<div>{fee} {inputAsset?.symbol}</div>
 					</div>
 					<div>
-						<div>Price Impact</div>
+						<div>{$LL.swapPage.tips.priceImpact()}</div>
 						<div
 							transition:fade
 							class={clsx({
@@ -274,7 +279,7 @@
 			</div>
 			{#if order?.priceImpact > 0.15}
 				<div transition:slide class="mt-3 self-center text-xs font-semibold opacity-50">
-					Lack of liquidity, please decrease swap amount
+					{$LL.swapPage.tips.warning()}
 				</div>
 			{/if}
 		{/if}
@@ -287,7 +292,7 @@
 			{#if loading}
 				<Spinner class="stroke-white stroke-2 text-center" />
 			{:else}
-				Swap
+				{$LL.swap()}
 			{/if}
 		</button>
 	</div>

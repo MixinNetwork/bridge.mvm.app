@@ -124,13 +124,6 @@ export const fetchAssets = async (user: User) => {
 	return assets;
 };
 
-export const dependAssets = async (
-	fetch: (info: RequestInfo, init?: RequestInit) => Promise<Response>
-): Promise<Asset[]> => {
-	const response = await fetch('/api/assets');
-	return await response.json();
-};
-
 export const fetchFeeOnAsset = async (
 	from: string,
 	to: string,

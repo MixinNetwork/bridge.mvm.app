@@ -20,6 +20,7 @@
 	import { selectAsset } from './export';
 	import { showToast } from '../common/toast/toast-container.svelte';
 	import { tick } from 'svelte';
+	import LL from '$i18n/i18n-svelte';
 
 	export let asset: Asset;
 	export let depositMode: boolean;
@@ -71,7 +72,15 @@
 				await deposit($library, asset, value);
 				await updateAssets();
 			} else {
-				await withdraw($library, asset, $user.contract, value, address, memo, $assetWithdrawalFee);
+				await withdraw(
+					$library,
+					asset,
+					$user.contract,
+					value,
+					address || $user.address,
+					memo,
+					$assetWithdrawalFee
+				);
 				await updateAssets();
 				await mvmBalance.reload?.();
 				await tick();
@@ -90,7 +99,7 @@
 
 <div class="mx-5 rounded-lg bg-white">
 	<div class="flex items-center justify-between py-5 px-4 pb-3 text-sm font-semibold">
-		<div>From</div>
+		<div>{$LL.from()}</div>
 		<div class="flex items-center space-x-1">
 			{#if depositMode}
 				<Eth height={16} width={16} />
@@ -102,8 +111,8 @@
 		</div>
 	</div>
 	<div class=" divide-y-2 divide-brand-background child:w-full">
-		<SelectedAssetButton {asset} onSelect={selectAsset}
-			>Balance: {fromBalance ? format({ n: fromBalance }) : '...'}</SelectedAssetButton
+		<SelectedAssetButton {asset} onSelect={selectAsset}>
+			{$LL.balanceOf(fromBalance ? format({ n: fromBalance }) : '...', '')}</SelectedAssetButton
 		>
 		<input
 			class={clsx('rounded-b-lg  px-4 py-6', inputClasses)}
@@ -117,7 +126,7 @@
 
 <div class=" mx-5 mt-3 rounded-lg bg-white">
 	<div class="flex items-center justify-between py-5 px-4 pb-3 text-sm font-semibold">
-		<div>To</div>
+		<div>{$LL.to()}</div>
 		<div class="flex items-center space-x-1">
 			{#if depositMode}
 				<LogoCircle height={16} width={16} />
@@ -191,11 +200,10 @@
 		class="mx-5 mt-3 space-y-2 rounded-lg bg-black bg-opacity-5 p-4 text-xs font-semibold text-black text-opacity-50"
 	>
 		<div>
-			Withdrawal fee: {$assetWithdrawalFee || '...'}
-			{asset.symbol}
+			{$LL.withdrawModal.tips1($assetWithdrawalFee || '...', asset.symbol)}
 		</div>
 		<div>
-			Gas fee: {TRANSACTION_GAS} ETH
+			{$LL.withdrawModal.tips2(TRANSACTION_GAS)}
 		</div>
 	</div>
 {/if}
@@ -208,6 +216,6 @@
 	{#if loading && !depositMode}
 		<Spinner class="stroke-white stroke-2 text-center" />
 	{:else}
-		{depositMode ? 'Deposit' : 'Withdraw'}
+		{depositMode ? $LL.deposit() : $LL.withdraw()}
 	{/if}
 </button>

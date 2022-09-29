@@ -9,12 +9,12 @@
 
 	import { totalBalanceUsd } from '../../stores/model';
 	import { format } from '../../helpers/big';
-	import Modal from '../common/modal/modal.svelte';
-	import LogoutModal from './modal/logout-modal.svelte';
+
+	import LL from '$i18n/i18n-svelte';
+	import LogoutButton from './logout-button.svelte';
 
 	let clazz: string | undefined = undefined;
 	export { clazz as class };
-	let logoutModalOpen = false;
 </script>
 
 <div
@@ -39,7 +39,7 @@
 	<Arrow class="rotate-90 sm:hidden md:block" />
 
 	<div
-		class="invisible absolute top-9 right-0 mt-2 hidden w-96 flex-col rounded-2xl bg-white pb-5 opacity-0 transition-all delay-100 group-hover:visible group-hover:opacity-100 md:flex"
+		class="invisible absolute top-9 right-0 mt-2 hidden w-96 flex-col rounded-2xl bg-white pb-5 opacity-0 shadow transition-all delay-100 group-hover:visible group-hover:opacity-100 md:flex"
 	>
 		<div class=" flex items-center space-x-3 p-6">
 			<img src={$providerLogo} alt={$providerName} class="h-12 w-12" />
@@ -49,19 +49,12 @@
 				</div>
 			</div>
 		</div>
-		<button
+		<LogoutButton
 			class="flex h-14 items-center space-x-3 px-6 hover:bg-brand-primary hover:bg-opacity-5"
-			on:click={() => (logoutModalOpen = !logoutModalOpen)}
 		>
 			<Logout />
-			<div class="grow text-start">Log out</div>
+			<div class="grow text-start">{$LL.logout.title()}</div>
 			<Arrow />
-		</button>
+		</LogoutButton>
 	</div>
-
-	<Modal
-		modal-opened={logoutModalOpen}
-		this={LogoutModal}
-		modal-on-close={() => (logoutModalOpen = !logoutModalOpen)}
-	/>
 </div>
