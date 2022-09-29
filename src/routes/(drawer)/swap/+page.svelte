@@ -114,9 +114,9 @@
 		minReceived = format({ n: +order.amount * +slippage });
 
 		if (lastEdited === 'input') {
-			outputAmount = (order.amount && format({ n: order.amount })) || undefined;
+			outputAmount = (order.amount && format({ n: order.amount, fixed: true })) || undefined;
 		} else if (lastEdited === 'output') {
-			inputAmount = (order.funds && format({ n: order.funds })) || undefined;
+			inputAmount = (order.funds && format({ n: order.funds, fixed: true })) || undefined;
 		}
 	};
 

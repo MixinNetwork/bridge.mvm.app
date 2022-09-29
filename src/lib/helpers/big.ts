@@ -108,7 +108,9 @@ export function format(opts: {
 		dp = Math.min(dp, opts.max_dp);
 	}
 
-	return opts.fixed ? num.toFormat(dp, mode) : num.decimalPlaces(dp, mode).toFormat();
+	return opts.fixed
+		? num.toFormat(dp, mode, { decimalSeparator: '.' })
+		: num.decimalPlaces(dp, mode).toFormat();
 }
 
 /**
