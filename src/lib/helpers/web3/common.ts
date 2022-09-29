@@ -194,22 +194,13 @@ export const swapAsset = async (
 
 	if (inputAsset.asset_id === ETH_ASSET_ID) {
 		const assetAmount = ethers.utils.parseEther(Number(order.funds).toFixed(8)).toString();
+		const bridge = new ethers.Contract(BRIDGE_ADDRESS, BRIDGE_ABI, signer);
 
-		if (site === '4swap') {
-			const bridge = new ethers.Contract(BRIDGE_ADDRESS, BRIDGE_ABI, signer);
-			await bridge.release(info.destination, info.extra, {
-				gasPrice: 10000000,
-				gasLimit: 500000,
-				value: assetAmount
-			});
-		}
-
-		if (site === 'MixPay') {
-			await signer.sendTransaction({
-				to: info.destination,
-				value: assetAmount
-			})
-		}
+		await bridge.release(info.destination, info.extra, {
+			gasPrice: 10000000,
+			gasLimit: 500000,
+			value: assetAmount
+		});
 
 		return await checkOrder(site, info.follow_id, user);
 	}

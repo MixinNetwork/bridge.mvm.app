@@ -100,8 +100,8 @@ ins.interceptors.response.use(async (res: AxiosResponse) => {
 export const fetchMixPayEstimatedPayment = async ({ inputAsset, outputAsset, inputAmount, outputAmount }: SwapParams): Promise<MixPayEstimatedPaymentResponse> => {
   const params: MixPayEstimatedPaymentRequest = {
     paymentAssetId: inputAsset,
-    settlementAssetId: inputAsset,
-    quoteAssetId: outputAsset,
+    quoteAssetId: inputAsset,
+    settlementAssetId: outputAsset,
   };
   if (inputAmount) params.paymentAmount = inputAmount;
   if (outputAmount) params.quoteAmount = outputAmount;
@@ -119,8 +119,8 @@ export const fetchMixPayPayment = async (
       payeeId: user_id,
       traceId: trace_id,
       paymentAssetId: inputAsset,
-      settlementAssetId: inputAsset,
-      quoteAssetId: outputAsset,
+      quoteAssetId: inputAsset,
+      settlementAssetId: outputAsset,
       paymentAmount: inputAmount,
       isChain: false,
     })
