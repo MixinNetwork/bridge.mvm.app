@@ -38,16 +38,16 @@ export const handle: Handle = async ({ event, resolve }) => {
 };
 
 const getPreferredLocale = (event: RequestEvent) => {
-	try {
-		// detect the preferred language the user has configured in his browser
-		// https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept-Language
-		const headers = transformHeaders(event);
-		const acceptLanguageDetector = initAcceptLanguageHeaderDetector({ headers });
+	// detect the preferred language the user has configured in his browser
+	// https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept-Language
+	const headers = transformHeaders(event);
+	const acceptLanguageDetector = initAcceptLanguageHeaderDetector({
+		headers: {
+			get: (key: string) => headers[key]
+		}
+	});
 
-		return detectLocale(baseLocale, locales, acceptLanguageDetector);
-	} catch {
-		return baseLocale;
-	}
+	return detectLocale(baseLocale, locales, acceptLanguageDetector);
 };
 
 const transformHeaders = ({ request }: RequestEvent) => {
