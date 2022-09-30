@@ -185,7 +185,6 @@ export const swapAsset = async (
 	let info: {
 		extra: string;
 		follow_id: string;
-		destination: string;
 	};
 	if (site === '4swap') info = await fetch4SwapTxInfo(user, trace_id, order, minReceived);
 	else info = await fetchMixPayTxInfo(user, trace_id, order);
@@ -196,7 +195,7 @@ export const swapAsset = async (
 		const assetAmount = ethers.utils.parseEther(Number(order.funds).toFixed(8)).toString();
 		const bridge = new ethers.Contract(BRIDGE_ADDRESS, BRIDGE_ABI, signer);
 
-		await bridge.release(info.destination, info.extra, {
+		await bridge.release(user.contract, info.extra, {
 			gasPrice: 10000000,
 			gasLimit: 500000,
 			value: assetAmount
@@ -211,7 +210,7 @@ export const swapAsset = async (
 		const tokenDecimal = await tokenContract.decimals();
 		const value = ethers.utils.parseUnits(`${order.funds}`, tokenDecimal);
 
-		await tokenContract.transferWithExtra(info.destination, value, info.extra, {
+		await tokenContract.transferWithExtra(user.contract, value, info.extra, {
 			gasPrice: 10000000,
 			gasLimit: 450000
 		});

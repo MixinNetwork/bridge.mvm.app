@@ -153,8 +153,7 @@ export const fetchMixPayTxInfo = async (user: RegisteredUser, trace_id: string, 
 
 	return {
 		extra,
-		follow_id: response.data.traceId,
-		destination: user.contract!
+		follow_id: response.data.traceId
 	};
 };
 

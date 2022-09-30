@@ -179,7 +179,6 @@ export const fetch4SwapTxInfo = async (
 
 	return {
 		extra,
-		follow_id: actionResp.follow_id,
-		destination: user.contract!
+		follow_id: actionResp.follow_id
 	};
 };
