@@ -1,9 +1,9 @@
 import { v4 } from 'uuid';
 import { signAuthenticationToken } from '@mixin.dev/mixin-node-sdk';
 import type { RegisteredUser } from '../../types/user';
-import type { Order } from "./route";
-import { fetchCode } from "../api";
-import { generateExtra } from "../sign";
+import type { Order } from './route';
+import { fetchCode } from '../api';
+import { generateExtra } from '../sign';
 
 export interface GetPairParams {
 	base: string;
@@ -153,7 +153,12 @@ export const fetch4SwapOrder = async (order_id: string, user: RegisteredUser) =>
 	return data as OrderResponse;
 };
 
-export const fetch4SwapTxInfo = async (user: RegisteredUser, trace_id: string, order: Order, minReceived: string) => {
+export const fetch4SwapTxInfo = async (
+	user: RegisteredUser,
+	trace_id: string,
+	order: Order,
+	minReceived: string
+) => {
 	const swapAction = `3,${user.user_id},${trace_id},${order.fill_asset_id},${order.routes},${minReceived}`;
 
 	const actionResp = await createAction({
@@ -176,5 +181,5 @@ export const fetch4SwapTxInfo = async (user: RegisteredUser, trace_id: string, o
 		extra,
 		follow_id: actionResp.follow_id,
 		destination: user.contract!
-	}
-}
+	};
+};

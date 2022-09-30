@@ -43,8 +43,8 @@ export const WHITELIST_ASSET_4SWAP = [
 	XIN_ASSET_ID,
 	EOS_ASSET_ID,
 	'eea900a8-b327-488c-8d8d-1428702fe240', // MOB
-	'f5ef6b5d-cc5a-3d90-b2c0-a2fd386e7a3c', // BOX
-]
+	'f5ef6b5d-cc5a-3d90-b2c0-a2fd386e7a3c' // BOX
+];
 
 export const WHITELIST_ASSET = [
 	{

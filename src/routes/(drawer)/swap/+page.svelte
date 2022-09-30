@@ -24,7 +24,7 @@
 	import Spinner from '$lib/components/common/spinner.svelte';
 	import { showToast } from '$lib/components/common/toast/toast-container.svelte';
 	import { focus } from 'focus-svelte';
-	import { fetchSwapPreOrderInfo } from "$lib/helpers/api";
+	import { fetchSwapPreOrderInfo } from '$lib/helpers/api';
 	import LL from '$i18n/i18n-svelte';
 
 	let a: Asset[] | undefined = $page.data.assets;
@@ -99,10 +99,11 @@
 		inputValue?: number,
 		outputValue?: number
 	) => {
-		site = (
-				WHITELIST_ASSET_4SWAP.includes(inputAsset.asset_id) ||
-				WHITELIST_ASSET_4SWAP.includes(outputAsset.asset_id)
-		) ? '4swap' : 'MixPay';
+		site =
+			WHITELIST_ASSET_4SWAP.includes(inputAsset.asset_id) ||
+			WHITELIST_ASSET_4SWAP.includes(outputAsset.asset_id)
+				? '4swap'
+				: 'MixPay';
 
 		const info = await fetchSwapPreOrderInfo(site, pairRoutes, slippage, {
 			inputAsset: inputAsset?.asset_id,
@@ -152,7 +153,7 @@
 			await updateAssets();
 			inputAsset = getAsset(inputAsset.asset_id, $assets);
 
-			if (res && res.state === 'Done') showToast('success', 'Successful');
+			if (res) showToast('success', 'Successful');
 
 			inputAmount = undefined;
 			outputAmount = undefined;

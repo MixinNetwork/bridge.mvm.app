@@ -10,9 +10,13 @@ import { fetchMvmTokens } from './mvm/api';
 import { getBalance } from './web3/common';
 import { fetchAssetContract } from './web3/registry';
 import { sortBy } from 'lodash-es';
-import type { PairRoutes, SwapParams } from "./4swap/route";
-import { fetchMixPayEstimatedPayment, fetchMixPayOrder, type MixPayPaymentResult } from "./mixpay/api";
-import { fetch4SwapOrder, type OrderResponse } from "./4swap/api";
+import type { PairRoutes, SwapParams } from './4swap/route';
+import {
+	fetchMixPayEstimatedPayment,
+	fetchMixPayOrder,
+	type MixPayPaymentResult
+} from './mixpay/api';
+import { fetch4SwapOrder, type OrderResponse } from './4swap/api';
 
 export const register = async (address: string): Promise<RegisteredUser> => {
 	const response = await fetch('https://bridge.mvm.dev/users', {
@@ -159,11 +163,19 @@ export const fetchCode = async (code_id: string): Promise<PaymentRequestResponse
 
 export const fetchExchangeRates = ExternalClient().exchangeRates;
 
-export const fetchSwapPreOrderInfo = async (site: string, pairRoutes: PairRoutes, slippage: number, { inputAsset, outputAsset, inputAmount, outputAmount }: SwapParams) => {
+export const fetchSwapPreOrderInfo = async (
+	site: string,
+	pairRoutes: PairRoutes,
+	slippage: number,
+	{ inputAsset, outputAsset, inputAmount, outputAmount }: SwapParams
+) => {
 	try {
 		if (site === 'MixPay') {
 			const response = await fetchMixPayEstimatedPayment({
-				inputAsset, outputAsset, inputAmount, outputAmount
+				inputAsset,
+				outputAsset,
+				inputAmount,
+				outputAmount
 			});
 
 			if (response.success) {
@@ -182,7 +194,7 @@ export const fetchSwapPreOrderInfo = async (site: string, pairRoutes: PairRoutes
 					order,
 					fee: '0',
 					price: format({ n: order.amount / order.funds, dp: 8 }),
-					minReceived: format({ n: order.amount})
+					minReceived: format({ n: order.amount })
 				};
 			}
 
@@ -191,7 +203,10 @@ export const fetchSwapPreOrderInfo = async (site: string, pairRoutes: PairRoutes
 
 		if (site === '4swap') {
 			const order = pairRoutes.getPreOrder({
-				inputAsset, outputAsset, inputAmount, outputAmount
+				inputAsset,
+				outputAsset,
+				inputAmount,
+				outputAmount
 			});
 
 			return {
@@ -199,20 +214,20 @@ export const fetchSwapPreOrderInfo = async (site: string, pairRoutes: PairRoutes
 				fee: format({ n: pairRoutes.getFee(order), dp: 8 }),
 				price: format({ n: +order.amount / +order.funds, dp: 8 }),
 				minReceived: format({ n: +order.amount * +slippage })
-			}
+			};
 		}
 
 		return undefined;
 	} catch (e) {
-		return undefined
+		return undefined;
 	}
-}
+};
 
 export const checkOrder = async (
 	site: '4swap' | 'MixPay',
 	order_id: string,
 	user: RegisteredUser
-): Promise<OrderResponse | MixPayPaymentResult> => {
+): Promise<boolean> => {
 	let counter = 0;
 	const fetchOrderStatus = site === '4swap' ? fetch4SwapOrder : fetchMixPayOrder;
 
@@ -222,7 +237,7 @@ export const checkOrder = async (
 
 			if (counter === 30) {
 				clearInterval(timer);
-				reject({ error: 'overtime' });
+				reject(false);
 			}
 
 			try {
@@ -232,7 +247,7 @@ export const checkOrder = async (
 					(site === 'MixPay' && res && (res as MixPayPaymentResult).data.status === 'success')
 				) {
 					clearInterval(timer);
-					resolve(res);
+					resolve(true);
 				}
 			} catch (e) {
 				return;

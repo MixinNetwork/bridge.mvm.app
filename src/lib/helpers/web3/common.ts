@@ -17,7 +17,7 @@ import { toHex } from '../utils';
 import { getWithdrawalExtra } from '../sign';
 import { fetch4SwapTxInfo } from '../4swap/api';
 import { checkOrder } from '../api';
-import { fetchMixPayTxInfo } from "../mixpay/api";
+import { fetchMixPayTxInfo } from '../mixpay/api';
 import { format } from '../big';
 
 export const mainnetProvider = ethers.getDefaultProvider(1);
