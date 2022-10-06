@@ -55,6 +55,7 @@
 
 			await registerAndSave($account);
 			await goto($page.url.searchParams.get(LAST_URL) || '/');
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		} catch (e: any) {
 			if (e.message !== 'No Web3 Provider found') return;
 			showToast('common', $LL.login.pleaseInstallMetaMaskFirst());

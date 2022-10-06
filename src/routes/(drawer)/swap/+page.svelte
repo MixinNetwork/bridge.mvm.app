@@ -12,7 +12,7 @@
 	import type { Asset } from '$lib/types/asset';
 	import Header from '$lib/components/base/header.svelte';
 	import UserInfo from '$lib/components/base/user-info.svelte';
-	import { format, toPercent } from '$lib/helpers/big';
+	import { bigLte, format, toPercent } from '$lib/helpers/big';
 	import SelectedAssetButton from '$lib/components/base/selected-asset-button.svelte';
 	import { slide } from 'svelte/transition';
 	import { DEFAULT_SLIPPAGE, INPUT_KEY, OUTPUT_KEY, formatFiat } from '$lib/components/swap/export';
@@ -174,9 +174,16 @@
 			<label for="input" class="opacity-100">
 				<div class="flex items-center justify-between py-5 px-4 pb-3 text-sm font-semibold">
 					<div>{$LL.from()}</div>
-					<div class=" text-xs text-black text-opacity-50">
+					<button
+						class="expand-4 text-xs text-black text-opacity-50 !opacity-100"
+						disabled={bigLte(inputAsset?.balance ?? 0, 0)}
+						on:click={() => {
+							lastEdited = 'input';
+							inputAmount = inputAsset?.balance;
+						}}
+					>
 						{$LL.balanceOf(format({ n: inputAsset?.balance ?? '0' }), inputAsset?.symbol || '')}
-					</div>
+					</button>
 				</div>
 				<div class="flex items-center">
 					{#if inputAsset}
@@ -213,9 +220,16 @@
 			<label for="output" class="opacity-100">
 				<div class="flex items-center justify-between py-5 px-4 pb-3 text-sm font-semibold">
 					<div>{$LL.to()}</div>
-					<div class=" text-xs text-black text-opacity-50">
+					<button
+						class="expand-4 text-xs text-black text-opacity-50 !opacity-100"
+						disabled={bigLte(outputAsset?.balance ?? 0, 0)}
+						on:click={() => {
+							lastEdited = 'output';
+							outputAmount = outputAsset?.balance;
+						}}
+					>
 						{$LL.balanceOf(format({ n: outputAsset?.balance ?? '0' }), outputAsset?.symbol || '')}
-					</div>
+					</button>
 				</div>
 				<div class="flex items-center">
 					{#if outputAsset}
