@@ -24,6 +24,7 @@
 	import LL from '$i18n/i18n-svelte';
 	import walletConnect from '$lib/assets/logo/wallet-connect.svg';
 	import metamask from '$lib/assets/logo/metamask.svg';
+	import { showToast } from '../../lib/components/common/toast/toast-container.svelte';
 
 	const providers: IProvider[] = [
 		{
@@ -54,6 +55,9 @@
 
 			await registerAndSave($account);
 			await goto($page.url.searchParams.get(LAST_URL) || '/');
+		} catch (e: any) {
+			if (e.message !== 'No Web3 Provider found') return;
+			showToast('common', $LL.login.pleaseInstallMetaMaskFirst());
 		} finally {
 			loading = false;
 		}

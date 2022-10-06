@@ -2,11 +2,13 @@
 	import { derived } from '@square/svelte-store';
 	import ToastItem, { type ToastItemComponent } from './toast-item.svelte';
 	import Success from './success.svelte';
+	import Common from './common.svelte';
 	import { v4 } from 'uuid';
 	import { deepWritable } from '../../../helpers/store/deep';
 
 	const toasts = {
-		success: Success
+		success: Success,
+		common: Common
 	};
 
 	export type ToastType = keyof typeof toasts;

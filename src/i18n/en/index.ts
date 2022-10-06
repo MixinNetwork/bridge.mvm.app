@@ -75,7 +75,8 @@ const en: BaseTranslation = {
 	login: {
 		title: 'Login',
 		connectBrowserWalletDescription: 'Connect using browser wallet',
-		connectWalletConnectDescription: 'Connect using WalletConnect'
+		connectWalletConnectDescription: 'Connect using WalletConnect',
+		pleaseInstallMetaMaskFirst: 'Please install MetaMask first'
 	}
 };
 
