@@ -49,7 +49,7 @@ const en: BaseTranslation = {
 	allTransactions: 'All Transactions',
 	fee: 'Fee',
 	balanceOf: 'Balance: {0:string} {1:string}',
-
+	copied: 'Copied',
 	swapPage: {
 		tips: {
 			price: 'Price:',

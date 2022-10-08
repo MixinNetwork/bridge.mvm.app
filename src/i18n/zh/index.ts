@@ -49,6 +49,7 @@ const zh: Translation = {
 	allTransactions: '全部交易',
 	fee: '手续费',
 	balanceOf: '余额：{0} {1}',
+	copied: '已复制',
 	swapPage: {
 		tips: {
 			price: '价格：',

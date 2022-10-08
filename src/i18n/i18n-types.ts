@@ -171,6 +171,10 @@ type RootTranslation = {
 	 * @param {string} 1
 	 */
 	balanceOf: RequiredParams<'0' | '1'>
+	/**
+	 * C​o​p​i​e​d
+	 */
+	copied: string
 	swapPage: {
 		tips: {
 			/**
@@ -400,6 +404,10 @@ export type TranslationFunctions = {
 	 * Balance: {0} {1}
 	 */
 	balanceOf: (arg0: string, arg1: string) => LocalizedString
+	/**
+	 * Copied
+	 */
+	copied: () => LocalizedString
 	swapPage: {
 		tips: {
 			/**

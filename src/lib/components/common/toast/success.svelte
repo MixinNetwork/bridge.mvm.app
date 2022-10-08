@@ -8,4 +8,4 @@
 	<img src={SuccessIcon} alt="success-icon" />
 </div>
 
-<div class="ml-3 inline-block font-semibold leading-10">{message}</div>
+<div class="inline-block font-semibold leading-10">{message}</div>
