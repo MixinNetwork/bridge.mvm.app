@@ -77,7 +77,8 @@ const zh: Translation = {
 		connectBrowserWalletDescription: '使用浏览器钱包连接',
 		connectWalletConnectDescription: '使用 WalletConnect 连接',
 		pleaseInstallMetaMaskFirst: '请先安装 MetaMask'
-	}
+	},
+	max: '最大'
 };
 
 export default zh;

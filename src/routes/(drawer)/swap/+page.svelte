@@ -156,6 +156,9 @@
 			loading = false;
 		}
 	};
+
+	$: isInputAssetBalanceLegal = bigLte(inputAsset?.balance ?? 0, 0);
+	$: isOutputAssetBalanceLegal = bigLte(outputAsset?.balance ?? 0, 0);
 </script>
 
 <Header class="bg-transparent">
@@ -175,14 +178,19 @@
 				<div class="flex items-center justify-between py-5 px-4 pb-3 text-sm font-semibold">
 					<div>{$LL.from()}</div>
 					<button
-						class="expand-4 text-xs text-black text-opacity-50 !opacity-100"
-						disabled={bigLte(inputAsset?.balance ?? 0, 0)}
+						class="expand-4 space-x-1 text-xs text-black text-opacity-50 !opacity-100"
+						disabled={isInputAssetBalanceLegal}
 						on:click={() => {
 							lastEdited = 'input';
 							inputAmount = inputAsset?.balance;
 						}}
 					>
-						{$LL.balanceOf(format({ n: inputAsset?.balance ?? '0' }), inputAsset?.symbol || '')}
+						{#if !isInputAssetBalanceLegal}
+							<span class="text-brand-primary">{$LL.max()}</span>
+						{/if}
+						<span>
+							{$LL.balanceOf(format({ n: inputAsset?.balance ?? 0 }), inputAsset?.symbol || '')}
+						</span>
 					</button>
 				</div>
 				<div class="flex items-center">
@@ -221,14 +229,19 @@
 				<div class="flex items-center justify-between py-5 px-4 pb-3 text-sm font-semibold">
 					<div>{$LL.to()}</div>
 					<button
-						class="expand-4 text-xs text-black text-opacity-50 !opacity-100"
-						disabled={bigLte(outputAsset?.balance ?? 0, 0)}
+						class="expand-4 space-x-1 text-xs text-black text-opacity-50 !opacity-100"
+						disabled={isOutputAssetBalanceLegal}
 						on:click={() => {
 							lastEdited = 'output';
 							outputAmount = outputAsset?.balance;
 						}}
 					>
-						{$LL.balanceOf(format({ n: outputAsset?.balance ?? '0' }), outputAsset?.symbol || '')}
+						{#if !isOutputAssetBalanceLegal}
+							<span class="text-brand-primary">{$LL.max()}</span>
+						{/if}
+						<span>
+							{$LL.balanceOf(format({ n: outputAsset?.balance ?? 0 }), outputAsset?.symbol || '')}
+						</span>
 					</button>
 				</div>
 				<div class="flex items-center">

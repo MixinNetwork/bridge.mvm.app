@@ -251,6 +251,10 @@ type RootTranslation = {
 		 */
 		pleaseInstallMetaMaskFirst: string
 	}
+	/**
+	 * M​a​x
+	 */
+	max: string
 }
 
 export type TranslationFunctions = {
@@ -484,6 +488,10 @@ export type TranslationFunctions = {
 		 */
 		pleaseInstallMetaMaskFirst: () => LocalizedString
 	}
+	/**
+	 * Max
+	 */
+	max: () => LocalizedString
 }
 
 export type Formatters = {}

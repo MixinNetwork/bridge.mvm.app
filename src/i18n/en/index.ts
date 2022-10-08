@@ -77,7 +77,8 @@ const en: BaseTranslation = {
 		connectBrowserWalletDescription: 'Connect using browser wallet',
 		connectWalletConnectDescription: 'Connect using WalletConnect',
 		pleaseInstallMetaMaskFirst: 'Please install MetaMask first'
-	}
+	},
+	max: 'Max'
 };
 
 export default en;
