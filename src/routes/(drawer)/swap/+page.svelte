@@ -303,7 +303,7 @@
 				</div>
 			</div>
 			{#if order?.priceImpact > 0.15}
-				<div transition:slide class="mt-3 self-center text-xs font-semibold opacity-50">
+				<div transition:slide|local class="mt-3 self-center text-xs font-semibold opacity-50">
 					{$LL.swapPage.tips.warning()}
 				</div>
 			{/if}
