@@ -16,6 +16,7 @@ export const ETH_ASSET_ID = '43d61dcd-e413-450d-80b8-101d5e903357';
 export const XIN_ASSET_ID = 'c94ac88f-4671-3976-b60a-09064f1811e8';
 export const TRX_ASSET_ID = '25dabac5-056a-48ff-b9f9-f67395dc407c';
 export const EOS_ASSET_ID = '6cfe566e-4aad-470b-8c9a-2fd35b49c68d';
+export const MOB_ASSET_ID = 'eea900a8-b327-488c-8d8d-1428702fe240';
 
 export const REGISTRY_PID = 'bd67087276ce3263b9333aa337e212a4';
 export const REGISTRY_ADDRESS = '0x3c84B6C98FBeB813e05a7A7813F0442883450B1F';
@@ -227,6 +228,11 @@ export const WHITELIST_ASSET = [
 		id: '0c79a53f-9caf-3e7c-a3ce-1edcba33301f',
 		symbol: 'FTT',
 		chain: 'ETH'
+	},
+	{
+		id: '659c407a-0489-30bf-9e6f-84ef25c971c9',
+		symbol: 'eUSD',
+		chain: 'MOB'
 	}
 ];
 
