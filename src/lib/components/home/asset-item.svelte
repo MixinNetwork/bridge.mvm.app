@@ -7,6 +7,7 @@
 	import AssetIcon from '../base/asset-icon.svelte';
 	import AssetItemModal from './asset-item-modal.svelte';
 	import Modal from '../common/modal/modal.svelte';
+	import LL from '$i18n/i18n-svelte';
 
 	export let asset: Asset;
 
@@ -50,8 +51,10 @@
 	<div
 		class="hidden flex-1 justify-end space-x-4 font-semibold child:flex child:h-10 child:w-[102px] child:items-center child:justify-center child:rounded-full child:bg-white lg:flex"
 	>
-		<button on:click|stopPropagation={() => switchDepositMode(asset, undefined)}>Deposit</button>
-		<button on:click|stopPropagation={() => switchWithdrawMode(asset)}>Withdraw</button>
+		<button on:click|stopPropagation={() => switchDepositMode(asset, undefined)}
+			>{$LL.deposit()}</button
+		>
+		<button on:click|stopPropagation={() => switchWithdrawMode(asset)}>{$LL.withdraw()}</button>
 		<!-- <button>Swap</button> -->
 	</div>
 </div>
