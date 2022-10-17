@@ -86,11 +86,18 @@ export const switchNetwork = async (provider: ethers.providers.Web3Provider, net
 		});
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	} catch (switchError: any) {
-		if (switchError?.code !== 4902) return;
+		if (
+			switchError?.code !== 4902 ||
+			switchError?.code !== -32603 ||
+			switchError?.data?.orginalError?.code === 4902 ||
+			switchError?.data?.orginalError?.code === -32603
+		)
+			return;
 		await request({
 			method: 'wallet_addEthereumChain',
 			params: [networkParams[toHex(number)]]
 		});
+		await switchNetwork(provider, network);
 	}
 };
 
