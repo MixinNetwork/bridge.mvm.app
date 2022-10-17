@@ -4,15 +4,14 @@ import { BRIDGE_ABI, ERC20_ABI, MVM_ERC20_ABI } from '../../constants/abis';
 import {
 	BRIDGE_ADDRESS,
 	ETH_ASSET_ID,
-	MAINNET_CHAIN_ID,
-	MVM_CHAIN_ID,
+	MAINNET_CHAIN_HEX_ID,
+	MVM_CHAIN_HEX_ID,
 	MVM_RPC_URL,
 	networkParams
 } from '../../constants/common';
 import type { Network } from '../../types/network';
 import type { RegisteredUser } from '$lib/types/user';
 import type { Asset } from '$lib/types/asset';
-import { toHex } from '../utils';
 import { generateExtra, getWithdrawalExtra } from '../sign';
 import { checkOrder, createAction } from '../4swap/api';
 import { fetchCode } from '../api';
@@ -77,25 +76,25 @@ export const switchNetwork = async (provider: ethers.providers.Web3Provider, net
 	const request = provider.provider.request;
 	if (!request) throw new Error('Web3Provider.provider.request must be defined');
 
-	const number = network === 'mainnet' ? MAINNET_CHAIN_ID : MVM_CHAIN_ID;
+	const hex = network === 'mainnet' ? MAINNET_CHAIN_HEX_ID : MVM_CHAIN_HEX_ID;
 
 	try {
 		await request({
 			method: 'wallet_switchEthereumChain',
-			params: [{ chainId: toHex(number) }]
+			params: [{ chainId: hex }]
 		});
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	} catch (switchError: any) {
 		if (
 			switchError?.code !== 4902 ||
 			switchError?.code !== -32603 ||
-			switchError?.data?.orginalError?.code === 4902 ||
-			switchError?.data?.orginalError?.code === -32603
+			switchError?.data?.orginalError?.code !== 4902 ||
+			switchError?.data?.orginalError?.code !== -32603
 		)
 			return;
 		await request({
 			method: 'wallet_addEthereumChain',
-			params: [networkParams[toHex(number)]]
+			params: [networkParams[hex]]
 		});
 		await switchNetwork(provider, network);
 	}
