@@ -235,11 +235,6 @@ export const WHITELIST_ASSET = [
 		chain: 'MOB'
 	},
 	{
-		id: 'dcde18b9-f015-326f-b8b1-5b820a060e44',
-		symbol: 'SHIB',
-		chain: 'ETH'
-	},
-	{
 		id: '6770a1e5-6086-44d5-b60f-545f9d9e8ffd',
 		symbol: 'DOGE',
 		chain: 'ETH'
