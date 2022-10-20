@@ -40,7 +40,7 @@
 		"eslint-config-prettier": "^8.3.0",
 		"eslint-plugin-square-svelte-store": "^1.0.0",
 		"eslint-plugin-svelte3": "^4.0.0",
-		"ethers": "^5.7.1",
+		"ethers": "^5.7.2",
 		"focus-svelte": "^0.3.4",
 		"hashids": "^2.2.10",
 		"js-cookie": "^3.0.1",
