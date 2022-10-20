@@ -33,6 +33,7 @@
 	import { fade } from 'svelte/transition';
 	import Empty from '$lib/components/base/empty.svelte';
 	import LL from '$i18n/i18n-svelte';
+	import Apps from '$lib/components/base/apps.svelte';
 
 	let a: Asset[] | undefined = $page.data.assets;
 
@@ -63,6 +64,7 @@
 		<Helper />
 	</a>
 	<UserInfo class="hidden md:flex" />
+	<Apps />
 </Header>
 
 <div

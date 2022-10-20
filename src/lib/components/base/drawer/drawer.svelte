@@ -48,16 +48,16 @@
 
 	<div class="mb-5 flex grow flex-col items-center justify-end">
 		<div class=" flex space-x-1 child:p-2">
-			<a href="https://discord.gg/JER9jmbRB6" target="_blank">
+			<a href="https://discord.gg/JER9jmbRB6" target="_blank" rel="noreferrer">
 				<Discrod />
 			</a>
-			<a href="https://t.me/mvmbridge " target="_blank">
+			<a href="https://t.me/mvmbridge " target="_blank" rel="noreferrer">
 				<Telegram />
 			</a>
-			<a href="https://mvm-bridge.mixin.group" target="_blank">
+			<a href="https://mvm-bridge.mixin.group" target="_blank" rel="noreferrer">
 				<Mixin />
 			</a>
-			<a href="https://twitter.com/MvmBridge" target="_blank">
+			<a href="https://twitter.com/MvmBridge" target="_blank" rel="noreferrer">
 				<Twitter />
 			</a>
 		</div>
