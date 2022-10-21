@@ -78,7 +78,21 @@ const zh: Translation = {
 		connectWalletConnectDescription: '使用 WalletConnect 连接',
 		pleaseInstallMetaMaskFirst: '请先安装 MetaMask'
 	},
-	max: '最大'
+	max: '最大',
+	apps: {
+		quill: {
+			description: '通过写作赚币'
+		},
+		leaf: {
+			description: '一个去中心化的金融网络，实施一个衍生品流动性协议。'
+		},
+		rings: {
+			description: '一个算法的、自主的利率协议。'
+		},
+		fourSwap: {
+			description: '4swap 是 Fox 的自动做市交易平台，与 Uniswap 类似。'
+		}
+	}
 };
 
 export default zh;

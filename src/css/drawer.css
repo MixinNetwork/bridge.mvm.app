@@ -102,7 +102,7 @@
 	}
 	.drawer-toggle {
 		& ~ .drawer-content {
-			@apply overflow-visible transition-all duration-300 ease-in-out;
+			@apply transition-all duration-300 ease-in-out;
 		}
 		& ~ .drawer-side {
 			& > .drawer-overlay {

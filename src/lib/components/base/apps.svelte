@@ -5,59 +5,66 @@
 	import PandoLeaf from '$lib/assets/apps/pando-leaf.svg';
 	import PandoRings from '$lib/assets/apps/pando-rings.svg';
 	import FourSwap from '$lib/assets/apps/4swap.svg';
+	import Modal from '../common/modal/modal.svelte';
+	import AppsModal from './apps-modal.svelte';
+	import LL from '$i18n/i18n-svelte';
 
-	const data = [
+	$: data = [
 		{
 			name: 'Quill',
-			description: 'Write to Earn',
+			description: $LL.apps.quill.description(),
 			icon: Quill,
 			href: 'https://quill.im/'
 		},
 		{
 			name: 'Pando Leaf',
-			description: 'A decentralized financial network, implement a derivatives liquidity protocol.',
+			description: $LL.apps.leaf.description(),
 			icon: PandoLeaf,
 			href: 'https://leaf.pando.im/'
 		},
 		{
 			name: 'Pando Rings',
-			description: 'An algorithmic, autonomous interest rate protocol.',
+			description: $LL.apps.rings.description(),
 			icon: PandoRings,
 			href: 'https://rings.pando.im/'
 		},
 		{
 			name: '4Swap',
-			description:
-				'4swap is the automated market-making trading platform of Fox, similar to Uniswap.',
+			description: $LL.apps.fourSwap.description(),
 			icon: FourSwap,
 			href: 'https://app.4swap.org/'
 		}
 	];
 
+	let opened = false;
+
 	let clazz: string | undefined = undefined;
 	export { clazz as class };
 </script>
 
-<div
+<button
 	class={clsx(
-		'group relative md:flex hidden items-center select-none z-50 justify-center md:bg-white w-fit md:rounded-full space-x-3 md:py-2 md:px-4 transition mr-3',
+		'group relative flex items-center md:cursor-default select-none opacity-100 z-50 justify-center md:bg-white w-fit md:rounded-full space-x-3 md:py-2 md:px-4 transition mr-3',
 		clazz
 	)}
+	on:click={() => (opened = true)}
 >
 	<Apps />
-	<div class=" text-sm font-semibold text-black text-opacity-80">APPS</div>
+	<div class=" hidden text-sm font-semibold text-black text-opacity-80 md:block">APPS</div>
 
 	<div
-		class="invisible absolute top-10 right-0 z-50 mt-3 hidden w-96 flex-col rounded-2xl bg-white px-5 py-5 opacity-0 shadow transition-all delay-100 group-hover:visible group-hover:opacity-100 md:flex"
+		class="invisible absolute top-10 -right-48 z-50 mt-3 hidden w-96 flex-col rounded-2xl bg-white p-5 opacity-0 shadow transition-all delay-100 group-hover:visible group-hover:opacity-100 md:flex lg:right-0"
 	>
 		{#each data as { name, description, icon, href } (name)}
 			<a class=" flex flex-row space-x-3 py-4" {href} target="_blank" rel="noreferrer">
 				<img src={icon} width="40" height="40" alt={name} class=" shrink-0" />
-				<div class="flex flex-col">
+				<div class="flex flex-col items-start text-start">
 					<div class=" font-bold text-black text-opacity-80">{name}</div>
 					<div class=" text-sm font-semibold text-black text-opacity-20">{description}</div>
 				</div>
 			</a>
 		{/each}
 	</div>
-</div>
+</button>
+
+<Modal this={AppsModal} {data} modal-opened={opened} modal-on-close={() => (opened = false)} />

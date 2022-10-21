@@ -78,7 +78,22 @@ const en: BaseTranslation = {
 		connectWalletConnectDescription: 'Connect using WalletConnect',
 		pleaseInstallMetaMaskFirst: 'Please install MetaMask first'
 	},
-	max: 'Max'
+	max: 'Max',
+	apps: {
+		quill: {
+			description: 'Write to Earn'
+		},
+		leaf: {
+			description: 'A decentralized financial network, implement a derivatives liquidity protocol.'
+		},
+		rings: {
+			description: 'An algorithmic, autonomous interest rate protocol.'
+		},
+		fourSwap: {
+			description:
+				'4swap is the automated market-making trading platform of Fox, similar to Uniswap.'
+		}
+	}
 };
 
 export default en;

@@ -3,7 +3,7 @@
 	import Qrcode from './qrcode.svelte';
 	import { ETH_ASSET_ID } from '$lib/constants/common';
 	import Bridge from './bridge.svelte';
-	import LayoutModal from '$lib/components/base/modal/layout-modal.svelte';
+	import FullLayoutModal from '$lib/components/base/modal/full-layout-modal.svelte';
 	import { providerName } from '$lib/stores/provider';
 	import LL from '$i18n/i18n-svelte';
 
@@ -21,7 +21,7 @@
 	$: if (asset && mode === 'metamask') switchDepositMode(asset, 'metamask');
 </script>
 
-<LayoutModal on:click={close}>
+<FullLayoutModal on:click={close}>
 	<div slot="title">{$LL.depositModal.title()}</div>
 
 	<div
@@ -60,4 +60,4 @@
 			</div>
 		{/if}
 	</div>
-</LayoutModal>
+</FullLayoutModal>

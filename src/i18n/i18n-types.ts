@@ -255,6 +255,32 @@ type RootTranslation = {
 	 * M​a​x
 	 */
 	max: string
+	apps: {
+		quill: {
+			/**
+			 * W​r​i​t​e​ ​t​o​ ​E​a​r​n
+			 */
+			description: string
+		}
+		leaf: {
+			/**
+			 * A​ ​d​e​c​e​n​t​r​a​l​i​z​e​d​ ​f​i​n​a​n​c​i​a​l​ ​n​e​t​w​o​r​k​,​ ​i​m​p​l​e​m​e​n​t​ ​a​ ​d​e​r​i​v​a​t​i​v​e​s​ ​l​i​q​u​i​d​i​t​y​ ​p​r​o​t​o​c​o​l​.
+			 */
+			description: string
+		}
+		rings: {
+			/**
+			 * A​n​ ​a​l​g​o​r​i​t​h​m​i​c​,​ ​a​u​t​o​n​o​m​o​u​s​ ​i​n​t​e​r​e​s​t​ ​r​a​t​e​ ​p​r​o​t​o​c​o​l​.
+			 */
+			description: string
+		}
+		fourSwap: {
+			/**
+			 * 4​s​w​a​p​ ​i​s​ ​t​h​e​ ​a​u​t​o​m​a​t​e​d​ ​m​a​r​k​e​t​-​m​a​k​i​n​g​ ​t​r​a​d​i​n​g​ ​p​l​a​t​f​o​r​m​ ​o​f​ ​F​o​x​,​ ​s​i​m​i​l​a​r​ ​t​o​ ​U​n​i​s​w​a​p​.
+			 */
+			description: string
+		}
+	}
 }
 
 export type TranslationFunctions = {
@@ -492,6 +518,32 @@ export type TranslationFunctions = {
 	 * Max
 	 */
 	max: () => LocalizedString
+	apps: {
+		quill: {
+			/**
+			 * Write to Earn
+			 */
+			description: () => LocalizedString
+		}
+		leaf: {
+			/**
+			 * A decentralized financial network, implement a derivatives liquidity protocol.
+			 */
+			description: () => LocalizedString
+		}
+		rings: {
+			/**
+			 * An algorithmic, autonomous interest rate protocol.
+			 */
+			description: () => LocalizedString
+		}
+		fourSwap: {
+			/**
+			 * 4swap is the automated market-making trading platform of Fox, similar to Uniswap.
+			 */
+			description: () => LocalizedString
+		}
+	}
 }
 
 export type Formatters = {}

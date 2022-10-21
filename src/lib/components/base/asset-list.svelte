@@ -3,7 +3,7 @@
 	import AssetIcon from '$lib/components/base/asset-icon.svelte';
 	import ChainLabel from '$lib/components/base/chain-label.svelte';
 	import type { Asset } from '$lib/types/asset';
-	import ModalHeader from '$lib/components/base/modal/modal-header.svelte';
+	import FullModalHeader from '$lib/components/base/modal/full-modal-header.svelte';
 	import LayoutBottomSheet from '$lib/components/base/modal/layout-bottom-sheet.svelte';
 	import { searchAssets } from '../../helpers/utils';
 	import SearchBar from './search-bar.svelte';
@@ -26,7 +26,7 @@
 </script>
 
 <LayoutBottomSheet>
-	<ModalHeader class="mb-0 hidden md:flex" on:click={close}>{$LL.assets()}</ModalHeader>
+	<FullModalHeader class="mb-0 hidden md:flex" on:click={close}>{$LL.assets()}</FullModalHeader>
 	<SearchBar bind:keyword class="md:pt-0" />
 	<div class="grow overflow-y-auto">
 		{#each filtedAssets || [] as asset (asset.asset_id)}

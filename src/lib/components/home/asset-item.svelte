@@ -22,12 +22,13 @@
 
 <svelte:window bind:innerWidth />
 
-<button
+<!-- svelte-ignore a11y-click-events-have-key-events -->
+<div
 	on:click={() => {
 		if (isLg) return switchDepositMode(asset, undefined);
 		isOpen = true;
 	}}
-	class="flex w-full cursor-pointer items-center  bg-brand-primary bg-opacity-0 p-5 opacity-100 hover:bg-opacity-5"
+	class="flex w-full cursor-pointer items-center bg-brand-primary bg-opacity-0 p-5 opacity-100 hover:bg-opacity-5"
 >
 	<div class="flex flex-1 items-center justify-between space-x-3">
 		<AssetIcon
@@ -57,6 +58,6 @@
 		<button on:click|stopPropagation={() => switchWithdrawMode(asset)}>{$LL.withdraw()}</button>
 		<!-- <button>Swap</button> -->
 	</div>
-</button>
+</div>
 
 <Modal modal-opened={isOpen} this={AssetItemModal} modal-on-close={close} {asset} />
