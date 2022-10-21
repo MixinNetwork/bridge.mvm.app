@@ -20,6 +20,7 @@ const en: BaseTranslation = {
 	swap: 'Swap',
 	explorer: 'Explorer',
 	audit: 'Audit',
+	docs: 'Docs',
 	logout: {
 		title: 'Log Out',
 		description: 'Are you sure want to logout?'

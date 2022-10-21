@@ -72,6 +72,10 @@ type RootTranslation = {
 	 * A​u​d​i​t
 	 */
 	audit: string
+	/**
+	 * D​o​c​s
+	 */
+	docs: string
 	logout: {
 		/**
 		 * L​o​g​ ​O​u​t
@@ -342,6 +346,10 @@ export type TranslationFunctions = {
 	 * Audit
 	 */
 	audit: () => LocalizedString
+	/**
+	 * Docs
+	 */
+	docs: () => LocalizedString
 	logout: {
 		/**
 		 * Log Out

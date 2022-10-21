@@ -10,6 +10,7 @@
 	import UserInfo from '../user-info.svelte';
 	import Exporor from '$lib/assets/drawer/explorer.svg?component';
 	import Audit from '$lib/assets/drawer/audit.svg?component';
+	import Docs from '$lib/assets/drawer/docs.svg?component';
 	import LL from '$i18n/i18n-svelte';
 	import LogoutButton from '$lib/components/base/logout-button.svelte';
 	import Logout from '$lib/assets/logout.svg?component';
@@ -29,12 +30,26 @@
 	<DrawerItem logo={Swap} href="/swap/" title={$LL.swap()} />
 	<!-- <DrawerItem logo={GasToken} href="/gas-token/" title="Gas Token" /> -->
 	<!-- <DrawerItem logo={Support} href="/support/" title="Support" /> -->
-	<DrawerItem logo={Exporor} href="https://scan.mvm.dev/" title={$LL.explorer()} target="_blank" />
+	<DrawerItem
+		logo={Exporor}
+		href="https://scan.mvm.dev/"
+		title={$LL.explorer()}
+		target="_blank"
+		rel="noreferrer"
+	/>
 	<DrawerItem
 		logo={Audit}
 		href="https://github.com/MixinNetwork/audits/"
 		title={$LL.audit()}
 		target="_blank"
+		rel="noreferrer"
+	/>
+	<DrawerItem
+		logo={Docs}
+		href="https://mvm.dev/"
+		title={$LL.docs()}
+		target="_blank"
+		rel="noreferrer"
 	/>
 
 	<LogoutButton

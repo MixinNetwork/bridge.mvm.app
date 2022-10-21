@@ -20,6 +20,7 @@ const zh: Translation = {
 	swap: '兑换',
 	explorer: '浏览器',
 	audit: '审计',
+	docs: '文档',
 	logout: {
 		title: '登出',
 		description: '您确定要登出吗？'
