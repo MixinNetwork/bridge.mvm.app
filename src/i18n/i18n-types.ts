@@ -289,6 +289,22 @@ type RootTranslation = {
 	 * N​/​A
 	 */
 	tokenNA: string
+	/**
+	 * T​o​k​e​n​ ​N​a​m​e
+	 */
+	tokenName: string
+	/**
+	 * T​o​k​e​n​ ​S​y​m​b​o​l
+	 */
+	tokenSymbol: string
+	/**
+	 * D​e​p​o​s​i​t​ ​C​o​n​f​i​r​m​a​t​i​o​n​s
+	 */
+	depositConfirmations: string
+	/**
+	 * A​d​d​ ​t​o​k​e​n​ ​t​o​ ​M​e​t​a​M​a​s​k
+	 */
+	addToMetaMask: string
 }
 
 export type TranslationFunctions = {
@@ -560,6 +576,22 @@ export type TranslationFunctions = {
 	 * N/A
 	 */
 	tokenNA: () => LocalizedString
+	/**
+	 * Token Name
+	 */
+	tokenName: () => LocalizedString
+	/**
+	 * Token Symbol
+	 */
+	tokenSymbol: () => LocalizedString
+	/**
+	 * Deposit Confirmations
+	 */
+	depositConfirmations: () => LocalizedString
+	/**
+	 * Add token to MetaMask
+	 */
+	addToMetaMask: () => LocalizedString
 }
 
 export type Formatters = {}

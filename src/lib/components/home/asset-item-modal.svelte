@@ -1,10 +1,16 @@
 <script lang="ts">
+	import clsx from 'clsx';
 	import type { Asset } from '../../types/asset';
 	import AssetIcon from '../base/asset-icon.svelte';
 	import LayoutBottomSheet from '../base/modal/layout-bottom-sheet.svelte';
-	import { switchDepositMode, switchWithdrawMode } from './export';
+	import { switchDepositMode, switchWithdrawMode, toSwapUrl } from './export';
 	import LL from '$i18n/i18n-svelte';
-	import ModalHeader from '../base/modal/modal-header.svelte';
+	import Copy from '$lib/assets/copy.svg?component';
+	import { showToast } from '../common/toast/toast-container.svelte';
+	import { library } from '../../stores/ether';
+	import { watchAsset } from '../../helpers/web3/registry';
+	import { ETH_ASSET_ID } from '../../constants/common';
+	import Close from '$lib/assets/close.svg?component';
 
 	export let close = () => {
 		//
@@ -12,23 +18,88 @@
 	export let asset: Asset;
 </script>
 
-<LayoutBottomSheet class="!h-auto p-5">
-	<ModalHeader {close}>
+<LayoutBottomSheet class="!h-auto items-center p-5">
+	<div
+		class="flex w-full items-center space-x-2 font-bold text-black text-opacity-80 md:relative md:space-x-0"
+	>
 		<AssetIcon
-			class="h-8 w-8 "
+			class="h-8 w-8 md:invisible"
 			chainClass=" h-3 w-3"
 			assetIconUrl={asset.icon_url}
 			assetName={asset.name}
 			chainIconUrl={asset.chain_icon_url}
 			chainName={asset.chain_name}
 		/>
-		<div class="flex items-center font-bold">
+		<div class="md:absolute-center flex items-center font-bold">
 			{asset.symbol}
 		</div>
-	</ModalHeader>
+		<div class="flex grow justify-end ">
+			<button on:click={close}>
+				<Close />
+			</button>
+		</div>
+	</div>
+
+	<AssetIcon
+		class="invisible my-9 h-[70px] w-[70px] md:visible"
+		chainClass="!h-6 !w-6"
+		assetIconUrl={asset.icon_url}
+		assetName={asset.name}
+		chainIconUrl={asset.chain_icon_url}
+		chainName={asset.chain_name}
+	/>
 
 	<div
-		class=" mt-5 flex flex-col items-center space-y-2 child:mx-8 child:w-full child:rounded-xl child:bg-brand-background child:py-4 child:text-center"
+		class={clsx(
+			'flex flex-col space-y-5 font-semibold mt-8 mb-12 w-full',
+			'child:flex child:flex-row child:space-x-2 child:justify-between',
+			'first:child:child:opacity-40'
+		)}
+	>
+		<div>
+			<div>{$LL.tokenName()}</div>
+			<div>{asset.name}</div>
+		</div>
+		<div>
+			<div>{$LL.tokenSymbol()}</div>
+			<div>{asset.symbol}</div>
+		</div>
+		<div>
+			<div>{$LL.address()}</div>
+			<button
+				class="flex flex-row items-center space-x-1 text-brand-primary"
+				on:click={async () => {
+					asset.destination && (await navigator.clipboard.writeText(asset.destination));
+					showToast('success', $LL.copied());
+				}}
+			>
+				<div>
+					{asset.destination.slice(0, 4) + '...' + asset.destination.slice(-4)}
+				</div>
+				<Copy class="fill-brand-primary" />
+			</button>
+		</div>
+		<div>
+			<div>{$LL.depositConfirmations()}</div>
+			<div>{asset.confirmations}</div>
+		</div>
+	</div>
+
+	<div
+		class={clsx(
+			'flex w-full flex-row mb-8',
+			'child:flex child:h-12 child:w-full child:flex-1 child:items-center child:justify-center child:bg-brand-background child:text-center first:child:rounded-l-xl last:child:rounded-r-xl',
+			'[&>*:nth-child(n+2)]:relative',
+			'[&>*:nth-child(n+2)]:before:absolute',
+			'[&>*:nth-child(n+2)]:before:left-0',
+			'[&>*:nth-child(n+2)]:before:h-6',
+			'[&>*:nth-child(n+2)]:before:w-[2px]',
+			'[&>*:nth-child(n+2)]:before:-translate-x-[1px]',
+			'[&>*:nth-child(n+2)]:before:rounded-full',
+			'[&>*:nth-child(n+2)]:before:bg-black',
+			'[&>*:nth-child(n+2)]:before:bg-opacity-5',
+			' [&>*:nth-child(n+2)]:before:content-[""]'
+		)}
 	>
 		<button
 			on:click={() => {
@@ -42,5 +113,14 @@
 				close();
 			}}>{$LL.withdraw()}</button
 		>
+		<a href={toSwapUrl(asset.asset_id)}>{$LL.swap()}</a>
 	</div>
+	{#if asset.asset_id !== ETH_ASSET_ID}
+		<button
+			class="mb-5 font-semibold text-brand-primary"
+			on:click={() => {
+				$library && watchAsset($library, asset);
+			}}>{$LL.addToMetaMask()}</button
+		>
+	{/if}
 </LayoutBottomSheet>

@@ -94,7 +94,11 @@ const zh: Translation = {
 			description: '4swap 是 Fox 的自动做市交易平台，与 Uniswap 类似。'
 		}
 	},
-	tokenNA: '暂无价格'
+	tokenNA: '暂无价格',
+	tokenName: '代币名称',
+	tokenSymbol: '代币符号',
+	depositConfirmations: '存入确认区块',
+	addToMetaMask: '添加到 MetaMask'
 };
 
 export default zh;

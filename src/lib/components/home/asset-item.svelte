@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { switchDepositMode, switchWithdrawMode } from './export';
+	import { switchDepositMode, switchWithdrawMode, toSwapUrl } from './export';
 
 	import { bigEq, bigGt, bigLt, bigMul, format, toPercent } from '../../helpers/big';
 
@@ -14,22 +14,11 @@
 	export let asset: Asset;
 
 	let isOpen = false;
-	const close = () => (isOpen = false);
-
-	let innerWidth = 0;
-
-	$: isLg = innerWidth >= 1024;
-	$: if (isLg) isOpen = false;
 </script>
-
-<svelte:window bind:innerWidth />
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <div
-	on:click={() => {
-		if (isLg) return switchDepositMode(asset, undefined);
-		isOpen = true;
-	}}
+	on:click={() => (isOpen = true)}
 	class="flex w-full cursor-pointer items-center bg-brand-primary bg-opacity-0 p-5 opacity-100 hover:bg-opacity-5"
 >
 	<div class="flex flex-1 items-center justify-between space-x-3">
@@ -75,8 +64,13 @@
 			>{$LL.deposit()}</button
 		>
 		<button on:click|stopPropagation={() => switchWithdrawMode(asset)}>{$LL.withdraw()}</button>
-		<!-- <button>Swap</button> -->
+		<a href={toSwapUrl(asset.asset_id)}>{$LL.swap()}</a>
 	</div>
 </div>
 
-<Modal modal-opened={isOpen} this={AssetItemModal} modal-on-close={close} {asset} />
+<Modal
+	modal-opened={isOpen}
+	this={AssetItemModal}
+	modal-on-close={() => (isOpen = false)}
+	{asset}
+/>

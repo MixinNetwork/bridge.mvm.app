@@ -95,7 +95,11 @@ const en: BaseTranslation = {
 				'4swap is the automated market-making trading platform of Fox, similar to Uniswap.'
 		}
 	},
-	tokenNA: 'N/A'
+	tokenNA: 'N/A',
+	tokenName: 'Token Name',
+	tokenSymbol: 'Token Symbol',
+	depositConfirmations: 'Deposit Confirmations',
+	addToMetaMask: 'Add token to MetaMask'
 };
 
 export default en;

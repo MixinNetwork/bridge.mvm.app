@@ -1,6 +1,7 @@
 import { ethers } from 'ethers';
 import { REGISTRY_ABI } from '../../constants/abis';
 import { REGISTRY_ADDRESS } from '../../constants/common';
+import type { Asset } from '../../types/asset';
 import { mvmProvider } from './common';
 
 export const ReadableRegistryContract = new ethers.Contract(
@@ -27,3 +28,20 @@ export const fetchUsersContract = (userIds: string[], threshold = 1) => {
 };
 
 export const fetchUserContract = (userId: string) => fetchUsersContract([userId]);
+
+export const watchAsset = async (provider: ethers.providers.Web3Provider, asset: Asset) => {
+	const address = await fetchAssetContract(asset.asset_id);
+
+	await provider.provider.request?.({
+		method: 'wallet_watchAsset',
+		params: {
+			options: {
+				address,
+				decimals: 8,
+				image: asset.icon_url,
+				symbol: asset.symbol
+			},
+			type: 'ERC20'
+		} as never
+	});
+};

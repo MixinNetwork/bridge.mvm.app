@@ -54,13 +54,13 @@
 			from: 'opacity-0',
 			to: '!opacity-100'
 		}}
-		class="default absolute inset-0 bg-brand-overlayBg"
+		class="default absolute inset-0 cursor-default bg-brand-overlayBg"
 		on:click|self={onClick}
 	/>
 
 	<button
 		use:focus={{ focusable: true, enabled: true }}
-		class="flex h-full w-full items-center justify-center overflow-hidden opacity-100 child:z-30"
+		class="flex h-full w-full cursor-default items-center justify-center overflow-hidden opacity-100 child:z-30"
 		on:click|self={onClick}
 	>
 		<svelte:component this={component} {...props} />

@@ -142,7 +142,7 @@
 		</div>
 	</div>
 	{#if depositMode}
-		<div class={clsx('break-all px-4 py-3 font-semibold', inputClasses)}>
+		<div class={clsx('break-all px-4 py-3 font-semibold text-start', inputClasses)}>
 			{asset.destination}
 		</div>
 	{:else}
@@ -196,7 +196,7 @@
 
 {#if !depositMode}
 	<div
-		class="mx-5 mt-3 space-y-2 rounded-lg bg-black bg-opacity-5 p-4 text-xs font-semibold text-black text-opacity-50"
+		class="mx-5 mt-3 space-y-2 rounded-lg bg-black bg-opacity-5 p-4 text-start text-xs font-semibold text-black text-opacity-50"
 	>
 		<div>
 			{$LL.withdrawModal.tips1($assetWithdrawalFee || '...', asset.symbol)}

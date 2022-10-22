@@ -2,7 +2,7 @@ import { browser } from '$app/environment';
 import { goto } from '$app/navigation';
 import { page } from '$app/stores';
 import { get } from '@square/svelte-store';
-import { ETH_ASSET_ID } from '../../constants/common';
+import { ETH_ASSET_ID, XIN_ASSET_ID } from '../../constants/common';
 import { setSearchParam } from '../../helpers/app-store';
 import { deepWritable } from '../../helpers/store/deep';
 import { assets } from '../../stores/model';
@@ -119,3 +119,8 @@ export const selectAsset = (asset: Asset) => {
 
 	switchWithdrawMode(asset);
 };
+
+export const toSwapUrl = (assetId: string) =>
+	XIN_ASSET_ID === assetId
+		? `swap/?input=${assetId}&output=${ETH_ASSET_ID}`
+		: `swap/?input=${assetId}&output=${XIN_ASSET_ID}`;
