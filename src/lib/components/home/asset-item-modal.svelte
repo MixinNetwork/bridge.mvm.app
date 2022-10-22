@@ -23,7 +23,7 @@
 		class="flex w-full items-center space-x-2 font-bold text-black text-opacity-80 md:relative md:space-x-0"
 	>
 		<AssetIcon
-			class="h-8 w-8 md:invisible"
+			class="h-8 w-8 md:hidden"
 			chainClass=" h-3 w-3"
 			assetIconUrl={asset.icon_url}
 			assetName={asset.name}
@@ -41,7 +41,7 @@
 	</div>
 
 	<AssetIcon
-		class="invisible my-9 h-[70px] w-[70px] md:visible"
+		class="my-9 hidden h-[70px] w-[70px] md:block"
 		chainClass="!h-6 !w-6"
 		assetIconUrl={asset.icon_url}
 		assetName={asset.name}
