@@ -73,6 +73,10 @@ export function bigLte(a: BigNumber.Value, b: BigNumber.Value): boolean {
 	return new BigNumber(a).lte(b);
 }
 
+export function bigEq(a: BigNumber.Value, b: BigNumber.Value): boolean {
+	return new BigNumber(a).eq(b);
+}
+
 export function isNum(num: BigNumber.Value): BigNumber.Value | BigNumber {
 	if (!num || !Number(num)) return 0;
 	if (Number(num) === Infinity) return 0;

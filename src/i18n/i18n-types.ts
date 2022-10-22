@@ -285,6 +285,10 @@ type RootTranslation = {
 			description: string
 		}
 	}
+	/**
+	 * N​/​A
+	 */
+	tokenNA: string
 }
 
 export type TranslationFunctions = {
@@ -552,6 +556,10 @@ export type TranslationFunctions = {
 			description: () => LocalizedString
 		}
 	}
+	/**
+	 * N/A
+	 */
+	tokenNA: () => LocalizedString
 }
 
 export type Formatters = {}
