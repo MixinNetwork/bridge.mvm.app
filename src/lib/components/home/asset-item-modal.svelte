@@ -11,6 +11,7 @@
 	import { watchAsset } from '../../helpers/web3/registry';
 	import { ETH_ASSET_ID } from '../../constants/common';
 	import Close from '$lib/assets/close.svg?component';
+	import { switchNetwork } from '../../helpers/web3/common';
 
 	export let close = () => {
 		//
@@ -118,7 +119,8 @@
 	{#if asset.asset_id !== ETH_ASSET_ID}
 		<button
 			class="mb-5 font-semibold text-brand-primary"
-			on:click={() => {
+			on:click={async () => {
+				$library && (await switchNetwork($library, 'mvm'));
 				$library && watchAsset($library, asset);
 			}}>{$LL.addToMetaMask()}</button
 		>
