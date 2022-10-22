@@ -30,7 +30,9 @@ export const fetchUsersContract = (userIds: string[], threshold = 1) => {
 export const fetchUserContract = (userId: string) => fetchUsersContract([userId]);
 
 export const watchAsset = async (provider: ethers.providers.Web3Provider, asset: Asset) => {
-	const address = await fetchAssetContract(asset.asset_id);
+	const address = asset.contract || (await fetchAssetContract(asset.asset_id));
+
+	if (!address) throw new Error('Asset contract not found');
 
 	await provider.provider.request?.({
 		method: 'wallet_watchAsset',
