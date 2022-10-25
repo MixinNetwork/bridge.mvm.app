@@ -132,6 +132,7 @@
 				<div>MVM</div>
 			{:else}
 				<img
+					loading="lazy"
 					src={asset.chain_icon_url || asset.icon_url}
 					width={16}
 					height={16}
@@ -159,7 +160,7 @@
 						address = $user?.address || '';
 					}}
 				>
-					<img src={$providerLogo} width={18} height={18} alt={$providerName} />
+					<img loading="lazy" src={$providerLogo} width={18} height={18} alt={$providerName} />
 				</button>
 			{/if}
 			<button

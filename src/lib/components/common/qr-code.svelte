@@ -26,4 +26,4 @@
 	});
 </script>
 
-<img src={image} alt={image && value} class={clazz} height={size} width={size} />
+<img loading="lazy" src={image} alt={image && value} class={clazz} height={size} width={size} />
