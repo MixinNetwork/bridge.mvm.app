@@ -139,9 +139,6 @@ const fetchMixPaySwapTraceId = async (user: RegisteredUser, opponent_id: string,
 				order: 'DESC'
 			});
 			const snapshot = snapshotArray.find((snapshot) => {
-				console.log(snapshot);
-				console.log(opponent_id, memo, paymentAssetId, timestamp)
-				console.log(format({n: snapshot.amount.slice(1)}), format({n: amount}), format({n: snapshot.amount.slice(1)}) === format({n: amount}))
 				if (
 					snapshot.type !== 'transfer'
 					|| !snapshot.amount.startsWith('-')
