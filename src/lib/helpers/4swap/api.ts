@@ -155,11 +155,10 @@ export const fetch4SwapOrder = async (order_id: string, user: RegisteredUser) =>
 
 export const fetch4SwapTxInfo = async (
 	user: RegisteredUser,
-	trace_id: string,
 	order: Order,
 	minReceived: string
 ) => {
-	const swapAction = `3,${user.user_id},${trace_id},${order.fill_asset_id},${order.routes},${minReceived}`;
+	const swapAction = `3,${user.user_id},${v4()},${order.fill_asset_id},${order.routes},${minReceived}`;
 
 	const actionResp = await createAction({
 		action: swapAction,
@@ -179,6 +178,6 @@ export const fetch4SwapTxInfo = async (
 
 	return {
 		extra,
-		follow_id: actionResp.follow_id
+		getFollowId: (t: string) => Promise.resolve(actionResp.follow_id)
 	};
 };

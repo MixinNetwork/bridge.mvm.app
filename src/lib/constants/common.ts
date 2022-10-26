@@ -6,6 +6,7 @@ declare const __version__: string;
 export const version = __version__;
 
 export const WITHDRAW_BOT_ID = '131a0774-59a1-4e3d-9af2-e1b43aa37936';
+export const MIXPAY_BOT_ID = '3539c3ce-52c0-4b0b-9573-c035ecb98d48';
 
 export const LAST_URL = 'last-url';
 export const USER_KEY = 'USER';

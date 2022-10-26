@@ -1,7 +1,10 @@
-import axios, { type AxiosResponse } from 'axios';
-import type { Order, SwapParams } from '../4swap/route';
-import type { RegisteredUser } from '../../types/user';
-import { generateExtra } from '../sign';
+import axios, {type AxiosResponse} from 'axios';
+import {TransferClient, type TransferResponse} from "@mixin.dev/mixin-node-sdk";
+import type {Order, SwapParams} from '../4swap/route';
+import type {RegisteredUser} from '../../types/user';
+import {generateExtra} from '../sign';
+import {MIXPAY_BOT_ID} from "../../constants/common";
+import {format} from "../big";
 
 interface MixPayBaseResponse {
 	code: number;
@@ -116,44 +119,67 @@ export const fetchMixPayEstimatedPayment = async ({
 	return await ins.get('/payments_estimated', { params });
 };
 
-export const fetchMixPayPayment = async (
-	user_id: string,
-	trace_id: string,
-	inputAsset: string,
-	outputAsset: string,
-	inputAmount: string
-): Promise<MixPayPaymentResponse> => {
-	return await ins.post('/payments', {
-		payeeId: user_id,
-		traceId: trace_id,
-		paymentAssetId: inputAsset,
-		quoteAssetId: inputAsset,
-		settlementAssetId: outputAsset,
-		paymentAmount: inputAmount,
-		isChain: false
-	});
-};
+const fetchMixPaySwapTraceId = async (user: RegisteredUser, opponent_id: string, memo: string, amount: string, paymentAssetId: string, timestamp: string): Promise<string> => {
+	const client = TransferClient({
+		keystore: {
+			...user,
+			...user.key
+		}
+	})
 
-export const fetchMixPayTxInfo = async (user: RegisteredUser, trace_id: string, order: Order) => {
-	const response = await fetchMixPayPayment(
-		user.user_id,
-		trace_id,
-		order.pay_asset_id,
-		order.fill_asset_id,
-		String(order.funds)
-	);
+	return await (new Promise((resolve, reject) => {
+		let count = 0;
+		const timer = setInterval(async () => {
+			count += 1;
+			const snapshotArray = await client.snapshots({
+				limit: 10,
+				offset: '',
+				asset: paymentAssetId,
+				opponent: MIXPAY_BOT_ID,
+				order: 'DESC'
+			});
+			const snapshot = snapshotArray.find((snapshot) => {
+				console.log(snapshot);
+				console.log(opponent_id, memo, paymentAssetId, timestamp)
+				console.log(format({n: snapshot.amount.slice(1)}), format({n: amount}), format({n: snapshot.amount.slice(1)}) === format({n: amount}))
+				if (
+					snapshot.type !== 'transfer'
+					|| !snapshot.amount.startsWith('-')
+				) return false;
 
+				if (
+					snapshot.opponent_id === opponent_id
+					&& snapshot.memo === memo
+					&& snapshot.asset_id === paymentAssetId
+					&& format({n: snapshot.amount.slice(1)}) === format({n: amount})
+				) return true
+			});
+
+			if (snapshot) {
+				clearInterval(timer);
+				resolve((snapshot as TransferResponse).trace_id);
+			}
+			if (count === 20) {
+				clearInterval(timer);
+				reject('timeout');
+			}
+		}, 1000 * 3)
+	}));
+}
+
+export const fetchMixPayTxInfo = async (user: RegisteredUser, order: Order) => {
+	const memo =  Buffer.from(`swap|${user.user_id}|${order.fill_asset_id}`).toString('base64');
 	const extra = generateExtra(
 		JSON.stringify({
-			receivers: [response.data.recipient],
+			receivers: [MIXPAY_BOT_ID],
 			threshold: 1,
-			extra: response.data.memo
+			extra: memo
 		})
 	);
 
 	return {
 		extra,
-		follow_id: response.data.traceId
+		getFollowId: (t: string) => fetchMixPaySwapTraceId(user, MIXPAY_BOT_ID, memo, String(order.funds), order.pay_asset_id, t)
 	};
 };
 

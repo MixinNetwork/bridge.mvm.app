@@ -188,14 +188,12 @@ export const swapAsset = async (
 ) => {
 	await switchNetwork(provider, 'mvm');
 
-	const trace_id = v4();
-
 	let info: {
 		extra: string;
-		follow_id: string;
+		getFollowId: (t: string) => Promise<string>;
 	};
-	if (site === '4swap') info = await fetch4SwapTxInfo(user, trace_id, order, minReceived);
-	else info = await fetchMixPayTxInfo(user, trace_id, order);
+	if (site === '4swap') info = await fetch4SwapTxInfo(user, order, minReceived);
+	else info = await fetchMixPayTxInfo(user, order);
 
 	const signer = provider.getSigner();
 
@@ -209,7 +207,8 @@ export const swapAsset = async (
 			value: assetAmount
 		});
 
-		return await checkOrder(site, info.follow_id, user);
+		const follow_id = await info.getFollowId(new Date().toISOString());
+		return await checkOrder(site, follow_id, user);
 	}
 
 	if (inputAsset.contract) {
@@ -222,7 +221,9 @@ export const swapAsset = async (
 			gasPrice: 10000000,
 			gasLimit: 450000
 		});
-		return await checkOrder(site, info.follow_id, user);
+
+		const follow_id = await info.getFollowId(new Date().toISOString());
+		return await checkOrder(site, follow_id, user);
 	}
 
 	throw new Error('Invalid asset');
