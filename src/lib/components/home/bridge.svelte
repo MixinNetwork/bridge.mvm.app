@@ -133,6 +133,7 @@
 				<div>MVM</div>
 			{:else}
 				<img
+					loading="lazy"
 					src={asset.chain_icon_url || asset.icon_url}
 					width={16}
 					height={16}
@@ -143,7 +144,7 @@
 		</div>
 	</div>
 	{#if depositMode}
-		<div class={clsx('break-all px-4 py-3 font-semibold', inputClasses)}>
+		<div class={clsx('break-all px-4 py-3 font-semibold text-start', inputClasses)}>
 			{asset.destination}
 		</div>
 	{:else}
@@ -160,7 +161,7 @@
 						address = $user?.address || '';
 					}}
 				>
-					<img src={$providerLogo} width={18} height={18} alt={$providerName} />
+					<img loading="lazy" src={$providerLogo} width={18} height={18} alt={$providerName} />
 				</button>
 			{/if}
 			<button
@@ -197,7 +198,7 @@
 
 {#if !depositMode}
 	<div
-		class="mx-5 mt-3 space-y-2 rounded-lg bg-black bg-opacity-5 p-4 text-xs font-semibold text-black text-opacity-50"
+		class="mx-5 mt-3 space-y-2 rounded-lg bg-black bg-opacity-5 p-4 text-start text-xs font-semibold text-black text-opacity-50"
 	>
 		<div>
 			{$LL.withdrawModal.tips1($assetWithdrawalFee || '...', asset.symbol)}

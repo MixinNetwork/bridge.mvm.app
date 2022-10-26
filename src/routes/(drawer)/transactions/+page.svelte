@@ -107,10 +107,11 @@
 			class="flex h-[72px] items-center justify-between space-x-3 p-5 font-semibold"
 			href={`https://scan.mvm.dev/tx/${tx.hash}`}
 			target="_blank"
+			rel="noreferrer"
 		>
 			<div class="flex flex-1 items-center justify-between">
 				<div class="flex flex-1 items-center space-x-3">
-					<img src={tx.icon || DEFAULT_ICON} width="24" height="24" alt={tx.name} />
+					<img loading="lazy" src={tx.icon || DEFAULT_ICON} width="24" height="24" alt={tx.name} />
 					<div class="grow">
 						{tx.total < 0 ? (tx.value !== 0 ? $LL.withdraw() : $LL.fee()) : $LL.deposit()}
 					</div>

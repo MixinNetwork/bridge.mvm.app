@@ -19,14 +19,14 @@
 
 <div
 	class={clsx(
-		'group relative flex md:h-10 items-center space-x-3 md:py-2 md:px-4 md:rounded-full md:bg-white w-fit transition',
+		'group relative flex md:h-10 items-center space-x-3 z-50 md:py-2 md:px-4 md:rounded-full md:bg-white w-fit transition select-none',
 		clazz,
 		{
 			'!hidden': !$providerLogo && !$providerName
 		}
 	)}
 >
-	<img src={$providerLogo} alt={$providerName} class="h-14 w-14 md:h-4 md:w-4" />
+	<img loading="lazy" src={$providerLogo} alt={$providerName} class="h-14 w-14 md:h-4 md:w-4" />
 	<div class="font-bold md:text-sm md:font-semibold">
 		<div class="text-xl md:hidden">
 			{format({ n: $totalBalanceUsd || 0, dp: 2, fixed: true })}
@@ -39,10 +39,10 @@
 	<Arrow class="rotate-90 sm:hidden md:block" />
 
 	<div
-		class="invisible absolute top-9 right-0 mt-2 hidden w-96 flex-col rounded-2xl bg-white pb-5 opacity-0 shadow transition-all delay-100 group-hover:visible group-hover:opacity-100 md:flex"
+		class="invisible absolute top-10 right-0 z-50 mt-3 hidden w-96 flex-col rounded-2xl bg-white pb-5 opacity-0 shadow transition-all delay-100 group-hover:visible group-hover:opacity-100 md:flex"
 	>
 		<div class=" flex items-center space-x-3 p-6">
-			<img src={$providerLogo} alt={$providerName} class="h-12 w-12" />
+			<img loading="lazy" src={$providerLogo} alt={$providerName} class="h-12 w-12" />
 			<div class=" font-semibold">
 				<div>
 					{$shortAddress}

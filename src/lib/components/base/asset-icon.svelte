@@ -12,9 +12,10 @@
 </script>
 
 <div class={clsx('relative h-10 w-10', clazz)}>
-	<img src={assetIconUrl} class="h-full w-full" alt={assetName} />
+	<img loading="lazy" src={assetIconUrl} class="h-full w-full" alt={assetName} />
 	{#if chainIconUrl}
 		<img
+			loading="lazy"
 			src={chainIconUrl}
 			class={clsx('absolute bottom-0 left-0 h-[14px] w-[14px]', chainClass)}
 			alt={chainName}

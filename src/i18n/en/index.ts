@@ -20,6 +20,7 @@ const en: BaseTranslation = {
 	swap: 'Swap',
 	explorer: 'Explorer',
 	audit: 'Audit',
+	docs: 'Docs',
 	logout: {
 		title: 'Log Out',
 		description: 'Are you sure want to logout?'
@@ -49,7 +50,7 @@ const en: BaseTranslation = {
 	allTransactions: 'All Transactions',
 	fee: 'Fee',
 	balanceOf: 'Balance: {0:string} {1:string}',
-
+	copied: 'Copied',
 	swapPage: {
 		tips: {
 			price: 'Price:',
@@ -75,8 +76,30 @@ const en: BaseTranslation = {
 	login: {
 		title: 'Login',
 		connectBrowserWalletDescription: 'Connect using browser wallet',
-		connectWalletConnectDescription: 'Connect using WalletConnect'
-	}
+		connectWalletConnectDescription: 'Connect using WalletConnect',
+		pleaseInstallMetaMaskFirst: 'Please install MetaMask first'
+	},
+	max: 'Max',
+	apps: {
+		quill: {
+			description: 'Write to Earn'
+		},
+		leaf: {
+			description: 'A decentralized financial network, implement a derivatives liquidity protocol.'
+		},
+		rings: {
+			description: 'An algorithmic, autonomous interest rate protocol.'
+		},
+		fourSwap: {
+			description:
+				'4swap is the automated market-making trading platform of Fox, similar to Uniswap.'
+		}
+	},
+	tokenNA: 'N/A',
+	tokenName: 'Token Name',
+	tokenSymbol: 'Token Symbol',
+	depositConfirmations: 'Deposit Confirmations',
+	addToMetaMask: 'Add token to MetaMask'
 };
 
 export default en;

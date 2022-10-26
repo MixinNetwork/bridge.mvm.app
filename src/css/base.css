@@ -23,9 +23,9 @@
 		@apply min-h-full;
 	}
 
-	a,
-	button,
-	label:not(.opacity-100) {
+	a:not(.opacity-100, .default),
+	button:not(.opacity-100, .default),
+	label:not(.opacity-100, .default) {
 		@apply hover:opacity-80 hover:active:focus:opacity-60 disabled:opacity-20;
 	}
 

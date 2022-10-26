@@ -20,6 +20,7 @@ const zh: Translation = {
 	swap: '兑换',
 	explorer: '浏览器',
 	audit: '审计',
+	docs: '文档',
 	logout: {
 		title: '登出',
 		description: '您确定要登出吗？'
@@ -49,6 +50,7 @@ const zh: Translation = {
 	allTransactions: '全部交易',
 	fee: '手续费',
 	balanceOf: '余额：{0} {1}',
+	copied: '已复制',
 	swapPage: {
 		tips: {
 			price: '价格：',
@@ -74,8 +76,29 @@ const zh: Translation = {
 	login: {
 		title: '登录',
 		connectBrowserWalletDescription: '使用浏览器钱包连接',
-		connectWalletConnectDescription: '使用 WalletConnect 连接'
-	}
+		connectWalletConnectDescription: '使用 WalletConnect 连接',
+		pleaseInstallMetaMaskFirst: '请先安装 MetaMask'
+	},
+	max: '最大',
+	apps: {
+		quill: {
+			description: '通过写作赚币'
+		},
+		leaf: {
+			description: '一个去中心化的金融网络，实施一个衍生品流动性协议。'
+		},
+		rings: {
+			description: '一个算法的、自主的利率协议。'
+		},
+		fourSwap: {
+			description: '4swap 是 Fox 的自动做市交易平台，与 Uniswap 类似。'
+		}
+	},
+	tokenNA: '暂无价格',
+	tokenName: '代币名称',
+	tokenSymbol: '代币符号',
+	depositConfirmations: '存入确认区块',
+	addToMetaMask: '添加到 MetaMask'
 };
 
 export default zh;

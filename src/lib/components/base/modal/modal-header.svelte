@@ -1,23 +1,20 @@
 <script lang="ts">
 	import clsx from 'clsx';
-	import Back from '$lib/assets/back.svg?component';
 	import Close from '$lib/assets/close.svg?component';
 
+	let close = () => {
+		//
+	};
 	let clazz: string | undefined = undefined;
-	export { clazz as class };
+	export { clazz as class, close };
 </script>
 
-<div class={clsx('mb-2 flex items-center justify-between py-3 px-5', clazz)}>
-	<button class=" visible md:invisible" on:click>
-		<Back />
-	</button>
+<div class={clsx('flex items-center space-x-2 text-black text-opacity-80 font-bold', clazz)}>
+	<slot />
 
-	<div class="text-lg font-bold">
-		<div class="text-lg font-bold">
-			<slot />
-		</div>
+	<div class="flex grow justify-end ">
+		<button on:click={close}>
+			<Close />
+		</button>
 	</div>
-	<button class="invisible md:visible" on:click>
-		<Close />
-	</button>
 </div>

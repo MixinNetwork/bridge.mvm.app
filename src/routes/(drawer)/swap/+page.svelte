@@ -12,7 +12,7 @@
 	import type { Asset } from '$lib/types/asset';
 	import Header from '$lib/components/base/header.svelte';
 	import UserInfo from '$lib/components/base/user-info.svelte';
-	import { format, toPercent } from '$lib/helpers/big';
+	import { bigLte, format, toPercent } from '$lib/helpers/big';
 	import SelectedAssetButton from '$lib/components/base/selected-asset-button.svelte';
 	import { slide } from 'svelte/transition';
 	import { DEFAULT_SLIPPAGE, INPUT_KEY, OUTPUT_KEY, formatFiat } from '$lib/components/swap/export';
@@ -161,6 +161,9 @@
 			loading = false;
 		}
 	};
+
+	$: isInputAssetBalanceLegal = bigLte(inputAsset?.balance ?? 0, 0);
+	$: isOutputAssetBalanceLegal = bigLte(outputAsset?.balance ?? 0, 0);
 </script>
 
 <Header class="bg-transparent">
@@ -179,9 +182,21 @@
 			<label for="input" class="opacity-100">
 				<div class="flex items-center justify-between py-5 px-4 pb-3 text-sm font-semibold">
 					<div>{$LL.from()}</div>
-					<div class=" text-xs text-black text-opacity-50">
-						{$LL.balanceOf(format({ n: inputAsset?.balance ?? '0' }), inputAsset?.symbol || '')}
-					</div>
+					<button
+						class="expand-4 space-x-1 text-xs text-black text-opacity-50 !opacity-100"
+						disabled={isInputAssetBalanceLegal}
+						on:click={() => {
+							lastEdited = 'input';
+							inputAmount = inputAsset?.balance;
+						}}
+					>
+						{#if !isInputAssetBalanceLegal}
+							<span class="text-brand-primary">{$LL.max()}</span>
+						{/if}
+						<span>
+							{$LL.balanceOf(format({ n: inputAsset?.balance ?? 0 }), inputAsset?.symbol || '')}
+						</span>
+					</button>
 				</div>
 				<div class="flex items-center">
 					{#if inputAsset}
@@ -218,9 +233,21 @@
 			<label for="output" class="opacity-100">
 				<div class="flex items-center justify-between py-5 px-4 pb-3 text-sm font-semibold">
 					<div>{$LL.to()}</div>
-					<div class=" text-xs text-black text-opacity-50">
-						{$LL.balanceOf(format({ n: outputAsset?.balance ?? '0' }), outputAsset?.symbol || '')}
-					</div>
+					<button
+						class="expand-4 space-x-1 text-xs text-black text-opacity-50 !opacity-100"
+						disabled={isOutputAssetBalanceLegal}
+						on:click={() => {
+							lastEdited = 'output';
+							outputAmount = outputAsset?.balance;
+						}}
+					>
+						{#if !isOutputAssetBalanceLegal}
+							<span class="text-brand-primary">{$LL.max()}</span>
+						{/if}
+						<span>
+							{$LL.balanceOf(format({ n: outputAsset?.balance ?? 0 }), outputAsset?.symbol || '')}
+						</span>
+					</button>
 				</div>
 				<div class="flex items-center">
 					{#if outputAsset}
@@ -281,7 +308,7 @@
 				</div>
 			</div>
 			{#if order?.priceImpact > 0.15}
-				<div transition:slide class="mt-3 self-center text-xs font-semibold opacity-50">
+				<div transition:slide|local class="mt-3 self-center text-xs font-semibold opacity-50">
 					{$LL.swapPage.tips.warning()}
 				</div>
 			{/if}

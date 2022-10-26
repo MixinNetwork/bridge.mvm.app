@@ -24,6 +24,7 @@
 	import LL from '$i18n/i18n-svelte';
 	import walletConnect from '$lib/assets/logo/wallet-connect.svg';
 	import metamask from '$lib/assets/logo/metamask.svg';
+	import { showToast } from '$lib/components/common/toast/toast-container.svelte';
 
 	const providers: IProvider[] = [
 		{
@@ -54,6 +55,10 @@
 
 			await registerAndSave($account);
 			await goto($page.url.searchParams.get(LAST_URL) || '/');
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		} catch (e: any) {
+			if (e.message !== 'No Web3 Provider found') return;
+			showToast('common', $LL.login.pleaseInstallMetaMaskFirst());
 		} finally {
 			loading = false;
 		}
@@ -71,7 +76,7 @@
 
 		{#each providers as { title, desc, icon, key } (key)}
 			<button class="flex space-x-3 px-8" on:click={() => connect(key)}>
-				<img src={icon} alt={title} width="48" height="48" />
+				<img loading="lazy" src={icon} alt={title} width="48" height="48" />
 				<div class="flex flex-col items-start">
 					<div class="font-bold">{title}</div>
 					<div class="text-sm font-semibold opacity-20">{desc}</div>

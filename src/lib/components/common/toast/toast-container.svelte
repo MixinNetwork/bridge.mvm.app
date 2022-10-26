@@ -2,11 +2,13 @@
 	import { derived } from '@square/svelte-store';
 	import ToastItem, { type ToastItemComponent } from './toast-item.svelte';
 	import Success from './success.svelte';
+	import Common from './common.svelte';
 	import { v4 } from 'uuid';
 	import { deepWritable } from '../../../helpers/store/deep';
 
 	const toasts = {
-		success: Success
+		success: Success,
+		common: Common
 	};
 
 	export type ToastType = keyof typeof toasts;
@@ -48,7 +50,9 @@
 	}
 </script>
 
-<div class="fixed left-1/2 top-2 z-50 flex -translate-x-1/2 flex-col justify-center space-y-2">
+<div
+	class="fixed left-1/2 top-2 z-50 flex w-full -translate-x-1/2 flex-col items-center justify-center space-y-2"
+>
 	{#each $toastsStore as { id, timer, component, message } (id)}
 		<ToastItem {component} {timer} {message} />
 	{/each}

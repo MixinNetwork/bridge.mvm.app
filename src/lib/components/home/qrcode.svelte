@@ -38,7 +38,7 @@
 			/>
 			<div class="w-full rounded-xl bg-black bg-opacity-[3%] py-2 px-3">
 				<div class=" text-sm font-semibold opacity-30">{key}</div>
-				<div class="flex items-center font-semibold">
+				<div class="flex items-center text-start font-semibold">
 					<div class="grow">
 						{value}
 					</div>
@@ -46,17 +46,17 @@
 						class="px-3 py-2"
 						on:click={async () => {
 							value && (await navigator.clipboard.writeText(value));
-							showToast('success', 'Copied');
+							showToast('success', $LL.copied());
 						}}
 					>
-						<Copy />
+						<Copy class="fill-gray-400" />
 					</button>
 				</div>
 			</div>
 		</div>
 	{/each}
 
-	<ul class="mx-6 list-outside list-disc pb-6 text-xs font-semibold opacity-50">
+	<ul class="mx-6 list-outside list-disc pb-6 text-start text-xs font-semibold opacity-50">
 		<li>{$LL.depositModal.tips1(asset.confirmations)}</li>
 		<li>{$LL.depositModal.tips2(asset.symbol)}</li>
 	</ul>
