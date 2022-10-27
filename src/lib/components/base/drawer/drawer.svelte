@@ -46,7 +46,7 @@
 	/>
 	<DrawerItem
 		logo={Docs}
-		href="https://mvm.dev/"
+		href="https://help.mvm.app/"
 		title={$LL.docs()}
 		target="_blank"
 		rel="noreferrer"
