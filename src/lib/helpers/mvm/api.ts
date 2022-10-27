@@ -141,7 +141,7 @@ export const fetchTransactions = async ({
 			contractAddress
 		}) => {
 			const isSend = from.toLowerCase() === params.address.toLowerCase();
-			const formattedValue = utils.formatUnits(value, tokenDecimal || 18);
+			const formattedValue = utils.formatUnits(value || 0, tokenDecimal || 18);
 			return {
 				hash,
 				blockNumber,
