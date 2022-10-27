@@ -25,7 +25,7 @@
 	<div class="flex w-[335px] flex-col items-center justify-center rounded-2xl bg-white pt-14 pb-5">
 		<img loading="lazy" src={iconUrl} class=" h-20 w-20" alt="eth" />
 		<div class=" mt-8 text-sm font-semibold opacity-20">
-			{$LL.swapForGasPage.tips()}
+			{$LL.swapForGasPage.tip()}
 		</div>
 
 		<form
@@ -36,14 +36,14 @@
 		>
 			<input name="address" class="hidden" value={$user.address} type="checkbox" checked={true} />
 			<div class="flex w-full flex-row space-x-3 overflow-x-scroll px-6 pb-10">
-				<Item amount="0.02" {price} selected={true} />
-				<Item amount="0.05" {price} selected={false} />
-				<Item amount="0.1" {price} selected={false} />
+				<Item amount="0.02" {price} selected={true} transactions={500} />
+				<Item amount="0.05" {price} selected={false} transactions={1000} />
+				<Item amount="0.1" {price} selected={false} transactions={2000} />
 			</div>
 
 			<button class="rounded-full bg-brand-primary px-6 py-3 text-white">{$LL.swap()}</button>
 
-			<div class=" mt-3 text-xs font-semibold opacity-20">{$LL.swapForGasPage.providedTips()}</div>
+			<div class=" mt-3 text-xs font-semibold opacity-20">{$LL.swapForGasPage.providedTip()}</div>
 		</form>
 	</div>
 </div>

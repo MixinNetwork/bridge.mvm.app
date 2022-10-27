@@ -101,8 +101,9 @@ const zh: Translation = {
 	depositConfirmations: '存入确认区块',
 	addToMetaMask: '添加到 MetaMask',
 	swapForGasPage: {
-		tips: 'ETH 用于支付交易手续费',
-		providedTips: '本服务由 Crypto Gas Station 提供'
+		tip: 'ETH 用于支付交易手续费',
+		providedTip: '本服务由 Crypto Gas Station 提供',
+		itemTip: '可用 {0} 次交易'
 	}
 };
 

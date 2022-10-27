@@ -313,11 +313,16 @@ type RootTranslation = {
 		/**
 		 * E​T​H​ ​i​s​ ​u​s​e​d​ ​t​o​ ​p​a​y​ ​f​o​r​ ​t​r​a​n​s​a​c​t​i​o​n​ ​f​e​e​s
 		 */
-		tips: string
+		tip: string
 		/**
 		 * T​h​i​s​ ​s​e​r​v​i​c​e​ ​i​s​ ​p​r​o​v​i​d​e​d​ ​b​y​ ​C​r​y​p​t​o​ ​G​a​s​ ​S​t​a​t​i​o​n
 		 */
-		providedTips: string
+		providedTip: string
+		/**
+		 * A​v​a​i​l​a​b​l​e​ ​f​o​r​ ​{​0​}​ ​t​r​a​n​s​a​c​t​i​o​n​s
+		 * @param {number} 0
+		 */
+		itemTip: RequiredParams<'0'>
 	}
 }
 
@@ -614,11 +619,15 @@ export type TranslationFunctions = {
 		/**
 		 * ETH is used to pay for transaction fees
 		 */
-		tips: () => LocalizedString
+		tip: () => LocalizedString
 		/**
 		 * This service is provided by Crypto Gas Station
 		 */
-		providedTips: () => LocalizedString
+		providedTip: () => LocalizedString
+		/**
+		 * Available for {0} transactions
+		 */
+		itemTip: (arg0: number) => LocalizedString
 	}
 }
 

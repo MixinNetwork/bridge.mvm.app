@@ -1,10 +1,12 @@
 <script lang="ts">
 	import { bigMul, format } from '../../helpers/big';
 	import Checked from '$lib/assets/swap-for-gas-checked.svg?component';
+	import LL from '$i18n/i18n-svelte';
 
 	export let amount: string;
 	export let price: string;
 	export let selected: boolean | undefined = undefined;
+	export let transactions: number;
 </script>
 
 <div class="relative font-semibold ">
@@ -28,7 +30,7 @@
 				fixed: true
 			})}
 		</div>
-		<div class="mt-4 text-sm opacity-50">Available for 100 transactions</div>
+		<div class="mt-4 text-sm opacity-50">{$LL.swapForGasPage.itemTip(transactions)}</div>
 	</label>
 	<Checked class="absolute bottom-0 right-0 opacity-0 transition-all peer-checked:opacity-100" />
 </div>

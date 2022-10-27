@@ -102,8 +102,9 @@ const en: BaseTranslation = {
 	depositConfirmations: 'Deposit Confirmations',
 	addToMetaMask: 'Add token to MetaMask',
 	swapForGasPage: {
-		tips: 'ETH is used to pay for transaction fees',
-		providedTips: 'This service is provided by Crypto Gas Station'
+		tip: 'ETH is used to pay for transaction fees',
+		providedTip: 'This service is provided by Crypto Gas Station',
+		itemTip: 'Available for {0:number} transactions'
 	}
 };
 
