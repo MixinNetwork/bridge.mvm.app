@@ -5,7 +5,7 @@
 	import Assets from '$lib/assets/drawer/assets.svg?component';
 	import Transactions from '$lib/assets/drawer/transactions.svg?component';
 	import Swap from '$lib/assets/drawer/swap.svg?component';
-	// import GasToken from '$lib/assets/drawer/gas-token.svg?component';
+	import SwapForGas from '$lib/assets/drawer/swap-for-gas.svg?component';
 	// import Support from '$lib/assets/drawer/support.svg?component';
 	import UserInfo from '../user-info.svelte';
 	import Exporor from '$lib/assets/drawer/explorer.svg?component';
@@ -28,7 +28,7 @@
 	<DrawerItem logo={Assets} href="/" title={$LL.assets()} />
 	<DrawerItem logo={Transactions} href="/transactions/" title={$LL.transactions()} />
 	<DrawerItem logo={Swap} href="/swap/" title={$LL.swap()} />
-	<!-- <DrawerItem logo={GasToken} href="/gas-token/" title="Gas Token" /> -->
+	<DrawerItem logo={SwapForGas} href="/swap-for-gas/" title={$LL.swapForGas()} />
 	<!-- <DrawerItem logo={Support} href="/support/" title="Support" /> -->
 	<DrawerItem
 		logo={Exporor}

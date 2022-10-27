@@ -18,6 +18,7 @@ const en: BaseTranslation = {
 	assets: 'Assets',
 	transactions: 'Transactions',
 	swap: 'Swap',
+	swapForGas: 'Swap for Gas',
 	explorer: 'Explorer',
 	audit: 'Audit',
 	docs: 'Docs',

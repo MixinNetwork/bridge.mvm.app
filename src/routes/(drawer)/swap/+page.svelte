@@ -25,6 +25,7 @@
 	import { focus } from 'focus-svelte';
 	import { ETH_ASSET_ID, XIN_ASSET_ID } from '$lib/constants/common';
 	import LL from '$i18n/i18n-svelte';
+	import Apps from '$lib/components/base/apps.svelte';
 
 	let a: Asset[] | undefined = $page.data.assets;
 	let p: Pair[] | undefined = $page.data.pairs;
@@ -167,6 +168,7 @@
 		<Helper />
 	</a>
 	<UserInfo class="hidden md:flex" />
+	<Apps />
 </Header>
 
 <div

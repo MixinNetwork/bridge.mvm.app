@@ -65,6 +65,10 @@ type RootTranslation = {
 	 */
 	swap: string
 	/**
+	 * S​w​a​p​ ​f​o​r​ ​G​a​s
+	 */
+	swapForGas: string
+	/**
 	 * E​x​p​l​o​r​e​r
 	 */
 	explorer: string
@@ -358,6 +362,10 @@ export type TranslationFunctions = {
 	 * Swap
 	 */
 	swap: () => LocalizedString
+	/**
+	 * Swap for Gas
+	 */
+	swapForGas: () => LocalizedString
 	/**
 	 * Explorer
 	 */

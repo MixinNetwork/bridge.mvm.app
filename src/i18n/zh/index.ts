@@ -18,6 +18,7 @@ const zh: Translation = {
 	assets: '资产',
 	transactions: '交易',
 	swap: '兑换',
+	swapForGas: 'Swap for Gas',
 	explorer: '浏览器',
 	audit: '审计',
 	docs: '文档',
