@@ -17,6 +17,7 @@ import {
 	type MixPayPaymentResult
 } from './mixpay/api';
 import { fetch4SwapOrder, type OrderResponse } from './4swap/api';
+import type { SwapSource } from "../types/swap";
 
 export const register = async (address: string): Promise<RegisteredUser> => {
 	const response = await fetch('https://bridge.mvm.dev/users', {
@@ -164,13 +165,13 @@ export const fetchCode = async (code_id: string): Promise<PaymentRequestResponse
 export const fetchExchangeRates = ExternalClient().exchangeRates;
 
 export const fetchSwapPreOrderInfo = async (
-	site: string,
+	source: SwapSource,
 	pairRoutes: PairRoutes,
 	slippage: number,
 	{ inputAsset, outputAsset, inputAmount, outputAmount }: SwapParams
 ) => {
 	try {
-		if (site === 'MixPay') {
+		if (source === 'MixPay') {
 			const response = await fetchMixPayEstimatedPayment({
 				inputAsset,
 				outputAsset,
@@ -198,10 +199,10 @@ export const fetchSwapPreOrderInfo = async (
 				};
 			}
 
-			site = '4swap';
+			source = '4Swap';
 		}
 
-		if (site === '4swap') {
+		if (source === '4Swap') {
 			const order = pairRoutes.getPreOrder({
 				inputAsset,
 				outputAsset,
@@ -224,12 +225,12 @@ export const fetchSwapPreOrderInfo = async (
 };
 
 export const checkOrder = async (
-	site: '4swap' | 'MixPay',
+	source: SwapSource,
 	order_id: string,
 	user: RegisteredUser
 ): Promise<boolean> => {
 	let counter = 0;
-	const fetchOrderStatus = site === '4swap' ? fetch4SwapOrder : fetchMixPayOrder;
+	const fetchOrderStatus = source === '4Swap' ? fetch4SwapOrder : fetchMixPayOrder;
 
 	return new Promise((resolve, reject) => {
 		const timer = setInterval(async () => {
@@ -243,8 +244,8 @@ export const checkOrder = async (
 			try {
 				const res = await fetchOrderStatus(order_id, user);
 				if (
-					(site === '4swap' && res && (res as OrderResponse).state === 'Done') ||
-					(site === 'MixPay' && res && (res as MixPayPaymentResult).data.status === 'success')
+					(source === '4Swap' && res && (res as OrderResponse).state === 'Done') ||
+					(source === 'MixPay' && res && (res as MixPayPaymentResult).data.status === 'success')
 				) {
 					clearInterval(timer);
 					resolve(true);

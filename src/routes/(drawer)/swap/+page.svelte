@@ -10,6 +10,9 @@
 	import { assets, pairs, updateAssets } from '$lib/stores/model';
 	import { getAsset } from '$lib/helpers/utils';
 	import type { Asset } from '$lib/types/asset';
+	import type { SwapSource } from "$lib/types/swap";
+	import type { MixPayAsset } from '$lib/helpers/mixpay/api';
+	import type { Pair } from '$lib/helpers/4swap/api';
 	import Header from '$lib/components/base/header.svelte';
 	import UserInfo from '$lib/components/base/user-info.svelte';
 	import { bigLte, format, toPercent } from '$lib/helpers/big';
@@ -20,15 +23,17 @@
 	import { registerAndSave, user } from '$lib/stores/user';
 	import { library } from '$lib/stores/ether';
 	import { ETH_ASSET_ID, WHITELIST_ASSET_4SWAP, XIN_ASSET_ID } from '$lib/constants/common';
-	import type { Pair } from '$lib/helpers/4swap/api';
 	import Spinner from '$lib/components/common/spinner.svelte';
 	import { showToast } from '$lib/components/common/toast/toast-container.svelte';
 	import { focus } from 'focus-svelte';
 	import { fetchSwapPreOrderInfo } from '$lib/helpers/api';
 	import LL from '$i18n/i18n-svelte';
+	import { chooseSwapSource } from "$lib/helpers/swap/source";
 
 	let a: Asset[] | undefined = $page.data.assets;
 	let p: Pair[] | undefined = $page.data.pairs;
+	let mixpayPaymentAssets: MixPayAsset[] | undefined = $page.data.paymentAssets;
+	let mixpaySettlementAssets: MixPayAsset[] | undefined = $page.data.settlementAssets;
 
 	let inputAsset: Asset | undefined = undefined;
 	let outputAsset: Asset | undefined = undefined;
@@ -90,7 +95,7 @@
 	let fee: string | undefined;
 	let price: string | undefined;
 	let minReceived: string | undefined;
-	let site: '4swap' | 'MixPay' = 'MixPay';
+	let source: SwapSource = 'NoPair';
 
 	const updateSwapInfo = async (
 		inputAsset: Asset,
@@ -99,13 +104,9 @@
 		inputValue?: number,
 		outputValue?: number
 	) => {
-		site =
-			WHITELIST_ASSET_4SWAP.includes(inputAsset.asset_id) ||
-			WHITELIST_ASSET_4SWAP.includes(outputAsset.asset_id)
-				? '4swap'
-				: 'MixPay';
+		if (source === 'NoPair') return;
 
-		const info = await fetchSwapPreOrderInfo(site, pairRoutes, slippage, {
+		const info = await fetchSwapPreOrderInfo(source, pairRoutes, slippage, {
 			inputAsset: inputAsset?.asset_id,
 			outputAsset: outputAsset?.asset_id,
 			inputAmount: lastEdited === 'input' ? `${inputValue}` : undefined,
@@ -125,6 +126,10 @@
 		}
 	};
 
+	$: if (inputAsset && outputAsset) {
+		source = chooseSwapSource(inputAsset, outputAsset, mixpayPaymentAssets, mixpaySettlementAssets);
+		if (source === 'NoPair') showToast('common', 'No Swap Pair');
+	}
 	$: if (inputAsset && outputAsset && lastEdited && (inputAmount || outputAmount)) {
 		updateSwapInfo(
 			inputAsset,
@@ -148,7 +153,7 @@
 
 		try {
 			if (!$user.contract) await registerAndSave($user.address);
-			const res = await swapAsset($library, $user, site, order, inputAsset, minReceived);
+			const res = await swapAsset($library, $user, source, order, inputAsset, minReceived);
 
 			await updateAssets();
 			inputAsset = getAsset(inputAsset.asset_id, $assets);

@@ -1,10 +1,25 @@
-import axios, {type AxiosResponse} from 'axios';
-import {TransferClient, type TransferResponse} from "@mixin.dev/mixin-node-sdk";
-import type {Order, SwapParams} from '../4swap/route';
-import type {RegisteredUser} from '../../types/user';
-import {generateExtra} from '../sign';
-import {MIXPAY_BOT_ID} from "../../constants/common";
-import {format} from "../big";
+import axios, { type AxiosResponse } from 'axios';
+import { TransferClient, type TransferResponse } from "@mixin.dev/mixin-node-sdk";
+import type { Order, SwapParams } from '../4swap/route';
+import type { RegisteredUser } from '../../types/user';
+import { generateExtra } from '../sign';
+import { MIXPAY_BOT_ID } from "../../constants/common";
+import { format } from "../big";
+
+export interface MixPayAsset {
+	name: string;
+	symbol: string;
+	iconUrl: string;
+	assetId: string;
+	network: string;
+	isAsset: boolean;
+	chainAsset: {
+		id: string;
+		symbol: string;
+		name: string;
+		iconUrl: string;
+	}
+}
 
 interface MixPayBaseResponse {
 	code: number;
@@ -60,6 +75,10 @@ interface MixPayPaymentResponse extends MixPayBaseResponse {
 	};
 }
 
+interface MixPayAssetResponse extends MixPayBaseResponse {
+	data: MixPayAsset[]
+}
+
 export interface MixPayPaymentResult extends MixPayBaseResponse {
 	data: {
 		traceId: string;
@@ -102,6 +121,9 @@ ins.interceptors.response.use(
 		return e.response.data;
 	}
 );
+
+export const fetchMixPayPaymentAssets = () => ins.get<unknown, MixPayAssetResponse>('/setting/payment_assets');
+export const fetchMixPaySettlementAssets = () => ins.get<unknown, MixPayAssetResponse>('/setting/settlement_assets');
 
 export const fetchMixPayEstimatedPayment = async ({
 	inputAsset,

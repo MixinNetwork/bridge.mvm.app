@@ -1,5 +1,4 @@
 import { ethers, utils, type BigNumberish } from 'ethers';
-import { v4 } from 'uuid';
 import { BRIDGE_ABI, ERC20_ABI, MVM_ERC20_ABI } from '../../constants/abis';
 import {
 	BRIDGE_ADDRESS,
@@ -12,6 +11,7 @@ import {
 import type { Network } from '../../types/network';
 import type { RegisteredUser } from '$lib/types/user';
 import type { Asset } from '$lib/types/asset';
+import type { SwapSource } from "$lib/types/swap";
 import type { Order } from '../4swap/route';
 import { getWithdrawalExtra } from '../sign';
 import { fetch4SwapTxInfo } from '../4swap/api';
@@ -181,7 +181,7 @@ export const withdraw = async (
 export const swapAsset = async (
 	provider: ethers.providers.Web3Provider,
 	user: RegisteredUser,
-	site: '4swap' | 'MixPay',
+	source: SwapSource,
 	order: Order,
 	inputAsset: Asset,
 	minReceived: string
@@ -192,7 +192,7 @@ export const swapAsset = async (
 		extra: string;
 		getFollowId: (t: string) => Promise<string>;
 	};
-	if (site === '4swap') info = await fetch4SwapTxInfo(user, order, minReceived);
+	if (source === '4Swap') info = await fetch4SwapTxInfo(user, order, minReceived);
 	else info = await fetchMixPayTxInfo(user, order);
 
 	const signer = provider.getSigner();
@@ -208,7 +208,7 @@ export const swapAsset = async (
 		});
 
 		const follow_id = await info.getFollowId(new Date().toISOString());
-		return await checkOrder(site, follow_id, user);
+		return await checkOrder(source, follow_id, user);
 	}
 
 	if (inputAsset.contract) {
@@ -223,7 +223,7 @@ export const swapAsset = async (
 		});
 
 		const follow_id = await info.getFollowId(new Date().toISOString());
-		return await checkOrder(site, follow_id, user);
+		return await checkOrder(source, follow_id, user);
 	}
 
 	throw new Error('Invalid asset');
