@@ -25,7 +25,7 @@
 	<div class="flex w-[335px] flex-col items-center justify-center rounded-2xl bg-white pt-14 pb-5">
 		<img loading="lazy" src={iconUrl} class=" h-20 w-20" alt="eth" />
 		<div class=" mt-8 text-sm font-semibold opacity-20">
-			ETH is used to pay for transaction fees
+			{$LL.swapForGasPage.tips()}
 		</div>
 
 		<form
@@ -43,7 +43,7 @@
 
 			<button class="rounded-full bg-brand-primary px-6 py-3 text-white">{$LL.swap()}</button>
 
-			<div class=" mt-3 text-xs font-semibold opacity-20">本服务由 Crypto Gas Station 提供</div>
+			<div class=" mt-3 text-xs font-semibold opacity-20">{$LL.swapForGasPage.providedTips()}</div>
 		</form>
 	</div>
 </div>

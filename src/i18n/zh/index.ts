@@ -18,7 +18,7 @@ const zh: Translation = {
 	assets: '资产',
 	transactions: '交易',
 	swap: '兑换',
-	swapForGas: 'Swap for Gas',
+	swapForGas: '兑换手续费',
 	explorer: '浏览器',
 	audit: '审计',
 	docs: '文档',
@@ -99,7 +99,11 @@ const zh: Translation = {
 	tokenName: '代币名称',
 	tokenSymbol: '代币符号',
 	depositConfirmations: '存入确认区块',
-	addToMetaMask: '添加到 MetaMask'
+	addToMetaMask: '添加到 MetaMask',
+	swapForGasPage: {
+		tips: 'ETH 用于支付交易手续费',
+		providedTips: '本服务由 Crypto Gas Station 提供'
+	}
 };
 
 export default zh;

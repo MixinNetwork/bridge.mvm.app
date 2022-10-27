@@ -309,6 +309,16 @@ type RootTranslation = {
 	 * A​d​d​ ​t​o​k​e​n​ ​t​o​ ​M​e​t​a​M​a​s​k
 	 */
 	addToMetaMask: string
+	swapForGasPage: {
+		/**
+		 * E​T​H​ ​i​s​ ​u​s​e​d​ ​t​o​ ​p​a​y​ ​f​o​r​ ​t​r​a​n​s​a​c​t​i​o​n​ ​f​e​e​s
+		 */
+		tips: string
+		/**
+		 * T​h​i​s​ ​s​e​r​v​i​c​e​ ​i​s​ ​p​r​o​v​i​d​e​d​ ​b​y​ ​C​r​y​p​t​o​ ​G​a​s​ ​S​t​a​t​i​o​n
+		 */
+		providedTips: string
+	}
 }
 
 export type TranslationFunctions = {
@@ -600,6 +610,16 @@ export type TranslationFunctions = {
 	 * Add token to MetaMask
 	 */
 	addToMetaMask: () => LocalizedString
+	swapForGasPage: {
+		/**
+		 * ETH is used to pay for transaction fees
+		 */
+		tips: () => LocalizedString
+		/**
+		 * This service is provided by Crypto Gas Station
+		 */
+		providedTips: () => LocalizedString
+	}
 }
 
 export type Formatters = {}

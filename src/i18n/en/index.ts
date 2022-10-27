@@ -100,7 +100,11 @@ const en: BaseTranslation = {
 	tokenName: 'Token Name',
 	tokenSymbol: 'Token Symbol',
 	depositConfirmations: 'Deposit Confirmations',
-	addToMetaMask: 'Add token to MetaMask'
+	addToMetaMask: 'Add token to MetaMask',
+	swapForGasPage: {
+		tips: 'ETH is used to pay for transaction fees',
+		providedTips: 'This service is provided by Crypto Gas Station'
+	}
 };
 
 export default en;
