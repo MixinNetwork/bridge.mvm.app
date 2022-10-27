@@ -11,7 +11,7 @@ export const load: PageLoad = async ({ parent }) => {
 
 	const [a, t] = await Promise.all([
 		(cacheAssets.length && cacheAssets) || fetchAssets(user),
-		fetchTransactions({ address: '0x1AE60D36412a6745fce4d4935FF5Bf2b8139a371' })
+		fetchTransactions({ address: user.address })
 	]);
 
 	return { assets: a, transactions: t };
