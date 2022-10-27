@@ -5,6 +5,7 @@ import { tick } from 'svelte';
 export interface ClassesParams {
 	delay?: number;
 	duration?: 75 | 100 | 150 | 200 | 300 | 500 | 700 | 1000;
+	base?: string;
 	from: string;
 	to: string;
 }
@@ -36,9 +37,10 @@ const convertClasses = (clazz: string) => clazz.split(' ').filter(Boolean);
 
 export function tailwind(
 	node: Element,
-	{ delay = 0, duration = 150, from, to }: ClassesParams
+	{ delay = 0, duration = 150, from, to, base }: ClassesParams
 ): TransitionConfig {
 	const durationClass = convertDurationClass(duration);
+	const baseClass = base && convertClasses(base);
 
 	const fromClasses = convertClasses(from);
 	const toClasses = convertClasses(to);
@@ -46,6 +48,8 @@ export function tailwind(
 	let lastT: number | undefined = undefined;
 	let lastIsForward: boolean | undefined = undefined;
 	let isForward: boolean | undefined = undefined;
+
+	baseClass && node.classList.add(...baseClass);
 
 	const play = (callback: () => void) => {
 		if (node.classList.contains(durationClass)) {
