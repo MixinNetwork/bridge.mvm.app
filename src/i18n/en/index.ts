@@ -41,8 +41,10 @@ const en: BaseTranslation = {
 		tips2: 'Min deposit: 0.00000001 {0:string}.'
 	},
 	withdrawModal: {
-		tips1: 'Withdrawal fee: {0:string} {1:string}',
-		tips2: 'Gas fee: {0} ETH'
+		l1Gas: 'L1Gas: ',
+		l2Gas: 'L2Gas: ',
+		l1GasTip: 'L1 Gas fee paid to Ethereum miners',
+		l2GasTip: 'L2 Gas fee payment MVM node '
 	},
 	from: 'From',
 	to: 'To',

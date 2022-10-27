@@ -25,4 +25,7 @@
 	.expand-4 {
 		@apply relative before:absolute before:-inset-4;
 	}
+	.tooltip:before {
+		@apply font-normal;
+	}
 }

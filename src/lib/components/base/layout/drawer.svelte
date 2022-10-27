@@ -3,7 +3,7 @@
 	import Drawer from '$lib/components/base/drawer/drawer.svelte';
 </script>
 
-<div class="drawer drawer-mobile">
+<div class="drawer-mobile drawer">
 	{#key $page.url.pathname}
 		<input id="drawer-toggle" type="checkbox" class="drawer-toggle" checked={false} />
 	{/key}

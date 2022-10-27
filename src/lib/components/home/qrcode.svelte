@@ -38,7 +38,7 @@
 			/>
 			<div class="w-full rounded-xl bg-black bg-opacity-[3%] py-2 px-3">
 				<div class=" text-sm font-semibold opacity-30">{key}</div>
-				<div class="flex items-center text-start font-semibold">
+				<div class="flex items-center font-semibold">
 					<div class="grow">
 						{value}
 					</div>
@@ -56,7 +56,7 @@
 		</div>
 	{/each}
 
-	<ul class="mx-6 list-outside list-disc pb-6 text-start text-xs font-semibold opacity-50">
+	<ul class="mx-6 list-outside list-disc pb-6 text-xs font-semibold opacity-50">
 		<li>{$LL.depositModal.tips1(asset.confirmations)}</li>
 		<li>{$LL.depositModal.tips2(asset.symbol)}</li>
 	</ul>

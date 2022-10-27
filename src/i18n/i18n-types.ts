@@ -138,16 +138,21 @@ type RootTranslation = {
 	}
 	withdrawModal: {
 		/**
-		 * W​i​t​h​d​r​a​w​a​l​ ​f​e​e​:​ ​{​0​}​ ​{​1​}
-		 * @param {string} 0
-		 * @param {string} 1
+		 * L​1​G​a​s​:​ 
 		 */
-		tips1: RequiredParams<'0' | '1'>
+		l1Gas: string
 		/**
-		 * G​a​s​ ​f​e​e​:​ ​{​0​}​ ​E​T​H
-		 * @param {unknown} 0
+		 * L​2​G​a​s​:​ 
 		 */
-		tips2: RequiredParams<'0'>
+		l2Gas: string
+		/**
+		 * L​1​ ​G​a​s​ ​f​e​e​ ​p​a​i​d​ ​t​o​ ​E​t​h​e​r​e​u​m​ ​m​i​n​e​r​s
+		 */
+		l1GasTip: string
+		/**
+		 * L​2​ ​G​a​s​ ​f​e​e​ ​p​a​y​m​e​n​t​ ​M​V​M​ ​n​o​d​e​ 
+		 */
+		l2GasTip: string
 	}
 	/**
 	 * F​r​o​m
@@ -449,13 +454,21 @@ export type TranslationFunctions = {
 	}
 	withdrawModal: {
 		/**
-		 * Withdrawal fee: {0} {1}
+		 * L1Gas: 
 		 */
-		tips1: (arg0: string, arg1: string) => LocalizedString
+		l1Gas: () => LocalizedString
 		/**
-		 * Gas fee: {0} ETH
+		 * L2Gas: 
 		 */
-		tips2: (arg0: unknown) => LocalizedString
+		l2Gas: () => LocalizedString
+		/**
+		 * L1 Gas fee paid to Ethereum miners
+		 */
+		l1GasTip: () => LocalizedString
+		/**
+		 * L2 Gas fee payment MVM node 
+		 */
+		l2GasTip: () => LocalizedString
 	}
 	/**
 	 * From

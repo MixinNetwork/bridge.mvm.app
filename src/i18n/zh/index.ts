@@ -41,8 +41,10 @@ const zh: Translation = {
 		tips2: '最少存入 0.00000001 {0}。'
 	},
 	withdrawModal: {
-		tips1: '提出手续费: {0} {1}',
-		tips2: '网络手续费: {0} ETH'
+		l1Gas: 'L1Gas: ',
+		l2Gas: 'L2Gas: ',
+		l1GasTip: 'L1 Gas 费支付给以太坊矿工',
+		l2GasTip: 'L2 Gas 费支付 MVM 节点 '
 	},
 	from: '来自',
 	to: '到',

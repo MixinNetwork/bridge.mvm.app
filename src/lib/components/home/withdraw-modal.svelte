@@ -16,7 +16,7 @@
 
 <FullLayoutModal on:click={close}>
 	<div slot="title">{$LL.withdraw()}</div>
-	<div class="flex grow flex-col items-stretch overflow-y-auto">
+	<div class="flex grow flex-col items-stretch overflow-visible">
 		{#if asset}
 			<Bridge {asset} depositMode={false} />
 		{/if}

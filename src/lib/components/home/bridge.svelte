@@ -8,10 +8,10 @@
 	import type { Asset } from '$lib/types/asset';
 	import Eth from '$lib/assets/logo/eth.svg?component';
 	import SelectedAssetButton from '$lib/components/base/selected-asset-button.svelte';
-	import { AssetWithdrawalFee, updateAssets, buildBalanceStore } from '$lib/stores/model';
+	import { AssetWithdrawalFee, updateAssets, buildBalanceStore, assets } from '$lib/stores/model';
 	import { user } from '$lib/stores/user';
 	import { EOS_ASSET_ID, ETH_ASSET_ID, TRANSACTION_GAS } from '$lib/constants/common';
-	import { bigGte, format } from '$lib/helpers/big';
+	import { bigGte, bigMul, format } from '$lib/helpers/big';
 	import LogoCircle from '$lib/assets/logo/logo-circle.svg?component';
 	import Spinner from '$lib/components/common/spinner.svelte';
 	import { library } from '$lib/stores/ether';
@@ -21,9 +21,15 @@
 	import { showToast } from '../common/toast/toast-container.svelte';
 	import { tick } from 'svelte';
 	import LL from '$i18n/i18n-svelte';
+	import { getAsset } from '../../helpers/utils';
+	import Info from '$lib/assets/info.svg?component';
+	import Modal from '../common/modal/modal.svelte';
+	import TipModal from '../base/tip-modal.svelte';
 
 	export let asset: Asset;
 	export let depositMode: boolean;
+
+	$: ethAsset = getAsset(ETH_ASSET_ID, $assets);
 
 	$: assetId = asset.asset_id;
 
@@ -94,6 +100,9 @@
 			loading = false;
 		}
 	};
+
+	let l1GasModalOpened = false;
+	let l2GasModalOpened = false;
 </script>
 
 <div class="mx-5 rounded-lg bg-white">
@@ -143,7 +152,7 @@
 		</div>
 	</div>
 	{#if depositMode}
-		<div class={clsx('break-all px-4 py-3 font-semibold text-start', inputClasses)}>
+		<div class={clsx('break-all px-4 py-3 font-semibold', inputClasses)}>
 			{asset.destination}
 		</div>
 	{:else}
@@ -197,13 +206,55 @@
 
 {#if !depositMode}
 	<div
-		class="mx-5 mt-3 space-y-2 rounded-lg bg-black bg-opacity-5 p-4 text-start text-xs font-semibold text-black text-opacity-50"
+		class={clsx(
+			'mx-5 mt-3 space-y-2 rounded-lg bg-black bg-opacity-5 p-4 text-xs font-semibold text-black text-opacity-50',
+			'child:flex child:justify-between',
+			'child:child:flex child:child:items-center child:child:space-x-1'
+		)}
 	>
 		<div>
-			{$LL.withdrawModal.tips1($assetWithdrawalFee || '...', asset.symbol)}
+			<button
+				class="tooltip hover:tooltip-open"
+				data-tip={$LL.withdrawModal.l1GasTip()}
+				on:click={() => (l1GasModalOpened = true)}
+			>
+				<div>
+					{$LL.withdrawModal.l1Gas()}
+				</div>
+				<Info />
+			</button>
+			<div>
+				{#if $assetWithdrawalFee}
+					{$assetWithdrawalFee}
+					{asset.symbol}
+					(${format({ n: bigMul($assetWithdrawalFee, asset.price_usd), max_dp: 3 })})
+				{:else}
+					'...'
+				{/if}
+			</div>
 		</div>
 		<div>
-			{$LL.withdrawModal.tips2(TRANSACTION_GAS)}
+			<button
+				class="tooltip hover:tooltip-open"
+				data-tip={$LL.withdrawModal.l2GasTip()}
+				on:click={() => (l2GasModalOpened = true)}
+			>
+				<div>
+					{$LL.withdrawModal.l2Gas()}
+				</div>
+
+				<Info />
+			</button>
+			<div>
+				{#if ethAsset}
+					{TRANSACTION_GAS} ETH (${format({
+						n: bigMul(TRANSACTION_GAS, ethAsset?.price_usd),
+						max_dp: 3
+					})})
+				{:else}
+					'...'
+				{/if}
+			</div>
 		</div>
 	</div>
 {/if}
@@ -219,3 +270,18 @@
 		{depositMode ? $LL.deposit() : $LL.withdraw()}
 	{/if}
 </button>
+
+<Modal
+	this={TipModal}
+	title={$LL.withdrawModal.l1Gas()}
+	description={$LL.withdrawModal.l1GasTip()}
+	modal-opened={l1GasModalOpened}
+	modal-on-close={() => (l1GasModalOpened = false)}
+/>
+<Modal
+	this={TipModal}
+	title={$LL.withdrawModal.l2Gas()}
+	description={$LL.withdrawModal.l2GasTip()}
+	modal-opened={l2GasModalOpened}
+	modal-on-close={() => (l2GasModalOpened = false)}
+/>
