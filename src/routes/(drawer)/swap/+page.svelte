@@ -22,7 +22,7 @@
 	import Faq from '$lib/components/swap/faq.svelte';
 	import { registerAndSave, user } from '$lib/stores/user';
 	import { library } from '$lib/stores/ether';
-	import { ETH_ASSET_ID, WHITELIST_ASSET_4SWAP, XIN_ASSET_ID } from '$lib/constants/common';
+	import { ETH_ASSET_ID, XIN_ASSET_ID } from '$lib/constants/common';
 	import Spinner from '$lib/components/common/spinner.svelte';
 	import { showToast } from '$lib/components/common/toast/toast-container.svelte';
 	import { focus } from 'focus-svelte';
@@ -96,6 +96,7 @@
 	let price: string | undefined;
 	let minReceived: string | undefined;
 	let source: SwapSource = 'NoPair';
+	let loadingPreOrder = false;
 
 	const updateSwapInfo = async (
 		inputAsset: Asset,
@@ -131,6 +132,7 @@
 		if (source === 'NoPair') showToast('common', 'No Swap Pair');
 	}
 	$: if (inputAsset && outputAsset && lastEdited && (inputAmount || outputAmount)) {
+		loadingPreOrder = true;
 		updateSwapInfo(
 			inputAsset,
 			outputAsset,
@@ -138,6 +140,7 @@
 			(inputAmount && Number(inputAmount)) || undefined,
 			(outputAmount && Number(outputAmount)) || undefined
 		);
+		loadingPreOrder = false;
 	} else order = undefined;
 
 	$: inputAmountFiat = formatFiat(inputAsset?.price_usd, (inputAmount && +inputAmount) || 0);
@@ -145,7 +148,7 @@
 
 	let loading = false;
 	const swap = async () => {
-		if (!$library || !$user || !order || !inputAsset || !minReceived) return;
+		if (!$library || !$user || !order || !inputAsset || !minReceived || source === 'NoPair') return;
 
 		loading = true;
 
@@ -324,7 +327,7 @@
 			on:click={swap}
 			disabled={!(order && +order.amount) || order?.priceImpact > 0.15}
 		>
-			{#if loading}
+			{#if loading || loadingPreOrder}
 				<Spinner class="stroke-white stroke-2 text-center" />
 			{:else}
 				{$LL.swap()}

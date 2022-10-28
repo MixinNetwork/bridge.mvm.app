@@ -190,7 +190,7 @@ export const swapAsset = async (
 
 	let info: {
 		extra: string;
-		getFollowId: (t: string) => Promise<string>;
+		getFollowId: (t: number) => Promise<string>;
 	};
 	if (source === '4Swap') info = await fetch4SwapTxInfo(user, order, minReceived);
 	else info = await fetchMixPayTxInfo(user, order);
@@ -207,7 +207,7 @@ export const swapAsset = async (
 			value: assetAmount
 		});
 
-		const follow_id = await info.getFollowId(new Date().toISOString());
+		const follow_id = await info.getFollowId(Date.now());
 		return await checkOrder(source, follow_id, user);
 	}
 
@@ -222,7 +222,7 @@ export const swapAsset = async (
 			gasLimit: 450000
 		});
 
-		const follow_id = await info.getFollowId(new Date().toISOString());
+		const follow_id = await info.getFollowId(Date.now());
 		return await checkOrder(source, follow_id, user);
 	}
 

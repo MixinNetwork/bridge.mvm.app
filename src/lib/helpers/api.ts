@@ -198,8 +198,6 @@ export const fetchSwapPreOrderInfo = async (
 					minReceived: format({ n: order.amount })
 				};
 			}
-
-			source = '4Swap';
 		}
 
 		if (source === '4Swap') {

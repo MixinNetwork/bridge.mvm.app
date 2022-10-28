@@ -122,8 +122,18 @@ ins.interceptors.response.use(
 	}
 );
 
-export const fetchMixPayPaymentAssets = () => ins.get<unknown, MixPayAssetResponse>('/setting/payment_assets');
-export const fetchMixPaySettlementAssets = () => ins.get<unknown, MixPayAssetResponse>('/setting/settlement_assets');
+export const fetchMixPayPaymentAssets = async () => {
+	const response = await fetch('https://api.mixpay.me/v1/setting/payment_assets');
+	const { data } = await response.json();
+	if (!data) throw new Error('No data found');
+	return data as MixPayAsset[];
+};
+export const fetchMixPaySettlementAssets = async () => {
+	const response = await fetch('https://api.mixpay.me/v1/setting/settlement_assets');
+	const { data } = await response.json();
+	if (!data) throw new Error('No data found');
+	return data as MixPayAsset[];
+}
 
 export const fetchMixPayEstimatedPayment = async ({
 	inputAsset,
@@ -141,7 +151,7 @@ export const fetchMixPayEstimatedPayment = async ({
 	return await ins.get('/payments_estimated', { params });
 };
 
-const fetchMixPaySwapTraceId = async (user: RegisteredUser, opponent_id: string, memo: string, amount: string, paymentAssetId: string, timestamp: string): Promise<string> => {
+const fetchMixPaySwapTraceId = async (user: RegisteredUser, opponent_id: string, memo: string, amount: string, paymentAssetId: string, timestamp: number): Promise<string> => {
 	const client = TransferClient({
 		keystore: {
 			...user,
@@ -161,17 +171,13 @@ const fetchMixPaySwapTraceId = async (user: RegisteredUser, opponent_id: string,
 				order: 'DESC'
 			});
 			const snapshot = snapshotArray.find((snapshot) => {
-				if (
-					snapshot.type !== 'transfer'
-					|| !snapshot.amount.startsWith('-')
-				) return false;
-
-				if (
-					snapshot.opponent_id === opponent_id
+				if (snapshot.type !== 'transfer') return false;
+				return snapshot.opponent_id === opponent_id
 					&& snapshot.memo === memo
 					&& snapshot.asset_id === paymentAssetId
-					&& format({n: snapshot.amount.slice(1)}) === format({n: amount})
-				) return true
+					&& new Date(snapshot.created_at).getTime() > timestamp
+					&& snapshot.amount.startsWith('-')
+					&& format({n: snapshot.amount.slice(1)}) === format({n: amount});
 			});
 
 			if (snapshot) {
@@ -198,7 +204,7 @@ export const fetchMixPayTxInfo = async (user: RegisteredUser, order: Order) => {
 
 	return {
 		extra,
-		getFollowId: (t: string) => fetchMixPaySwapTraceId(user, MIXPAY_BOT_ID, memo, String(order.funds), order.pay_asset_id, t)
+		getFollowId: (t: number) => fetchMixPaySwapTraceId(user, MIXPAY_BOT_ID, memo, String(order.funds), order.pay_asset_id, t)
 	};
 };
 
