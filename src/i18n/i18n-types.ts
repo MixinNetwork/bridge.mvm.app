@@ -328,6 +328,10 @@ type RootTranslation = {
 		 * @param {number} 0
 		 */
 		itemTip: RequiredParams<'0'>
+		/**
+		 * C​u​s​t​o​m​ ​a​m​o​u​n​t
+		 */
+		customAmount: string
 	}
 }
 
@@ -641,6 +645,10 @@ export type TranslationFunctions = {
 		 * Available for {0} transactions
 		 */
 		itemTip: (arg0: number) => LocalizedString
+		/**
+		 * Custom amount
+		 */
+		customAmount: () => LocalizedString
 	}
 }
 

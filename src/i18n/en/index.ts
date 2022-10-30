@@ -106,7 +106,8 @@ const en: BaseTranslation = {
 	swapForGasPage: {
 		tip: 'ETH is used to pay for transaction fees',
 		providedTip: 'This service is provided by Crypto Gas Station',
-		itemTip: 'Available for {0:number} transactions'
+		itemTip: 'Available for {0:number} transactions',
+		customAmount: 'Custom amount'
 	}
 };
 

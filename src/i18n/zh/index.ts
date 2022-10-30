@@ -105,7 +105,8 @@ const zh: Translation = {
 	swapForGasPage: {
 		tip: 'ETH 用于支付交易手续费',
 		providedTip: '本服务由 Crypto Gas Station 提供',
-		itemTip: '可用 {0} 次交易'
+		itemTip: '可用 {0} 次交易',
+		customAmount: '自定义金额'
 	}
 };
 
