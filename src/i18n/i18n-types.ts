@@ -138,11 +138,11 @@ type RootTranslation = {
 	}
 	withdrawModal: {
 		/**
-		 * L​1​G​a​s​:​ 
+		 * L​1​ ​G​a​s​:​ 
 		 */
 		l1Gas: string
 		/**
-		 * L​2​G​a​s​:​ 
+		 * L​2​ ​G​a​s​:​ 
 		 */
 		l2Gas: string
 		/**
@@ -458,11 +458,11 @@ export type TranslationFunctions = {
 	}
 	withdrawModal: {
 		/**
-		 * L1Gas: 
+		 * L1 Gas: 
 		 */
 		l1Gas: () => LocalizedString
 		/**
-		 * L2Gas: 
+		 * L2 Gas: 
 		 */
 		l2Gas: () => LocalizedString
 		/**
