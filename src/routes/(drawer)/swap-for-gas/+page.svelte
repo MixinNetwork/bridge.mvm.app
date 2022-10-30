@@ -65,8 +65,8 @@
 				<Item value="custom" {price} selected={selectCustom} transactions={64}>
 					<input
 						type="number"
-						class="h-16 w-full rounded-lg bg-[#F5F7FA] p-1"
-						placeholder="Amount"
+						class="h-16 w-full rounded-lg bg-[#F5F7FA] p-1 text-lg font-semibold"
+						placeholder={$LL.amount()}
 						bind:value={customAmount}
 						on:focus={() => (selectCustom = true)}
 						on:blur={() => (selectCustom = false)}

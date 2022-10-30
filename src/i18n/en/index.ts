@@ -108,7 +108,8 @@ const en: BaseTranslation = {
 		providedTip: 'This service is provided by Crypto Gas Station',
 		itemTip: 'Available for {0:number} transactions',
 		customAmount: 'Custom amount'
-	}
+	},
+	amount: 'Amount'
 };
 
 export default en;

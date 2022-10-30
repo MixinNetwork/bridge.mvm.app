@@ -333,6 +333,10 @@ type RootTranslation = {
 		 */
 		customAmount: string
 	}
+	/**
+	 * A​m​o​u​n​t
+	 */
+	amount: string
 }
 
 export type TranslationFunctions = {
@@ -650,6 +654,10 @@ export type TranslationFunctions = {
 		 */
 		customAmount: () => LocalizedString
 	}
+	/**
+	 * Amount
+	 */
+	amount: () => LocalizedString
 }
 
 export type Formatters = {}
