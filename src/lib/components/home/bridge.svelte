@@ -213,38 +213,43 @@
 		)}
 	>
 		<div>
-			<button
-				class="tooltip hover:tooltip-open"
-				data-tip={$LL.withdrawModal.l1GasTip()}
-				on:click={() => (l1GasModalOpened = true)}
-			>
+			<div>
 				<div>
 					{$LL.withdrawModal.l1Gas()}
 				</div>
-				<Info />
-			</button>
+				<button
+					class="tooltip hover:tooltip-open"
+					data-tip={$LL.withdrawModal.l1GasTip()}
+					on:click={() => (l1GasModalOpened = true)}
+				>
+					<Info />
+				</button>
+			</div>
+
 			<div>
 				{#if $assetWithdrawalFee}
 					{$assetWithdrawalFee}
 					{asset.symbol}
 					(${format({ n: bigMul($assetWithdrawalFee, asset.price_usd), max_dp: 3 })})
 				{:else}
-					'...'
+					...
 				{/if}
 			</div>
 		</div>
 		<div>
-			<button
-				class="tooltip hover:tooltip-open"
-				data-tip={$LL.withdrawModal.l2GasTip()}
-				on:click={() => (l2GasModalOpened = true)}
-			>
+			<div>
 				<div>
 					{$LL.withdrawModal.l2Gas()}
 				</div>
+				<button
+					class="tooltip hover:tooltip-open"
+					data-tip={$LL.withdrawModal.l2GasTip()}
+					on:click={() => (l2GasModalOpened = true)}
+				>
+					<Info />
+				</button>
+			</div>
 
-				<Info />
-			</button>
 			<div>
 				{#if ethAsset}
 					{TRANSACTION_GAS} ETH (${format({
@@ -252,7 +257,7 @@
 						max_dp: 3
 					})})
 				{:else}
-					'...'
+					...
 				{/if}
 			</div>
 		</div>

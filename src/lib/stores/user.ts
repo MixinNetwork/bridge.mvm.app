@@ -61,5 +61,5 @@ export const address = derived(user, ($user) => $user?.address);
 
 export const shortAddress = derived(address, ($address) => {
 	if (!$address) return;
-	return $address.slice(0, 4) + '...' + $address.slice(-4);
+	return $address.slice(2, 6) + '...' + $address.slice(-4);
 });

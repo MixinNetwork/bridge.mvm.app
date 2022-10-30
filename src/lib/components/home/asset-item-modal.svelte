@@ -88,7 +88,7 @@
 
 	<div
 		class={clsx(
-			'flex w-full flex-row mb-8',
+			'flex w-full flex-row mb-8 font-semibold',
 			'child:flex child:h-12 child:w-full child:flex-1 child:items-center child:justify-center child:bg-brand-background child:text-center first:child:rounded-l-xl last:child:rounded-r-xl',
 			'[&>*:nth-child(n+2)]:relative',
 			'[&>*:nth-child(n+2)]:before:absolute',

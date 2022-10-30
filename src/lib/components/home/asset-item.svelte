@@ -30,7 +30,7 @@
 		/>
 		<div>
 			<span class="space-x-1">
-				<span class="font-bold">{format({ n: asset.balance, dp: 8 })}</span>
+				<span class="font-bold">{format({ n: asset.balance, dp: 8 })} {asset.symbol}</span>
 				<ChainLabel chainId={asset.chain_id} assetId={asset.asset_id} />
 			</span>
 			<div class="text-sm font-semibold opacity-20">
