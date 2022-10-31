@@ -67,6 +67,7 @@
 						type="number"
 						class="h-16 w-full rounded-lg bg-[#F5F7FA] p-1 text-lg font-semibold"
 						placeholder={$LL.amount()}
+						step="0.001"
 						bind:value={customAmount}
 						on:focus={() => (selectCustom = true)}
 						on:blur={() => (selectCustom = false)}
