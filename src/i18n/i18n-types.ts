@@ -271,7 +271,7 @@ type RootTranslation = {
 	apps: {
 		quill: {
 			/**
-			 * W​r​i​t​e​ ​t​o​ ​E​a​r​n
+			 * Q​u​i​l​l​ ​i​s​ ​b​u​i​l​d​i​n​g​ ​a​ ​v​a​l​u​e​ ​n​e​t​ ​o​n​ ​t​h​e​ ​W​e​b​3​ ​f​o​r​ ​b​o​t​h​ ​a​u​t​h​o​r​s​ ​a​n​d​ ​r​e​a​d​e​r​s​.
 			 */
 			description: string
 		}
@@ -289,7 +289,7 @@ type RootTranslation = {
 		}
 		fourSwap: {
 			/**
-			 * 4​s​w​a​p​ ​i​s​ ​t​h​e​ ​a​u​t​o​m​a​t​e​d​ ​m​a​r​k​e​t​-​m​a​k​i​n​g​ ​t​r​a​d​i​n​g​ ​p​l​a​t​f​o​r​m​ ​o​f​ ​F​o​x​,​ ​s​i​m​i​l​a​r​ ​t​o​ ​U​n​i​s​w​a​p​.
+			 * A​ ​f​u​l​l​y​ ​d​e​c​e​n​t​r​a​l​i​z​e​d​ ​p​r​o​t​o​c​o​l​ ​f​o​r​ ​a​u​t​o​m​a​t​e​d​ ​l​i​q​u​i​d​i​t​y​ ​p​r​o​v​i​s​i​o​n​.
 			 */
 			description: string
 		}
@@ -593,7 +593,7 @@ export type TranslationFunctions = {
 	apps: {
 		quill: {
 			/**
-			 * Write to Earn
+			 * Quill is building a value net on the Web3 for both authors and readers.
 			 */
 			description: () => LocalizedString
 		}
@@ -611,7 +611,7 @@ export type TranslationFunctions = {
 		}
 		fourSwap: {
 			/**
-			 * 4swap is the automated market-making trading platform of Fox, similar to Uniswap.
+			 * A fully decentralized protocol for automated liquidity provision.
 			 */
 			description: () => LocalizedString
 		}

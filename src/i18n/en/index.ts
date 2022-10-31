@@ -85,7 +85,7 @@ const en: BaseTranslation = {
 	max: 'Max',
 	apps: {
 		quill: {
-			description: 'Write to Earn'
+			description: 'Quill is building a value net on the Web3 for both authors and readers.'
 		},
 		leaf: {
 			description: 'A decentralized financial network, implement a derivatives liquidity protocol.'
@@ -94,8 +94,7 @@ const en: BaseTranslation = {
 			description: 'An algorithmic, autonomous interest rate protocol.'
 		},
 		fourSwap: {
-			description:
-				'4swap is the automated market-making trading platform of Fox, similar to Uniswap.'
+			description: 'A fully decentralized protocol for automated liquidity provision.'
 		}
 	},
 	tokenNA: 'N/A',
