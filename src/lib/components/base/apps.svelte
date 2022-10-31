@@ -56,10 +56,15 @@
 	<div class=" hidden text-sm font-semibold text-black text-opacity-80 md:block">Apps</div>
 
 	<div
-		class="invisible absolute top-10 -right-48 z-50 mt-3 hidden w-96 flex-col rounded-2xl bg-white p-5 opacity-0 shadow transition-all delay-100 group-hover:visible group-hover:opacity-100 md:flex lg:right-0"
+		class="invisible absolute top-10 -right-48 z-50 mt-3 hidden w-96 flex-col rounded-2xl bg-white py-5 opacity-0 shadow transition-all delay-100 group-hover:visible group-hover:opacity-100 md:flex lg:right-0"
 	>
 		{#each data as { name, description, icon, href } (name)}
-			<a class=" flex flex-row space-x-3 py-4" {href} target="_blank" rel="noreferrer">
+			<a
+				class=" default flex flex-row space-x-3 bg-brand-primary bg-opacity-0 py-4 px-5 hover:bg-opacity-5"
+				{href}
+				target="_blank"
+				rel="noreferrer"
+			>
 				<img loading="lazy" src={icon} width="40" height="40" alt={name} class=" shrink-0" />
 				<div class="flex flex-col items-start text-start">
 					<div class=" font-bold text-black text-opacity-80">{name}</div>
