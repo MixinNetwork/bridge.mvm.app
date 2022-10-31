@@ -95,6 +95,13 @@ const en: BaseTranslation = {
 		},
 		fourSwap: {
 			description: 'A fully decentralized protocol for automated liquidity provision.'
+		},
+		trident: {
+			description: 'The most simple and easy-to-use NFTs marketplace in the world.'
+		},
+		optionDance: {
+			description:
+				'We reinvented options trading for investors, everyone can trade options like the gurus.'
 		}
 	},
 	tokenNA: 'N/A',

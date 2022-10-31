@@ -293,6 +293,18 @@ type RootTranslation = {
 			 */
 			description: string
 		}
+		trident: {
+			/**
+			 * T​h​e​ ​m​o​s​t​ ​s​i​m​p​l​e​ ​a​n​d​ ​e​a​s​y​-​t​o​-​u​s​e​ ​N​F​T​s​ ​m​a​r​k​e​t​p​l​a​c​e​ ​i​n​ ​t​h​e​ ​w​o​r​l​d​.
+			 */
+			description: string
+		}
+		optionDance: {
+			/**
+			 * W​e​ ​r​e​i​n​v​e​n​t​e​d​ ​o​p​t​i​o​n​s​ ​t​r​a​d​i​n​g​ ​f​o​r​ ​i​n​v​e​s​t​o​r​s​,​ ​e​v​e​r​y​o​n​e​ ​c​a​n​ ​t​r​a​d​e​ ​o​p​t​i​o​n​s​ ​l​i​k​e​ ​t​h​e​ ​g​u​r​u​s​.
+			 */
+			description: string
+		}
 	}
 	/**
 	 * N​/​A
@@ -612,6 +624,18 @@ export type TranslationFunctions = {
 		fourSwap: {
 			/**
 			 * A fully decentralized protocol for automated liquidity provision.
+			 */
+			description: () => LocalizedString
+		}
+		trident: {
+			/**
+			 * The most simple and easy-to-use NFTs marketplace in the world.
+			 */
+			description: () => LocalizedString
+		}
+		optionDance: {
+			/**
+			 * We reinvented options trading for investors, everyone can trade options like the gurus.
 			 */
 			description: () => LocalizedString
 		}

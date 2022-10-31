@@ -95,6 +95,12 @@ const zh: Translation = {
 		},
 		fourSwap: {
 			description: '一项完全分散的自动流动性供应协议。'
+		},
+		trident: {
+			description: '世界上最简单易用的 NFT 市场。'
+		},
+		optionDance: {
+			description: '我们为投资者重新发明了期权交易，每个人都可以像大师一样交易期权。'
 		}
 	},
 	tokenNA: '暂无价格',

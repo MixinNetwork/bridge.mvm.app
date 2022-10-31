@@ -33,6 +33,19 @@
 			description: $LL.apps.fourSwap.description(),
 			icon: FourSwap,
 			href: 'https://app.4swap.org/'
+		},
+		{
+			name: 'Trident',
+			description: $LL.apps.trident.description(),
+
+			icon: 'https://mixin-images.zeromesh.net/UrECmX-_zO9twWDh8429lOUU9h7XgRapTM_McbovByNGWK9v-uPVKQw8ZbUvjRLJhEMKGGYs21VtKPNWXfujfVM_T49P4zY3XQgH=s256',
+			href: 'https://thetrident.one/'
+		},
+		{
+			name: 'OptionDance',
+			description: $LL.apps.optionDance.description(),
+			icon: 'https://mixin-images.zeromesh.net/3H9XZLLfHeIW4ARQXN99nIgIQQuhEzqsv0iG7_gec3T82UylqQPyOoJEFIVvYHWSo8Z4AN7RSF03qMOZqbOwCJy7srXwhpvPMnU=s256',
+			href: 'https://option.dance/'
 		}
 	];
 
@@ -65,7 +78,14 @@
 				target="_blank"
 				rel="noreferrer"
 			>
-				<img loading="lazy" src={icon} width="40" height="40" alt={name} class=" shrink-0" />
+				<img
+					loading="lazy"
+					src={icon}
+					width="40"
+					height="40"
+					alt={name}
+					class="h-10 w-10 shrink-0"
+				/>
 				<div class="flex flex-col items-start text-start">
 					<div class=" font-bold text-black text-opacity-80">{name}</div>
 					<div class=" text-sm font-semibold text-black text-opacity-20">{description}</div>
