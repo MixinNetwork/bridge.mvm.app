@@ -10,7 +10,7 @@
 	export let selected: boolean | undefined = undefined;
 	export let transactions: number;
 
-	const dispatcher = createEventDispatcher()
+	const dispatcher = createEventDispatcher();
 
 	let element: HTMLElement | undefined;
 	$: parent = element?.parentElement && element?.parentElement;
