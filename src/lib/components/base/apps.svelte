@@ -69,7 +69,7 @@
 	<div class=" hidden text-sm font-semibold text-black text-opacity-80 md:block">Apps</div>
 
 	<div
-		class="invisible absolute top-10 -right-48 z-50 mt-3 hidden w-96 flex-col rounded-2xl bg-white py-5 opacity-0 shadow transition-all delay-100 group-hover:visible group-hover:opacity-100 md:flex lg:right-0"
+		class="invisible absolute top-10 -right-48 z-50 mt-3 hidden h-[480px] w-96 flex-col overflow-y-auto rounded-2xl bg-white py-5 opacity-0 shadow transition-all delay-100 group-hover:visible group-hover:opacity-100 md:flex lg:right-0"
 	>
 		{#each data as { name, description, icon, href } (name)}
 			<a
