@@ -10,7 +10,7 @@
 	import { assets, pairs, updateAssets } from '$lib/stores/model';
 	import { getAsset } from '$lib/helpers/utils';
 	import type { Asset } from '$lib/types/asset';
-	import type { SwapSource } from "$lib/types/swap";
+	import type { SwapSource } from '$lib/types/swap';
 	import type { MixPayAsset } from '$lib/helpers/mixpay/api';
 	import type { Pair } from '$lib/helpers/4swap/api';
 	import Header from '$lib/components/base/header.svelte';
@@ -28,7 +28,7 @@
 	import { focus } from 'focus-svelte';
 	import { fetchSwapPreOrderInfo } from '$lib/helpers/api';
 	import LL from '$i18n/i18n-svelte';
-	import { chooseSwapSource } from "$lib/helpers/swap/source";
+	import { chooseSwapSource } from '$lib/helpers/swap/source';
 
 	let a: Asset[] | undefined = $page.data.assets;
 	let p: Pair[] | undefined = $page.data.pairs;

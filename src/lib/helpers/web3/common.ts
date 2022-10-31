@@ -11,7 +11,7 @@ import {
 import type { Network } from '../../types/network';
 import type { RegisteredUser } from '$lib/types/user';
 import type { Asset } from '$lib/types/asset';
-import type { SwapSource } from "$lib/types/swap";
+import type { SwapSource } from '$lib/types/swap';
 import type { Order } from '../4swap/route';
 import { getWithdrawalExtra } from '../sign';
 import { fetch4SwapTxInfo } from '../4swap/api';

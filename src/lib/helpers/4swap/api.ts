@@ -153,12 +153,10 @@ export const fetch4SwapOrder = async (order_id: string, user: RegisteredUser) =>
 	return data as OrderResponse;
 };
 
-export const fetch4SwapTxInfo = async (
-	user: RegisteredUser,
-	order: Order,
-	minReceived: string
-) => {
-	const swapAction = `3,${user.user_id},${v4()},${order.fill_asset_id},${order.routes},${minReceived}`;
+export const fetch4SwapTxInfo = async (user: RegisteredUser, order: Order, minReceived: string) => {
+	const swapAction = `3,${user.user_id},${v4()},${order.fill_asset_id},${
+		order.routes
+	},${minReceived}`;
 
 	const actionResp = await createAction({
 		action: swapAction,

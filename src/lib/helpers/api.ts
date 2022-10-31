@@ -17,7 +17,7 @@ import {
 	type MixPayPaymentResult
 } from './mixpay/api';
 import { fetch4SwapOrder, type OrderResponse } from './4swap/api';
-import type { SwapSource } from "../types/swap";
+import type { SwapSource } from '../types/swap';
 
 export const register = async (address: string): Promise<RegisteredUser> => {
 	const response = await fetch('https://bridge.mvm.dev/users', {

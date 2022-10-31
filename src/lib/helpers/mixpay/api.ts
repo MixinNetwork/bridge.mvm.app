@@ -1,10 +1,10 @@
 import axios, { type AxiosResponse } from 'axios';
-import { TransferClient, type TransferResponse } from "@mixin.dev/mixin-node-sdk";
+import { TransferClient, type TransferResponse } from '@mixin.dev/mixin-node-sdk';
 import type { Order, SwapParams } from '../4swap/route';
 import type { RegisteredUser } from '../../types/user';
 import { generateExtra } from '../sign';
-import { MIXPAY_BOT_ID } from "../../constants/common";
-import { format } from "../big";
+import { MIXPAY_BOT_ID } from '../../constants/common';
+import { format } from '../big';
 
 export interface MixPayAsset {
 	name: string;
@@ -18,7 +18,7 @@ export interface MixPayAsset {
 		symbol: string;
 		name: string;
 		iconUrl: string;
-	}
+	};
 }
 
 interface MixPayBaseResponse {
@@ -76,7 +76,7 @@ interface MixPayPaymentResponse extends MixPayBaseResponse {
 }
 
 interface MixPayAssetResponse extends MixPayBaseResponse {
-	data: MixPayAsset[]
+	data: MixPayAsset[];
 }
 
 export interface MixPayPaymentResult extends MixPayBaseResponse {
@@ -133,7 +133,7 @@ export const fetchMixPaySettlementAssets = async () => {
 	const { data } = await response.json();
 	if (!data) throw new Error('No data found');
 	return data as MixPayAsset[];
-}
+};
 
 export const fetchMixPayEstimatedPayment = async ({
 	inputAsset,
@@ -151,15 +151,22 @@ export const fetchMixPayEstimatedPayment = async ({
 	return await ins.get('/payments_estimated', { params });
 };
 
-const fetchMixPaySwapTraceId = async (user: RegisteredUser, opponent_id: string, memo: string, amount: string, paymentAssetId: string, timestamp: number): Promise<string> => {
+const fetchMixPaySwapTraceId = async (
+	user: RegisteredUser,
+	opponent_id: string,
+	memo: string,
+	amount: string,
+	paymentAssetId: string,
+	timestamp: number
+): Promise<string> => {
 	const client = TransferClient({
 		keystore: {
 			...user,
 			...user.key
 		}
-	})
+	});
 
-	return await (new Promise((resolve, reject) => {
+	return await new Promise((resolve, reject) => {
 		let count = 0;
 		const timer = setInterval(async () => {
 			count += 1;
@@ -172,12 +179,14 @@ const fetchMixPaySwapTraceId = async (user: RegisteredUser, opponent_id: string,
 			});
 			const snapshot = snapshotArray.find((snapshot) => {
 				if (snapshot.type !== 'transfer') return false;
-				return snapshot.opponent_id === opponent_id
-					&& snapshot.memo === memo
-					&& snapshot.asset_id === paymentAssetId
-					&& new Date(snapshot.created_at).getTime() > timestamp
-					&& snapshot.amount.startsWith('-')
-					&& format({n: snapshot.amount.slice(1)}) === format({n: amount});
+				return (
+					snapshot.opponent_id === opponent_id &&
+					snapshot.memo === memo &&
+					snapshot.asset_id === paymentAssetId &&
+					new Date(snapshot.created_at).getTime() > timestamp &&
+					snapshot.amount.startsWith('-') &&
+					format({ n: snapshot.amount.slice(1) }) === format({ n: amount })
+				);
 			});
 
 			if (snapshot) {
@@ -188,12 +197,12 @@ const fetchMixPaySwapTraceId = async (user: RegisteredUser, opponent_id: string,
 				clearInterval(timer);
 				reject('timeout');
 			}
-		}, 1000 * 3)
-	}));
-}
+		}, 1000 * 3);
+	});
+};
 
 export const fetchMixPayTxInfo = async (user: RegisteredUser, order: Order) => {
-	const memo =  Buffer.from(`swap|${user.user_id}|${order.fill_asset_id}`).toString('base64');
+	const memo = Buffer.from(`swap|${user.user_id}|${order.fill_asset_id}`).toString('base64');
 	const extra = generateExtra(
 		JSON.stringify({
 			receivers: [MIXPAY_BOT_ID],
@@ -204,7 +213,8 @@ export const fetchMixPayTxInfo = async (user: RegisteredUser, order: Order) => {
 
 	return {
 		extra,
-		getFollowId: (t: number) => fetchMixPaySwapTraceId(user, MIXPAY_BOT_ID, memo, String(order.funds), order.pay_asset_id, t)
+		getFollowId: (t: number) =>
+			fetchMixPaySwapTraceId(user, MIXPAY_BOT_ID, memo, String(order.funds), order.pay_asset_id, t)
 	};
 };
 
