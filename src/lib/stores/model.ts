@@ -16,7 +16,7 @@ export const assets = deepWritable<Asset[]>([], (set) => {
 		if (!$user) return;
 		const assets = await fetchAssets($user);
 		set(assets);
-	}, 5000);
+	}, 5000 * 100);
 	return () => {
 		clearInterval(timer);
 	};
@@ -33,7 +33,7 @@ export const pairs = deepWritable<Pair[]>([], (set) => {
 	const timer = setInterval(async () => {
 		const pairs = await fetchPairs();
 		set(pairs);
-	}, 15000);
+	}, 15000 * 100);
 	return () => {
 		clearInterval(timer);
 	};

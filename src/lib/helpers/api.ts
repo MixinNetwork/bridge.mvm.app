@@ -5,17 +5,12 @@ import type { RegisteredUser, User } from '../types/user';
 import ExternalClient from '@mixin.dev/mixin-node-sdk/src/client/external';
 import { utils } from 'ethers';
 import { WHITELIST_ASSET_ID, ETH_ASSET_ID, EOS_ASSET_ID } from '../constants/common';
-import { bigMul, format } from './big';
+import { bigMul } from './big';
 import { fetchMvmTokens } from './mvm/api';
 import { getBalance } from './web3/common';
 import { fetchAssetContract } from './web3/registry';
 import { sortBy } from 'lodash-es';
-import type { PairRoutes, SwapParams } from './4swap/route';
-import {
-	fetchMixPayEstimatedPayment,
-	fetchMixPayOrder,
-	type MixPayPaymentResult
-} from './mixpay/api';
+import { fetchMixPayOrder, type MixPayPaymentResult } from './mixpay/api';
 import { fetch4SwapOrder, type OrderResponse } from './4swap/api';
 import type { SwapSource } from '../types/swap';
 
@@ -163,64 +158,6 @@ export const fetchCode = async (code_id: string): Promise<PaymentRequestResponse
 };
 
 export const fetchExchangeRates = ExternalClient().exchangeRates;
-
-export const fetchSwapPreOrderInfo = async (
-	source: SwapSource,
-	pairRoutes: PairRoutes,
-	slippage: number,
-	{ inputAsset, outputAsset, inputAmount, outputAmount }: SwapParams
-) => {
-	try {
-		if (source === 'MixPay') {
-			const response = await fetchMixPayEstimatedPayment({
-				inputAsset,
-				outputAsset,
-				inputAmount,
-				outputAmount
-			});
-
-			if (response.success) {
-				const order = {
-					funds: Number(response.data.paymentAmount),
-					amount: Number(response.data.estimatedSettlementAmount),
-					fill_asset_id: outputAsset,
-					pay_asset_id: inputAsset,
-					priceImpact: 0,
-					routeAssets: [''],
-					routeIds: [0],
-					route_assets: [''],
-					routes: ''
-				};
-				return {
-					order,
-					fee: '0',
-					price: format({ n: order.amount / order.funds, dp: 8 }),
-					minReceived: format({ n: order.amount })
-				};
-			}
-		}
-
-		if (source === '4Swap') {
-			const order = pairRoutes.getPreOrder({
-				inputAsset,
-				outputAsset,
-				inputAmount,
-				outputAmount
-			});
-
-			return {
-				order,
-				fee: format({ n: pairRoutes.getFee(order), dp: 8 }),
-				price: format({ n: +order.amount / +order.funds, dp: 8 }),
-				minReceived: format({ n: +order.amount * +slippage })
-			};
-		}
-
-		return undefined;
-	} catch (e) {
-		return undefined;
-	}
-};
 
 export const checkOrder = async (
 	source: SwapSource,

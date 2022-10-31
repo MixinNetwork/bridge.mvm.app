@@ -5,7 +5,7 @@
 	import { page } from '$app/stores';
 	import Helper from '$lib/assets/helper.svg?component';
 	import Switch from '$lib/assets/switch.svg?component';
-	import { PairRoutes, type Order } from '$lib/helpers/4swap/route';
+	import { PairRoutes, type Order, type SwapParams } from '$lib/helpers/4swap/route';
 	import { setSearchParam } from '$lib/helpers/app-store';
 	import { assets, pairs, updateAssets } from '$lib/stores/model';
 	import { getAsset } from '$lib/helpers/utils';
@@ -26,10 +26,11 @@
 	import Spinner from '$lib/components/common/spinner.svelte';
 	import { showToast } from '$lib/components/common/toast/toast-container.svelte';
 	import { focus } from 'focus-svelte';
-	import { fetchSwapPreOrderInfo } from '$lib/helpers/api';
 	import LL from '$i18n/i18n-svelte';
 	import { chooseSwapSource } from '$lib/helpers/swap/source';
 	import Apps from '$lib/components/base/apps.svelte';
+	import { get4SwapSwapInfo } from '$lib/helpers/4swap/utils';
+	import { fetchMixPayPreOrder } from '$lib/helpers/mixpay/api';
 
 	let a: Asset[] | undefined = $page.data.assets;
 	let p: Pair[] | undefined = $page.data.pairs;
@@ -90,10 +91,10 @@
 	};
 
 	const handleChangeAmount = (source: 'input' | 'output') => {
-		lastEdited = source
+		lastEdited = source;
 		if (source === 'input' && !inputAmount) outputAmount = '';
 		if (source === 'output' && !outputAmount) inputAmount = '';
-	}
+	};
 
 	$: pairRoutes = new PairRoutes($pairs);
 	let order: Order | undefined;
@@ -103,25 +104,11 @@
 	let price: string | undefined;
 	let minReceived: string | undefined;
 	let source: SwapSource = 'NoPair';
+	let lastMixPayRequestParams: string | undefined;
 	let loadingPreOrder = false;
+	let timer: ReturnType<typeof setInterval> | null = null;
 
-	const updateSwapInfo = async (
-		inputAsset: Asset,
-		outputAsset: Asset,
-		lastEdited: 'input' | 'output',
-		inputValue?: number,
-		outputValue?: number
-	) => {
-		if (source === 'NoPair') return;
-
-		const info = await fetchSwapPreOrderInfo(source, pairRoutes, slippage, {
-			inputAsset: inputAsset?.asset_id,
-			outputAsset: outputAsset?.asset_id,
-			inputAmount: lastEdited === 'input' ? `${inputValue}` : undefined,
-			outputAmount: lastEdited === 'output' ? `${outputValue}` : undefined
-		});
-		if (!info) return;
-
+	const setSwapInfo = (info: { order: Order; fee: string; price: string; minReceived: string }) => {
 		order = info.order;
 		fee = info.fee;
 		price = info.price;
@@ -133,13 +120,56 @@
 			inputAmount = (order.funds && format({ n: order.funds, fixed: true })) || undefined;
 		}
 	};
+	const updateMixPaySwapInfo = async (requestParams: SwapParams) => {
+		loadingPreOrder = true;
+		const info = await fetchMixPayPreOrder(requestParams);
+		loadingPreOrder = false;
+		if (info) setSwapInfo(info);
+	};
+
+	const updateSwapInfo = async (
+		inputAsset: Asset,
+		outputAsset: Asset,
+		lastEdited: 'input' | 'output',
+		inputValue?: number,
+		outputValue?: number
+	) => {
+		if (source === 'NoPair') return;
+		const requestParams = {
+			inputAsset: inputAsset?.asset_id,
+			outputAsset: outputAsset?.asset_id,
+			inputAmount: lastEdited === 'input' ? `${inputValue}` : undefined,
+			outputAmount: lastEdited === 'output' ? `${outputValue}` : undefined
+		};
+
+		if (source === '4Swap') {
+			const info = get4SwapSwapInfo(pairRoutes, slippage, requestParams);
+			if (info) setSwapInfo(info);
+		}
+
+		if (source === 'MixPay') {
+			const params = JSON.stringify({
+				lastEdited,
+				inputAsset: requestParams.inputAsset,
+				outputAsset: requestParams.outputAsset,
+				amount: lastEdited === 'input' ? requestParams.inputAmount : requestParams.outputAmount
+			});
+			if (lastMixPayRequestParams && lastMixPayRequestParams === params) return;
+
+			if (timer) clearInterval(timer);
+			lastMixPayRequestParams = params;
+			await updateMixPaySwapInfo(requestParams);
+			timer = setInterval(() => {
+				updateMixPaySwapInfo(requestParams);
+			}, 1000 * 15);
+		}
+	};
 
 	$: if (inputAsset && outputAsset) {
 		source = chooseSwapSource(inputAsset, outputAsset, mixpayPaymentAssets, mixpaySettlementAssets);
 		if (source === 'NoPair') showToast('common', 'No Swap Pair');
 	}
 	$: if (inputAsset && outputAsset && lastEdited && (inputAmount || outputAmount)) {
-		loadingPreOrder = true;
 		updateSwapInfo(
 			inputAsset,
 			outputAsset,
@@ -147,7 +177,6 @@
 			(inputAmount && Number(inputAmount)) || undefined,
 			(outputAmount && Number(outputAmount)) || undefined
 		);
-		loadingPreOrder = false;
 	} else order = undefined;
 
 	$: inputAmountFiat = formatFiat(inputAsset?.price_usd, (inputAmount && +inputAmount) || 0);
