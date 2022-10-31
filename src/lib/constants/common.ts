@@ -209,11 +209,11 @@ export const WHITELIST_ASSET = [
 	// 	symbol: 'RLY',
 	// 	chain: 'ETH'
 	// },
-	{
-		id: '44adc71b-0c37-3b42-aa19-fe2d59dae5fd',
-		symbol: 'EPC',
-		chain: 'ETH'
-	},
+	// {
+	// 	id: '44adc71b-0c37-3b42-aa19-fe2d59dae5fd',
+	// 	symbol: 'EPC',
+	// 	chain: 'ETH'
+	// },
 	{
 		id: '75e0414b-b190-3783-995a-e6064d30c55d',
 		symbol: 'TYC',
