@@ -204,11 +204,11 @@ export const WHITELIST_ASSET = [
 		symbol: 'USDT',
 		chain: 'EOS'
 	},
-	{
-		id: 'bb4c9a0c-245b-3bd2-a3f4-a5eb73c90c00',
-		symbol: 'RLY',
-		chain: 'ETH'
-	},
+	// {
+	// 	id: 'bb4c9a0c-245b-3bd2-a3f4-a5eb73c90c00',
+	// 	symbol: 'RLY',
+	// 	chain: 'ETH'
+	// },
 	{
 		id: '44adc71b-0c37-3b42-aa19-fe2d59dae5fd',
 		symbol: 'EPC',
