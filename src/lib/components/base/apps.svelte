@@ -29,7 +29,7 @@
 			href: 'https://rings.pando.im/'
 		},
 		{
-			name: '4Swap',
+			name: '4swap',
 			description: $LL.apps.fourSwap.description(),
 			icon: FourSwap,
 			href: 'https://app.4swap.org/'
