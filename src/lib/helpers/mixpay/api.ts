@@ -115,7 +115,7 @@ export const fetchMixPayEstimatedPayment = async ({
 }: SwapParams): Promise<MixPayEstimatedPaymentResponse> => {
 	const params: MixPayEstimatedPaymentRequest = {
 		paymentAssetId: inputAsset,
-		quoteAssetId: inputAsset,
+		quoteAssetId: outputAsset,
 		settlementAssetId: outputAsset
 	};
 	if (inputAmount) params.paymentAmount = inputAmount;

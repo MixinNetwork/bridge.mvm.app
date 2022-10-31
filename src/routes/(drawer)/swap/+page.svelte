@@ -89,6 +89,12 @@
 		goto($page.url, { keepfocus: true, replaceState: true, noscroll: true });
 	};
 
+	const handleChangeAmount = (source: 'input' | 'output') => {
+		lastEdited = source
+		if (source === 'input' && !inputAmount) outputAmount = '';
+		if (source === 'output' && !outputAmount) inputAmount = '';
+	}
+
 	$: pairRoutes = new PairRoutes($pairs);
 	let order: Order | undefined;
 
@@ -224,7 +230,7 @@
 							autocomplete="off"
 							use:focus={{ enabled: true, focusable: true, focusDelay: 100 }}
 							bind:value={inputAmount}
-							on:input={() => (lastEdited = 'input')}
+							on:input={() => handleChangeAmount('input')}
 							placeholder="0.0"
 						/>
 						<div class="text-sm font-semibold text-black text-opacity-30">≈ ${inputAmountFiat}</div>
@@ -274,7 +280,7 @@
 							class="w-full text-right font-bold text-black"
 							autocomplete="off"
 							bind:value={outputAmount}
-							on:input={() => (lastEdited = 'output')}
+							on:input={() => handleChangeAmount('output')}
 							placeholder="0.0"
 						/>
 						<div class="text-sm font-semibold text-black text-opacity-30">
