@@ -8,8 +8,8 @@ import { WHITELIST_ASSET_4SWAP } from '$lib/constants/common';
 export const chooseSwapSource = (
 	inputAsset: Asset,
 	outputAsset: Asset,
-	MixPayPaymentAssets: MixPayAsset[],
-	MixPaySettlementAssets: MixPayAsset[]
+	MixPayPaymentAssets: MixPayAsset[] | undefined,
+	MixPaySettlementAssets: MixPayAsset[] | undefined
 ): SwapSource => {
 	const $pairs = get(pairs);
 
@@ -28,6 +28,7 @@ export const chooseSwapSource = (
 		return '4Swap';
 
 	if (
+		MixPayPaymentAssets && MixPaySettlementAssets &&
 		MixPayPaymentAssets.some((asset) => asset.assetId === inputAsset.asset_id) &&
 		MixPaySettlementAssets.some((asset) => asset.assetId === outputAsset.asset_id)
 	)

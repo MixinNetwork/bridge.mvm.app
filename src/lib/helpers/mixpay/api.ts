@@ -143,7 +143,7 @@ const fetchMixPaySwapTraceId = async (
 		const timer = setInterval(async () => {
 			count += 1;
 			const snapshotArray = await client.snapshots({
-				limit: 10,
+				limit: 5,
 				offset: '',
 				asset: paymentAssetId,
 				opponent: MIXPAY_BOT_ID,
@@ -173,7 +173,7 @@ const fetchMixPaySwapTraceId = async (
 	});
 };
 
-export const fetchMixPayTxInfo = async (user: RegisteredUser, order: Order) => {
+export const fetchMixPayTxInfo = (user: RegisteredUser, order: Order) => {
 	const memo = Buffer.from(`swap|${user.user_id}|${order.fill_asset_id}`).toString('base64');
 	const extra = generateExtra(
 		JSON.stringify({
