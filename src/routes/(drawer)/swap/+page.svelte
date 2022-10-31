@@ -15,7 +15,7 @@
 	import type { Pair } from '$lib/helpers/4swap/api';
 	import Header from '$lib/components/base/header.svelte';
 	import UserInfo from '$lib/components/base/user-info.svelte';
-	import { bigLte, format, toPercent } from '$lib/helpers/big';
+	import { bigLte, bigGte, format, toPercent } from '$lib/helpers/big';
 	import SelectedAssetButton from '$lib/components/base/selected-asset-button.svelte';
 	import { slide } from 'svelte/transition';
 	import { DEFAULT_SLIPPAGE, INPUT_KEY, OUTPUT_KEY, formatFiat } from '$lib/components/swap/export';
@@ -362,7 +362,12 @@
 		<button
 			class="mt-10 mb-6 flex w-28 justify-center self-center rounded-full bg-brand-primary px-6 py-3 text-white"
 			on:click={swap}
-			disabled={!(order && +order.amount) || order?.priceImpact > 0.15}
+			disabled={
+				!(order && +order.amount)
+				|| order?.priceImpact > 0.15
+				|| loadingPreOrder
+				|| bigGte(inputAmount, inputAsset?.balance)
+			}
 		>
 			{#if loading || loadingPreOrder}
 				<Spinner class="stroke-white stroke-2 text-center" />
