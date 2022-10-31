@@ -15,6 +15,7 @@
 	import { ETH_ASSET_ID } from '$lib/constants/common';
 	import { onMount, onDestroy } from 'svelte';
 	import LL from '$i18n/i18n-svelte';
+	import Apps from '$lib/components/base/apps.svelte';
 
 	const DEFAULT_ICON =
 		'https://images.mixin.one/yH_I5b0GiV2zDmvrXRyr3bK5xusjfy5q7FX3lw3mM2Ryx4Dfuj6Xcw8SHNRnDKm7ZVE3_LvpKlLdcLrlFQUBhds=s128';
@@ -94,6 +95,7 @@
 		<Helper />
 	</a>
 	<UserInfo class="hidden md:flex" />
+	<Apps />
 </Header>
 
 <div

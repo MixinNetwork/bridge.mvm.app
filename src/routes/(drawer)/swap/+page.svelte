@@ -29,6 +29,7 @@
 	import { fetchSwapPreOrderInfo } from '$lib/helpers/api';
 	import LL from '$i18n/i18n-svelte';
 	import { chooseSwapSource } from '$lib/helpers/swap/source';
+	import Apps from '$lib/components/base/apps.svelte';
 
 	let a: Asset[] | undefined = $page.data.assets;
 	let p: Pair[] | undefined = $page.data.pairs;
@@ -180,6 +181,7 @@
 		<Helper />
 	</a>
 	<UserInfo class="hidden md:flex" />
+	<Apps />
 </Header>
 
 <div
@@ -195,7 +197,7 @@
 						disabled={isInputAssetBalanceLegal}
 						on:click={() => {
 							lastEdited = 'input';
-							inputAmount = inputAsset?.balance;
+							inputAmount = format({ n: inputAsset?.balance ?? 0, max_dp: 8, mode: 1 });
 						}}
 					>
 						{#if !isInputAssetBalanceLegal}
@@ -246,7 +248,7 @@
 						disabled={isOutputAssetBalanceLegal}
 						on:click={() => {
 							lastEdited = 'output';
-							outputAmount = outputAsset?.balance;
+							outputAmount = format({ n: outputAsset?.balance ?? 0, max_dp: 8, mode: 1 });
 						}}
 					>
 						{#if !isOutputAssetBalanceLegal}

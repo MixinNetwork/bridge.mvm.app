@@ -25,4 +25,14 @@
 	.expand-4 {
 		@apply relative before:absolute before:-inset-4;
 	}
+	.tooltip:before {
+		@apply font-normal;
+	}
+	.scrollbar-hide {
+		-ms-overflow-style: none;
+		scrollbar-width: none;
+		&::-webkit-scrollbar {
+			display: none;
+		}
+	}
 }

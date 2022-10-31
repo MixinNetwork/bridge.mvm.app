@@ -65,6 +65,10 @@ type RootTranslation = {
 	 */
 	swap: string
 	/**
+	 * S​w​a​p​ ​f​o​r​ ​G​a​s
+	 */
+	swapForGas: string
+	/**
 	 * E​x​p​l​o​r​e​r
 	 */
 	explorer: string
@@ -134,16 +138,21 @@ type RootTranslation = {
 	}
 	withdrawModal: {
 		/**
-		 * W​i​t​h​d​r​a​w​a​l​ ​f​e​e​:​ ​{​0​}​ ​{​1​}
-		 * @param {string} 0
-		 * @param {string} 1
+		 * L​1​ ​G​a​s​:​ 
 		 */
-		tips1: RequiredParams<'0' | '1'>
+		l1Gas: string
 		/**
-		 * G​a​s​ ​f​e​e​:​ ​{​0​}​ ​E​T​H
-		 * @param {unknown} 0
+		 * L​2​ ​G​a​s​:​ 
 		 */
-		tips2: RequiredParams<'0'>
+		l2Gas: string
+		/**
+		 * L​1​ ​G​a​s​ ​f​e​e​ ​p​a​i​d​ ​t​o​ ​E​t​h​e​r​e​u​m​ ​m​i​n​e​r​s
+		 */
+		l1GasTip: string
+		/**
+		 * L​2​ ​G​a​s​ ​f​e​e​ ​p​a​y​m​e​n​t​ ​M​V​M​ ​n​o​d​e​ 
+		 */
+		l2GasTip: string
 	}
 	/**
 	 * F​r​o​m
@@ -305,6 +314,29 @@ type RootTranslation = {
 	 * A​d​d​ ​t​o​k​e​n​ ​t​o​ ​M​e​t​a​M​a​s​k
 	 */
 	addToMetaMask: string
+	swapForGasPage: {
+		/**
+		 * E​T​H​ ​i​s​ ​u​s​e​d​ ​t​o​ ​p​a​y​ ​f​o​r​ ​t​r​a​n​s​a​c​t​i​o​n​ ​f​e​e​s
+		 */
+		tip: string
+		/**
+		 * T​h​i​s​ ​s​e​r​v​i​c​e​ ​i​s​ ​p​r​o​v​i​d​e​d​ ​b​y​ ​C​r​y​p​t​o​ ​G​a​s​ ​S​t​a​t​i​o​n
+		 */
+		providedTip: string
+		/**
+		 * A​v​a​i​l​a​b​l​e​ ​f​o​r​ ​{​0​}​ ​t​r​a​n​s​a​c​t​i​o​n​s
+		 * @param {number} 0
+		 */
+		itemTip: RequiredParams<'0'>
+		/**
+		 * C​u​s​t​o​m​ ​a​m​o​u​n​t
+		 */
+		customAmount: string
+	}
+	/**
+	 * A​m​o​u​n​t
+	 */
+	amount: string
 }
 
 export type TranslationFunctions = {
@@ -358,6 +390,10 @@ export type TranslationFunctions = {
 	 * Swap
 	 */
 	swap: () => LocalizedString
+	/**
+	 * Swap for Gas
+	 */
+	swapForGas: () => LocalizedString
 	/**
 	 * Explorer
 	 */
@@ -426,13 +462,21 @@ export type TranslationFunctions = {
 	}
 	withdrawModal: {
 		/**
-		 * Withdrawal fee: {0} {1}
+		 * L1 Gas: 
 		 */
-		tips1: (arg0: string, arg1: string) => LocalizedString
+		l1Gas: () => LocalizedString
 		/**
-		 * Gas fee: {0} ETH
+		 * L2 Gas: 
 		 */
-		tips2: (arg0: unknown) => LocalizedString
+		l2Gas: () => LocalizedString
+		/**
+		 * L1 Gas fee paid to Ethereum miners
+		 */
+		l1GasTip: () => LocalizedString
+		/**
+		 * L2 Gas fee payment MVM node 
+		 */
+		l2GasTip: () => LocalizedString
 	}
 	/**
 	 * From
@@ -592,6 +636,28 @@ export type TranslationFunctions = {
 	 * Add token to MetaMask
 	 */
 	addToMetaMask: () => LocalizedString
+	swapForGasPage: {
+		/**
+		 * ETH is used to pay for transaction fees
+		 */
+		tip: () => LocalizedString
+		/**
+		 * This service is provided by Crypto Gas Station
+		 */
+		providedTip: () => LocalizedString
+		/**
+		 * Available for {0} transactions
+		 */
+		itemTip: (arg0: number) => LocalizedString
+		/**
+		 * Custom amount
+		 */
+		customAmount: () => LocalizedString
+	}
+	/**
+	 * Amount
+	 */
+	amount: () => LocalizedString
 }
 
 export type Formatters = {}

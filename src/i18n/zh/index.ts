@@ -18,6 +18,7 @@ const zh: Translation = {
 	assets: '资产',
 	transactions: '交易',
 	swap: '兑换',
+	swapForGas: '兑换手续费',
 	explorer: '浏览器',
 	audit: '审计',
 	docs: '文档',
@@ -40,8 +41,10 @@ const zh: Translation = {
 		tips2: '最少存入 0.00000001 {0}。'
 	},
 	withdrawModal: {
-		tips1: '提出手续费: {0} {1}',
-		tips2: '网络手续费: {0} ETH'
+		l1Gas: 'L1 Gas: ',
+		l2Gas: 'L2 Gas: ',
+		l1GasTip: 'L1 Gas 费支付给以太坊矿工',
+		l2GasTip: 'L2 Gas 费支付 MVM 节点 '
 	},
 	from: '来自',
 	to: '到',
@@ -98,7 +101,14 @@ const zh: Translation = {
 	tokenName: '代币名称',
 	tokenSymbol: '代币符号',
 	depositConfirmations: '存入确认区块',
-	addToMetaMask: '添加到 MetaMask'
+	addToMetaMask: '添加到 MetaMask',
+	swapForGasPage: {
+		tip: 'ETH 用于支付交易手续费',
+		providedTip: '本服务由 Crypto Gas Station 提供',
+		itemTip: '可用 {0} 次交易',
+		customAmount: '自定义数量'
+	},
+	amount: '数量'
 };
 
 export default zh;

@@ -18,6 +18,7 @@ const en: BaseTranslation = {
 	assets: 'Assets',
 	transactions: 'Transactions',
 	swap: 'Swap',
+	swapForGas: 'Swap for Gas',
 	explorer: 'Explorer',
 	audit: 'Audit',
 	docs: 'Docs',
@@ -40,8 +41,10 @@ const en: BaseTranslation = {
 		tips2: 'Min deposit: 0.00000001 {0:string}.'
 	},
 	withdrawModal: {
-		tips1: 'Withdrawal fee: {0:string} {1:string}',
-		tips2: 'Gas fee: {0} ETH'
+		l1Gas: 'L1 Gas: ',
+		l2Gas: 'L2 Gas: ',
+		l1GasTip: 'L1 Gas fee paid to Ethereum miners',
+		l2GasTip: 'L2 Gas fee payment MVM node '
 	},
 	from: 'From',
 	to: 'To',
@@ -99,7 +102,14 @@ const en: BaseTranslation = {
 	tokenName: 'Token Name',
 	tokenSymbol: 'Token Symbol',
 	depositConfirmations: 'Deposit Confirmations',
-	addToMetaMask: 'Add token to MetaMask'
+	addToMetaMask: 'Add token to MetaMask',
+	swapForGasPage: {
+		tip: 'ETH is used to pay for transaction fees',
+		providedTip: 'This service is provided by Crypto Gas Station',
+		itemTip: 'Available for {0:number} transactions',
+		customAmount: 'Custom amount'
+	},
+	amount: 'Amount'
 };
 
 export default en;

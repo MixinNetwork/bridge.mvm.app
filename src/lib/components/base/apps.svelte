@@ -47,10 +47,13 @@
 		'group relative flex items-center md:cursor-default select-none opacity-100 z-50 justify-center md:bg-white w-fit md:rounded-full space-x-3 md:py-2 md:px-4 transition mr-3',
 		clazz
 	)}
-	on:click={() => (opened = true)}
+	on:click={() => {
+		if (window.innerWidth <= 720) return;
+		opened = true;
+	}}
 >
 	<Apps />
-	<div class=" hidden text-sm font-semibold text-black text-opacity-80 md:block">APPS</div>
+	<div class=" hidden text-sm font-semibold text-black text-opacity-80 md:block">Apps</div>
 
 	<div
 		class="invisible absolute top-10 -right-48 z-50 mt-3 hidden w-96 flex-col rounded-2xl bg-white p-5 opacity-0 shadow transition-all delay-100 group-hover:visible group-hover:opacity-100 md:flex lg:right-0"

@@ -1,6 +1,14 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
 	content: ['./src/**/*.{html,js,svelte,ts}'],
+	daisyui: {
+		styled: true,
+		themes: false,
+		base: false,
+		utils: false,
+		logs: false,
+		rtl: false
+	},
 	theme: {
 		screens: {
 			sm: '375px',
@@ -25,6 +33,7 @@ module.exports = {
 		}
 	},
 	plugins: [
+		require('daisyui'),
 		({ addVariant }) => {
 			addVariant('child', '& > *');
 			addVariant('descendant', '& *');

@@ -3,7 +3,7 @@
 	import Drawer from '$lib/components/base/drawer/drawer.svelte';
 </script>
 
-<div class="drawer drawer-mobile">
+<div class="drawer-mobile drawer">
 	{#key $page.url.pathname}
 		<input id="drawer-toggle" type="checkbox" class="drawer-toggle" checked={false} />
 	{/key}
@@ -11,7 +11,9 @@
 		<label for="drawer-toggle" class="drawer-overlay" />
 		<Drawer />
 	</div>
-	<div class="drawer-content flex flex-col">
-		<slot />
-	</div>
+	{#key $page.url.pathname}
+		<div class="drawer-content flex flex-col">
+			<slot />
+		</div>
+	{/key}
 </div>
