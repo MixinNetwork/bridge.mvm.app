@@ -362,12 +362,10 @@
 		<button
 			class="mt-10 mb-6 flex w-28 justify-center self-center rounded-full bg-brand-primary px-6 py-3 text-white"
 			on:click={swap}
-			disabled={
-				!(order && +order.amount)
-				|| order?.priceImpact > 0.15
-				|| loadingPreOrder
-				|| bigGte(inputAmount, inputAsset?.balance)
-			}
+			disabled={!(order && +order.amount) ||
+				order?.priceImpact > 0.15 ||
+				loadingPreOrder ||
+				bigGte(inputAmount, inputAsset?.balance)}
 		>
 			{#if loading || loadingPreOrder}
 				<Spinner class="stroke-white stroke-2 text-center" />

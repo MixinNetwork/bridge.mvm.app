@@ -19,6 +19,8 @@ export interface MixPayAsset {
 		name: string;
 		iconUrl: string;
 	};
+	minPaymentAmount?: string;
+	maxPaymentAmount?: string;
 }
 
 interface MixPayBaseResponse {
