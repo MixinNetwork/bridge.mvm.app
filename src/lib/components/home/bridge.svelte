@@ -221,7 +221,7 @@
 					class="tooltip hover:tooltip-open"
 					data-tip={$LL.withdrawModal.l1GasTip()}
 					on:click={() => {
-						if (window.innerWidth <= 720) return;
+						if (window.innerWidth > 720) return;
 						l1GasModalOpened = true;
 					}}
 				>
@@ -248,7 +248,7 @@
 					class="tooltip hover:tooltip-open"
 					data-tip={$LL.withdrawModal.l2GasTip()}
 					on:click={() => {
-						if (window.innerWidth <= 720) return;
+						if (window.innerWidth > 720) return;
 						l2GasModalOpened = true;
 					}}
 				>

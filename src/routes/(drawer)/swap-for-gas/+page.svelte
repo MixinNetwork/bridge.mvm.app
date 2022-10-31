@@ -14,6 +14,8 @@
 
 	let selectCustom = false;
 	let customAmount: number;
+
+	const unselectCustom = () => (selectCustom = false);
 </script>
 
 <Header class=" bg-transparent">
@@ -59,9 +61,9 @@
 			<div
 				class="scrollbar-hide flex w-full snap-x scroll-px-6 flex-row space-x-3 overflow-x-auto pb-10 pt-1 pr-6 first:child:pl-6"
 			>
-				<Item value="0.01" {price} selected={true} transactions={500} />
-				<Item value="0.05" {price} selected={false} transactions={2500} />
-				<Item value="0.1" {price} selected={false} transactions={5000} />
+				<Item value="0.01" {price} selected={true} transactions={500} on:click={unselectCustom} />
+				<Item value="0.05" {price} selected={false} transactions={2500} on:click={unselectCustom} />
+				<Item value="0.1" {price} selected={false} transactions={5000} on:click={unselectCustom} />
 				<Item value="custom" {price} selected={selectCustom} transactions={64}>
 					<input
 						type="number"
@@ -70,7 +72,6 @@
 						step="0.001"
 						bind:value={customAmount}
 						on:focus={() => (selectCustom = true)}
-						on:blur={() => (selectCustom = false)}
 					/>
 					<div class="mt-4 text-sm opacity-50">{$LL.swapForGasPage.customAmount()}</div>
 				</Item>

@@ -48,7 +48,7 @@
 		clazz
 	)}
 	on:click={() => {
-		if (window.innerWidth <= 720) return;
+		if (window.innerWidth > 720) return;
 		opened = true;
 	}}
 >
