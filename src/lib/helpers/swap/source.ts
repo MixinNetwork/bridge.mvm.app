@@ -28,7 +28,8 @@ export const chooseSwapSource = (
 		return '4Swap';
 
 	if (
-		MixPayPaymentAssets && MixPaySettlementAssets &&
+		MixPayPaymentAssets &&
+		MixPaySettlementAssets &&
 		MixPayPaymentAssets.some((asset) => asset.assetId === inputAsset.asset_id) &&
 		MixPaySettlementAssets.some((asset) => asset.assetId === outputAsset.asset_id)
 	)

@@ -193,7 +193,7 @@ export const swapAsset = async (
 		getFollowId: (t: number) => Promise<string>;
 	};
 	if (source === '4Swap') info = await fetch4SwapTxInfo(user, order, minReceived);
-	else info = await fetchMixPayTxInfo(user, order);
+	else info = fetchMixPayTxInfo(user, order);
 
 	const signer = provider.getSigner();
 
