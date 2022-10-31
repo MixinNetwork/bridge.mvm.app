@@ -176,6 +176,6 @@ export const fetch4SwapTxInfo = async (user: RegisteredUser, order: Order, minRe
 
 	return {
 		extra,
-		getFollowId: (t: number) => Promise.resolve(actionResp.follow_id)
+		getFollowId: () => Promise.resolve(actionResp.follow_id)
 	};
 };

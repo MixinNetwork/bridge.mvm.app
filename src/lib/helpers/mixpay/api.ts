@@ -51,34 +51,6 @@ export interface MixPayEstimatedPaymentResponse extends MixPayBaseResponse {
 	};
 }
 
-interface MixPayPaymentResponse extends MixPayBaseResponse {
-	data: {
-		isChain: boolean;
-		expire: number;
-		seconds: number;
-
-		traceId: string;
-		memo: string;
-		recipient: string;
-		destination: string;
-		tag: string;
-
-		quoteAmount: string;
-		paymentAmount: string;
-		estimatedSettlementAmount: string;
-		settlementAssetId: string;
-		settlementAssetSymbol: string;
-		paymentAssetId: string;
-		paymentAssetSymbol: string;
-		quoteAssetSymbol: string;
-		quoteAssetId: string;
-	};
-}
-
-interface MixPayAssetResponse extends MixPayBaseResponse {
-	data: MixPayAsset[];
-}
-
 export interface MixPayPaymentResult extends MixPayBaseResponse {
 	data: {
 		traceId: string;
@@ -117,7 +89,7 @@ ins.interceptors.response.use(
 	async (res: AxiosResponse) => {
 		return res.data;
 	},
-	async (e: any) => {
+	async (e) => {
 		return e.response.data;
 	}
 );
