@@ -106,7 +106,8 @@
 	let source: SwapSource = 'NoPair';
 	let lastMixPayRequestParams: string | undefined;
 	let loadingPreOrder = false;
-	let timer: ReturnType<typeof setInterval> | null = null;
+	let timer;
+	let debounceTimer;
 
 	const setSwapInfo = (info: { order: Order; fee: string; price: string; minReceived: string }) => {
 		order = info.order;
@@ -173,14 +174,21 @@
 		source = chooseSwapSource(inputAsset, outputAsset, mixpayPaymentAssets, mixpaySettlementAssets);
 		if (source === 'NoPair') showToast('common', 'No Swap Pair');
 	}
-	$: if (inputAsset && outputAsset && lastEdited && (inputAmount || outputAmount)) {
-		updateSwapInfo(
-			inputAsset,
-			outputAsset,
-			lastEdited,
-			(inputAmount && Number(inputAmount)) || undefined,
-			(outputAmount && Number(outputAmount)) || undefined
-		);
+	$: if (
+		inputAsset &&
+		outputAsset &&
+		((lastEdited === 'input' && !!inputAmount) || (lastEdited === 'output' && !!outputAmount))
+	) {
+		if (debounceTimer) clearTimeout(debounceTimer);
+		debounceTimer = setTimeout(() => {
+			updateSwapInfo(
+				inputAsset,
+				outputAsset,
+				lastEdited,
+				(inputAmount && Number(inputAmount)) || undefined,
+				(outputAmount && Number(outputAmount)) || undefined
+			);
+		}, 300);
 	} else order = undefined;
 
 	$: inputAmountFiat = formatFiat(inputAsset?.price_usd, (inputAmount && +inputAmount) || 0);
