@@ -114,7 +114,7 @@ export const fetchMixPayPreOrder = async ({
 	outputAsset,
 	inputAmount,
 	outputAmount
-}: SwapParams) => {
+}: SwapParams, callback: (type: string, message: string) => void) => {
 	const params: MixPayEstimatedPaymentRequest = {
 		paymentAssetId: inputAsset,
 		quoteAssetId: outputAsset,
@@ -146,7 +146,10 @@ export const fetchMixPayPreOrder = async ({
 				price: format({ n: order.amount / order.funds, dp: 8 }),
 				minReceived: format({ n: order.amount })
 			};
-		} else return undefined;
+		}
+
+		callback('common', response.message);
+		return undefined;
 	} catch (e) {
 		return undefined;
 	}

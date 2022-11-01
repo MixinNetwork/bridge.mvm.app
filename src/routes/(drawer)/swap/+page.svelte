@@ -122,9 +122,12 @@
 	};
 	const updateMixPaySwapInfo = async (requestParams: SwapParams) => {
 		loadingPreOrder = true;
-		const info = await fetchMixPayPreOrder(requestParams);
+		const info = await fetchMixPayPreOrder(requestParams, showToast);
 		loadingPreOrder = false;
-		if (info) setSwapInfo(info);
+
+		if (!info) return false;
+		setSwapInfo(info);
+		return info;
 	};
 
 	const updateSwapInfo = async (
@@ -158,8 +161,8 @@
 
 			if (timer) clearInterval(timer);
 			lastMixPayRequestParams = params;
-			await updateMixPaySwapInfo(requestParams);
-			timer = setInterval(() => {
+			const flag = await updateMixPaySwapInfo(requestParams);
+			if (flag) timer = setInterval(() => {
 				updateMixPaySwapInfo(requestParams);
 			}, 1000 * 15);
 		}
