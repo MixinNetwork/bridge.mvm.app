@@ -53,7 +53,7 @@ export interface MixPayEstimatedPaymentResponse extends MixPayBaseResponse {
 	};
 }
 
-export interface MixPayPaymentResult extends MixPayBaseResponse {
+export interface MixPayPaymentResponse extends MixPayBaseResponse {
 	data: {
 		traceId: string;
 		status: `unpaid` | `pending` | `failed` | `success`;
@@ -109,12 +109,10 @@ export const fetchMixPaySettlementAssets = async () => {
 	return data as MixPayAsset[];
 };
 
-export const fetchMixPayPreOrder = async ({
-	inputAsset,
-	outputAsset,
-	inputAmount,
-	outputAmount
-}: SwapParams, callback: (type: string, message: string) => void) => {
+export const fetchMixPayPreOrder = async (
+	{ inputAsset, outputAsset, inputAmount, outputAmount }: SwapParams,
+	callback: (type: string, message: string) => void
+) => {
 	const params: MixPayEstimatedPaymentRequest = {
 		paymentAssetId: inputAsset,
 		quoteAssetId: outputAsset,
@@ -123,36 +121,32 @@ export const fetchMixPayPreOrder = async ({
 	if (inputAmount) params.paymentAmount = inputAmount;
 	if (outputAmount) params.quoteAmount = outputAmount;
 
-	try {
-		const response = await ins.get<unknown, MixPayEstimatedPaymentResponse>('/payments_estimated', {
-			params
-		});
+	const response = await ins.get<unknown, MixPayEstimatedPaymentResponse>('/payments_estimated', {
+		params
+	});
 
-		if (response.success) {
-			const order = {
-				funds: Number(response.data.paymentAmount),
-				amount: Number(response.data.estimatedSettlementAmount),
-				fill_asset_id: outputAsset,
-				pay_asset_id: inputAsset,
-				priceImpact: 0,
-				routeAssets: [''],
-				routeIds: [0],
-				route_assets: [''],
-				routes: ''
-			};
-			return {
-				order,
-				fee: '0',
-				price: format({ n: order.amount / order.funds, dp: 8 }),
-				minReceived: format({ n: order.amount })
-			};
-		}
-
-		callback('common', response.message);
-		return undefined;
-	} catch (e) {
-		return undefined;
+	if (response.success) {
+		const order = {
+			funds: Number(response.data.paymentAmount),
+			amount: Number(response.data.estimatedSettlementAmount),
+			fill_asset_id: outputAsset,
+			pay_asset_id: inputAsset,
+			priceImpact: 0,
+			routeAssets: [''],
+			routeIds: [0],
+			route_assets: [''],
+			routes: ''
+		};
+		return {
+			order,
+			fee: '0',
+			price: format({ n: order.amount / order.funds, dp: 8 }),
+			minReceived: format({ n: order.amount })
+		};
 	}
+
+	callback('common', response.message);
+	return undefined;
 };
 
 const fetchMixPaySwapTraceId = async (
@@ -222,7 +216,7 @@ export const fetchMixPayTxInfo = (user: RegisteredUser, order: Order) => {
 	};
 };
 
-export const fetchMixPayOrder = async (trace_id: string): Promise<MixPayPaymentResult> => {
+export const fetchMixPayOrder = async (trace_id: string): Promise<MixPayPaymentResponse> => {
 	return await ins.get('/payments_result', {
 		params: {
 			traceId: trace_id

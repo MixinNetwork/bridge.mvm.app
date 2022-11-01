@@ -162,9 +162,10 @@
 			if (timer) clearInterval(timer);
 			lastMixPayRequestParams = params;
 			const flag = await updateMixPaySwapInfo(requestParams);
-			if (flag) timer = setInterval(() => {
-				updateMixPaySwapInfo(requestParams);
-			}, 1000 * 15);
+			if (flag)
+				timer = setInterval(() => {
+					updateMixPaySwapInfo(requestParams);
+				}, 1000 * 15);
 		}
 	};
 

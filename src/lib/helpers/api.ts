@@ -10,7 +10,7 @@ import { fetchMvmTokens } from './mvm/api';
 import { getBalance } from './web3/common';
 import { fetchAssetContract } from './web3/registry';
 import { sortBy } from 'lodash-es';
-import { fetchMixPayOrder, type MixPayPaymentResult } from './mixpay/api';
+import { fetchMixPayOrder, type MixPayPaymentResponse } from './mixpay/api';
 import { fetch4SwapOrder, type OrderResponse } from './4swap/api';
 import type { SwapSource } from '../types/swap';
 
@@ -180,7 +180,7 @@ export const checkOrder = async (
 				const res = await fetchOrderStatus(order_id, user);
 				if (
 					(source === '4Swap' && res && (res as OrderResponse).state === 'Done') ||
-					(source === 'MixPay' && res && (res as MixPayPaymentResult).data.status === 'success')
+					(source === 'MixPay' && res && (res as MixPayPaymentResponse).data.status === 'success')
 				) {
 					clearInterval(timer);
 					resolve(true);
