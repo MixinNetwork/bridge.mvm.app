@@ -138,7 +138,10 @@
 		inputValue?: number,
 		outputValue?: number
 	) => {
-		if (source === 'NoPair') return;
+		if (source === 'NoPair') {
+			if (timer) clearInterval(timer);
+			return;
+		}
 		const requestParams = {
 			inputAsset: inputAsset?.asset_id,
 			outputAsset: outputAsset?.asset_id,
@@ -147,6 +150,7 @@
 		};
 
 		if (source === '4Swap') {
+			if (timer) clearInterval(timer);
 			const info = get4SwapSwapInfo(pairRoutes, slippage, requestParams);
 			if (info) setSwapInfo(info);
 		}
