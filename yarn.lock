@@ -634,10 +634,10 @@
     estree-walker "^2.0.2"
     picomatch "^2.3.1"
 
-"@square/svelte-store@^1.0.1":
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/@square/svelte-store/-/svelte-store-1.0.1.tgz#a0c9c3350187915958d068ef1c326b25ce73c2e0"
-  integrity sha512-ETb8oItc0TTzlmufaIraBtxspfYEPjn6PwJQ+Lh4VU+aPQa1Iop5XCPE67yLzZczs5vF4Fq5C6rOzvKjb8tmRg==
+"@square/svelte-store@^1.0.6":
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/@square/svelte-store/-/svelte-store-1.0.6.tgz#fe46c3833ee594b492b0e7d161bdffef405b89d8"
+  integrity sha512-jMWXXvTgO8ilxpVngEiHqHymIfVdGySANCvLKleGXLCfK9YB3Eha/BCitnoFy0YxyWmOb6QagxnHW+bYtFmcgg==
   dependencies:
     js-cookie "^3.0.1"
     svelte "^3.0.0"
