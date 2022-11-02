@@ -24,7 +24,7 @@ const createSwapOrder = () => {
 		if (source === '4Swap') {
 			const info = get4SwapSwapInfo(pairRoutes, slippage, requestParams);
 			set(info);
-      return;
+			return;
 		}
 
 		const info = await fetchMixPayPreOrder(requestParams);
