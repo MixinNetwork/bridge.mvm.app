@@ -6,7 +6,7 @@
 	import Helper from '$lib/assets/helper.svg?component';
 	import Switch from '$lib/assets/switch.svg?component';
 	import { PairRoutes } from '$lib/helpers/4swap/route';
-	import type { Order, PreOrderInfo, SwapParams } from '$lib/types/swap';
+	import type { Order, SwapParams } from '$lib/types/swap';
 	import { setSearchParam } from '$lib/helpers/app-store';
 	import { assets, pairs, updateAssets } from '$lib/stores/model';
 	import { getAsset } from '$lib/helpers/utils';
@@ -101,13 +101,12 @@
 	const debouncedUpdateOrder = debounce(
 		async (
 			source: Omit<SwapSource, 'NoPair'>,
-			lastEdited: 'input' | 'output',
 			requestParams: SwapParams,
-			pairRoutes?: PairRoutes,
-			slippage?: number
+			pairRoutes: PairRoutes,
+			slippage: number
 		) => {
 			loadingPreOrder = true;
-			await swapOrder.fetchOrderInfo(source, lastEdited, requestParams, pairRoutes, slippage);
+			await swapOrder.fetchOrderInfo(showToast, source, requestParams, pairRoutes, slippage);
 			loadingPreOrder = false;
 		},
 		400
@@ -129,8 +128,8 @@
 		((lastEdited === 'input' && !!inputAmount) || (lastEdited === 'output' && !!outputAmount))
 	) {
 		const requestParams = {
-			inputAsset: inputAsset!.asset_id,
-			outputAsset: outputAsset!.asset_id,
+			inputAsset: inputAsset.asset_id,
+			outputAsset: outputAsset.asset_id,
 			inputAmount: lastEdited === 'input' ? String(inputAmount) : undefined,
 			outputAmount: lastEdited === 'output' ? String(outputAmount) : undefined
 		};
@@ -143,7 +142,7 @@
 
 		if (current !== lastSwapInfo) {
 			lastSwapInfo = current;
-			debouncedUpdateOrder($swapSource, lastEdited!, requestParams, pairRoutes, slippage);
+			debouncedUpdateOrder($swapSource, requestParams, pairRoutes, slippage);
 		}
 	} else swapOrder.set(undefined);
 
@@ -153,7 +152,7 @@
 	let price: string | undefined;
 	let minReceived: string | undefined;
 
-	$: if ($swapOrder) {
+	$: if ($swapOrder?.order) {
 		order = $swapOrder.order;
 		fee = $swapOrder.fee;
 		price = $swapOrder.price;

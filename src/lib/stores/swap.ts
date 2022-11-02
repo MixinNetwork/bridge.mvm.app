@@ -1,4 +1,4 @@
-import { get, writable } from 'svelte/store';
+import { get, writable } from '@square/svelte-store';
 import type { PairRoutes } from '$lib/helpers/4swap/route';
 import type { SwapSource, SwapParams, PreOrderInfo } from '$lib/types/swap';
 import type { Asset } from '$lib/types/asset';
@@ -8,46 +8,50 @@ import { pairs } from './model';
 import { WHITELIST_ASSET_4SWAP } from '$lib/constants/common';
 
 const createSwapOrder = () => {
-	const { subscribe, update, set } = writable<PreOrderInfo | undefined>(undefined);
+	const { subscribe, set } = writable<PreOrderInfo | undefined>(undefined);
 
 	let mixpayOrderInfoUpdateTimer: ReturnType<typeof setInterval>;
-	let mixpayLastRequestParams: string;
 
 	const updateSwapInfo = async (
+		showToast: (type: 'common' | 'success', msg: string, duration?: number) => void,
 		source: Omit<SwapSource, 'NoPair'>,
-		lastEdited: 'input' | 'output',
 		requestParams: SwapParams,
-		pairRoutes?: PairRoutes,
-		slippage?: number
+		pairRoutes: PairRoutes,
+		slippage: number
 	) => {
+		if (mixpayOrderInfoUpdateTimer) clearInterval(mixpayOrderInfoUpdateTimer);
+
 		if (source === '4Swap') {
-			if (mixpayOrderInfoUpdateTimer) clearInterval(mixpayOrderInfoUpdateTimer);
 			const info = get4SwapSwapInfo(pairRoutes!, slippage!, requestParams);
-			return info;
+			set(info);
 		}
 
 		const info = await fetchMixPayPreOrder(requestParams);
-		if (mixpayOrderInfoUpdateTimer) clearInterval(mixpayOrderInfoUpdateTimer);
-		if (info)
+		if (info.errorMessage) {
+			showToast('common', info.errorMessage);
+			return;
+		}
+
+		if (info.order) {
+			set(info);
 			mixpayOrderInfoUpdateTimer = setInterval(async () => {
 				const info = await fetchMixPayPreOrder(requestParams);
 				set(info);
 			}, 1000 * 15);
-		return info;
+		}
 	};
 
 	return {
 		subscribe,
 		set,
 		fetchOrderInfo: async (
+			showToast: (type: 'common' | 'success', msg: string, duration?: number) => void,
 			source: Omit<SwapSource, 'NoPair'>,
-			lastEdited: 'input' | 'output',
 			requestParams: SwapParams,
-			pairRoutes?: PairRoutes,
-			slippage?: number
+			pairRoutes: PairRoutes,
+			slippage: number
 		) => {
-			const info = await updateSwapInfo(source, lastEdited, requestParams, pairRoutes, slippage);
-			set(info);
+			await updateSwapInfo(showToast, source, requestParams, pairRoutes, slippage);
 		}
 	};
 };

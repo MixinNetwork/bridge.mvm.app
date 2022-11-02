@@ -17,7 +17,7 @@ export type Order = RouteCtx & {
 };
 
 export interface PreOrderInfo {
-	order: Order;
+	order: Order | undefined;
 	fee: string;
 	price: string;
 	minReceived: string;

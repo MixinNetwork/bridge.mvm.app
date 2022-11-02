@@ -114,7 +114,7 @@ export const fetchMixPayPreOrder = async ({
 	outputAsset,
 	inputAmount,
 	outputAmount
-}: SwapParams): Promise<PreOrderInfo | undefined> => {
+}: SwapParams): Promise<PreOrderInfo> => {
 	const params: MixPayEstimatedPaymentRequest = {
 		paymentAssetId: inputAsset,
 		quoteAssetId: outputAsset,
@@ -147,7 +147,13 @@ export const fetchMixPayPreOrder = async ({
 		};
 	}
 
-	return undefined;
+	return {
+		order: undefined,
+		fee: '',
+		price: '',
+		minReceived: '',
+		errorMessage: response.message
+	};
 };
 
 const fetchMixPaySwapTraceId = async (
