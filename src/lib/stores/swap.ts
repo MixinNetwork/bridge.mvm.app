@@ -6,19 +6,37 @@ import { get4SwapSwapInfo } from '$lib/helpers/4swap/utils';
 import { fetchMixPayPreOrder, type MixPayAsset } from '$lib/helpers/mixpay/api';
 import { pairs } from './model';
 import { WHITELIST_ASSET_4SWAP } from '$lib/constants/common';
+import { isEqual } from 'lodash-es';
 
 const createSwapOrder = () => {
 	const { subscribe, set } = writable<PreOrderInfo | undefined>(undefined);
 
 	let mixpayOrderInfoUpdateTimer: ReturnType<typeof setInterval>;
+  let lastParams: {
+    lastEdited: 'input' | 'output';
+    inputAsset: string;
+    outputAsset: string | undefined;
+    amount: string | undefined;
+  };
 
 	const updateSwapInfo = async (
 		showToast: (type: 'common' | 'success', msg: string, duration?: number) => void,
 		source: Omit<SwapSource, 'NoPair'>,
+    lastEdited: 'input' | 'output',
 		requestParams: SwapParams,
 		pairRoutes: PairRoutes,
 		slippage: number
 	) => {
+		const current = {
+			lastEdited,
+			inputAsset: requestParams.inputAsset,
+			outputAsset: requestParams.outputAsset,
+			amount: lastEdited === 'input' ? requestParams.inputAmount : requestParams.outputAmount
+		};
+
+		if (isEqual(current, lastParams)) return;
+		lastParams = current;
+
 		if (mixpayOrderInfoUpdateTimer) clearInterval(mixpayOrderInfoUpdateTimer);
 
 		if (source === '4Swap') {
@@ -48,11 +66,12 @@ const createSwapOrder = () => {
 		fetchOrderInfo: async (
 			showToast: (type: 'common' | 'success', msg: string, duration?: number) => void,
 			source: Omit<SwapSource, 'NoPair'>,
+      lastEdited: 'input' | 'output',
 			requestParams: SwapParams,
 			pairRoutes: PairRoutes,
 			slippage: number
 		) => {
-			await updateSwapInfo(showToast, source, requestParams, pairRoutes, slippage);
+			await updateSwapInfo(showToast, source, lastEdited, requestParams, pairRoutes, slippage);
 		}
 	};
 };

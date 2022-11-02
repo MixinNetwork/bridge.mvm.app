@@ -100,19 +100,19 @@
 	const debouncedUpdateOrder = debounce(
 		async (
 			source: Omit<SwapSource, 'NoPair'>,
+    	lastEdited: 'input' | 'output',
 			requestParams: SwapParams,
 			pairRoutes: PairRoutes,
 			slippage: number
 		) => {
 			loadingPreOrder = true;
-			await swapOrder.fetchOrderInfo(showToast, source, requestParams, pairRoutes, slippage);
+			await swapOrder.fetchOrderInfo(showToast, source, lastEdited, requestParams, pairRoutes, slippage);
 			loadingPreOrder = false;
 		},
 		400
 	);
 
 	let loadingPreOrder = false;
-	let lastSwapInfo: string;
 
 	$: if (inputAsset && outputAsset) {
 		swapSource.updateSource(inputAsset, outputAsset, mixpayPaymentAssets, mixpaySettlementAssets);
@@ -132,17 +132,7 @@
 			inputAmount: lastEdited === 'input' ? String(inputAmount) : undefined,
 			outputAmount: lastEdited === 'output' ? String(outputAmount) : undefined
 		};
-		const current = JSON.stringify({
-			lastEdited,
-			inputAsset: requestParams.inputAsset,
-			outputAsset: requestParams.outputAsset,
-			amount: lastEdited === 'input' ? requestParams.inputAmount : requestParams.outputAmount
-		});
-
-		if (current !== lastSwapInfo) {
-			lastSwapInfo = current;
-			debouncedUpdateOrder($swapSource, requestParams, pairRoutes, slippage);
-		}
+		debouncedUpdateOrder($swapSource, lastEdited, requestParams, pairRoutes, slippage);
 	} else swapOrder.set(undefined);
 
 	// info
