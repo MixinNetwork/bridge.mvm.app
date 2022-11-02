@@ -1,4 +1,4 @@
-import type { RouteCtx } from "$lib/helpers/4swap/route";
+import type { RouteCtx } from '$lib/helpers/4swap/route';
 
 export type SwapSource = 'MixPay' | '4Swap' | 'NoPair';
 
@@ -17,9 +17,9 @@ export type Order = RouteCtx & {
 };
 
 export interface PreOrderInfo {
-  order: Order;
-  fee: string;
-  price: string;
-  minReceived: string;
-  errorMessage?: string;
+	order: Order;
+	fee: string;
+	price: string;
+	minReceived: string;
+	errorMessage?: string;
 }
