@@ -1,5 +1,6 @@
 import BigNumber from 'bignumber.js';
 import Hashids from 'hashids';
+import type { Order, SwapParams } from '$lib/types/swap';
 import { Uniswap } from '../swap/uniswap';
 import { Curve, A } from '../swap/curve';
 import type { Pair } from './api';
@@ -8,13 +9,6 @@ const HASH_SALT = 'uniswap routes';
 const uniswap = new Uniswap();
 const curve = new Curve(A);
 const precision = 8;
-
-export type SwapParams = {
-	inputAsset: string;
-	outputAsset: string;
-	inputAmount?: string;
-	outputAmount?: string;
-};
 
 export type RouteCtx = {
 	routeAssets: string[];
@@ -29,13 +23,6 @@ export type RoutePair = Pair & {
 	baseAmount: number;
 	quoteAmount: number;
 	fillPercent: number;
-};
-
-export type Order = RouteCtx & {
-	route_assets: string[];
-	routes: string;
-	fill_asset_id: string;
-	pay_asset_id: string;
 };
 
 const getPairByIds = (pairs: Pair[], id1: string, id2: string) => {
@@ -176,7 +163,7 @@ export class PairRoutes {
 		return +funds - receivePercent * +funds;
 	}
 
-	getPreOrder({ inputAsset, outputAsset, inputAmount, outputAmount }: SwapParams) {
+	getPreOrder({ inputAsset, outputAsset, inputAmount, outputAmount }: SwapParams): Order {
 		let bestRoute: RouteCtx | null = null;
 		let funds = inputAmount;
 		let amount = outputAmount;
