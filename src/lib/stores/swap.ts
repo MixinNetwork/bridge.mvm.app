@@ -37,7 +37,7 @@ const createSwapOrder = () => {
 
 		if (source === 'NoPair') {
 			set(undefined);
-      return;
+			return;
 		}
 
 		if (mixpayOrderInfoUpdateTimer) clearInterval(mixpayOrderInfoUpdateTimer);
