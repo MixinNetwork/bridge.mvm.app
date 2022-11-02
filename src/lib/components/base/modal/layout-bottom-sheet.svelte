@@ -12,7 +12,7 @@
 		to: 'translate-y-0 scale-100 opacity-100 ease-in-out'
 	}}
 	class={clsx(
-		'flex h-5/6 w-full flex-col self-end rounded-t-2xl bg-white md:h-[560px] md:w-[375px] md:self-center md:rounded-xl',
+		'flex max-h-[80%] w-full flex-col self-end rounded-t-2xl bg-white md:h-[560px] md:w-[375px] md:self-center md:rounded-xl',
 		clazz
 	)}
 >

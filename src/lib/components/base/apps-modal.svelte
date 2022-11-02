@@ -16,7 +16,7 @@
 <LayoutBottomSheet class="!h-auto p-5">
 	<ModalHeader {close}>APPS</ModalHeader>
 	{#each data as { name, description, icon, href } (name)}
-		<a class=" flex flex-row space-x-3 py-4" {href} target="_blank" rel="noreferrer">
+		<a class="flex flex-row space-x-3 py-4" {href} target="_blank" rel="noreferrer">
 			<img loading="lazy" src={icon} width="40" height="40" alt={name} class=" shrink-0" />
 			<div class="flex flex-col items-start">
 				<div class=" font-bold text-black text-opacity-80">{name}</div>

@@ -3,13 +3,15 @@
 	import Checked from '$lib/assets/swap-for-gas-checked.svg?component';
 	import LL from '$i18n/i18n-svelte';
 	import { browser } from '$app/environment';
+	import { createEventDispatcher } from 'svelte';
 
 	export let value: string;
 	export let price: string;
 	export let selected: boolean | undefined = undefined;
 	export let transactions: number;
 
-	let clientWidth: number | undefined;
+	const dispatcher = createEventDispatcher();
+
 	let element: HTMLElement | undefined;
 	$: parent = element?.parentElement && element?.parentElement;
 	$: paddingLeft =
@@ -18,7 +20,7 @@
 		element && parent && paddingLeft && element.offsetLeft - parent.offsetLeft - paddingLeft;
 </script>
 
-<div class="relative snap-start font-semibold" bind:clientWidth bind:this={element}>
+<div class="relative snap-start font-semibold" bind:this={element}>
 	<input class="peer hidden" id={value} name="quantity" {value} type="radio" checked={selected} />
 	<!-- svelte-ignore a11y-click-events-have-key-events -->
 	<label
@@ -26,6 +28,7 @@
 		class="box-border flex h-40 w-32 flex-col rounded-xl border-2 border-transparent bg-white p-2 shadow-md transition-all peer-checked:border-brand-primary peer-checked:bg-brand-primary peer-checked:bg-opacity-5"
 		on:click={() => {
 			parent && offset && parent.scrollTo({ left: offset, behavior: 'smooth' });
+			dispatcher('click');
 		}}
 	>
 		<slot>

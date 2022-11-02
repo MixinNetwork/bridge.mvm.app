@@ -13,12 +13,14 @@ export const USER_KEY = 'USER';
 export const LANG = 'lang';
 export const PROVIDER_KEY = 'PROVIDER';
 
-export const ETH_ASSET_ID = '43d61dcd-e413-450d-80b8-101d5e903357';
-export const XIN_ASSET_ID = 'c94ac88f-4671-3976-b60a-09064f1811e8';
 export const TRX_ASSET_ID = '25dabac5-056a-48ff-b9f9-f67395dc407c';
+export const ETH_ASSET_ID = '43d61dcd-e413-450d-80b8-101d5e903357';
+export const BTC_ASSET_ID = 'c6d0c728-2624-429b-8e0d-d9d19b6592fa';
 export const EOS_ASSET_ID = '6cfe566e-4aad-470b-8c9a-2fd35b49c68d';
 export const MOB_ASSET_ID = 'eea900a8-b327-488c-8d8d-1428702fe240';
 export const BOX_ASSET_ID = 'f5ef6b5d-cc5a-3d90-b2c0-a2fd386e7a3c';
+export const DOGE_ASSET_ID = '6770a1e5-6086-44d5-b60f-545f9d9e8ffd';
+export const XIN_ASSET_ID = 'c94ac88f-4671-3976-b60a-09064f1811e8';
 
 export const REGISTRY_PID = 'bd67087276ce3263b9333aa337e212a4';
 export const REGISTRY_ADDRESS = '0x3c84B6C98FBeB813e05a7A7813F0442883450B1F';
@@ -34,6 +36,8 @@ export const ETHER_SCAN_URL = 'https://etherscan.io/';
 export const MVM_RPC_URL = 'https://geth.mvm.dev/';
 export const MVM_SCAN_URL = 'https://scan.mvm.dev/';
 
+export const HOST = import.meta.env.VITE_HOST;
+
 export const EMPTY_ADDRESS = '0x0000000000000000000000000000000000000000';
 
 export const MAINNET_CHAIN_ID = 1;
@@ -46,7 +50,7 @@ export const WHITELIST_ASSET_4SWAP = [XIN_ASSET_ID, EOS_ASSET_ID, MOB_ASSET_ID, 
 
 export const WHITELIST_ASSET = [
 	{
-		id: 'c6d0c728-2624-429b-8e0d-d9d19b6592fa',
+		id: BTC_ASSET_ID,
 		symbol: 'BTC',
 		chain: 'BTC'
 	},
@@ -82,11 +86,6 @@ export const WHITELIST_ASSET = [
 		chain: 'ETH'
 	},
 	{
-		id: '257c225a-0777-3292-bf00-eee3738e7f6d',
-		symbol: 'ONE',
-		chain: undefined
-	},
-	{
 		id: 'f6f1c01c-8489-3346-b127-dc0dc09b9ce7',
 		symbol: 'LINK',
 		chain: 'ETH'
@@ -111,71 +110,66 @@ export const WHITELIST_ASSET = [
 		symbol: 'AAVE',
 		chain: 'ETH'
 	},
-	{
-		id: '88b29aef-6059-3351-abbd-0ecfcc574280',
-		symbol: 'GRT',
-		chain: 'ETH'
-	},
-	{
-		id: '4a47d208-ce92-3f24-8a10-541fa17b7620',
-		symbol: 'CRV',
-		chain: 'ETH'
-	},
-	{
-		id: '0cc20afd-d872-326e-b5c7-aa78558cd6af',
-		symbol: 'COMP',
-		chain: 'ETH'
-	},
-	{
-		id: '4488ed2a-bfad-3036-9401-0ee9593aa5ff',
-		symbol: 'SUSHI',
-		chain: 'ETH'
-	},
+	// {
+	// 	id: '88b29aef-6059-3351-abbd-0ecfcc574280',
+	// 	symbol: 'GRT',
+	// 	chain: 'ETH'
+	// },
+	// {
+	// 	id: '4a47d208-ce92-3f24-8a10-541fa17b7620',
+	// 	symbol: 'CRV',
+	// 	chain: 'ETH'
+	// },
+	// {
+	// 	id: '0cc20afd-d872-326e-b5c7-aa78558cd6af',
+	// 	symbol: 'COMP',
+	// 	chain: 'ETH'
+	// },
+	// {
+	// 	id: '4488ed2a-bfad-3036-9401-0ee9593aa5ff',
+	// 	symbol: 'SUSHI',
+	// 	chain: 'ETH'
+	// },
 	{
 		id: '965e5c6e-434c-3fa9-b780-c50f43cd955c',
 		symbol: 'CNB',
 		chain: 'ETH'
 	},
-	{
-		id: 'b5289c48-ec3a-3cdb-b2c4-0913d1812cd5',
-		symbol: 'mAED',
-		chain: 'ETH'
-	},
+	// {
+	// 	id: 'b5289c48-ec3a-3cdb-b2c4-0913d1812cd5',
+	// 	symbol: 'mAED',
+	// 	chain: 'ETH'
+	// },
 	{
 		id: '0ff3f325-4f34-334d-b6c0-a3bd8850fc06',
 		symbol: 'JPYC',
 		chain: 'ETH'
 	},
-	{
-		id: 'f1d987df-1835-3f03-aefd-5e3e4132d11e',
-		symbol: 'HT',
-		chain: 'ETH'
-	},
-	{
-		id: 'bced5614-2fdc-3463-a680-0b3e3b32ce2e',
-		symbol: 'HT',
-		chain: undefined
-	},
-	{
-		id: '0119f16d-f44c-3c12-9d59-044f5303c028',
-		symbol: 'YFI',
-		chain: 'ETH'
-	},
+	// {
+	// 	id: 'f1d987df-1835-3f03-aefd-5e3e4132d11e',
+	// 	symbol: 'HT',
+	// 	chain: 'ETH'
+	// },
+	// {
+	// 	id: '0119f16d-f44c-3c12-9d59-044f5303c028',
+	// 	symbol: 'YFI',
+	// 	chain: 'ETH'
+	// },
 	{
 		id: '2f5bef0e-d41a-3cf3-b6fa-b8dd0d8a3327',
 		symbol: 'EURT',
 		chain: 'ETH'
 	},
-	{
-		id: 'aa189c4c-99ca-39eb-8d96-71a8f6f7218a',
-		symbol: 'AKITA',
-		chain: 'ETH'
-	},
-	{
-		id: '16fefe30-e19d-3229-a432-5d0fdb0abd4f',
-		symbol: 'CVC',
-		chain: 'ETH'
-	},
+	// {
+	// 	id: 'aa189c4c-99ca-39eb-8d96-71a8f6f7218a',
+	// 	symbol: 'AKITA',
+	// 	chain: 'ETH'
+	// },
+	// {
+	// 	id: '16fefe30-e19d-3229-a432-5d0fdb0abd4f',
+	// 	symbol: 'CVC',
+	// 	chain: 'ETH'
+	// },
 	{
 		id: 'c3dc19ae-d087-3279-ac51-dc655940256a',
 		symbol: 'MANA',
@@ -189,28 +183,28 @@ export const WHITELIST_ASSET = [
 	{
 		id: 'b91e18ff-a9ae-3dc7-8679-e935d9a4b34b',
 		symbol: 'USDT',
-		chain: undefined
+		chain: 'TRX'
 	},
 	{
 		id: '5dac5e28-ad13-31ea-869f-41770dfcee09',
 		symbol: 'USDT',
 		chain: 'EOS'
 	},
-	{
-		id: 'bb4c9a0c-245b-3bd2-a3f4-a5eb73c90c00',
-		symbol: 'RLY',
-		chain: 'ETH'
-	},
-	{
-		id: '44adc71b-0c37-3b42-aa19-fe2d59dae5fd',
-		symbol: 'EPC',
-		chain: 'ETH'
-	},
-	{
-		id: '75e0414b-b190-3783-995a-e6064d30c55d',
-		symbol: 'TYC',
-		chain: 'ETH'
-	},
+	// {
+	// 	id: 'bb4c9a0c-245b-3bd2-a3f4-a5eb73c90c00',
+	// 	symbol: 'RLY',
+	// 	chain: 'ETH'
+	// },
+	// {
+	// 	id: '44adc71b-0c37-3b42-aa19-fe2d59dae5fd',
+	// 	symbol: 'EPC',
+	// 	chain: 'ETH'
+	// },
+	// {
+	// 	id: '75e0414b-b190-3783-995a-e6064d30c55d',
+	// 	symbol: 'TYC',
+	// 	chain: 'ETH'
+	// },
 	{
 		id: '14693c1a-d835-3572-b9b4-e0cbb62099e5',
 		symbol: 'PINK',

@@ -29,10 +29,23 @@
 			href: 'https://rings.pando.im/'
 		},
 		{
-			name: '4Swap',
+			name: '4swap',
 			description: $LL.apps.fourSwap.description(),
 			icon: FourSwap,
 			href: 'https://app.4swap.org/'
+		},
+		{
+			name: 'Trident',
+			description: $LL.apps.trident.description(),
+
+			icon: 'https://mixin-images.zeromesh.net/UrECmX-_zO9twWDh8429lOUU9h7XgRapTM_McbovByNGWK9v-uPVKQw8ZbUvjRLJhEMKGGYs21VtKPNWXfujfVM_T49P4zY3XQgH=s256',
+			href: 'https://thetrident.one/'
+		},
+		{
+			name: 'OptionDance',
+			description: $LL.apps.optionDance.description(),
+			icon: 'https://mixin-images.zeromesh.net/3H9XZLLfHeIW4ARQXN99nIgIQQuhEzqsv0iG7_gec3T82UylqQPyOoJEFIVvYHWSo8Z4AN7RSF03qMOZqbOwCJy7srXwhpvPMnU=s256',
+			href: 'https://option.dance/'
 		}
 	];
 
@@ -44,11 +57,11 @@
 
 <button
 	class={clsx(
-		'group relative flex items-center md:cursor-default select-none opacity-100 z-50 justify-center md:bg-white w-fit md:rounded-full space-x-3 md:py-2 md:px-4 transition mr-3',
+		'group relative flex items-center md:cursor-default select-none opacity-100 z-50 justify-center md:bg-white w-fit md:rounded-full space-x-3 md:py-2 md:px-4 transition',
 		clazz
 	)}
 	on:click={() => {
-		if (window.innerWidth <= 720) return;
+		if (window.innerWidth > 720) return;
 		opened = true;
 	}}
 >
@@ -56,11 +69,23 @@
 	<div class=" hidden text-sm font-semibold text-black text-opacity-80 md:block">Apps</div>
 
 	<div
-		class="invisible absolute top-10 -right-48 z-50 mt-3 hidden w-96 flex-col rounded-2xl bg-white p-5 opacity-0 shadow transition-all delay-100 group-hover:visible group-hover:opacity-100 md:flex lg:right-0"
+		class="invisible absolute top-10 -right-48 z-50 mt-3 hidden h-[480px] w-96 flex-col overflow-y-auto rounded-2xl bg-white py-5 opacity-0 shadow transition-all delay-100 group-hover:visible group-hover:opacity-100 md:flex lg:right-0"
 	>
 		{#each data as { name, description, icon, href } (name)}
-			<a class=" flex flex-row space-x-3 py-4" {href} target="_blank" rel="noreferrer">
-				<img loading="lazy" src={icon} width="40" height="40" alt={name} class=" shrink-0" />
+			<a
+				class=" default flex flex-row space-x-3 bg-brand-primary bg-opacity-0 py-4 px-5 hover:bg-opacity-5"
+				{href}
+				target="_blank"
+				rel="noreferrer"
+			>
+				<img
+					loading="lazy"
+					src={icon}
+					width="40"
+					height="40"
+					alt={name}
+					class="h-10 w-10 shrink-0"
+				/>
 				<div class="flex flex-col items-start text-start">
 					<div class=" font-bold text-black text-opacity-80">{name}</div>
 					<div class=" text-sm font-semibold text-black text-opacity-20">{description}</div>

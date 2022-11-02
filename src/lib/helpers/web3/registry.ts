@@ -10,10 +10,16 @@ export const ReadableRegistryContract = new ethers.Contract(
 	mvmProvider
 );
 
+const assetContractMap: { [key: string]: string } = {};
+
 export const fetchAssetContract = async (assetId: string): Promise<string | undefined> => {
+	if (assetContractMap[assetId]) return assetContractMap[assetId];
 	const id = assetId.replaceAll('-', '');
 	const address = await ReadableRegistryContract.contracts(`0x${id}`);
 	if (address === '0x0000000000000000000000000000000000000000') return undefined;
+
+	assetContractMap[assetId] = address;
+
 	return address;
 };
 

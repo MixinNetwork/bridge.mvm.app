@@ -2,25 +2,25 @@
 	import Header from '$lib/components/base/header.svelte';
 	import { page } from '$app/stores';
 	import LL from '$i18n/i18n-svelte';
-	import Helper from '$lib/assets/helper.svg?component';
 	import UserInfo from '$lib/components/base/user-info.svelte';
 	import Apps from '$lib/components/base/apps.svelte';
 	import { user } from '$lib/stores/user';
 	import Item from '$lib/components/swap-for-gas/item.svelte';
 	import { enhance } from '$app/forms';
+	import { HOST } from '../../../lib/constants/common';
+	import { append } from 'svelte/internal';
 
 	let price: string = $page.data.price;
 	let iconUrl: string = $page.data.iconUrl;
 
 	let selectCustom = false;
 	let customAmount: number;
+
+	const unselectCustom = () => (selectCustom = false);
 </script>
 
 <Header class=" bg-transparent">
 	<div class="md:hidden">{$LL.swapForGas()}</div>
-	<a href="/" class="md:hidden">
-		<Helper />
-	</a>
 	<UserInfo class="hidden md:flex" />
 	<Apps />
 </Header>
@@ -41,6 +41,12 @@
 			target="_blank"
 			use:enhance={({ data, cancel, action }) => {
 				action.searchParams.append('address', $user.address);
+
+				const callbackUrl = data.get('callbackUrl');
+				callbackUrl &&
+					typeof callbackUrl === 'string' &&
+					action.searchParams.append('callbackUrl', callbackUrl);
+
 				const quantity = data.get('quantity');
 				if (quantity && typeof quantity === 'string') {
 					if (quantity === 'custom') {
@@ -56,20 +62,27 @@
 			class="mt-5 flex w-full flex-col items-center"
 		>
 			<input name="address" class="hidden" value={$user.address} type="checkbox" checked={true} />
+			<input
+				name="callbackUrl"
+				class="hidden"
+				value={`${HOST}swap-for-gas/`}
+				type="checkbox"
+				checked={true}
+			/>
 			<div
 				class="scrollbar-hide flex w-full snap-x scroll-px-6 flex-row space-x-3 overflow-x-auto pb-10 pt-1 pr-6 first:child:pl-6"
 			>
-				<Item value="0.01" {price} selected={true} transactions={500} />
-				<Item value="0.05" {price} selected={false} transactions={2500} />
-				<Item value="0.1" {price} selected={false} transactions={5000} />
+				<Item value="0.01" {price} selected={true} transactions={500} on:click={unselectCustom} />
+				<Item value="0.05" {price} selected={false} transactions={2500} on:click={unselectCustom} />
+				<Item value="0.1" {price} selected={false} transactions={5000} on:click={unselectCustom} />
 				<Item value="custom" {price} selected={selectCustom} transactions={64}>
 					<input
 						type="number"
 						class="h-16 w-full rounded-lg bg-[#F5F7FA] p-1 text-lg font-semibold"
 						placeholder={$LL.amount()}
+						step="0.001"
 						bind:value={customAmount}
 						on:focus={() => (selectCustom = true)}
-						on:blur={() => (selectCustom = false)}
 					/>
 					<div class="mt-4 text-sm opacity-50">{$LL.swapForGasPage.customAmount()}</div>
 				</Item>

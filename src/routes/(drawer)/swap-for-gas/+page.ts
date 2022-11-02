@@ -2,7 +2,7 @@ import { get } from '@square/svelte-store';
 import { assets } from '$lib/stores/model';
 import type { PageLoad } from './$types';
 import { NetworkClient } from '@mixin.dev/mixin-node-sdk';
-import { ETH_ASSET_ID } from '../../../lib/constants/common';
+import { ETH_ASSET_ID } from '$lib/constants/common';
 
 export const load: PageLoad = async () => {
 	const cacheAssets = get(assets);
