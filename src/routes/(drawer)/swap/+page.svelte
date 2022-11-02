@@ -106,8 +106,8 @@
 	let source: SwapSource = 'NoPair';
 	let lastMixPayRequestParams: string | undefined;
 	let loadingPreOrder = false;
-	let timer;
-	let debounceTimer;
+	let timer: ReturnType<typeof setInterval>;
+	let debounceTimer: ReturnType<typeof setInterval>;
 
 	const setSwapInfo = (info: { order: Order; fee: string; price: string; minReceived: string }) => {
 		order = info.order;
@@ -186,9 +186,9 @@
 		if (debounceTimer) clearTimeout(debounceTimer);
 		debounceTimer = setTimeout(() => {
 			updateSwapInfo(
-				inputAsset,
-				outputAsset,
-				lastEdited,
+				inputAsset!,
+				outputAsset!,
+				lastEdited!,
 				(inputAmount && Number(inputAmount)) || undefined,
 				(outputAmount && Number(outputAmount)) || undefined
 			);
@@ -380,8 +380,8 @@
 			on:click={swap}
 			disabled={!(order && +order.amount) ||
 				order?.priceImpact > 0.15 ||
-				loadingPreOrder ||
-				bigGte(inputAmount, inputAsset?.balance)}
+				loadingPreOrder || 
+				!!(inputAmount && inputAsset?.balance && bigGte(inputAmount, inputAsset?.balance))}
 		>
 			{#if loading || loadingPreOrder}
 				<Spinner class="stroke-white stroke-2 text-center" />
