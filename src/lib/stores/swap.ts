@@ -12,16 +12,16 @@ const createSwapOrder = () => {
 	const { subscribe, set } = writable<PreOrderInfo | undefined>(undefined);
 
 	let mixpayOrderInfoUpdateTimer: ReturnType<typeof setInterval>;
-  let lastParams: {
+	let lastParams: {
 		lastEdited: 'input' | 'output';
 		inputAsset: string;
 		outputAsset: string | undefined;
 		amount: string | undefined;
-  };
+	};
 
 	const updateSwapInfo = async (
 		source: SwapSource,
-    lastEdited: 'input' | 'output',
+		lastEdited: 'input' | 'output',
 		requestParams: SwapParams,
 		pairRoutes: PairRoutes,
 		slippage: number
@@ -67,7 +67,7 @@ const createSwapOrder = () => {
 		subscribe,
 		fetchOrderInfo: async (
 			source: SwapSource,
-      lastEdited: 'input' | 'output',
+			lastEdited: 'input' | 'output',
 			requestParams: SwapParams,
 			pairRoutes: PairRoutes,
 			slippage: number
