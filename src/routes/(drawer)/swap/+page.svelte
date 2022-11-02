@@ -99,14 +99,20 @@
 
 	const debouncedUpdateOrder = debounce(
 		async (
-			source: Omit<SwapSource, 'NoPair'>,
-    	lastEdited: 'input' | 'output',
+			source: SwapSource,
+			lastEdited: 'input' | 'output',
 			requestParams: SwapParams,
 			pairRoutes: PairRoutes,
 			slippage: number
 		) => {
 			loadingPreOrder = true;
-			await swapOrder.fetchOrderInfo(showToast, source, lastEdited, requestParams, pairRoutes, slippage);
+			try {
+				await swapOrder.fetchOrderInfo(source, lastEdited, requestParams, pairRoutes, slippage);
+			} catch (e) {
+				showToast('common', e as string);
+				if (lastEdited === 'input') outputAmount = undefined;
+				if (lastEdited === 'output') inputAmount = undefined;
+			}
 			loadingPreOrder = false;
 		},
 		400
@@ -116,14 +122,12 @@
 
 	$: if (inputAsset && outputAsset) {
 		swapSource.updateSource(inputAsset, outputAsset, mixpayPaymentAssets, mixpaySettlementAssets);
-		console.log($swapSource);
 		if ($swapSource === 'NoPair') showToast('common', 'No Swap Pair');
 	}
 
 	$: if (
 		inputAsset &&
 		outputAsset &&
-		$swapSource !== 'NoPair' &&
 		((lastEdited === 'input' && !!inputAmount) || (lastEdited === 'output' && !!outputAmount))
 	) {
 		const requestParams = {
@@ -133,7 +137,7 @@
 			outputAmount: lastEdited === 'output' ? String(outputAmount) : undefined
 		};
 		debouncedUpdateOrder($swapSource, lastEdited, requestParams, pairRoutes, slippage);
-	} else swapOrder.set(undefined);
+	}
 
 	// info
 	let order: Order | undefined;

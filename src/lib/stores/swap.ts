@@ -12,17 +12,16 @@ const createSwapOrder = () => {
 	const { subscribe, set } = writable<PreOrderInfo | undefined>(undefined);
 
 	let mixpayOrderInfoUpdateTimer: ReturnType<typeof setInterval>;
-  let lastParams: {
-    lastEdited: 'input' | 'output';
-    inputAsset: string;
-    outputAsset: string | undefined;
-    amount: string | undefined;
-  };
+	let lastParams: {
+		lastEdited: 'input' | 'output';
+		inputAsset: string;
+		outputAsset: string | undefined;
+		amount: string | undefined;
+	};
 
 	const updateSwapInfo = async (
-		showToast: (type: 'common' | 'success', msg: string, duration?: number) => void,
-		source: Omit<SwapSource, 'NoPair'>,
-    lastEdited: 'input' | 'output',
+		source: SwapSource,
+		lastEdited: 'input' | 'output',
 		requestParams: SwapParams,
 		pairRoutes: PairRoutes,
 		slippage: number
@@ -33,9 +32,13 @@ const createSwapOrder = () => {
 			outputAsset: requestParams.outputAsset,
 			amount: lastEdited === 'input' ? requestParams.inputAmount : requestParams.outputAmount
 		};
-
 		if (isEqual(current, lastParams)) return;
 		lastParams = current;
+
+		if (source === 'NoPair') {
+			set(undefined);
+			throw new Error('No Swap pair');
+		}
 
 		if (mixpayOrderInfoUpdateTimer) clearInterval(mixpayOrderInfoUpdateTimer);
 
@@ -47,8 +50,8 @@ const createSwapOrder = () => {
 
 		const info = await fetchMixPayPreOrder(requestParams);
 		if (info.errorMessage) {
-			showToast('common', info.errorMessage);
-			return;
+			set(undefined);
+			throw new Error(info.errorMessage);
 		}
 
 		if (info.order) {
@@ -62,16 +65,14 @@ const createSwapOrder = () => {
 
 	return {
 		subscribe,
-		set,
 		fetchOrderInfo: async (
-			showToast: (type: 'common' | 'success', msg: string, duration?: number) => void,
-			source: Omit<SwapSource, 'NoPair'>,
-      lastEdited: 'input' | 'output',
+			source: SwapSource,
+			lastEdited: 'input' | 'output',
 			requestParams: SwapParams,
 			pairRoutes: PairRoutes,
 			slippage: number
 		) => {
-			await updateSwapInfo(showToast, source, lastEdited, requestParams, pairRoutes, slippage);
+			await updateSwapInfo(source, lastEdited, requestParams, pairRoutes, slippage);
 		}
 	};
 };
