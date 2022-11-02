@@ -114,7 +114,9 @@ const zh: Translation = {
 		itemTip: '可用 {0} 次交易',
 		customAmount: '自定义数量'
 	},
-	amount: '数量'
+	amount: '数量',
+	pending: '待确认 ({0})',
+	confirmations: '{0}/{1} 确认数'
 };
 
 export default zh;

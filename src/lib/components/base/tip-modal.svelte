@@ -12,7 +12,7 @@
 <LayoutBottomSheet class="!h-auto p-5">
 	<ModalHeader {close}>{title}</ModalHeader>
 
-	<div class="mt-8 mb-12 font-semibold">
+	<div class="mb-12 font-semibold">
 		{description}
 	</div>
 </LayoutBottomSheet>

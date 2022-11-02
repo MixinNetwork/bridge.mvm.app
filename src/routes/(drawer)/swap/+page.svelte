@@ -3,7 +3,6 @@
 	import { fade } from 'svelte/transition';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
-	import Helper from '$lib/assets/helper.svg?component';
 	import Switch from '$lib/assets/switch.svg?component';
 	import { PairRoutes, type Order } from '$lib/helpers/4swap/route';
 	import { setSearchParam } from '$lib/helpers/app-store';
@@ -164,9 +163,6 @@
 
 <Header class="bg-transparent">
 	<div class="md:hidden">{$LL.swap()}</div>
-	<a href="/" class="md:hidden">
-		<Helper />
-	</a>
 	<UserInfo class="hidden md:flex" />
 	<Apps />
 </Header>

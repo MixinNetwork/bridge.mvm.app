@@ -2,7 +2,6 @@
 	import Header from '$lib/components/base/header.svelte';
 	import { page } from '$app/stores';
 	import LL from '$i18n/i18n-svelte';
-	import Helper from '$lib/assets/helper.svg?component';
 	import UserInfo from '$lib/components/base/user-info.svelte';
 	import Apps from '$lib/components/base/apps.svelte';
 	import { user } from '$lib/stores/user';
@@ -20,9 +19,6 @@
 
 <Header class=" bg-transparent">
 	<div class="md:hidden">{$LL.swapForGas()}</div>
-	<a href="/" class="md:hidden">
-		<Helper />
-	</a>
 	<UserInfo class="hidden md:flex" />
 	<Apps />
 </Header>

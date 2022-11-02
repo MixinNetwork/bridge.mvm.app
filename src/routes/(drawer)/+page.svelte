@@ -2,7 +2,6 @@
 	import clsx from 'clsx';
 	import Brand from '$lib/components/base/brand.svelte';
 	import Header from '$lib/components/base/header.svelte';
-	import Helper from '$lib/assets/helper.svg?component';
 	import UserInfo from '$lib/components/base/user-info.svelte';
 	import Balance from '$lib/components/home/balance.svelte';
 	import Send from '$lib/assets/send.svg?component';
@@ -34,6 +33,7 @@
 	import Empty from '$lib/components/base/empty.svelte';
 	import LL from '$i18n/i18n-svelte';
 	import Apps from '$lib/components/base/apps.svelte';
+	import DepositPending from '$lib/components/base/deposit-pending.svelte';
 
 	let a: Asset[] | undefined = $page.data.assets;
 
@@ -60,11 +60,10 @@
 
 <Header>
 	<Brand class="space-x-2 md:hidden" logoClass="w-6" MVMClass="text-lg" bridgeClass="hidden" />
-	<a href="/" class="md:hidden">
-		<Helper />
-	</a>
 	<UserInfo class="hidden md:flex" />
+
 	<Apps />
+	<DepositPending />
 </Header>
 
 <div

@@ -115,7 +115,9 @@ const en: BaseTranslation = {
 		itemTip: 'Available for {0:number} transactions',
 		customAmount: 'Custom amount'
 	},
-	amount: 'Amount'
+	amount: 'Amount',
+	pending: 'Pending({0:number})',
+	confirmations: '{0:number}/{1:number} Confirmations'
 };
 
 export default en;

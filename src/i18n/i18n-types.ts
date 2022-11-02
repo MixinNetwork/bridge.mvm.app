@@ -349,6 +349,17 @@ type RootTranslation = {
 	 * A​m​o​u​n​t
 	 */
 	amount: string
+	/**
+	 * P​e​n​d​i​n​g​(​{​0​}​)
+	 * @param {number} 0
+	 */
+	pending: RequiredParams<'0'>
+	/**
+	 * {​0​}​/​{​1​}​ ​C​o​n​f​i​r​m​a​t​i​o​n​s
+	 * @param {number} 0
+	 * @param {number} 1
+	 */
+	confirmations: RequiredParams<'0' | '1'>
 }
 
 export type TranslationFunctions = {
@@ -682,6 +693,14 @@ export type TranslationFunctions = {
 	 * Amount
 	 */
 	amount: () => LocalizedString
+	/**
+	 * Pending({0})
+	 */
+	pending: (arg0: number) => LocalizedString
+	/**
+	 * {0}/{1} Confirmations
+	 */
+	confirmations: (arg0: number, arg1: number) => LocalizedString
 }
 
 export type Formatters = {}

@@ -43,7 +43,7 @@
 					{title}
 				</div>
 				{#if target === '_blank'}
-					<External />
+					<External class=" stroke-black" />
 				{/if}
 			</span>
 			<Arrow class="md:hidden" />

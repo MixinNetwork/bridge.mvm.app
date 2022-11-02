@@ -9,7 +9,7 @@
 	export { clazz as class, close };
 </script>
 
-<div class={clsx('flex items-center space-x-2 text-black text-opacity-80 font-bold', clazz)}>
+<div class={clsx('flex items-center space-x-2 text-black text-opacity-80 font-bold mb-5', clazz)}>
 	<slot />
 
 	<div class="flex grow justify-end ">

@@ -3,7 +3,6 @@
 	import { fetchTransactions, type Transaction } from '$lib/helpers/mvm/api';
 	import { page } from '$app/stores';
 	import dayjs from 'dayjs';
-	import Helper from '$lib/assets/helper.svg?component';
 	import Header from '$lib/components/base/header.svelte';
 	import UserInfo from '$lib/components/base/user-info.svelte';
 	import { bigAdd, format } from '$lib/helpers/big';
@@ -91,9 +90,6 @@
 
 <Header>
 	<div class="md:hidden">{$LL.allTransactions()}</div>
-	<a href="/" class="md:hidden">
-		<Helper />
-	</a>
 	<UserInfo class="hidden md:flex" />
 	<Apps />
 </Header>

@@ -24,7 +24,9 @@
 		showBackground && '!bg-opacity-100',
 		'[&>*:nth-child(1)]:float-left',
 		'[&>*:nth-child(2)]:absolute-center',
-		'[&>*:nth-child(n+3)]:float-right'
+		'[&>*:nth-child(n+3)]:float-right',
+		'md:[&>*:nth-child(n+4)]:mr-3',
+		'[&>*:nth-child(n+5)]:mr-3'
 	)}
 	bind:clientHeight={height}
 	use:scrollableParent

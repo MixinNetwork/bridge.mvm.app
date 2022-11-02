@@ -12,11 +12,14 @@ export const USER_KEY = 'USER';
 export const LANG = 'lang';
 export const PROVIDER_KEY = 'PROVIDER';
 
-export const ETH_ASSET_ID = '43d61dcd-e413-450d-80b8-101d5e903357';
-export const XIN_ASSET_ID = 'c94ac88f-4671-3976-b60a-09064f1811e8';
 export const TRX_ASSET_ID = '25dabac5-056a-48ff-b9f9-f67395dc407c';
+export const ETH_ASSET_ID = '43d61dcd-e413-450d-80b8-101d5e903357';
+export const BTC_ASSET_ID = 'c6d0c728-2624-429b-8e0d-d9d19b6592fa';
 export const EOS_ASSET_ID = '6cfe566e-4aad-470b-8c9a-2fd35b49c68d';
 export const MOB_ASSET_ID = 'eea900a8-b327-488c-8d8d-1428702fe240';
+export const DOGE_ASSET_ID = '6770a1e5-6086-44d5-b60f-545f9d9e8ffd';
+
+export const XIN_ASSET_ID = 'c94ac88f-4671-3976-b60a-09064f1811e8';
 
 export const REGISTRY_PID = 'bd67087276ce3263b9333aa337e212a4';
 export const REGISTRY_ADDRESS = '0x3c84B6C98FBeB813e05a7A7813F0442883450B1F';
@@ -42,7 +45,7 @@ export const MVM_CHAIN_HEX_ID = toHex(MVM_CHAIN_ID);
 
 export const WHITELIST_ASSET = [
 	{
-		id: 'c6d0c728-2624-429b-8e0d-d9d19b6592fa',
+		id: BTC_ASSET_ID,
 		symbol: 'BTC',
 		chain: 'BTC'
 	},
