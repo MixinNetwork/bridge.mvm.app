@@ -380,7 +380,7 @@
 			on:click={swap}
 			disabled={!(order && +order.amount) ||
 				order?.priceImpact > 0.15 ||
-				loadingPreOrder || 
+				loadingPreOrder ||
 				!!(inputAmount && inputAsset?.balance && bigGte(inputAmount, inputAsset?.balance))}
 		>
 			{#if loading || loadingPreOrder}

@@ -42,12 +42,7 @@ export const MVM_CHAIN_ID = 73927;
 export const MAINNET_CHAIN_HEX_ID = toHex(MAINNET_CHAIN_ID);
 export const MVM_CHAIN_HEX_ID = toHex(MVM_CHAIN_ID);
 
-export const WHITELIST_ASSET_4SWAP = [
-	XIN_ASSET_ID,
-	EOS_ASSET_ID,
-	MOB_ASSET_ID,
-	BOX_ASSET_ID
-];
+export const WHITELIST_ASSET_4SWAP = [XIN_ASSET_ID, EOS_ASSET_ID, MOB_ASSET_ID, BOX_ASSET_ID];
 
 export const WHITELIST_ASSET = [
 	{
@@ -60,7 +55,7 @@ export const WHITELIST_ASSET = [
 	{ id: EOS_ASSET_ID, symbol: 'EOS', chain: 'EOS' },
 	{ id: BOX_ASSET_ID, symbol: 'BOX', chain: 'ETH' },
 	{ id: XIN_ASSET_ID, symbol: 'XIN', chain: 'ETH' },
-	{ id: MOB_ASSET_ID,  symbol: 'MOB', chain: undefined },
+	{ id: MOB_ASSET_ID, symbol: 'MOB', chain: undefined },
 	{
 		id: '9b180ab6-6abe-3dc0-a13f-04169eb34bfa',
 		symbol: 'USDC',

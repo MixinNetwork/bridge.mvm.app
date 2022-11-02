@@ -111,7 +111,7 @@ export const fetchMixPaySettlementAssets = async () => {
 
 export const fetchMixPayPreOrder = async (
 	{ inputAsset, outputAsset, inputAmount, outputAmount }: SwapParams,
-	callback: (type: "success" | "common", message: string, duration?: number) => void,
+	callback: (type: 'success' | 'common', message: string, duration?: number) => void
 ) => {
 	const params: MixPayEstimatedPaymentRequest = {
 		paymentAssetId: inputAsset,
