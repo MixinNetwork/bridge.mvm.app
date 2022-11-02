@@ -1,6 +1,6 @@
 import axios, { type AxiosResponse } from 'axios';
 import { TransferClient, type TransferResponse } from '@mixin.dev/mixin-node-sdk';
-import type { Order, SwapParams } from '../4swap/route';
+import type { Order, PreOrderInfo, SwapParams } from '$lib/types/swap';
 import type { RegisteredUser } from '../../types/user';
 import { generateExtra } from '../sign';
 import { MIXPAY_BOT_ID } from '../../constants/common';
@@ -109,10 +109,12 @@ export const fetchMixPaySettlementAssets = async () => {
 	return data as MixPayAsset[];
 };
 
-export const fetchMixPayPreOrder = async (
-	{ inputAsset, outputAsset, inputAmount, outputAmount }: SwapParams,
-	callback: (type: 'success' | 'common', message: string, duration?: number) => void
-) => {
+export const fetchMixPayPreOrder = async ({
+	inputAsset,
+	outputAsset,
+	inputAmount,
+	outputAmount
+}: SwapParams): Promise<PreOrderInfo | undefined> => {
 	const params: MixPayEstimatedPaymentRequest = {
 		paymentAssetId: inputAsset,
 		quoteAssetId: outputAsset,
@@ -145,7 +147,6 @@ export const fetchMixPayPreOrder = async (
 		};
 	}
 
-	callback('common', response.message);
 	return undefined;
 };
 

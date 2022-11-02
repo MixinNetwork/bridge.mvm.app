@@ -5,7 +5,8 @@
 	import { page } from '$app/stores';
 	import Helper from '$lib/assets/helper.svg?component';
 	import Switch from '$lib/assets/switch.svg?component';
-	import { PairRoutes, type Order, type SwapParams } from '$lib/helpers/4swap/route';
+	import { PairRoutes } from '$lib/helpers/4swap/route';
+	import type { Order, PreOrderInfo, SwapParams } from '$lib/types/swap';
 	import { setSearchParam } from '$lib/helpers/app-store';
 	import { assets, pairs, updateAssets } from '$lib/stores/model';
 	import { getAsset } from '$lib/helpers/utils';
@@ -27,10 +28,9 @@
 	import { showToast } from '$lib/components/common/toast/toast-container.svelte';
 	import { focus } from 'focus-svelte';
 	import LL from '$i18n/i18n-svelte';
-	import { chooseSwapSource } from '$lib/helpers/swap/source';
 	import Apps from '$lib/components/base/apps.svelte';
-	import { get4SwapSwapInfo } from '$lib/helpers/4swap/utils';
-	import { fetchMixPayPreOrder } from '$lib/helpers/mixpay/api';
+	import { swapOrder, swapSource } from '$lib/stores/swap';
+	import { debounce } from 'lodash-es';
 
 	let a: Asset[] | undefined = $page.data.assets;
 	let p: Pair[] | undefined = $page.data.pairs;
@@ -53,6 +53,8 @@
 			getAsset($page.url.searchParams.get(OUTPUT_KEY) || XIN_ASSET_ID, $assets) ||
 			getAsset(XIN_ASSET_ID, $assets));
 
+	$: pairRoutes = new PairRoutes($pairs);
+
 	let lastEdited: 'input' | 'output' | undefined = undefined;
 	let inputAmount: number | string | undefined = undefined;
 	let outputAmount: number | string | undefined = undefined;
@@ -70,8 +72,8 @@
 		inputAsset = outputAsset;
 		outputAsset = temp;
 
-		setSearchParam($page, INPUT_KEY, outputAsset?.asset_id);
-		setSearchParam($page, OUTPUT_KEY, inputAsset?.asset_id);
+		setSearchParam($page, INPUT_KEY, inputAsset?.asset_id);
+		setSearchParam($page, OUTPUT_KEY, outputAsset?.asset_id);
 
 		goto($page.url, { keepfocus: true, replaceState: true, noscroll: true });
 	};
@@ -96,111 +98,86 @@
 		if (source === 'output' && !outputAmount) inputAmount = '';
 	};
 
-	$: pairRoutes = new PairRoutes($pairs);
-	let order: Order | undefined;
+	const debouncedUpdateOrder = debounce(
+		async (
+			source: Omit<SwapSource, 'NoPair'>,
+			lastEdited: 'input' | 'output',
+			requestParams: SwapParams,
+			pairRoutes?: PairRoutes,
+			slippage?: number
+		) => {
+			loadingPreOrder = true;
+			await swapOrder.fetchOrderInfo(source, lastEdited, requestParams, pairRoutes, slippage);
+			loadingPreOrder = false;
+		},
+		400
+	);
+
+	let loadingPreOrder = false;
+	let lastSwapInfo: string;
+
+	$: if (inputAsset && outputAsset) {
+		swapSource.updateSource(inputAsset, outputAsset, mixpayPaymentAssets, mixpaySettlementAssets);
+		console.log($swapSource);
+		if ($swapSource === 'NoPair') showToast('common', 'No Swap Pair');
+	}
+
+	$: if (
+		inputAsset &&
+		outputAsset &&
+		$swapSource !== 'NoPair' &&
+		((lastEdited === 'input' && !!inputAmount) || (lastEdited === 'output' && !!outputAmount))
+	) {
+		const requestParams = {
+			inputAsset: inputAsset!.asset_id,
+			outputAsset: outputAsset!.asset_id,
+			inputAmount: lastEdited === 'input' ? String(inputAmount) : undefined,
+			outputAmount: lastEdited === 'output' ? String(outputAmount) : undefined
+		};
+		const current = JSON.stringify({
+			lastEdited,
+			inputAsset: requestParams.inputAsset,
+			outputAsset: requestParams.outputAsset,
+			amount: lastEdited === 'input' ? requestParams.inputAmount : requestParams.outputAmount
+		});
+
+		if (current !== lastSwapInfo) {
+			lastSwapInfo = current;
+			debouncedUpdateOrder($swapSource, lastEdited!, requestParams, pairRoutes, slippage);
+		}
+	} else swapOrder.set(undefined);
 
 	// info
+	let order: Order | undefined;
 	let fee: string | undefined;
 	let price: string | undefined;
 	let minReceived: string | undefined;
-	let source: SwapSource = 'NoPair';
-	let lastMixPayRequestParams: string | undefined;
-	let loadingPreOrder = false;
-	let timer: ReturnType<typeof setInterval>;
-	let debounceTimer: ReturnType<typeof setInterval>;
 
-	const setSwapInfo = (info: { order: Order; fee: string; price: string; minReceived: string }) => {
-		order = info.order;
-		fee = info.fee;
-		price = info.price;
-		minReceived = info.minReceived;
+	$: if ($swapOrder) {
+		order = $swapOrder.order;
+		fee = $swapOrder.fee;
+		price = $swapOrder.price;
+		minReceived = $swapOrder.minReceived;
 
 		if (lastEdited === 'input') {
 			outputAmount = (order.amount && format({ n: order.amount, fixed: true })) || undefined;
 		} else if (lastEdited === 'output') {
 			inputAmount = (order.funds && format({ n: order.funds, fixed: true })) || undefined;
 		}
-	};
-	const updateMixPaySwapInfo = async (requestParams: SwapParams) => {
-		loadingPreOrder = true;
-		const info = await fetchMixPayPreOrder(requestParams, showToast);
-		loadingPreOrder = false;
-
-		if (!info) return false;
-		setSwapInfo(info);
-		return info;
-	};
-
-	const updateSwapInfo = async (
-		inputAsset: Asset,
-		outputAsset: Asset,
-		lastEdited: 'input' | 'output',
-		inputValue?: number,
-		outputValue?: number
-	) => {
-		if (source === 'NoPair') {
-			if (timer) clearInterval(timer);
-			return;
-		}
-		const requestParams = {
-			inputAsset: inputAsset?.asset_id,
-			outputAsset: outputAsset?.asset_id,
-			inputAmount: lastEdited === 'input' ? `${inputValue}` : undefined,
-			outputAmount: lastEdited === 'output' ? `${outputValue}` : undefined
-		};
-
-		if (source === '4Swap') {
-			if (timer) clearInterval(timer);
-			const info = get4SwapSwapInfo(pairRoutes, slippage, requestParams);
-			if (info) setSwapInfo(info);
-		}
-
-		if (source === 'MixPay') {
-			const params = JSON.stringify({
-				lastEdited,
-				inputAsset: requestParams.inputAsset,
-				outputAsset: requestParams.outputAsset,
-				amount: lastEdited === 'input' ? requestParams.inputAmount : requestParams.outputAmount
-			});
-			if (lastMixPayRequestParams && lastMixPayRequestParams === params) return;
-
-			if (timer) clearInterval(timer);
-			lastMixPayRequestParams = params;
-			const flag = await updateMixPaySwapInfo(requestParams);
-			if (flag)
-				timer = setInterval(() => {
-					updateMixPaySwapInfo(requestParams);
-				}, 1000 * 15);
-		}
-	};
-
-	$: if (inputAsset && outputAsset) {
-		source = chooseSwapSource(inputAsset, outputAsset, mixpayPaymentAssets, mixpaySettlementAssets);
-		if (source === 'NoPair') showToast('common', 'No Swap Pair');
+	} else {
+		order = undefined;
+		fee = undefined;
+		price = undefined;
+		minReceived = undefined;
 	}
-	$: if (
-		inputAsset &&
-		outputAsset &&
-		((lastEdited === 'input' && !!inputAmount) || (lastEdited === 'output' && !!outputAmount))
-	) {
-		if (debounceTimer) clearTimeout(debounceTimer);
-		debounceTimer = setTimeout(() => {
-			updateSwapInfo(
-				inputAsset!,
-				outputAsset!,
-				lastEdited!,
-				(inputAmount && Number(inputAmount)) || undefined,
-				(outputAmount && Number(outputAmount)) || undefined
-			);
-		}, 300);
-	} else order = undefined;
 
 	$: inputAmountFiat = formatFiat(inputAsset?.price_usd, (inputAmount && +inputAmount) || 0);
 	$: outputAmountFiat = formatFiat(outputAsset?.price_usd, (outputAmount && +outputAmount) || 0);
 
 	let loading = false;
 	const swap = async () => {
-		if (!$library || !$user || !order || !inputAsset || !minReceived || source === 'NoPair') return;
+		if (!$library || !$user || !order || !inputAsset || !minReceived || $swapSource === 'NoPair')
+			return;
 
 		loading = true;
 
@@ -208,7 +185,7 @@
 
 		try {
 			if (!$user.contract) await registerAndSave($user.address);
-			const res = await swapAsset($library, $user, source, order, inputAsset, minReceived);
+			const res = await swapAsset($library, $user, $swapSource, order, inputAsset, minReceived);
 
 			await updateAssets();
 			inputAsset = getAsset(inputAsset.asset_id, $assets);
