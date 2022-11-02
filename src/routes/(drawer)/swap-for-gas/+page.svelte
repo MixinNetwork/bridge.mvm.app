@@ -7,6 +7,8 @@
 	import { user } from '$lib/stores/user';
 	import Item from '$lib/components/swap-for-gas/item.svelte';
 	import { enhance } from '$app/forms';
+	import { HOST } from '../../../lib/constants/common';
+	import { append } from 'svelte/internal';
 
 	let price: string = $page.data.price;
 	let iconUrl: string = $page.data.iconUrl;
@@ -39,6 +41,12 @@
 			target="_blank"
 			use:enhance={({ data, cancel, action }) => {
 				action.searchParams.append('address', $user.address);
+
+				const callbackUrl = data.get('callbackUrl');
+				callbackUrl &&
+					typeof callbackUrl === 'string' &&
+					action.searchParams.append('callbackUrl', callbackUrl);
+
 				const quantity = data.get('quantity');
 				if (quantity && typeof quantity === 'string') {
 					if (quantity === 'custom') {
@@ -54,6 +62,13 @@
 			class="mt-5 flex w-full flex-col items-center"
 		>
 			<input name="address" class="hidden" value={$user.address} type="checkbox" checked={true} />
+			<input
+				name="callbackUrl"
+				class="hidden"
+				value={`${HOST}swap-for-gas/`}
+				type="checkbox"
+				checked={true}
+			/>
 			<div
 				class="scrollbar-hide flex w-full snap-x scroll-px-6 flex-row space-x-3 overflow-x-auto pb-10 pt-1 pr-6 first:child:pl-6"
 			>
