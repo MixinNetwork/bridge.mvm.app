@@ -22,7 +22,7 @@ const createSwapOrder = () => {
 		if (mixpayOrderInfoUpdateTimer) clearInterval(mixpayOrderInfoUpdateTimer);
 
 		if (source === '4Swap') {
-			const info = get4SwapSwapInfo(pairRoutes!, slippage!, requestParams);
+			const info = get4SwapSwapInfo(pairRoutes, slippage, requestParams);
 			set(info);
 		}
 
