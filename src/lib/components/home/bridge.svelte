@@ -66,9 +66,10 @@
 	let loading = false;
 	const transfer = async () => {
 		if (!amount || !$library || !$user || !$assetWithdrawalFee) return;
-		if (!$user.contract) await registerAndSave($user.address);
 
 		loading = true;
+
+		if (!$user.contract) await registerAndSave($user.address);
 
 		const { deposit, withdraw } = await import('$lib/helpers/web3/common');
 
