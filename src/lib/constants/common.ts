@@ -18,6 +18,7 @@ export const XIN_ASSET_ID = 'c94ac88f-4671-3976-b60a-09064f1811e8';
 export const TRX_ASSET_ID = '25dabac5-056a-48ff-b9f9-f67395dc407c';
 export const EOS_ASSET_ID = '6cfe566e-4aad-470b-8c9a-2fd35b49c68d';
 export const MOB_ASSET_ID = 'eea900a8-b327-488c-8d8d-1428702fe240';
+export const BOX_ASSET_ID = 'f5ef6b5d-cc5a-3d90-b2c0-a2fd386e7a3c';
 
 export const REGISTRY_PID = 'bd67087276ce3263b9333aa337e212a4';
 export const REGISTRY_ADDRESS = '0x3c84B6C98FBeB813e05a7A7813F0442883450B1F';
@@ -45,7 +46,7 @@ export const WHITELIST_ASSET_4SWAP = [
 	XIN_ASSET_ID,
 	EOS_ASSET_ID,
 	MOB_ASSET_ID,
-	'f5ef6b5d-cc5a-3d90-b2c0-a2fd386e7a3c' // BOX
+	BOX_ASSET_ID
 ];
 
 export const WHITELIST_ASSET = [
@@ -57,21 +58,9 @@ export const WHITELIST_ASSET = [
 	{ id: ETH_ASSET_ID, symbol: 'ETH', chain: 'ETH' },
 	{ id: TRX_ASSET_ID, symbol: 'TRX', chain: 'TRX' },
 	{ id: EOS_ASSET_ID, symbol: 'EOS', chain: 'EOS' },
-	{
-		id: 'f5ef6b5d-cc5a-3d90-b2c0-a2fd386e7a3c',
-		symbol: 'BOX',
-		chain: 'ETH'
-	},
-	{
-		id: 'c94ac88f-4671-3976-b60a-09064f1811e8',
-		symbol: 'XIN',
-		chain: 'ETH'
-	},
-	{
-		id: 'eea900a8-b327-488c-8d8d-1428702fe240',
-		symbol: 'MOB',
-		chain: undefined
-	},
+	{ id: BOX_ASSET_ID, symbol: 'BOX', chain: 'ETH' },
+	{ id: XIN_ASSET_ID, symbol: 'XIN', chain: 'ETH' },
+	{ id: MOB_ASSET_ID,  symbol: 'MOB', chain: undefined },
 	{
 		id: '9b180ab6-6abe-3dc0-a13f-04169eb34bfa',
 		symbol: 'USDC',
