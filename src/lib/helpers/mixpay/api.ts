@@ -97,9 +97,9 @@ ins.interceptors.response.use(
 );
 
 export const fetchMixPayPaymentAssets = async () =>
-	ins.get<unknown, MixPayAsset[]>('/setting/payment_assets');
+	(await ins.get('/setting/payment_assets')).data as MixPayAsset[];
 export const fetchMixPaySettlementAssets = async () =>
-	ins.get<unknown, MixPayAsset[]>('/setting/settlement_assets');
+	(await ins.get('/setting/settlement_assets')).data as MixPayAsset[];
 
 export const fetchMixPayPreOrder = async ({
 	inputAsset,
@@ -173,7 +173,9 @@ const fetchMixPaySwapTraceId = async (
 				asset: paymentAssetId,
 				opponent: MIXPAY_BOT_ID,
 				order: 'DESC'
-			});
+				// todo fix type error
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			} as any);
 			const snapshot = snapshotArray.find((snapshot) => {
 				if (snapshot.type !== 'transfer') return false;
 				return (

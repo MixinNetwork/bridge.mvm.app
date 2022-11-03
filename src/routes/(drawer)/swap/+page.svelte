@@ -41,12 +41,7 @@
 	let slippage = DEFAULT_SLIPPAGE;
 
 	$: a && !$assets.length && assets.set(a);
-	$: p &&
-		!$pairs.data.length &&
-		pairs.set({
-			data: p,
-			loading: $pairs.loading
-		});
+	$: p && !$pairs.length && pairs.set(p);
 
 	$: !inputAsset &&
 		(inputAsset =
@@ -57,7 +52,7 @@
 			getAsset($page.url.searchParams.get(OUTPUT_KEY) || XIN_ASSET_ID, $assets) ||
 			getAsset(XIN_ASSET_ID, $assets));
 
-	$: pairRoutes = new PairRoutes($pairs.data);
+	$: pairRoutes = new PairRoutes($pairs);
 
 	let lastEdited: 'input' | 'output' | undefined = undefined;
 	let inputAmount: number | string | undefined = undefined;
@@ -122,7 +117,13 @@
 	);
 
 	$: if (inputAsset && outputAsset) {
-		swapSource.updateSource(inputAsset, outputAsset, mixpayPaymentAssets, mixpaySettlementAssets);
+		swapSource.updateSource(
+			$pairs,
+			inputAsset,
+			outputAsset,
+			mixpayPaymentAssets,
+			mixpaySettlementAssets
+		);
 		if ($swapSource === 'NoPair') showToast('common', 'No Swap Pair');
 	}
 
@@ -348,10 +349,9 @@
 			disabled={!(order && +order.amount) ||
 				order?.priceImpact > 0.15 ||
 				$swapOrder.loading ||
-				$pairs.loading ||
 				!!(inputAmount && inputAsset?.balance && bigGte(inputAmount, inputAsset?.balance))}
 		>
-			{#if loading || $swapOrder.loading || $pairs.loading}
+			{#if loading || $swapOrder.loading}
 				<Spinner class="stroke-white stroke-2 text-center" />
 			{:else}
 				{$LL.swap()}
