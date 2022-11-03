@@ -25,8 +25,6 @@
 	import LL from '$i18n/i18n-svelte';
 	import Apps from '$lib/components/base/apps.svelte';
 	import { swapOrder } from '$lib/stores/swap';
-	import { debounce } from 'lodash-es';
-	import { PairRoutes } from '$lib/helpers/4swap/route';
 
 	let a: Asset[] | undefined = $page.data.assets;
 
