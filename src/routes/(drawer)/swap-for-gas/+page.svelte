@@ -7,7 +7,7 @@
 	import { user } from '$lib/stores/user';
 	import Item from '$lib/components/swap-for-gas/item.svelte';
 	import { enhance } from '$app/forms';
-	import { HOST } from '../../../lib/constants/common';
+	import { browser } from '$app/environment';
 
 	let price: string = $page.data.price;
 	let iconUrl: string = $page.data.iconUrl;
@@ -40,11 +40,7 @@
 			target="_blank"
 			use:enhance={({ data, cancel, action }) => {
 				action.searchParams.append('address', $user.address);
-
-				const callbackUrl = data.get('callbackUrl');
-				callbackUrl &&
-					typeof callbackUrl === 'string' &&
-					action.searchParams.append('callbackUrl', callbackUrl);
+				action.searchParams.append('callbackUrl', window.location.href);
 
 				const quantity = data.get('quantity');
 				if (quantity && typeof quantity === 'string') {
@@ -64,7 +60,7 @@
 			<input
 				name="callbackUrl"
 				class="hidden"
-				value={`${HOST}swap-for-gas/`}
+				value={(browser && window.location.href) || ''}
 				type="checkbox"
 				checked={true}
 			/>
