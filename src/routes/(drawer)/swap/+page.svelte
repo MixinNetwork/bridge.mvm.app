@@ -25,6 +25,7 @@
 	import LL from '$i18n/i18n-svelte';
 	import Apps from '$lib/components/base/apps.svelte';
 	import { swapOrder } from '$lib/stores/swap';
+	import { tick } from 'svelte';
 
 	let a: Asset[] | undefined = $page.data.assets;
 
@@ -93,6 +94,7 @@
 	) => {
 		try {
 			const { source } = $swapOrder;
+			await tick()
 			await swapOrder.fetchOrderInfo($pairs, source, lastEdited, requestParams, slippage);
 		} catch (e) {
 			showToast('common', e as string);
