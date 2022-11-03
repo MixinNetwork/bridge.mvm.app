@@ -9,8 +9,6 @@ import { WHITELIST_ASSET_4SWAP } from '$lib/constants/common';
 import { isEqual } from 'lodash-es';
 
 const createSwapOrder = () => {
-	const { subscribe, set } = writable<PreOrderInfo | undefined>(undefined);
-
 	let mixpayOrderInfoUpdateTimer: ReturnType<typeof setInterval>;
 	let lastParams: {
 		lastEdited: 'input' | 'output';
@@ -18,6 +16,10 @@ const createSwapOrder = () => {
 		outputAsset: string | undefined;
 		amount: string | undefined;
 	};
+
+	const { subscribe, set } = writable<PreOrderInfo | undefined>(undefined, () => {
+		if (mixpayOrderInfoUpdateTimer) clearInterval(mixpayOrderInfoUpdateTimer);
+	});
 
 	const updateSwapInfo = async (
 		source: SwapSource,
