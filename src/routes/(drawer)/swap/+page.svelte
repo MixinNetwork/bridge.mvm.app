@@ -113,7 +113,9 @@
 			outputAmount: lastEdited === 'output' ? String(outputAmount) : undefined
 		};
 		updateOrder(lastEdited, requestParams, slippage);
-	} else {
+	} 
+
+	$: if(!inputAmount && !outputAmount) {
 		swapOrder.reset();
 	}
 
@@ -134,7 +136,9 @@
 		} else if (lastEdited === 'output') {
 			inputAmount = (order.funds && format({ n: order.funds, fixed: true })) || undefined;
 		}
-	} else {
+	} 
+
+	$: if(!$swapOrder?.order) {
 		order = undefined;
 		fee = undefined;
 		price = undefined;
