@@ -94,7 +94,7 @@
 	) => {
 		try {
 			const { source } = $swapOrder;
-			await tick()
+			await tick();
 			await swapOrder.fetchOrderInfo($pairs, source, lastEdited, requestParams, slippage);
 		} catch (e) {
 			showToast('common', e as string);
