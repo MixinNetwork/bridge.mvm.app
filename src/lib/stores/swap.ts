@@ -1,4 +1,4 @@
-import { writable } from '@square/svelte-store';
+import { get, writable } from '@square/svelte-store';
 import type { SwapSource, SwapParams, PreOrderInfo } from '$lib/types/swap';
 import { fetchPairs, type Pair } from '../helpers/4swap/api';
 import { get4SwapSwapInfo } from '$lib/helpers/4swap/utils';
@@ -68,6 +68,7 @@ const createSwapOrder = () => {
 			requestParams: SwapParams,
 			slippage: number
 		) => {
+			if (!$pairs.length) $pairs = get(pairs);
 			const order4Swap = get4SwapSwapInfo($pairs, slippage, requestParams);
 
 			const orderMixPay =
