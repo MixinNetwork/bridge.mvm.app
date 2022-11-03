@@ -12,7 +12,7 @@ export const load: PageLoad = async ({ parent }) => {
 	const cachePairs = get(pairs);
 	const [a, p, paymentAssets, settlementAssets] = await Promise.all([
 		(cacheAssets.length && cacheAssets) || fetchAssets(user),
-		(cachePairs.length && cachePairs) || fetchPairs(),
+		(cachePairs.data.length && cachePairs) || fetchPairs(),
 		fetchMixPayPaymentAssets(),
 		fetchMixPaySettlementAssets()
 	]);

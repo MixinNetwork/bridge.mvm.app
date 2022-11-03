@@ -41,7 +41,10 @@
 	let slippage = DEFAULT_SLIPPAGE;
 
 	$: a && !$assets.length && assets.set(a);
-	$: p && !$pairs.length && pairs.set(p);
+	$: p && !$pairs.data.length && pairs.set({
+		data: p,
+		loading: $pairs.loading
+	});
 
 	$: !inputAsset &&
 		(inputAsset =
@@ -52,7 +55,7 @@
 			getAsset($page.url.searchParams.get(OUTPUT_KEY) || XIN_ASSET_ID, $assets) ||
 			getAsset(XIN_ASSET_ID, $assets));
 
-	$: pairRoutes = new PairRoutes($pairs);
+	$: pairRoutes = new PairRoutes($pairs.data);
 
 	let lastEdited: 'input' | 'output' | undefined = undefined;
 	let inputAmount: number | string | undefined = undefined;
@@ -343,9 +346,10 @@
 			disabled={!(order && +order.amount) ||
 				order?.priceImpact > 0.15 ||
 				$swapOrder.loading ||
+				$pairs.loading ||
 				!!(inputAmount && inputAsset?.balance && bigGte(inputAmount, inputAsset?.balance))}
 		>
-			{#if loading || $swapOrder.loading}
+			{#if loading || $swapOrder.loading || $pairs.loading}
 				<Spinner class="stroke-white stroke-2 text-center" />
 			{:else}
 				{$LL.swap()}
