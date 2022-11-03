@@ -176,8 +176,8 @@ const createSwapOrder = () => {
 				...emptyOrder,
 				loading: false,
 				source: 'NoPair'
-			})
-			updateTimer && clearInterval(updateTimer)
+			});
+			updateTimer && clearInterval(updateTimer);
 		}
 	};
 };
