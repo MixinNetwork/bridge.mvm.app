@@ -36,8 +36,6 @@ export const ETHER_SCAN_URL = 'https://etherscan.io/';
 export const MVM_RPC_URL = 'https://geth.mvm.dev/';
 export const MVM_SCAN_URL = 'https://scan.mvm.dev/';
 
-export const HOST = import.meta.env.VITE_HOST;
-
 export const EMPTY_ADDRESS = '0x0000000000000000000000000000000000000000';
 
 export const MAINNET_CHAIN_ID = 1;
