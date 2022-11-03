@@ -86,7 +86,11 @@
 		if (source === 'output' && !outputAmount) inputAmount = '';
 	};
 
-	const updateOrder = async (lastEdited: 'input' | 'output', requestParams: SwapParams, slippage: number) => {
+	const updateOrder = async (
+		lastEdited: 'input' | 'output',
+		requestParams: SwapParams,
+		slippage: number
+	) => {
 		try {
 			const { source } = $swapOrder;
 			await swapOrder.fetchOrderInfo($pairs, source, lastEdited, requestParams, slippage);

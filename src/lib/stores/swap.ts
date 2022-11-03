@@ -55,66 +55,73 @@ const createSwapOrder = () => {
 			fetchPairs(),
 			fetchMixPayPaymentAssets(),
 			fetchMixPaySettlementAssets()
-		])
+		]);
 		mixPayPaymentAssets = payment;
 		mixPaySettlementAssets = settment;
 		pairs.set(p);
 	};
 
-	const debouncedUpdate = debounce(async (
-		$pairs: Pair[],
-		lastEdited: 'input' | 'output',
-		requestParams: SwapParams,
-		slippage: number) => {
-		const order4Swap = get4SwapSwapInfo($pairs, slippage, requestParams);
+	const debouncedUpdate = debounce(
+		async (
+			$pairs: Pair[],
+			lastEdited: 'input' | 'output',
+			requestParams: SwapParams,
+			slippage: number
+		) => {
+			const order4Swap = get4SwapSwapInfo($pairs, slippage, requestParams);
 
-		const orderMixPay =
-			mixPayPaymentAssets.some((asset) => asset.assetId === requestParams.inputAsset) &&
-			mixPaySettlementAssets.some((asset) => asset.assetId === requestParams.outputAsset)
-				? await fetchMixPayPreOrder(requestParams)
-				: { ...emptyOrder };
+			const orderMixPay =
+				mixPayPaymentAssets.some((asset) => asset.assetId === requestParams.inputAsset) &&
+				mixPaySettlementAssets.some((asset) => asset.assetId === requestParams.outputAsset)
+					? await fetchMixPayPreOrder(requestParams)
+					: { ...emptyOrder };
 
-		if (!order4Swap.order && !orderMixPay.order) {
-			set({
-				...emptyOrder,
-				loading: false,
-				source: 'NoPair'
-			});
-			throw new Error('No Swap Pair');
-		}
-
-		let source: SwapSource = '4Swap';
-
-		if ((!!order4Swap.order || !!orderMixPay.order) && !!order4Swap.order !== !!orderMixPay.order) {
-			source = order4Swap.order ? '4Swap' : 'MixPay';
-		}
-
-		if (!!order4Swap.order && !!orderMixPay.order) {
-			if (lastEdited === 'input') {
-				source = order4Swap.order.amount > orderMixPay.order.amount ? '4Swap' : 'MixPay';
-			} else {
-				source = order4Swap.order.funds < orderMixPay.order.funds ? '4Swap' : 'MixPay';
-			}
-		}
-
-		const order = source === '4Swap' ? order4Swap : orderMixPay;
-		set({
-			...order,
-			loading: false,
-			source
-		});
-
-		if (source === 'MixPay')
-			updateTimer = setInterval(async () => {
-				modifyLoadingStatus(true);
-				const res = await fetchMixPayPreOrder(requestParams);
+			if (!order4Swap.order && !orderMixPay.order) {
 				set({
-					...res,
+					...emptyOrder,
 					loading: false,
-					source: 'MixPay'
+					source: 'NoPair'
 				});
-			}, 1000 * 15);
-	}, 300)
+				throw new Error('No Swap Pair');
+			}
+
+			let source: SwapSource = '4Swap';
+
+			if (
+				(!!order4Swap.order || !!orderMixPay.order) &&
+				!!order4Swap.order !== !!orderMixPay.order
+			) {
+				source = order4Swap.order ? '4Swap' : 'MixPay';
+			}
+
+			if (!!order4Swap.order && !!orderMixPay.order) {
+				if (lastEdited === 'input') {
+					source = order4Swap.order.amount > orderMixPay.order.amount ? '4Swap' : 'MixPay';
+				} else {
+					source = order4Swap.order.funds < orderMixPay.order.funds ? '4Swap' : 'MixPay';
+				}
+			}
+
+			const order = source === '4Swap' ? order4Swap : orderMixPay;
+			set({
+				...order,
+				loading: false,
+				source
+			});
+
+			if (source === 'MixPay')
+				updateTimer = setInterval(async () => {
+					modifyLoadingStatus(true);
+					const res = await fetchMixPayPreOrder(requestParams);
+					set({
+						...res,
+						loading: false,
+						source: 'MixPay'
+					});
+				}, 1000 * 15);
+		},
+		300
+	);
 
 	const updateSwapInfo = async (
 		$pairs: Pair[],
