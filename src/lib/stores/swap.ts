@@ -24,7 +24,7 @@ const createSwapOrder = () => {
 		amount: string | undefined;
 	};
 
-	const { subscribe, update } = writable<PreOrderInfo & { loading: boolean }>({
+	const { subscribe, update, set } = writable<PreOrderInfo & { loading: boolean }>({
 		...emptyOrder,
 		loading: false
 	}, () => {
@@ -81,10 +81,10 @@ const createSwapOrder = () => {
 					loading: true
 				}))
 				const res = await fetchMixPayPreOrder(requestParams);
-				update(info => ({
+				set({
 					...res,
 					loading: false
-				}))
+				})
 			}, 1000 * 15);
 		}
 	};
@@ -127,15 +127,11 @@ const createSource = () => {
 		if (
 			(WHITELIST_ASSET_4SWAP.includes(inputAsset.asset_id) ||
 				WHITELIST_ASSET_4SWAP.includes(outputAsset.asset_id)) &&
-			($pairs.some(
+			($pairs.data.some(
 				(pair) =>
-					pair.base_asset_id === outputAsset.asset_id && pair.quote_asset_id === inputAsset.asset_id
-			) ||
-				$pairs.some(
-					(pair) =>
-						pair.base_asset_id === inputAsset.asset_id &&
-						pair.quote_asset_id === outputAsset.asset_id
-				))
+					pair.base_asset_id === outputAsset.asset_id && pair.quote_asset_id === inputAsset.asset_id ||
+					pair.base_asset_id === inputAsset.asset_id && pair.quote_asset_id === outputAsset.asset_id
+			))
 		)
 			return '4Swap';
 
@@ -148,12 +144,9 @@ const createSource = () => {
 			return 'MixPay';
 
 		if (
-			$pairs.some(
+			$pairs.data.some(
 				(pair) =>
-					pair.base_asset_id === outputAsset.asset_id && pair.quote_asset_id === inputAsset.asset_id
-			) ||
-			$pairs.some(
-				(pair) =>
+					pair.base_asset_id === outputAsset.asset_id && pair.quote_asset_id === inputAsset.asset_id || 
 					pair.base_asset_id === inputAsset.asset_id && pair.quote_asset_id === outputAsset.asset_id
 			)
 		)
