@@ -114,7 +114,7 @@
 		};
 		updateOrder(lastEdited, requestParams, slippage);
 	} else {
-		swapOrder.resetTimer();
+		swapOrder.reset();
 	}
 
 	// info
@@ -176,8 +176,7 @@
 
 			if (res) showToast('success', 'Successful');
 
-			inputAmount = undefined;
-			outputAmount = undefined;
+			swapOrder.reset();
 		} finally {
 			loading = false;
 		}

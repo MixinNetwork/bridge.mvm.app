@@ -171,7 +171,14 @@ const createSwapOrder = () => {
 	return {
 		subscribe,
 		fetchOrderInfo: updateSwapInfo,
-		resetTimer: () => updateTimer && clearInterval(updateTimer)
+		reset: () => {
+			set({
+				...emptyOrder,
+				loading: false,
+				source: 'NoPair'
+			})
+			updateTimer && clearInterval(updateTimer)
+		}
 	};
 };
 
