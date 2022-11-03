@@ -88,19 +88,16 @@
 		if (source === 'output' && !outputAmount) inputAmount = '';
 	};
 
-	const debouncedUpdateOrder = debounce(
-		async (lastEdited: 'input' | 'output', requestParams: SwapParams, slippage: number) => {
-			try {
-				const { source } = $swapOrder;
-				await swapOrder.fetchOrderInfo($pairs, source, lastEdited, requestParams, slippage);
-			} catch (e) {
-				showToast('common', e as string);
-				if (lastEdited === 'input') outputAmount = undefined;
-				if (lastEdited === 'output') inputAmount = undefined;
-			}
-		},
-		400
-	);
+	const updateOrder = async (lastEdited: 'input' | 'output', requestParams: SwapParams, slippage: number) => {
+		try {
+			const { source } = $swapOrder;
+			await swapOrder.fetchOrderInfo($pairs, source, lastEdited, requestParams, slippage);
+		} catch (e) {
+			showToast('common', e as string);
+			if (lastEdited === 'input') outputAmount = undefined;
+			if (lastEdited === 'output') inputAmount = undefined;
+		}
+	};
 
 	$: if (
 		inputAsset &&
@@ -113,7 +110,7 @@
 			inputAmount: lastEdited === 'input' ? String(inputAmount) : undefined,
 			outputAmount: lastEdited === 'output' ? String(outputAmount) : undefined
 		};
-		debouncedUpdateOrder(lastEdited, requestParams, slippage);
+		updateOrder(lastEdited, requestParams, slippage);
 	}
 
 	// info

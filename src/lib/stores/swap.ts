@@ -8,7 +8,7 @@ import {
 	fetchMixPaySettlementAssets,
 	type MixPayAsset
 } from '$lib/helpers/mixpay/api';
-import { isEqual } from 'lodash-es';
+import { debounce, isEqual } from 'lodash-es';
 import { pairs } from './model';
 
 const emptyOrder: PreOrderInfo = {
@@ -61,48 +61,11 @@ const createSwapOrder = () => {
 		pairs.set(p);
 	};
 
-	const updateSwapInfo = async (
+	const debouncedUpdate = debounce(async (
 		$pairs: Pair[],
-		lastSource: SwapSource,
 		lastEdited: 'input' | 'output',
 		requestParams: SwapParams,
-		slippage: number
-	) => {
-		console.log(lastSource);
-		const current = {
-			lastEdited,
-			inputAsset: requestParams.inputAsset,
-			outputAsset: requestParams.outputAsset,
-			amount: lastEdited === 'input' ? requestParams.inputAmount : requestParams.outputAmount
-		};
-		if (lastSource === 'MixPay') {
-			console.log(current, lastParams, isEqual(current, lastParams));
-			if (isEqual(current, lastParams)) return;
-		}
-		lastParams = current;
-
-		if (updateTimer) clearInterval(updateTimer);
-
-		if (
-			!!$pairs.length &&
-			!!mixPayPaymentAssets.length &&
-			!!mixPaySettlementAssets.length &&
-			(mixPayPaymentAssets.every((asset) => asset.assetId !== requestParams.inputAsset) ||
-				mixPaySettlementAssets.every((asset) => asset.assetId !== requestParams.outputAsset))
-		) {
-			const order4Swap = get4SwapSwapInfo($pairs, slippage, requestParams);
-			set({
-				...order4Swap,
-				loading: false,
-				source: '4Swap'
-			});
-			return;
-		}
-
-		modifyLoadingStatus(true);
-		if (!$pairs.length || !mixPayPaymentAssets.length || !mixPaySettlementAssets.length)
-			await init();
-
+		slippage: number) => {
 		const order4Swap = get4SwapSwapInfo($pairs, slippage, requestParams);
 
 		const orderMixPay =
@@ -152,6 +115,52 @@ const createSwapOrder = () => {
 					source: 'MixPay'
 				});
 			}, 1000 * 15);
+	}, 300)
+
+	const updateSwapInfo = async (
+		$pairs: Pair[],
+		lastSource: SwapSource,
+		lastEdited: 'input' | 'output',
+		requestParams: SwapParams,
+		slippage: number
+	) => {
+		// Avoid keep sending requests due to update the other amount the last time
+		const current = {
+			lastEdited,
+			inputAsset: requestParams.inputAsset,
+			outputAsset: requestParams.outputAsset,
+			amount: lastEdited === 'input' ? requestParams.inputAmount : requestParams.outputAmount
+		};
+		if (lastSource === 'MixPay') {
+			console.log(current, lastParams, isEqual(current, lastParams));
+			if (isEqual(current, lastParams)) return;
+		}
+		lastParams = current;
+
+		if (updateTimer) clearInterval(updateTimer);
+
+		// directly use 4Swap
+		if (
+			!!$pairs.length &&
+			!!mixPayPaymentAssets.length &&
+			!!mixPaySettlementAssets.length &&
+			(mixPayPaymentAssets.every((asset) => asset.assetId !== requestParams.inputAsset) ||
+				mixPaySettlementAssets.every((asset) => asset.assetId !== requestParams.outputAsset))
+		) {
+			const order4Swap = get4SwapSwapInfo($pairs, slippage, requestParams);
+			set({
+				...order4Swap,
+				loading: false,
+				source: '4Swap'
+			});
+			return;
+		}
+
+		modifyLoadingStatus(true);
+		if (!$pairs.length || !mixPayPaymentAssets.length || !mixPaySettlementAssets.length)
+			await init();
+
+		debouncedUpdate($pairs, lastEdited, requestParams, slippage);
 	};
 
 	return {
