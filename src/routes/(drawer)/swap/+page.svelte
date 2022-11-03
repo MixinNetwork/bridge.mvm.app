@@ -155,6 +155,7 @@
 			!$user ||
 			!order ||
 			!inputAsset ||
+			!outputAsset ||
 			!minReceived ||
 			$swapOrder.source === 'NoPair'
 		)
@@ -177,6 +178,7 @@
 
 			await updateAssets();
 			inputAsset = getAsset(inputAsset.asset_id, $assets);
+			outputAsset = getAsset(outputAsset.asset_id, $assets);
 
 			if (res) showToast('success', 'Successful');
 
