@@ -106,7 +106,6 @@ const createSwapOrder = () => {
 
 		if (source === 'MixPay')
 			updateTimer = setInterval(async () => {
-				console.log('interval');
 				modifyLoadingStatus(true);
 				const res = await fetchMixPayPreOrder(requestParams);
 				set({
@@ -132,7 +131,6 @@ const createSwapOrder = () => {
 			amount: lastEdited === 'input' ? requestParams.inputAmount : requestParams.outputAmount
 		};
 		if (lastSource === 'MixPay') {
-			console.log(current, lastParams, isEqual(current, lastParams));
 			if (isEqual(current, lastParams)) return;
 		}
 		lastParams = current;
