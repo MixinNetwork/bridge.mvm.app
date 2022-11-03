@@ -111,6 +111,8 @@
 			outputAmount: lastEdited === 'output' ? String(outputAmount) : undefined
 		};
 		updateOrder(lastEdited, requestParams, slippage);
+	} else {
+		swapOrder.resetTimer();
 	}
 
 	// info

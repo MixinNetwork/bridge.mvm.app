@@ -165,7 +165,8 @@ const createSwapOrder = () => {
 
 	return {
 		subscribe,
-		fetchOrderInfo: updateSwapInfo
+		fetchOrderInfo: updateSwapInfo,
+		resetTimer: () => updateTimer && clearInterval(updateTimer)
 	};
 };
 
