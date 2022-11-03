@@ -18,12 +18,9 @@ export const chooseSwapSource = (
 			WHITELIST_ASSET_4SWAP.includes(outputAsset.asset_id)) &&
 		($pairs.some(
 			(pair) =>
-				pair.base_asset_id === outputAsset.asset_id && pair.quote_asset_id === inputAsset.asset_id
-		) ||
-			$pairs.some(
-				(pair) =>
-					pair.base_asset_id === inputAsset.asset_id && pair.quote_asset_id === outputAsset.asset_id
-			))
+				pair.base_asset_id === outputAsset.asset_id && pair.quote_asset_id === inputAsset.asset_id ||
+				pair.base_asset_id === inputAsset.asset_id && pair.quote_asset_id === outputAsset.asset_id
+		))
 	)
 		return '4Swap';
 
@@ -35,16 +32,11 @@ export const chooseSwapSource = (
 	)
 		return 'MixPay';
 
-	if (
-		$pairs.some(
+	if ($pairs.some(
 			(pair) =>
-				pair.base_asset_id === outputAsset.asset_id && pair.quote_asset_id === inputAsset.asset_id
-		) ||
-		$pairs.some(
-			(pair) =>
+				pair.base_asset_id === outputAsset.asset_id && pair.quote_asset_id === inputAsset.asset_id ||
 				pair.base_asset_id === inputAsset.asset_id && pair.quote_asset_id === outputAsset.asset_id
-		)
-	)
+	) )
 		return '4Swap';
 
 	return 'NoPair';

@@ -35,12 +35,12 @@ const createSwapOrder = () => {
 		if (isEqual(current, lastParams)) return;
 		lastParams = current;
 
+		if (mixpayOrderInfoUpdateTimer) clearInterval(mixpayOrderInfoUpdateTimer);
+
 		if (source === 'NoPair') {
 			set(undefined);
 			return;
 		}
-
-		if (mixpayOrderInfoUpdateTimer) clearInterval(mixpayOrderInfoUpdateTimer);
 
 		if (source === '4Swap') {
 			const info = get4SwapSwapInfo(pairRoutes, slippage, requestParams);
