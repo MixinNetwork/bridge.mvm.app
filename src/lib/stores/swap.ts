@@ -1,12 +1,15 @@
 import { writable } from '@square/svelte-store';
-import type { PairRoutes } from '$lib/helpers/4swap/route';
 import type { SwapSource, SwapParams, PreOrderInfo } from '$lib/types/swap';
-import type { Asset } from '$lib/types/asset';
+import { fetchPairs, type Pair } from '../helpers/4swap/api';
 import { get4SwapSwapInfo } from '$lib/helpers/4swap/utils';
-import { fetchMixPayPreOrder, type MixPayAsset } from '$lib/helpers/mixpay/api';
-import { WHITELIST_ASSET_4SWAP } from '$lib/constants/common';
+import {
+	fetchMixPayPaymentAssets,
+	fetchMixPayPreOrder,
+	fetchMixPaySettlementAssets,
+	type MixPayAsset
+} from '$lib/helpers/mixpay/api';
 import { isEqual } from 'lodash-es';
-import type { Pair } from '../helpers/4swap/api';
+import { pairs } from './model';
 
 const emptyOrder: PreOrderInfo = {
 	order: undefined,
@@ -16,82 +19,139 @@ const emptyOrder: PreOrderInfo = {
 };
 
 const createSwapOrder = () => {
-	let mixpayOrderInfoUpdateTimer: ReturnType<typeof setInterval>;
+	let updateTimer: ReturnType<typeof setInterval>;
 	let lastParams: {
 		lastEdited: 'input' | 'output';
 		inputAsset: string;
 		outputAsset: string | undefined;
 		amount: string | undefined;
 	};
+	let mixPayPaymentAssets: MixPayAsset[] = [];
+	let mixPaySettlementAssets: MixPayAsset[] = [];
 
-	const { subscribe, update, set } = writable<PreOrderInfo & { loading: boolean }>(
+	const { subscribe, update, set } = writable<
+		PreOrderInfo & {
+			loading: boolean;
+			source: SwapSource;
+		}
+	>(
 		{
 			...emptyOrder,
-			loading: false
+			loading: false,
+			source: 'NoPair'
 		},
-		() => () => mixpayOrderInfoUpdateTimer && clearInterval(mixpayOrderInfoUpdateTimer)
+		() => () => updateTimer && clearInterval(updateTimer)
 	);
 
+	const modifyLoadingStatus = (loading: boolean) => {
+		update((info) => ({
+			...info,
+			loading
+		}));
+	};
+
+	const init = async () => {
+		const [p, payment, settment] = await Promise.all([
+			fetchPairs(),
+			fetchMixPayPaymentAssets(),
+			fetchMixPaySettlementAssets()
+		])
+		mixPayPaymentAssets = payment;
+		mixPaySettlementAssets = settment;
+		pairs.set(p);
+	};
+
 	const updateSwapInfo = async (
-		source: SwapSource,
+		$pairs: Pair[],
+		lastSource: SwapSource,
 		lastEdited: 'input' | 'output',
 		requestParams: SwapParams,
-		pairRoutes: PairRoutes,
 		slippage: number
 	) => {
+		console.log(lastSource);
 		const current = {
 			lastEdited,
 			inputAsset: requestParams.inputAsset,
 			outputAsset: requestParams.outputAsset,
 			amount: lastEdited === 'input' ? requestParams.inputAmount : requestParams.outputAmount
 		};
-		if (isEqual(current, lastParams)) return;
+		if (lastSource === 'MixPay') {
+			console.log(current, lastParams, isEqual(current, lastParams));
+			if (isEqual(current, lastParams)) return;
+		}
 		lastParams = current;
 
-		if (mixpayOrderInfoUpdateTimer) clearInterval(mixpayOrderInfoUpdateTimer);
+		if (updateTimer) clearInterval(updateTimer);
 
-		if (source === 'NoPair') {
-			update((info) => ({
+		if (
+			!!$pairs.length &&
+			!!mixPayPaymentAssets.length &&
+			!!mixPaySettlementAssets.length &&
+			(mixPayPaymentAssets.every((asset) => asset.assetId !== requestParams.inputAsset) ||
+				mixPaySettlementAssets.every((asset) => asset.assetId !== requestParams.outputAsset))
+		) {
+			const order4Swap = get4SwapSwapInfo($pairs, slippage, requestParams);
+			set({
+				...order4Swap,
+				loading: false,
+				source: '4Swap'
+			});
+			return;
+		}
+
+		modifyLoadingStatus(true);
+		if (!$pairs.length || !mixPayPaymentAssets.length || !mixPaySettlementAssets.length)
+			await init();
+
+		const order4Swap = get4SwapSwapInfo($pairs, slippage, requestParams);
+
+		const orderMixPay =
+			mixPayPaymentAssets.some((asset) => asset.assetId === requestParams.inputAsset) &&
+			mixPaySettlementAssets.some((asset) => asset.assetId === requestParams.outputAsset)
+				? await fetchMixPayPreOrder(requestParams)
+				: { ...emptyOrder };
+
+		if (!order4Swap.order && !orderMixPay.order) {
+			set({
 				...emptyOrder,
-				loading: info.loading
-			}));
-			return;
+				loading: false,
+				source: 'NoPair'
+			});
+			throw new Error('No Swap Pair');
 		}
 
-		if (source === '4Swap') {
-			const res = get4SwapSwapInfo(pairRoutes, slippage, requestParams);
-			update((info) => ({
-				...res,
-				loading: info.loading
-			}));
-			return;
+		let source: SwapSource = '4Swap';
+
+		if ((!!order4Swap.order || !!orderMixPay.order) && !!order4Swap.order !== !!orderMixPay.order) {
+			source = order4Swap.order ? '4Swap' : 'MixPay';
 		}
 
-		update((info) => ({
-			...info,
-			loading: true
-		}));
-		const res = await fetchMixPayPreOrder(requestParams);
-		update(() => ({
-			...res,
-			loading: false
-		}));
+		if (!!order4Swap.order && !!orderMixPay.order) {
+			if (lastEdited === 'input') {
+				source = order4Swap.order.amount > orderMixPay.order.amount ? '4Swap' : 'MixPay';
+			} else {
+				source = order4Swap.order.funds < orderMixPay.order.funds ? '4Swap' : 'MixPay';
+			}
+		}
 
-		if (res.errorMessage) throw new Error(res.errorMessage);
+		const order = source === '4Swap' ? order4Swap : orderMixPay;
+		set({
+			...order,
+			loading: false,
+			source
+		});
 
-		if (res.order) {
-			mixpayOrderInfoUpdateTimer = setInterval(async () => {
-				update((info) => ({
-					...info,
-					loading: true
-				}));
+		if (source === 'MixPay')
+			updateTimer = setInterval(async () => {
+				console.log('interval');
+				modifyLoadingStatus(true);
 				const res = await fetchMixPayPreOrder(requestParams);
 				set({
 					...res,
-					loading: false
+					loading: false,
+					source: 'MixPay'
 				});
 			}, 1000 * 15);
-		}
 	};
 
 	return {
@@ -101,59 +161,3 @@ const createSwapOrder = () => {
 };
 
 export const swapOrder = createSwapOrder();
-
-const createSource = () => {
-	const { subscribe, set } = writable<SwapSource>('NoPair');
-
-	const chooseSwapSource = (
-		pairs: Pair[],
-		inputAsset: Asset,
-		outputAsset: Asset,
-		mixPayPaymentAssets: MixPayAsset[] | undefined,
-		mixPaySettlementAssets: MixPayAsset[] | undefined
-	): SwapSource => {
-		if (
-			(WHITELIST_ASSET_4SWAP.includes(inputAsset.asset_id) ||
-				WHITELIST_ASSET_4SWAP.includes(outputAsset.asset_id)) &&
-			pairs.some(
-				(pair) =>
-					(pair.base_asset_id === outputAsset.asset_id &&
-						pair.quote_asset_id === inputAsset.asset_id) ||
-					(pair.base_asset_id === inputAsset.asset_id &&
-						pair.quote_asset_id === outputAsset.asset_id)
-			)
-		)
-			return '4Swap';
-
-		if (
-			mixPayPaymentAssets &&
-			mixPaySettlementAssets &&
-			mixPayPaymentAssets.some((asset) => asset.assetId === inputAsset.asset_id) &&
-			mixPaySettlementAssets.some((asset) => asset.assetId === outputAsset.asset_id)
-		)
-			return 'MixPay';
-
-		if (
-			pairs.some(
-				(pair) =>
-					(pair.base_asset_id === outputAsset.asset_id &&
-						pair.quote_asset_id === inputAsset.asset_id) ||
-					(pair.base_asset_id === inputAsset.asset_id &&
-						pair.quote_asset_id === outputAsset.asset_id)
-			)
-		)
-			return '4Swap';
-
-		return 'NoPair';
-	};
-
-	return {
-		subscribe,
-		updateSource: (...parameters: Parameters<typeof chooseSwapSource>) => {
-			const source = chooseSwapSource(...parameters);
-			set(source);
-		}
-	};
-};
-
-export const swapSource = createSource();

@@ -4,15 +4,11 @@
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import Switch from '$lib/assets/switch.svg?component';
-	import { PairRoutes } from '$lib/helpers/4swap/route';
 	import type { Order, SwapParams } from '$lib/types/swap';
 	import { setSearchParam } from '$lib/helpers/app-store';
 	import { assets, pairs, updateAssets } from '$lib/stores/model';
 	import { getAsset } from '$lib/helpers/utils';
 	import type { Asset } from '$lib/types/asset';
-	import type { SwapSource } from '$lib/types/swap';
-	import type { MixPayAsset } from '$lib/helpers/mixpay/api';
-	import type { Pair } from '$lib/helpers/4swap/api';
 	import Header from '$lib/components/base/header.svelte';
 	import UserInfo from '$lib/components/base/user-info.svelte';
 	import { bigLte, bigGte, format, toPercent } from '$lib/helpers/big';
@@ -28,20 +24,17 @@
 	import { focus } from 'focus-svelte';
 	import LL from '$i18n/i18n-svelte';
 	import Apps from '$lib/components/base/apps.svelte';
-	import { swapOrder, swapSource } from '$lib/stores/swap';
+	import { swapOrder } from '$lib/stores/swap';
 	import { debounce } from 'lodash-es';
+	import { PairRoutes } from '$lib/helpers/4swap/route';
 
 	let a: Asset[] | undefined = $page.data.assets;
-	let p: Pair[] | undefined = $page.data.pairs;
-	let mixpayPaymentAssets: MixPayAsset[] | undefined = $page.data.paymentAssets;
-	let mixpaySettlementAssets: MixPayAsset[] | undefined = $page.data.settlementAssets;
 
 	let inputAsset: Asset | undefined = undefined;
 	let outputAsset: Asset | undefined = undefined;
 	let slippage = DEFAULT_SLIPPAGE;
 
 	$: a && !$assets.length && assets.set(a);
-	$: p && !$pairs.length && pairs.set(p);
 
 	$: !inputAsset &&
 		(inputAsset =
@@ -51,8 +44,6 @@
 		(outputAsset =
 			getAsset($page.url.searchParams.get(OUTPUT_KEY) || XIN_ASSET_ID, $assets) ||
 			getAsset(XIN_ASSET_ID, $assets));
-
-	$: pairRoutes = new PairRoutes($pairs);
 
 	let lastEdited: 'input' | 'output' | undefined = undefined;
 	let inputAmount: number | string | undefined = undefined;
@@ -98,15 +89,10 @@
 	};
 
 	const debouncedUpdateOrder = debounce(
-		async (
-			source: SwapSource,
-			lastEdited: 'input' | 'output',
-			requestParams: SwapParams,
-			pairRoutes: PairRoutes,
-			slippage: number
-		) => {
+		async (lastEdited: 'input' | 'output', requestParams: SwapParams, slippage: number) => {
 			try {
-				await swapOrder.fetchOrderInfo(source, lastEdited, requestParams, pairRoutes, slippage);
+				const { source } = $swapOrder;
+				await swapOrder.fetchOrderInfo($pairs, source, lastEdited, requestParams, slippage);
 			} catch (e) {
 				showToast('common', e as string);
 				if (lastEdited === 'input') outputAmount = undefined;
@@ -115,17 +101,6 @@
 		},
 		400
 	);
-
-	$: if (inputAsset && outputAsset) {
-		swapSource.updateSource(
-			$pairs,
-			inputAsset,
-			outputAsset,
-			mixpayPaymentAssets,
-			mixpaySettlementAssets
-		);
-		if ($swapSource === 'NoPair') showToast('common', 'No Swap Pair');
-	}
 
 	$: if (
 		inputAsset &&
@@ -138,7 +113,7 @@
 			inputAmount: lastEdited === 'input' ? String(inputAmount) : undefined,
 			outputAmount: lastEdited === 'output' ? String(outputAmount) : undefined
 		};
-		debouncedUpdateOrder($swapSource, lastEdited, requestParams, pairRoutes, slippage);
+		debouncedUpdateOrder(lastEdited, requestParams, slippage);
 	}
 
 	// info
@@ -170,7 +145,14 @@
 
 	let loading = false;
 	const swap = async () => {
-		if (!$library || !$user || !order || !inputAsset || !minReceived || $swapSource === 'NoPair')
+		if (
+			!$library ||
+			!$user ||
+			!order ||
+			!inputAsset ||
+			!minReceived ||
+			$swapOrder.source === 'NoPair'
+		)
 			return;
 
 		loading = true;
@@ -179,7 +161,14 @@
 
 		try {
 			if (!$user.contract) await registerAndSave($user.address);
-			const res = await swapAsset($library, $user, $swapSource, order, inputAsset, minReceived);
+			const res = await swapAsset(
+				$library,
+				$user,
+				$swapOrder.source,
+				order,
+				inputAsset,
+				minReceived
+			);
 
 			await updateAssets();
 			inputAsset = getAsset(inputAsset.asset_id, $assets);
