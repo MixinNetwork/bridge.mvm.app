@@ -1,7 +1,7 @@
 import { v4 } from 'uuid';
 import { signAuthenticationToken } from '@mixin.dev/mixin-node-sdk';
 import type { RegisteredUser } from '../../types/user';
-import type { Order } from './route';
+import type { Order } from '$lib/types/swap';
 import { fetchCode } from '../api';
 import { generateExtra } from '../sign';
 

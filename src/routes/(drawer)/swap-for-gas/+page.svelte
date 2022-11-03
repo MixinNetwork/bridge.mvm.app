@@ -8,7 +8,6 @@
 	import Item from '$lib/components/swap-for-gas/item.svelte';
 	import { enhance } from '$app/forms';
 	import { HOST } from '../../../lib/constants/common';
-	import { append } from 'svelte/internal';
 
 	let price: string = $page.data.price;
 	let iconUrl: string = $page.data.iconUrl;
