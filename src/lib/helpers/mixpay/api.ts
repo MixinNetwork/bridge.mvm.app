@@ -96,18 +96,8 @@ ins.interceptors.response.use(
 	}
 );
 
-export const fetchMixPayPaymentAssets = async () => {
-	const response = await fetch('https://api.mixpay.me/v1/setting/payment_assets');
-	const { data } = await response.json();
-	if (!data) throw new Error('No data found');
-	return data as MixPayAsset[];
-};
-export const fetchMixPaySettlementAssets = async () => {
-	const response = await fetch('https://api.mixpay.me/v1/setting/settlement_assets');
-	const { data } = await response.json();
-	if (!data) throw new Error('No data found');
-	return data as MixPayAsset[];
-};
+export const fetchMixPayPaymentAssets = async () => ins.get<unknown, MixPayAsset[]>('/setting/payment_assets');
+export const fetchMixPaySettlementAssets = async () => ins.get<unknown, MixPayAsset[]>('/setting/settlement_assets');
 
 export const fetchMixPayPreOrder = async ({
 	inputAsset,
