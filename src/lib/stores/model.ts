@@ -32,17 +32,20 @@ export const updateAssets = async () => {
 export const pairs = deepWritable<{
 	data: Pair[];
 	loading: boolean;
-}>({
-	data: [],
-	loading: false
-}, () => {
-	const timer = setInterval(async () => {
-		await updatePairs()
-	}, 15000);
-	return () => {
-		clearInterval(timer);
-	};
-});
+}>(
+	{
+		data: [],
+		loading: false
+	},
+	() => {
+		const timer = setInterval(async () => {
+			await updatePairs();
+		}, 15000);
+		return () => {
+			clearInterval(timer);
+		};
+	}
+);
 
 const updatePairs = async () => {
 	const $pair = get(pairs);
@@ -50,13 +53,13 @@ const updatePairs = async () => {
 	pairs.set({
 		data: $pair.data,
 		loading: true
-	})
+	});
 	const data = await fetchPairs();
 	pairs.set({
 		data,
 		loading: false
-	})
-}
+	});
+};
 
 export const exchangeRates = deepWritable<ExchangeRateResponse[]>([]);
 

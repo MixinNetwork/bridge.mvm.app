@@ -41,10 +41,12 @@
 	let slippage = DEFAULT_SLIPPAGE;
 
 	$: a && !$assets.length && assets.set(a);
-	$: p && !$pairs.data.length && pairs.set({
-		data: p,
-		loading: $pairs.loading
-	});
+	$: p &&
+		!$pairs.data.length &&
+		pairs.set({
+			data: p,
+			loading: $pairs.loading
+		});
 
 	$: !inputAsset &&
 		(inputAsset =

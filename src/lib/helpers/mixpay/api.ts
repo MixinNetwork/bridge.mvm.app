@@ -96,8 +96,10 @@ ins.interceptors.response.use(
 	}
 );
 
-export const fetchMixPayPaymentAssets = async () => ins.get<unknown, MixPayAsset[]>('/setting/payment_assets');
-export const fetchMixPaySettlementAssets = async () => ins.get<unknown, MixPayAsset[]>('/setting/settlement_assets');
+export const fetchMixPayPaymentAssets = async () =>
+	ins.get<unknown, MixPayAsset[]>('/setting/payment_assets');
+export const fetchMixPaySettlementAssets = async () =>
+	ins.get<unknown, MixPayAsset[]>('/setting/settlement_assets');
 
 export const fetchMixPayPreOrder = async ({
 	inputAsset,

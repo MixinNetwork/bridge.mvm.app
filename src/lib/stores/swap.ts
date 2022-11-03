@@ -13,7 +13,7 @@ const emptyOrder: PreOrderInfo = {
 	fee: '',
 	price: '',
 	minReceived: ''
-}
+};
 
 const createSwapOrder = () => {
 	let mixpayOrderInfoUpdateTimer: ReturnType<typeof setInterval>;
@@ -24,12 +24,15 @@ const createSwapOrder = () => {
 		amount: string | undefined;
 	};
 
-	const { subscribe, update, set } = writable<PreOrderInfo & { loading: boolean }>({
-		...emptyOrder,
-		loading: false
-	}, () => {
-		if (mixpayOrderInfoUpdateTimer) clearInterval(mixpayOrderInfoUpdateTimer);
-	});
+	const { subscribe, update, set } = writable<PreOrderInfo & { loading: boolean }>(
+		{
+			...emptyOrder,
+			loading: false
+		},
+		() => {
+			if (mixpayOrderInfoUpdateTimer) clearInterval(mixpayOrderInfoUpdateTimer);
+		}
+	);
 
 	const updateSwapInfo = async (
 		source: SwapSource,
@@ -50,41 +53,41 @@ const createSwapOrder = () => {
 		if (mixpayOrderInfoUpdateTimer) clearInterval(mixpayOrderInfoUpdateTimer);
 
 		if (source === 'NoPair') {
-			update(info => ({
+			update((info) => ({
 				...emptyOrder,
 				loading: info.loading
-			}))
+			}));
 			return;
 		}
 
 		if (source === '4Swap') {
 			const res = get4SwapSwapInfo(pairRoutes, slippage, requestParams);
-			update(info => ({
+			update((info) => ({
 				...res,
 				loading: info.loading
-			}))
+			}));
 			return;
 		}
 
 		const res = await fetchMixPayPreOrder(requestParams);
-		update(info => ({
+		update((info) => ({
 			...res,
 			loading: info.loading
-		}))
+		}));
 
 		if (res.errorMessage) throw new Error(res.errorMessage);
 
 		if (res.order) {
 			mixpayOrderInfoUpdateTimer = setInterval(async () => {
-				update(info => ({
+				update((info) => ({
 					...info,
 					loading: true
-				}))
+				}));
 				const res = await fetchMixPayPreOrder(requestParams);
 				set({
 					...res,
 					loading: false
-				})
+				});
 			}, 1000 * 15);
 		}
 	};
@@ -98,12 +101,12 @@ const createSwapOrder = () => {
 			pairRoutes: PairRoutes,
 			slippage: number
 		) => {
-			update(info => ({
+			update((info) => ({
 				...info,
 				loading: true
 			}));
 			await updateSwapInfo(source, lastEdited, requestParams, pairRoutes, slippage);
-			update(info => ({
+			update((info) => ({
 				...info,
 				loading: false
 			}));
@@ -127,11 +130,13 @@ const createSource = () => {
 		if (
 			(WHITELIST_ASSET_4SWAP.includes(inputAsset.asset_id) ||
 				WHITELIST_ASSET_4SWAP.includes(outputAsset.asset_id)) &&
-			($pairs.data.some(
+			$pairs.data.some(
 				(pair) =>
-					pair.base_asset_id === outputAsset.asset_id && pair.quote_asset_id === inputAsset.asset_id ||
-					pair.base_asset_id === inputAsset.asset_id && pair.quote_asset_id === outputAsset.asset_id
-			))
+					(pair.base_asset_id === outputAsset.asset_id &&
+						pair.quote_asset_id === inputAsset.asset_id) ||
+					(pair.base_asset_id === inputAsset.asset_id &&
+						pair.quote_asset_id === outputAsset.asset_id)
+			)
 		)
 			return '4Swap';
 
@@ -146,8 +151,10 @@ const createSource = () => {
 		if (
 			$pairs.data.some(
 				(pair) =>
-					pair.base_asset_id === outputAsset.asset_id && pair.quote_asset_id === inputAsset.asset_id || 
-					pair.base_asset_id === inputAsset.asset_id && pair.quote_asset_id === outputAsset.asset_id
+					(pair.base_asset_id === outputAsset.asset_id &&
+						pair.quote_asset_id === inputAsset.asset_id) ||
+					(pair.base_asset_id === inputAsset.asset_id &&
+						pair.quote_asset_id === outputAsset.asset_id)
 			)
 		)
 			return '4Swap';

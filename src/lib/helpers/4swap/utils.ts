@@ -26,7 +26,7 @@ export const get4SwapSwapInfo = (
 			order: undefined,
 			fee: '',
 			price: '',
-			minReceived: '',
+			minReceived: ''
 		};
 	}
 };
