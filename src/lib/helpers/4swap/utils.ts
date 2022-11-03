@@ -1,11 +1,12 @@
 import type { PairRoutes } from './route';
 import type { PreOrderInfo, SwapParams } from '$lib/types/swap';
 import { format } from '../big';
+
 export const get4SwapSwapInfo = (
 	pairRoutes: PairRoutes,
 	slippage: number,
 	{ inputAsset, outputAsset, inputAmount, outputAmount }: SwapParams
-): PreOrderInfo | undefined => {
+): PreOrderInfo => {
 	try {
 		const order = pairRoutes.getPreOrder({
 			inputAsset,
@@ -21,6 +22,11 @@ export const get4SwapSwapInfo = (
 			minReceived: format({ n: +order.amount * +slippage })
 		};
 	} catch (e) {
-		return undefined;
+		return {
+			order: undefined,
+			fee: '',
+			price: '',
+			minReceived: '',
+		};
 	}
 };

@@ -8,6 +8,13 @@ import { pairs } from './model';
 import { WHITELIST_ASSET_4SWAP } from '$lib/constants/common';
 import { isEqual } from 'lodash-es';
 
+const emptyOrder: PreOrderInfo = {
+	order: undefined,
+	fee: '',
+	price: '',
+	minReceived: ''
+}
+
 const createSwapOrder = () => {
 	let mixpayOrderInfoUpdateTimer: ReturnType<typeof setInterval>;
 	let lastParams: {
@@ -17,7 +24,10 @@ const createSwapOrder = () => {
 		amount: string | undefined;
 	};
 
-	const { subscribe, set } = writable<PreOrderInfo | undefined>(undefined, () => {
+	const { subscribe, update } = writable<PreOrderInfo & { loading: boolean }>({
+		...emptyOrder,
+		loading: false
+	}, () => {
 		if (mixpayOrderInfoUpdateTimer) clearInterval(mixpayOrderInfoUpdateTimer);
 	});
 
@@ -40,27 +50,41 @@ const createSwapOrder = () => {
 		if (mixpayOrderInfoUpdateTimer) clearInterval(mixpayOrderInfoUpdateTimer);
 
 		if (source === 'NoPair') {
-			set(undefined);
+			update(info => ({
+				...emptyOrder,
+				loading: info.loading
+			}))
 			return;
 		}
 
 		if (source === '4Swap') {
-			const info = get4SwapSwapInfo(pairRoutes, slippage, requestParams);
-			set(info);
+			const res = get4SwapSwapInfo(pairRoutes, slippage, requestParams);
+			update(info => ({
+				...res,
+				loading: info.loading
+			}))
 			return;
 		}
 
-		const info = await fetchMixPayPreOrder(requestParams);
-		if (info.errorMessage) {
-			set(undefined);
-			throw new Error(info.errorMessage);
-		}
+		const res = await fetchMixPayPreOrder(requestParams);
+		update(info => ({
+			...res,
+			loading: info.loading
+		}))
 
-		if (info.order) {
-			set(info);
+		if (res.errorMessage) throw new Error(res.errorMessage);
+
+		if (res.order) {
 			mixpayOrderInfoUpdateTimer = setInterval(async () => {
-				const info = await fetchMixPayPreOrder(requestParams);
-				set(info);
+				update(info => ({
+					...info,
+					loading: true
+				}))
+				const res = await fetchMixPayPreOrder(requestParams);
+				update(info => ({
+					...res,
+					loading: false
+				}))
 			}, 1000 * 15);
 		}
 	};
@@ -74,7 +98,15 @@ const createSwapOrder = () => {
 			pairRoutes: PairRoutes,
 			slippage: number
 		) => {
+			update(info => ({
+				...info,
+				loading: true
+			}));
 			await updateSwapInfo(source, lastEdited, requestParams, pairRoutes, slippage);
+			update(info => ({
+				...info,
+				loading: false
+			}));
 		}
 	};
 };

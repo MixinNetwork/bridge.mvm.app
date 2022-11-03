@@ -105,7 +105,6 @@
 			pairRoutes: PairRoutes,
 			slippage: number
 		) => {
-			loadingPreOrder = true;
 			try {
 				await swapOrder.fetchOrderInfo(source, lastEdited, requestParams, pairRoutes, slippage);
 			} catch (e) {
@@ -113,12 +112,9 @@
 				if (lastEdited === 'input') outputAmount = undefined;
 				if (lastEdited === 'output') inputAmount = undefined;
 			}
-			loadingPreOrder = false;
 		},
 		400
 	);
-
-	let loadingPreOrder = false;
 
 	$: if (inputAsset && outputAsset) {
 		swapSource.updateSource(inputAsset, outputAsset, mixpayPaymentAssets, mixpaySettlementAssets);
@@ -346,10 +342,10 @@
 			on:click={swap}
 			disabled={!(order && +order.amount) ||
 				order?.priceImpact > 0.15 ||
-				loadingPreOrder ||
+				$swapOrder.loading ||
 				!!(inputAmount && inputAsset?.balance && bigGte(inputAmount, inputAsset?.balance))}
 		>
-			{#if loading || loadingPreOrder}
+			{#if loading || $swapOrder.loading}
 				<Spinner class="stroke-white stroke-2 text-center" />
 			{:else}
 				{$LL.swap()}
