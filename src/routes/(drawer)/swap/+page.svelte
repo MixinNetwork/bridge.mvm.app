@@ -106,7 +106,8 @@
 	$: if (
 		inputAsset &&
 		outputAsset &&
-		((lastEdited === 'input' && !!inputAmount) || (lastEdited === 'output' && !!outputAmount))
+		lastEdited &&
+		(inputAmount || outputAmount)
 	) {
 		const requestParams = {
 			inputAsset: inputAsset.asset_id,
@@ -115,10 +116,6 @@
 			outputAmount: lastEdited === 'output' ? String(outputAmount) : undefined
 		};
 		updateOrder(lastEdited, requestParams, slippage);
-	}
-
-	$: if (!inputAmount && !outputAmount) {
-		swapOrder.reset();
 	}
 
 	// info

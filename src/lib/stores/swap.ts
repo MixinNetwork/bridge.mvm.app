@@ -68,6 +68,18 @@ const createSwapOrder = () => {
 			requestParams: SwapParams,
 			slippage: number
 		) => {
+			if (
+				(lastEdited === 'input' && Number.isNaN(Number(requestParams.inputAmount))) ||
+				(lastEdited === 'output' && Number.isNaN(Number(requestParams.outputAmount))) 
+			) {
+				set({
+					...emptyOrder,
+					loading: false,
+					source: 'NoPair'
+				});
+				return;
+			}
+
 			if (!$pairs.length) $pairs = get(pairs);
 			const order4Swap = get4SwapSwapInfo($pairs, slippage, requestParams);
 
