@@ -135,9 +135,9 @@
 		minReceived = $swapOrder.minReceived;
 
 		if (lastEdited === 'input') {
-			outputAmount = (order.amount && format({ n: order.amount, fixed: true })) || undefined;
+			outputAmount = (order.amount && format({ n: order.amount, fixed: true, dp: 8 })) || undefined;
 		} else if (lastEdited === 'output') {
-			inputAmount = (order.funds && format({ n: order.funds, fixed: true })) || undefined;
+			inputAmount = (order.funds && format({ n: order.funds, fixed: true, dp: 8 })) || undefined;
 		}
 	}
 
