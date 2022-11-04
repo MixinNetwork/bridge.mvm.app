@@ -8,6 +8,7 @@
 	import Item from '$lib/components/swap-for-gas/item.svelte';
 	import { enhance } from '$app/forms';
 	import { browser } from '$app/environment';
+	import DepositPending from '$lib/components/base/deposit-pending.svelte';
 
 	let price: string = $page.data.price;
 	let iconUrl: string = $page.data.iconUrl;
@@ -22,6 +23,7 @@
 	<div class="md:hidden">{$LL.swapForGas()}</div>
 	<UserInfo class="hidden md:flex" />
 	<Apps />
+	<DepositPending />
 </Header>
 
 <div class="mt-5 flex items-center justify-center">

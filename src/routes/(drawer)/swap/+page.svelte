@@ -26,6 +26,7 @@
 	import Apps from '$lib/components/base/apps.svelte';
 	import { swapOrder } from '$lib/stores/swap';
 	import { tick } from 'svelte';
+	import DepositPending from '$lib/components/base/deposit-pending.svelte';
 
 	let a: Asset[] | undefined = $page.data.assets;
 
@@ -197,6 +198,7 @@
 	<div class="md:hidden">{$LL.swap()}</div>
 	<UserInfo class="hidden md:flex" />
 	<Apps />
+	<DepositPending />
 </Header>
 
 <div

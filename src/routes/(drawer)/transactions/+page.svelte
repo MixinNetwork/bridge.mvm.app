@@ -15,6 +15,7 @@
 	import { onMount, onDestroy } from 'svelte';
 	import LL from '$i18n/i18n-svelte';
 	import Apps from '$lib/components/base/apps.svelte';
+	import DepositPending from '$lib/components/base/deposit-pending.svelte';
 
 	const DEFAULT_ICON =
 		'https://images.mixin.one/yH_I5b0GiV2zDmvrXRyr3bK5xusjfy5q7FX3lw3mM2Ryx4Dfuj6Xcw8SHNRnDKm7ZVE3_LvpKlLdcLrlFQUBhds=s128';
@@ -92,6 +93,7 @@
 	<div class="md:hidden">{$LL.allTransactions()}</div>
 	<UserInfo class="hidden md:flex" />
 	<Apps />
+	<DepositPending />
 </Header>
 
 <div
