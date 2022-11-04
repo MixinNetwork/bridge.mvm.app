@@ -48,13 +48,17 @@
 	let inputAmount: number | string | undefined = undefined;
 	let outputAmount: number | string | undefined = undefined;
 
-	const handleSwitch = () => {
+	const handleSwitch = async () => {
 		if (lastEdited === 'input' && inputAmount) {
-			lastEdited = 'output';
+			swapOrder.reset();
 			outputAmount = format({ n: inputAmount });
+			inputAmount = undefined;	
+			lastEdited = 'output';
 		} else if (lastEdited === 'output' && outputAmount) {
-			lastEdited = 'input';
+			swapOrder.reset();
 			inputAmount = format({ n: outputAmount });
+			outputAmount = undefined;
+			lastEdited = 'input';
 		}
 
 		const temp = inputAsset;
