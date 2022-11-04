@@ -249,7 +249,7 @@
 
 			<div class="relative h-[2px] bg-brand-background">
 				<button
-					class="absolute left-1/2  -translate-y-1/2 -translate-x-1/2"
+					class="absolute left-1/2  -translate-y-1/2 -translate-x-1/2 z-10"
 					on:click={handleSwitch}
 				>
 					<Switch />
