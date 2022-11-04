@@ -124,7 +124,8 @@
 	$: if (
 		$swapOrder?.order &&
 		$swapOrder?.order.pay_asset_id === inputAsset?.asset_id &&
-		$swapOrder?.order.fill_asset_id === outputAsset?.asset_id
+		$swapOrder?.order.fill_asset_id === outputAsset?.asset_id &&
+		((lastEdited === 'input' && inputAmount) || (lastEdited === 'output' && outputAmount))
 	) {
 		order = $swapOrder.order;
 		fee = $swapOrder.fee;
