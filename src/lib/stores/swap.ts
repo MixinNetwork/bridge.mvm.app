@@ -70,7 +70,7 @@ const createSwapOrder = () => {
 		) => {
 			if (
 				(lastEdited === 'input' && Number.isNaN(Number(requestParams.inputAmount))) ||
-				(lastEdited === 'output' && Number.isNaN(Number(requestParams.outputAmount))) 
+				(lastEdited === 'output' && Number.isNaN(Number(requestParams.outputAmount)))
 			) {
 				set({
 					...emptyOrder,

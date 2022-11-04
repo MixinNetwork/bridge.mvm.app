@@ -52,7 +52,7 @@
 		if (lastEdited === 'input' && inputAmount) {
 			swapOrder.reset();
 			outputAmount = format({ n: inputAmount });
-			inputAmount = undefined;	
+			inputAmount = undefined;
 			lastEdited = 'output';
 		} else if (lastEdited === 'output' && outputAmount) {
 			swapOrder.reset();
@@ -107,12 +107,7 @@
 		}
 	};
 
-	$: if (
-		inputAsset &&
-		outputAsset &&
-		lastEdited &&
-		(inputAmount || outputAmount)
-	) {
+	$: if (inputAsset && outputAsset && lastEdited && (inputAmount || outputAmount)) {
 		const requestParams = {
 			inputAsset: inputAsset.asset_id,
 			outputAsset: outputAsset.asset_id,
