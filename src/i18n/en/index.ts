@@ -61,7 +61,7 @@ const en: BaseTranslation = {
 			fee: 'Fee:',
 			priceImpact: 'Price Impact:',
 			warning: 'Lack of liquidity, please decrease swap amount',
-			success: 'Successful'
+			success: 'Successful swap'
 		},
 		faq: {
 			description1: 'How does it work?',
