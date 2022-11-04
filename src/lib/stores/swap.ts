@@ -10,6 +10,7 @@ import {
 } from '$lib/helpers/mixpay/api';
 import { debounce, isEqual } from 'lodash-es';
 import { pairs } from './model';
+import { bigGt, bigLt } from '$lib/helpers/big';
 
 const emptyOrder: PreOrderInfo = {
 	order: undefined,
@@ -163,7 +164,27 @@ const createSwapOrder = () => {
 			!!mixPayPaymentAssets.length &&
 			!!mixPaySettlementAssets.length &&
 			(mixPayPaymentAssets.every((asset) => asset.assetId !== requestParams.inputAsset) ||
-				mixPaySettlementAssets.every((asset) => asset.assetId !== requestParams.outputAsset))
+				mixPaySettlementAssets.every((asset) => asset.assetId !== requestParams.outputAsset) ||
+				mixPayPaymentAssets.some(
+					(asset) =>
+						asset.assetId === requestParams.inputAsset &&
+						lastEdited === 'input' &&
+						requestParams.inputAmount &&
+						asset.minPaymentAmount &&
+						asset.maxPaymentAmount &&
+						(bigLt(requestParams.inputAmount, asset.minPaymentAmount) ||
+							bigGt(requestParams.inputAmount, asset.maxPaymentAmount))
+				) ||
+				mixPayPaymentAssets.some(
+					(asset) =>
+						asset.assetId === requestParams.outputAsset &&
+						lastEdited === 'output' &&
+						requestParams.outputAmount &&
+						asset.minPaymentAmount &&
+						asset.maxPaymentAmount &&
+						(bigLt(requestParams.outputAmount, asset.minPaymentAmount) ||
+							bigGt(requestParams.outputAmount, asset.maxPaymentAmount))
+				))
 		) {
 			const order4Swap = get4SwapSwapInfo($pairs, slippage, requestParams);
 			set({
