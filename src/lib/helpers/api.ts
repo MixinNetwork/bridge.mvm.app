@@ -10,6 +10,9 @@ import { fetchMvmTokens } from './mvm/api';
 import { getBalance } from './web3/common';
 import { fetchAssetContract } from './web3/registry';
 import { sortBy } from 'lodash-es';
+import { fetchMixPayOrder, type MixPayPaymentResponse } from './mixpay/api';
+import { fetch4SwapOrder, type OrderResponse } from './4swap/api';
+import type { SwapSource } from '../types/swap';
 
 export const register = async (address: string): Promise<RegisteredUser> => {
 	const response = await fetch('https://bridge.mvm.dev/users', {
@@ -155,3 +158,36 @@ export const fetchCode = async (code_id: string): Promise<PaymentRequestResponse
 };
 
 export const fetchExchangeRates = ExternalClient().exchangeRates;
+
+export const checkOrder = async (
+	source: SwapSource,
+	order_id: string,
+	user: RegisteredUser
+): Promise<boolean> => {
+	let counter = 0;
+	const fetchOrderStatus = source === '4Swap' ? fetch4SwapOrder : fetchMixPayOrder;
+
+	return new Promise((resolve, reject) => {
+		const timer = setInterval(async () => {
+			counter++;
+
+			if (counter === 30) {
+				clearInterval(timer);
+				reject(false);
+			}
+
+			try {
+				const res = await fetchOrderStatus(order_id, user);
+				if (
+					(source === '4Swap' && res && (res as OrderResponse).state === 'Done') ||
+					(source === 'MixPay' && res && (res as MixPayPaymentResponse).data.status === 'success')
+				) {
+					clearInterval(timer);
+					resolve(true);
+				}
+			} catch (e) {
+				return;
+			}
+		}, 5000);
+	});
+};

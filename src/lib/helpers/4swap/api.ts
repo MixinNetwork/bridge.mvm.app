@@ -1,6 +1,9 @@
 import { v4 } from 'uuid';
 import { signAuthenticationToken } from '@mixin.dev/mixin-node-sdk';
 import type { RegisteredUser } from '../../types/user';
+import type { Order } from '$lib/types/swap';
+import { fetchCode } from '../api';
+import { generateExtra } from '../sign';
 
 export interface GetPairParams {
 	base: string;
@@ -80,7 +83,7 @@ interface Transaction {
 	amount: string;
 }
 
-interface OrderResponse {
+export interface OrderResponse {
 	id: string;
 	created_at: string;
 	user_id: string;
@@ -129,7 +132,7 @@ export const createAction = async (params: ActionRequest) => {
 	return data as ActionResponse;
 };
 
-export const fetchOrder = async (order_id: string, user: RegisteredUser) => {
+export const fetch4SwapOrder = async (order_id: string, user: RegisteredUser) => {
 	const trace_id = v4();
 	const token = signAuthenticationToken('GET', `/me`, '', trace_id, {
 		...user,
@@ -150,30 +153,29 @@ export const fetchOrder = async (order_id: string, user: RegisteredUser) => {
 	return data as OrderResponse;
 };
 
-export const checkOrder = async (
-	order_id: string,
-	user: RegisteredUser
-): Promise<OrderResponse> => {
-	let counter = 0;
+export const fetch4SwapTxInfo = async (user: RegisteredUser, order: Order, minReceived: string) => {
+	const swapAction = `3,${user.user_id},${v4()},${order.fill_asset_id},${
+		order.routes
+	},${minReceived}`;
 
-	return new Promise((resolve, reject) => {
-		const timer = setInterval(async () => {
-			counter++;
-
-			if (counter === 30) {
-				clearInterval(timer);
-				reject({ error: 'overtime' });
-			}
-
-			try {
-				const res = await fetchOrder(order_id, user);
-				if (res && res.state === 'Done') {
-					clearInterval(timer);
-					resolve(res);
-				}
-			} catch (e) {
-				return;
-			}
-		}, 5000);
+	const actionResp = await createAction({
+		action: swapAction,
+		amount: order.funds,
+		asset_id: order.pay_asset_id,
+		broker_id: ''
 	});
+
+	const codeResp = await fetchCode(actionResp.code);
+	const extra = generateExtra(
+		JSON.stringify({
+			receivers: codeResp.receivers,
+			threshold: codeResp.threshold,
+			extra: codeResp.memo
+		})
+	);
+
+	return {
+		extra,
+		getFollowId: () => Promise.resolve(actionResp.follow_id)
+	};
 };

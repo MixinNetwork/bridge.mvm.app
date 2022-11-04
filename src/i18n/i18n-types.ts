@@ -209,7 +209,11 @@ type RootTranslation = {
 			/**
 			 * L​a​c​k​ ​o​f​ ​l​i​q​u​i​d​i​t​y​,​ ​p​l​e​a​s​e​ ​d​e​c​r​e​a​s​e​ ​s​w​a​p​ ​a​m​o​u​n​t
 			 */
-			warning: string
+			warning: string,
+			/**
+			 * Successful
+			 */
+			success: string
 		}
 		faq: {
 			/**
@@ -555,6 +559,10 @@ export type TranslationFunctions = {
 			 * Lack of liquidity, please decrease swap amount
 			 */
 			warning: () => LocalizedString
+			/**
+			 * Successful
+			 */
+			success: () => LocalizedString
 		}
 		faq: {
 			/**

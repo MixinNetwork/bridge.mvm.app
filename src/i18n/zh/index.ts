@@ -60,7 +60,8 @@ const zh: Translation = {
 			minReceived: '至少获得：',
 			fee: '手续费：',
 			priceImpact: '价格影响：',
-			warning: '流动性不足，请减少兑换金额'
+			warning: '流动性不足，请减少兑换金额',
+			success: '兑换成功'
 		},
 		faq: {
 			description1: '它是如何工作的？',

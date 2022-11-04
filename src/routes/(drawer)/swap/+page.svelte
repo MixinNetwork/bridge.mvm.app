@@ -4,37 +4,36 @@
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import Switch from '$lib/assets/switch.svg?component';
-	import { PairRoutes, type Order } from '$lib/helpers/4swap/route';
+	import type { Order, SwapParams } from '$lib/types/swap';
 	import { setSearchParam } from '$lib/helpers/app-store';
 	import { assets, pairs, updateAssets } from '$lib/stores/model';
 	import { getAsset } from '$lib/helpers/utils';
 	import type { Asset } from '$lib/types/asset';
 	import Header from '$lib/components/base/header.svelte';
 	import UserInfo from '$lib/components/base/user-info.svelte';
-	import { bigLte, format, toPercent } from '$lib/helpers/big';
+	import { bigLte, bigGte, format, toPercent } from '$lib/helpers/big';
 	import SelectedAssetButton from '$lib/components/base/selected-asset-button.svelte';
 	import { slide } from 'svelte/transition';
 	import { DEFAULT_SLIPPAGE, INPUT_KEY, OUTPUT_KEY, formatFiat } from '$lib/components/swap/export';
 	import Faq from '$lib/components/swap/faq.svelte';
 	import { registerAndSave, user } from '$lib/stores/user';
 	import { library } from '$lib/stores/ether';
-	import type { Pair } from '$lib/helpers/4swap/api';
+	import { ETH_ASSET_ID, XIN_ASSET_ID } from '$lib/constants/common';
 	import Spinner from '$lib/components/common/spinner.svelte';
 	import { showToast } from '$lib/components/common/toast/toast-container.svelte';
 	import { focus } from 'focus-svelte';
-	import { ETH_ASSET_ID, XIN_ASSET_ID } from '$lib/constants/common';
 	import LL from '$i18n/i18n-svelte';
 	import Apps from '$lib/components/base/apps.svelte';
+	import { swapOrder } from '$lib/stores/swap';
+	import { tick } from 'svelte';
 
 	let a: Asset[] | undefined = $page.data.assets;
-	let p: Pair[] | undefined = $page.data.pairs;
 
 	let inputAsset: Asset | undefined = undefined;
 	let outputAsset: Asset | undefined = undefined;
 	let slippage = DEFAULT_SLIPPAGE;
 
 	$: a && !$assets.length && assets.set(a);
-	$: p && !$pairs.length && pairs.set(p);
 
 	$: !inputAsset &&
 		(inputAsset =
@@ -49,21 +48,24 @@
 	let inputAmount: number | string | undefined = undefined;
 	let outputAmount: number | string | undefined = undefined;
 
-	const handleSwitch = () => {
+	const handleSwitch = async () => {
+		swapOrder.reset();
 		if (lastEdited === 'input' && inputAmount) {
-			lastEdited = 'output';
 			outputAmount = format({ n: inputAmount });
+			inputAmount = undefined;
+			lastEdited = 'output';
 		} else if (lastEdited === 'output' && outputAmount) {
-			lastEdited = 'input';
 			inputAmount = format({ n: outputAmount });
+			outputAmount = undefined;
+			lastEdited = 'input';
 		}
 
 		const temp = inputAsset;
 		inputAsset = outputAsset;
 		outputAsset = temp;
 
-		setSearchParam($page, INPUT_KEY, outputAsset?.asset_id);
-		setSearchParam($page, OUTPUT_KEY, inputAsset?.asset_id);
+		setSearchParam($page, INPUT_KEY, inputAsset?.asset_id);
+		setSearchParam($page, OUTPUT_KEY, outputAsset?.asset_id);
 
 		goto($page.url, { keepfocus: true, replaceState: true, noscroll: true });
 	};
@@ -82,60 +84,83 @@
 		goto($page.url, { keepfocus: true, replaceState: true, noscroll: true });
 	};
 
-	$: pairRoutes = new PairRoutes($pairs);
-	let order: Order | undefined;
+	const handleChangeAmount = (source: 'input' | 'output') => {
+		lastEdited = source;
+		if (source === 'input' && !inputAmount) outputAmount = '';
+		if (source === 'output' && !outputAmount) inputAmount = '';
+	};
+
+	const updateOrder = async (
+		lastEdited: 'input' | 'output',
+		requestParams: SwapParams,
+		slippage: number
+	) => {
+		try {
+			const { source } = $swapOrder;
+			await tick();
+			await swapOrder.fetchOrderInfo($pairs, source, lastEdited, requestParams, slippage);
+		} catch (e) {
+			if (lastEdited === 'input') outputAmount = undefined;
+			if (lastEdited === 'output') inputAmount = undefined;
+		}
+	};
+
+	$: if (inputAsset && outputAsset && lastEdited && (inputAmount || outputAmount) && $pairs) {
+		const requestParams = {
+			inputAsset: inputAsset.asset_id,
+			outputAsset: outputAsset.asset_id,
+			inputAmount: lastEdited === 'input' ? String(inputAmount) : undefined,
+			outputAmount: lastEdited === 'output' ? String(outputAmount) : undefined
+		};
+		updateOrder(lastEdited, requestParams, slippage);
+	}
 
 	// info
+	let order: Order | undefined;
 	let fee: string | undefined;
 	let price: string | undefined;
 	let minReceived: string | undefined;
 
-	const updateSwapInfo = async (
-		inputAsset: Asset,
-		outputAsset: Asset,
-		lastEdited: 'input' | 'output',
-		inputValue?: number,
-		outputValue?: number
-	) => {
-		try {
-			order = pairRoutes.getPreOrder({
-				inputAsset: inputAsset.asset_id,
-				outputAsset: outputAsset.asset_id,
-				inputAmount: lastEdited === 'input' ? `${inputValue}` : undefined,
-				outputAmount: lastEdited === 'output' ? `${outputValue}` : undefined
-			});
-		} catch (e) {
-			order = undefined;
-		}
-		if (!order) return;
-
-		fee = format({ n: pairRoutes.getFee(order), dp: 8 });
-		price = format({ n: +order.amount / +order.funds, dp: 8 });
-		minReceived = format({ n: +order.amount * +slippage });
+	$: if (
+		$swapOrder?.order &&
+		$swapOrder?.order.pay_asset_id === inputAsset?.asset_id &&
+		$swapOrder?.order.fill_asset_id === outputAsset?.asset_id &&
+		((lastEdited === 'input' && inputAmount) || (lastEdited === 'output' && outputAmount))
+	) {
+		order = $swapOrder.order;
+		fee = $swapOrder.fee;
+		price = $swapOrder.price;
+		minReceived = $swapOrder.minReceived;
 
 		if (lastEdited === 'input') {
-			outputAmount = (order.amount && format({ n: order.amount, fixed: true })) || undefined;
+			outputAmount = (order.amount && format({ n: order.amount, fixed: true, dp: 8 })) || undefined;
 		} else if (lastEdited === 'output') {
-			inputAmount = (order.funds && format({ n: order.funds, fixed: true })) || undefined;
+			inputAmount = (order.funds && format({ n: order.funds, fixed: true, dp: 8 })) || undefined;
 		}
-	};
+	}
 
-	$: if (inputAsset && outputAsset && lastEdited && (inputAmount || outputAmount)) {
-		updateSwapInfo(
-			inputAsset,
-			outputAsset,
-			lastEdited,
-			(inputAmount && Number(inputAmount)) || undefined,
-			(outputAmount && Number(outputAmount)) || undefined
-		);
-	} else order = undefined;
+	$: if (!$swapOrder?.order) {
+		order = undefined;
+		fee = undefined;
+		price = undefined;
+		minReceived = undefined;
+	}
 
 	$: inputAmountFiat = formatFiat(inputAsset?.price_usd, (inputAmount && +inputAmount) || 0);
 	$: outputAmountFiat = formatFiat(outputAsset?.price_usd, (outputAmount && +outputAmount) || 0);
 
 	let loading = false;
 	const swap = async () => {
-		if (!$library || !$user || !order || !inputAsset || !minReceived) return;
+		if (
+			!$library ||
+			!$user ||
+			!order ||
+			!inputAsset ||
+			!outputAsset ||
+			!minReceived ||
+			$swapOrder.source === 'NoPair'
+		)
+			return;
 
 		loading = true;
 
@@ -143,15 +168,22 @@
 
 		try {
 			if (!$user.contract) await registerAndSave($user.address);
-			const res = await swapAsset($library, $user, order, inputAsset, minReceived);
+			const res = await swapAsset(
+				$library,
+				$user,
+				$swapOrder.source,
+				order,
+				inputAsset,
+				minReceived
+			);
 
 			await updateAssets();
 			inputAsset = getAsset(inputAsset.asset_id, $assets);
+			outputAsset = getAsset(outputAsset.asset_id, $assets);
 
-			if (res && res.state === 'Done') showToast('success', 'Successful');
+			if (res) showToast('success', $LL.swapPage.tips.success());
 
-			inputAmount = undefined;
-			outputAmount = undefined;
+			swapOrder.reset();
 		} finally {
 			loading = false;
 		}
@@ -207,7 +239,7 @@
 							autocomplete="off"
 							use:focus={{ enabled: true, focusable: true, focusDelay: 100 }}
 							bind:value={inputAmount}
-							on:input={() => (lastEdited = 'input')}
+							on:input={() => handleChangeAmount('input')}
 							placeholder="0.0"
 						/>
 						<div class="text-sm font-semibold text-black text-opacity-30">≈ ${inputAmountFiat}</div>
@@ -217,7 +249,7 @@
 
 			<div class="relative h-[2px] bg-brand-background">
 				<button
-					class="absolute left-1/2  -translate-y-1/2 -translate-x-1/2"
+					class="absolute left-1/2 z-10 -translate-y-1/2 -translate-x-1/2"
 					on:click={handleSwitch}
 				>
 					<Switch />
@@ -257,7 +289,7 @@
 							class="w-full text-right font-bold text-black"
 							autocomplete="off"
 							bind:value={outputAmount}
-							on:input={() => (lastEdited = 'output')}
+							on:input={() => handleChangeAmount('output')}
 							placeholder="0.0"
 						/>
 						<div class="text-sm font-semibold text-black text-opacity-30">
@@ -310,9 +342,12 @@
 		<button
 			class="mt-10 mb-6 flex w-28 justify-center self-center rounded-full bg-brand-primary px-6 py-3 text-white"
 			on:click={swap}
-			disabled={!(order && +order.amount) || order?.priceImpact > 0.15}
+			disabled={!(order && +order.amount) ||
+				order?.priceImpact > 0.15 ||
+				$swapOrder.loading ||
+				!!(inputAmount && inputAsset?.balance && bigGte(inputAmount, inputAsset?.balance))}
 		>
-			{#if loading}
+			{#if loading || $swapOrder.loading}
 				<Spinner class="stroke-white stroke-2 text-center" />
 			{:else}
 				{$LL.swap()}

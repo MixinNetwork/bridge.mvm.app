@@ -6,6 +6,7 @@ declare const __version__: string;
 export const version = __version__;
 
 export const WITHDRAW_BOT_ID = '131a0774-59a1-4e3d-9af2-e1b43aa37936';
+export const MIXPAY_BOT_ID = '3539c3ce-52c0-4b0b-9573-c035ecb98d48';
 
 export const LAST_URL = 'last-url';
 export const USER_KEY = 'USER';
@@ -17,8 +18,8 @@ export const ETH_ASSET_ID = '43d61dcd-e413-450d-80b8-101d5e903357';
 export const BTC_ASSET_ID = 'c6d0c728-2624-429b-8e0d-d9d19b6592fa';
 export const EOS_ASSET_ID = '6cfe566e-4aad-470b-8c9a-2fd35b49c68d';
 export const MOB_ASSET_ID = 'eea900a8-b327-488c-8d8d-1428702fe240';
+export const BOX_ASSET_ID = 'f5ef6b5d-cc5a-3d90-b2c0-a2fd386e7a3c';
 export const DOGE_ASSET_ID = '6770a1e5-6086-44d5-b60f-545f9d9e8ffd';
-
 export const XIN_ASSET_ID = 'c94ac88f-4671-3976-b60a-09064f1811e8';
 
 export const REGISTRY_PID = 'bd67087276ce3263b9333aa337e212a4';
@@ -43,6 +44,8 @@ export const MVM_CHAIN_ID = 73927;
 export const MAINNET_CHAIN_HEX_ID = toHex(MAINNET_CHAIN_ID);
 export const MVM_CHAIN_HEX_ID = toHex(MVM_CHAIN_ID);
 
+export const WHITELIST_ASSET_4SWAP = [XIN_ASSET_ID, EOS_ASSET_ID, MOB_ASSET_ID, BOX_ASSET_ID];
+
 export const WHITELIST_ASSET = [
 	{
 		id: BTC_ASSET_ID,
@@ -52,21 +55,9 @@ export const WHITELIST_ASSET = [
 	{ id: ETH_ASSET_ID, symbol: 'ETH', chain: 'ETH' },
 	{ id: TRX_ASSET_ID, symbol: 'TRX', chain: 'TRX' },
 	{ id: EOS_ASSET_ID, symbol: 'EOS', chain: 'EOS' },
-	{
-		id: 'f5ef6b5d-cc5a-3d90-b2c0-a2fd386e7a3c',
-		symbol: 'BOX',
-		chain: 'ETH'
-	},
-	{
-		id: 'c94ac88f-4671-3976-b60a-09064f1811e8',
-		symbol: 'XIN',
-		chain: 'ETH'
-	},
-	{
-		id: 'eea900a8-b327-488c-8d8d-1428702fe240',
-		symbol: 'MOB',
-		chain: undefined
-	},
+	{ id: BOX_ASSET_ID, symbol: 'BOX', chain: 'ETH' },
+	{ id: XIN_ASSET_ID, symbol: 'XIN', chain: 'ETH' },
+	{ id: MOB_ASSET_ID, symbol: 'MOB', chain: undefined },
 	{
 		id: '9b180ab6-6abe-3dc0-a13f-04169eb34bfa',
 		symbol: 'USDC',
