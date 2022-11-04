@@ -49,13 +49,12 @@
 	let outputAmount: number | string | undefined = undefined;
 
 	const handleSwitch = async () => {
+		swapOrder.reset();
 		if (lastEdited === 'input' && inputAmount) {
-			swapOrder.reset();
 			outputAmount = format({ n: inputAmount });
 			inputAmount = undefined;
 			lastEdited = 'output';
 		} else if (lastEdited === 'output' && outputAmount) {
-			swapOrder.reset();
 			inputAmount = format({ n: outputAmount });
 			outputAmount = undefined;
 			lastEdited = 'input';
@@ -107,7 +106,7 @@
 		}
 	};
 
-	$: if (inputAsset && outputAsset && lastEdited && (inputAmount || outputAmount)) {
+	$: if (inputAsset && outputAsset && lastEdited && (inputAmount || outputAmount) && $pairs) {
 		const requestParams = {
 			inputAsset: inputAsset.asset_id,
 			outputAsset: outputAsset.asset_id,
@@ -123,7 +122,11 @@
 	let price: string | undefined;
 	let minReceived: string | undefined;
 
-	$: if ($swapOrder?.order) {
+	$: if (
+		$swapOrder?.order 
+		&& $swapOrder?.order.pay_asset_id === inputAsset?.asset_id 
+		&& $swapOrder?.order.fill_asset_id === outputAsset?.asset_id
+	) {
 		order = $swapOrder.order;
 		fee = $swapOrder.fee;
 		price = $swapOrder.price;
