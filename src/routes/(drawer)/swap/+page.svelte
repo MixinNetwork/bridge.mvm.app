@@ -123,9 +123,9 @@
 	let minReceived: string | undefined;
 
 	$: if (
-		$swapOrder?.order 
-		&& $swapOrder?.order.pay_asset_id === inputAsset?.asset_id 
-		&& $swapOrder?.order.fill_asset_id === outputAsset?.asset_id
+		$swapOrder?.order &&
+		$swapOrder?.order.pay_asset_id === inputAsset?.asset_id &&
+		$swapOrder?.order.fill_asset_id === outputAsset?.asset_id
 	) {
 		order = $swapOrder.order;
 		fee = $swapOrder.fee;
@@ -249,7 +249,7 @@
 
 			<div class="relative h-[2px] bg-brand-background">
 				<button
-					class="absolute left-1/2  -translate-y-1/2 -translate-x-1/2 z-10"
+					class="absolute left-1/2 z-10 -translate-y-1/2 -translate-x-1/2"
 					on:click={handleSwitch}
 				>
 					<Switch />
