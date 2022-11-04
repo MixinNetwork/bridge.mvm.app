@@ -60,7 +60,8 @@ const en: BaseTranslation = {
 			minReceived: 'Min Received:',
 			fee: 'Fee:',
 			priceImpact: 'Price Impact:',
-			warning: 'Lack of liquidity, please decrease swap amount'
+			warning: 'Lack of liquidity, please decrease swap amount',
+			success: 'Successful'
 		},
 		faq: {
 			description1: 'How does it work?',

@@ -100,7 +100,6 @@
 			await tick();
 			await swapOrder.fetchOrderInfo($pairs, source, lastEdited, requestParams, slippage);
 		} catch (e) {
-			showToast('common', e as string);
 			if (lastEdited === 'input') outputAmount = undefined;
 			if (lastEdited === 'output') inputAmount = undefined;
 		}
@@ -181,7 +180,7 @@
 			inputAsset = getAsset(inputAsset.asset_id, $assets);
 			outputAsset = getAsset(outputAsset.asset_id, $assets);
 
-			if (res) showToast('success', 'Successful');
+			if (res) showToast('success', $LL.swapPage.tips.success());
 
 			swapOrder.reset();
 		} finally {
