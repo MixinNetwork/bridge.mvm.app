@@ -642,13 +642,13 @@
     js-cookie "^3.0.1"
     svelte "^3.0.0"
 
-"@sveltejs/adapter-auto@^1.0.0-next.86":
-  version "1.0.0-next.86"
-  resolved "https://registry.yarnpkg.com/@sveltejs/adapter-auto/-/adapter-auto-1.0.0-next.86.tgz#06f4a93c556c75121ea9bcb34600bba34725b6d7"
-  integrity sha512-IKW1SUiXPPZ+qumQu5v48VH4aGmYiSLS83qbDlwfNmoRQejgU54f1M5s+isVmnr9kIOwbMQ0CfYhmZWJ7sEv6Q==
+"@sveltejs/adapter-auto@^1.0.0-next.87":
+  version "1.0.0-next.87"
+  resolved "https://registry.yarnpkg.com/@sveltejs/adapter-auto/-/adapter-auto-1.0.0-next.87.tgz#40834b41535089a37456e029d971bf00816c60a0"
+  integrity sha512-0MPCKo3aY1i3oESI6ZZikOB+MDV89WlWj4ot+/WEsP1J2uDA2HSirCZYWDnLB5i00HDHzqwBOfDDwHJ00pPC4w==
   dependencies:
     "@sveltejs/adapter-cloudflare" "1.0.0-next.40"
-    "@sveltejs/adapter-netlify" "1.0.0-next.83"
+    "@sveltejs/adapter-netlify" "1.0.0-next.84"
     "@sveltejs/adapter-vercel" "1.0.0-next.81"
 
 "@sveltejs/adapter-cloudflare@1.0.0-next.40":
@@ -660,10 +660,10 @@
     esbuild "^0.15.12"
     worktop "0.8.0-next.14"
 
-"@sveltejs/adapter-netlify@1.0.0-next.83":
-  version "1.0.0-next.83"
-  resolved "https://registry.yarnpkg.com/@sveltejs/adapter-netlify/-/adapter-netlify-1.0.0-next.83.tgz#2d44100683b1c5304f348cc703115afc8adaf798"
-  integrity sha512-4hPKs7T1v81KatpMm8AgPEe4LSvoRNWiooxbSlLL8su/nnVe2FHPlpGgRcdSsE9VUmlkyd+4YIbVFG0ZcYO4LQ==
+"@sveltejs/adapter-netlify@1.0.0-next.84":
+  version "1.0.0-next.84"
+  resolved "https://registry.yarnpkg.com/@sveltejs/adapter-netlify/-/adapter-netlify-1.0.0-next.84.tgz#6581e3ca5528da1616518717295e6bff632e48c7"
+  integrity sha512-i4vf3to0sV/iI39UPPhlVjOP+jZCZ048M4oHkqDM1FfJwACwgXaysdF2t4X0DV3loLmrkfarwbatjbGIECA9uQ==
   dependencies:
     "@iarna/toml" "^2.2.5"
     esbuild "^0.15.12"
