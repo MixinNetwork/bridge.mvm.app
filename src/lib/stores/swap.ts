@@ -57,9 +57,9 @@ const createSwapOrder = () => {
 			fetchMixPayPaymentAssets(),
 			fetchMixPaySettlementAssets()
 		]);
-		if (p.status === "fulfilled") pairs.set(p.value);
-		if (payment.status === "fulfilled") mixPayPaymentAssets = payment.value;
-		if (settment.status === "fulfilled") mixPaySettlementAssets = settment.value;
+		if (p.status === 'fulfilled') pairs.set(p.value);
+		if (payment.status === 'fulfilled') mixPayPaymentAssets = payment.value;
+		if (settment.status === 'fulfilled') mixPaySettlementAssets = settment.value;
 	};
 
 	const debouncedUpdate = debounce(
