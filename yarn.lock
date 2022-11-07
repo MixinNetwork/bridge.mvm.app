@@ -678,14 +678,14 @@
     esbuild "^0.15.12"
 
 "@sveltejs/kit@next":
-  version "1.0.0-next.532"
-  resolved "https://registry.yarnpkg.com/@sveltejs/kit/-/kit-1.0.0-next.532.tgz#3283c97d8cc6ffe4552a930aa966b37f61189e56"
-  integrity sha512-g+t+dncoz/DBc1mfwSfBaIBqE5pl0caMUy7yZzjsnyw0WG3AevC04d2KfTOgtOMgXVDnSVqZxlTR+MM5tnKeyw==
+  version "1.0.0-next.538"
+  resolved "https://registry.yarnpkg.com/@sveltejs/kit/-/kit-1.0.0-next.538.tgz#12972a418af633267f704eec98755054134fe388"
+  integrity sha512-NRu6+j1Lc0daE2OirlbDCbT/yMf5l5nFln2o1asMA3HL7A244SG+uGGFea4DZ1bdetZ3IhO5xa1MWIGY5Ybb3g==
   dependencies:
     "@sveltejs/vite-plugin-svelte" "^1.1.0"
     "@types/cookie" "^0.5.1"
     cookie "^0.5.0"
-    devalue "^4.1.0"
+    devalue "^4.2.0"
     kleur "^4.1.5"
     magic-string "^0.26.7"
     mime "^3.0.0"
@@ -1992,7 +1992,7 @@ detective@^5.2.1:
     defined "^1.0.0"
     minimist "^1.2.6"
 
-devalue@^4.1.0:
+devalue@^4.2.0:
   version "4.2.0"
   resolved "https://registry.yarnpkg.com/devalue/-/devalue-4.2.0.tgz#3f542d7c828e317bab5fd3bcecde210af8f83d4b"
   integrity sha512-mbjoAaCL2qogBKgeFxFPOXAUsZchircF+B/79LD4sHH0+NHfYm8gZpQrskKDn5gENGt35+5OI1GUF7hLVnkPDw==
