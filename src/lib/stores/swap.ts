@@ -52,15 +52,17 @@ const createSwapOrder = () => {
 	};
 
 	const init = async () => {
-		const [payment, settment] = await Promise.all([
-			fetchMixPayPaymentAssets(),
-			fetchMixPaySettlementAssets()
-		]);
-		mixPayPaymentAssets = payment;
-		mixPaySettlementAssets = settment;
-
-		const p = await fetchPairs();
-		pairs.set(p);
+		try {
+			const [payment, settment] = await Promise.all([
+				fetchMixPayPaymentAssets(),
+				fetchMixPaySettlementAssets()
+			]);
+			mixPayPaymentAssets = payment;
+			mixPaySettlementAssets = settment;
+	
+			const p = await fetchPairs();
+			pairs.set(p);
+		} catch(e) {}
 	};
 
 	const debouncedUpdate = debounce(
