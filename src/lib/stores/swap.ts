@@ -59,10 +59,10 @@ const createSwapOrder = () => {
 			]);
 			mixPayPaymentAssets = payment;
 			mixPaySettlementAssets = settment;
-	
+
 			const p = await fetchPairs();
 			pairs.set(p);
-		} catch(e) {}
+		} catch (e) {}
 	};
 
 	const debouncedUpdate = debounce(
