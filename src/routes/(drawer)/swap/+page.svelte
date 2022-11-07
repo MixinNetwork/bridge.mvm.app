@@ -73,6 +73,7 @@
 
 	const handleChangeInputAsset = (asset: Asset) => {
 		if (outputAsset?.asset_id === asset.asset_id) return;
+		swapOrder.reset();
 		inputAsset = asset;
 		setSearchParam($page, INPUT_KEY, asset.asset_id);
 		goto($page.url, { keepfocus: true, replaceState: true, noscroll: true });
@@ -80,6 +81,7 @@
 
 	const handleChangeOutputAsset = (asset: Asset) => {
 		if (inputAsset?.asset_id === asset.asset_id) return;
+		swapOrder.reset();
 		outputAsset = asset;
 		setSearchParam($page, OUTPUT_KEY, asset.asset_id);
 		goto($page.url, { keepfocus: true, replaceState: true, noscroll: true });
