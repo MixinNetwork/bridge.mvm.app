@@ -62,7 +62,9 @@ const createSwapOrder = () => {
 
 			const p = await fetchPairs();
 			pairs.set(p);
-		} catch (e) {}
+		} catch (e) {
+			console.log(e);
+		}
 	};
 
 	const debouncedUpdate = debounce(
