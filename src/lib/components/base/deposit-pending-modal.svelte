@@ -7,8 +7,6 @@
 	import type { ExternalTransactionResponseWithAsset } from './deposit-pending.svelte';
 	import LayoutBottomSheet from './modal/layout-bottom-sheet.svelte';
 	import ModalHeader from './modal/modal-header.svelte';
-	import External from '$lib/assets/external.svg?component';
-	import { explorerTransaction } from '../../helpers/utils';
 
 	export let close = () => {
 		//
@@ -25,12 +23,7 @@
 		{#each group as [date, data] (date)}
 			<div class=" text-sm font-semibold opacity-20">{date}</div>
 			{#each data as { asset, amount, asset_id, chain_id, destination, confirmations, transaction_hash } (transaction_hash)}
-				<a
-					class="flex flex-row space-x-3 py-4"
-					target="_blank"
-					rel="noreferrer"
-					href={explorerTransaction(chain_id, transaction_hash)}
-				>
+				<div class="flex flex-row space-x-3 py-4">
 					<AssetIcon
 						assetIconUrl={asset.icon_url}
 						assetName={asset.name}
@@ -47,8 +40,6 @@
 							<span>
 								{destination.slice(0, 6)}...{destination.slice(-4)}
 							</span>
-
-							<External class=" stroke-black" />
 						</span>
 					</div>
 					<div class="flex shrink-0 flex-col items-end justify-center space-y-2">
@@ -62,7 +53,7 @@
 							/>
 						</div>
 					</div>
-				</a>
+				</div>
 			{/each}
 		{/each}
 	</div>
