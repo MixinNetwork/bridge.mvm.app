@@ -13,12 +13,10 @@
 
 	export let asset: Asset;
 
-	$: depositEntry = $userDestinations.find(({ asset_id }) => asset_id === asset.asset_id)
+	$: depositEntry = $userDestinations.find(({ asset_id }) => asset_id === asset.chain_id)
 		?.deposit_entries?.[0];
-	$: destination = $userDestinations.find(({ asset_id }) => asset_id === asset.asset_id)
-		?.deposit_entries?.[0].destination;
 
-	$: !destination && browser && userDestinations.fetchDestination(asset.asset_id);
+	$: !depositEntry && browser && userDestinations.fetchDestination(asset.chain_id);
 
 	$: address = depositEntry?.destination;
 	$: memo = depositEntry?.tag;

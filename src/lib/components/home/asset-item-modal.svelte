@@ -22,10 +22,10 @@
 	};
 	export let asset: Asset;
 
-	$: destination = $userDestinations.find(({ asset_id }) => asset_id === asset.asset_id)
+	$: destination = $userDestinations.find(({ asset_id }) => asset_id === asset.chain_id)
 		?.deposit_entries?.[0].destination;
 
-	$: !destination && browser && userDestinations.fetchDestination(asset.asset_id);
+	$: !destination && browser && userDestinations.fetchDestination(asset.chain_id);
 </script>
 
 <LayoutBottomSheet class="!h-auto items-center p-5">

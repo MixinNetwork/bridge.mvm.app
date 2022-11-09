@@ -115,10 +115,10 @@
 	let l1GasModalOpened = false;
 	let l2GasModalOpened = false;
 
-	$: destination = $userDestinations.find(({ asset_id }) => asset_id === asset.asset_id)
+	$: destination = $userDestinations.find(({ asset_id }) => asset_id === asset.chain_id)
 		?.deposit_entries?.[0].destination;
 
-	$: !destination && browser && userDestinations.fetchDestination(asset.asset_id);
+	$: !destination && browser && userDestinations.fetchDestination(asset.chain_id);
 </script>
 
 <div class="mx-5 rounded-lg bg-white">
