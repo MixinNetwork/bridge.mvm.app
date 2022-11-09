@@ -1,4 +1,5 @@
-import { type Stores, type StoresValues, type Loadable, asyncDerived } from '@square/svelte-store';
+import { asyncDerived, type Stores } from '@square/svelte-store';
+import type { Loadable, StoresValues } from '@square/svelte-store/lib/async-stores/types';
 
 export const asyncDerivedStores = <S extends Stores, T, F = T>(
 	stores: S,

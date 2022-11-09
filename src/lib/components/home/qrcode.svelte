@@ -6,11 +6,22 @@
 	import { showToast } from '$lib/components/common/toast/toast-container.svelte';
 	import { selectAsset } from './export';
 	import LL from '$i18n/i18n-svelte';
+	import { userDestinations } from '../../stores/model';
+	import { browser } from '$app/environment';
+	import Spinner from '../common/spinner.svelte';
+	import { slide } from 'svelte/transition';
 
 	export let asset: Asset;
 
-	$: address = asset?.deposit_entries[0].destination;
-	$: memo = asset?.deposit_entries[0].tag;
+	$: depositEntry = $userDestinations.find(({ asset_id }) => asset_id === asset.asset_id)
+		?.deposit_entries?.[0];
+	$: destination = $userDestinations.find(({ asset_id }) => asset_id === asset.asset_id)
+		?.deposit_entries?.[0].destination;
+
+	$: !destination && browser && userDestinations.fetchDestination(asset.asset_id);
+
+	$: address = depositEntry?.destination;
+	$: memo = depositEntry?.tag;
 	$: qrcodes = [
 		...(memo
 			? [
@@ -29,32 +40,38 @@
 
 <div class="mx-5 rounded-lg bg-white">
 	<SelectedAssetButton {asset} onSelect={selectAsset} />
-	{#each qrcodes as { key, value } (key)}
-		<div class="mx-4 flex flex-col items-center break-all  pb-6">
-			<QrCode
-				{value}
-				size={130}
-				class=" mt-6 mb-4 h-[130px] w-[130px] rounded-xl bg-white p-3 shadow"
-			/>
-			<div class="w-full rounded-xl bg-black bg-opacity-[3%] py-2 px-3">
-				<div class=" text-sm font-semibold opacity-30">{key}</div>
-				<div class="flex items-center font-semibold">
-					<div class="grow">
-						{value}
+	{#if depositEntry}
+		{#each qrcodes as { key, value } (key)}
+			<div in:slide|local class="mx-4 flex flex-col items-center break-all pb-6">
+				<QrCode
+					{value}
+					size={130}
+					class=" mt-6 mb-4 h-[130px] w-[130px] rounded-xl bg-white p-3 shadow"
+				/>
+				<div class="w-full rounded-xl bg-black bg-opacity-[3%] py-2 px-3">
+					<div class=" text-sm font-semibold opacity-30">{key}</div>
+					<div class="flex items-center font-semibold">
+						<div class="grow">
+							{value}
+						</div>
+						<button
+							class="px-3 py-2"
+							on:click={async () => {
+								value && (await navigator.clipboard.writeText(value));
+								showToast('success', $LL.copied());
+							}}
+						>
+							<Copy class="fill-gray-400" />
+						</button>
 					</div>
-					<button
-						class="px-3 py-2"
-						on:click={async () => {
-							value && (await navigator.clipboard.writeText(value));
-							showToast('success', $LL.copied());
-						}}
-					>
-						<Copy class="fill-gray-400" />
-					</button>
 				</div>
 			</div>
+		{/each}
+	{:else}
+		<div class="flex h-[278px] items-center justify-center">
+			<Spinner size={24} class="stroke-brand-primary" />
 		</div>
-	{/each}
+	{/if}
 
 	<ul class="mx-6 list-outside list-disc pb-6 text-xs font-semibold opacity-50">
 		<li>{$LL.depositModal.tips1(asset.confirmations)}</li>

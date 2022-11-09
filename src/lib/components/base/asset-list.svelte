@@ -30,7 +30,7 @@
 	<SearchBar bind:keyword class="md:pt-0" />
 	<div class="grow overflow-y-auto">
 		{#each filtedAssets || [] as asset (asset.asset_id)}
-			<button class="flex w-full space-x-3 px-5 py-4" on:click={() => click(asset)}>
+			<button class="flex w-full space-x-3 px-5 py-4 text-start" on:click={() => click(asset)}>
 				<AssetIcon
 					assetIconUrl={asset.icon_url}
 					assetName={asset.name}

@@ -12,11 +12,20 @@
 	import { ETH_ASSET_ID } from '../../constants/common';
 	import Close from '$lib/assets/close.svg?component';
 	import { switchNetwork } from '../../helpers/web3/common';
+	import { userDestinations } from '../../stores/model';
+	import Spinner from '../common/spinner.svelte';
+	import { browser } from '$app/environment';
+	import { fade } from 'svelte/transition';
 
 	export let close = () => {
 		//
 	};
 	export let asset: Asset;
+
+	$: destination = $userDestinations.find(({ asset_id }) => asset_id === asset.asset_id)
+		?.deposit_entries?.[0].destination;
+
+	$: !destination && browser && userDestinations.fetchDestination(asset.asset_id);
 </script>
 
 <LayoutBottomSheet class="!h-auto items-center p-5">
@@ -67,18 +76,23 @@
 		</div>
 		<div>
 			<div>{$LL.address()}</div>
-			<button
-				class="flex flex-row items-center space-x-1 text-brand-primary"
-				on:click={async () => {
-					asset.destination && (await navigator.clipboard.writeText(asset.destination));
-					showToast('success', $LL.copied());
-				}}
-			>
-				<div>
-					{asset.destination.slice(0, 4) + '...' + asset.destination.slice(-4)}
-				</div>
-				<Copy class="fill-brand-primary" />
-			</button>
+			{#if destination}
+				<button
+					transition:fade|local
+					class="flex flex-row items-center space-x-1 text-brand-primary"
+					on:click={async () => {
+						destination && (await navigator.clipboard.writeText(destination));
+						showToast('success', $LL.copied());
+					}}
+				>
+					<div>
+						{destination?.slice(0, 4) + '...' + destination?.slice(-4)}
+					</div>
+					<Copy class="fill-brand-primary" />
+				</button>
+			{:else}
+				<Spinner size={24} class="stroke-brand-primary" />
+			{/if}
 		</div>
 		<div>
 			<div>{$LL.depositConfirmations()}</div>

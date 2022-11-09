@@ -1,4 +1,8 @@
-import type { ExchangeRateResponse } from '@mixin.dev/mixin-node-sdk';
+import {
+	AssetClient,
+	type AssetResponse,
+	type ExchangeRateResponse
+} from '@mixin.dev/mixin-node-sdk';
 import { asyncDerived, asyncReadable, derived, get } from '@square/svelte-store';
 import { fetchPairs, type Pair } from '../helpers/4swap/api';
 import { fetchAssets, fetchFeeOnAsset, fetchWithdrawalFee } from '../helpers/api';
@@ -21,6 +25,44 @@ export const assets = deepWritable<Asset[]>([], (set) => {
 		clearInterval(timer);
 	};
 });
+
+export const userDestinations = (() => {
+	const destinations = deepWritable<Pick<AssetResponse, 'asset_id' | 'deposit_entries'>[]>([]);
+
+	const findDestination = (assetId: string) => {
+		const $destinations = get(destinations);
+		const destination = $destinations.find(({ asset_id }) => asset_id === assetId);
+		return destination;
+	};
+	return {
+		subscribe: destinations.subscribe,
+		fetchDestination: async (assetId: string) => {
+			const $user = get(user);
+			const assetClient = AssetClient({
+				keystore: { ...$user, ...$user.key },
+				requestConfig: { timeout: 1000 * 60 }
+			});
+
+			const $destinations = get(destinations);
+			if (!$destinations.length) {
+				const list = await assetClient.fetchList();
+				destinations.set(list);
+			}
+
+			let destination = findDestination(assetId);
+			if (destination) return destination.deposit_entries;
+
+			const asset = await assetClient.fetch(assetId);
+			destinations.update((list) => [...list, asset]);
+
+			destination = findDestination(assetId);
+
+			if (!destination) throw new Error('Destination not found');
+
+			return destination.deposit_entries;
+		}
+	};
+})();
 
 export const updateAssets = async () => {
 	const $user = get(user);

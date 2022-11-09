@@ -105,6 +105,7 @@ export const switchNetwork = async (provider: ethers.providers.Web3Provider, net
 export const deposit = async (
 	provider: ethers.providers.Web3Provider,
 	asset: Asset,
+	destination: string,
 	amount: string
 ) => {
 	await switchNetwork(provider, 'mainnet');
@@ -114,7 +115,7 @@ export const deposit = async (
 	if (asset.asset_id === ETH_ASSET_ID) {
 		const transactionParameters = {
 			from: ethers.utils.getAddress(await signer.getAddress()),
-			to: asset.destination,
+			to: destination,
 			value: ethers.utils.parseEther(amount).toString(),
 			chainId: 0x1
 		};
@@ -125,7 +126,7 @@ export const deposit = async (
 		const tokenContract = new ethers.Contract(asset.asset_key, ERC20_ABI, signer);
 		const tokenDecimal = await tokenContract.decimals();
 		const value = ethers.utils.parseUnits(amount, tokenDecimal);
-		return await tokenContract.transfer(asset.destination, value, {
+		return await tokenContract.transfer(destination, value, {
 			gasLimit: 300000
 		});
 	}

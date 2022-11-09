@@ -76,7 +76,7 @@ export const switchDepositMode = (asset: Asset, _depositMode: DepositMode | unde
 	setSearchParam($page, MODE_KEY, 'deposit');
 	setSearchParam($page, DEPOSIT_MODE_KEY, get(depositMode));
 
-	browser && goto($page.url, { keepfocus: true, replaceState: true, noscroll: true });
+	browser && goto($page.url, { keepFocus: true, replaceState: true, noScroll: true });
 };
 
 export const switchWithdrawMode = (asset: Asset) => {
@@ -89,7 +89,7 @@ export const switchWithdrawMode = (asset: Asset) => {
 	setSearchParam($page, MODE_KEY, 'withdraw');
 	setSearchParam($page, DEPOSIT_MODE_KEY, undefined);
 
-	browser && goto($page.url, { keepfocus: true, replaceState: true, noscroll: true });
+	browser && goto($page.url, { keepFocus: true, replaceState: true, noScroll: true });
 };
 
 export const resetStore = () => {
@@ -102,7 +102,7 @@ export const resetStore = () => {
 	setSearchParam($page, MODE_KEY, undefined);
 	setSearchParam($page, DEPOSIT_MODE_KEY, undefined);
 
-	browser && goto($page.url, { keepfocus: true, replaceState: true, noscroll: true });
+	browser && goto($page.url, { keepFocus: true, replaceState: true, noScroll: true });
 };
 
 export const selectAsset = (asset: Asset) => {

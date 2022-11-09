@@ -8,7 +8,13 @@
 	import type { Asset } from '$lib/types/asset';
 	import Eth from '$lib/assets/logo/eth.svg?component';
 	import SelectedAssetButton from '$lib/components/base/selected-asset-button.svelte';
-	import { AssetWithdrawalFee, updateAssets, buildBalanceStore, assets } from '$lib/stores/model';
+	import {
+		AssetWithdrawalFee,
+		updateAssets,
+		buildBalanceStore,
+		assets,
+		userDestinations
+	} from '$lib/stores/model';
 	import { registerAndSave, user } from '$lib/stores/user';
 	import { EOS_ASSET_ID, ETH_ASSET_ID, TRANSACTION_GAS } from '$lib/constants/common';
 	import { bigGte, bigMul, format } from '$lib/helpers/big';
@@ -25,6 +31,8 @@
 	import Info from '$lib/assets/info.svg?component';
 	import Modal from '../common/modal/modal.svelte';
 	import TipModal from '../base/tip-modal.svelte';
+	import { browser } from '$app/environment';
+	import { slide } from 'svelte/transition';
 
 	export let asset: Asset;
 	export let depositMode: boolean;
@@ -76,7 +84,8 @@
 		try {
 			const value = amount.toString();
 			if (depositMode) {
-				await deposit($library, asset, value);
+				const destination = await userDestinations.fetchDestination(asset.asset_id);
+				await deposit($library, asset, destination[0].destination, value);
 				await updateAssets();
 			} else {
 				await withdraw(
@@ -105,6 +114,11 @@
 
 	let l1GasModalOpened = false;
 	let l2GasModalOpened = false;
+
+	$: destination = $userDestinations.find(({ asset_id }) => asset_id === asset.asset_id)
+		?.deposit_entries?.[0].destination;
+
+	$: !destination && browser && userDestinations.fetchDestination(asset.asset_id);
 </script>
 
 <div class="mx-5 rounded-lg bg-white">
@@ -154,8 +168,16 @@
 		</div>
 	</div>
 	{#if depositMode}
-		<div class={clsx('break-all px-4 py-3 font-semibold', inputClasses)}>
-			{asset.destination}
+		<div
+			class={clsx('break-all px-4 py-3 font-semibold', inputClasses, {
+				'flex items-center justify-center': !destination
+			})}
+		>
+			{#if destination}
+				<div in:slide|local>{destination}</div>
+			{:else}
+				<Spinner size={24} class="stroke-brand-primary" />
+			{/if}
 		</div>
 	{:else}
 		<div class="flex border-b-2 border-brand-background">
@@ -275,7 +297,7 @@
 <button
 	class="mt-10 flex w-28 justify-center self-center rounded-full bg-brand-primary px-6 py-4 text-white"
 	on:click={transfer}
-	disabled={(!isEthChain && !address) || !fromBalance || !amount || amount < 0.0001}
+	disabled={!destination || (!isEthChain && !address) || !fromBalance || !amount || amount < 0.0001}
 >
 	{#if loading && !depositMode}
 		<Spinner class="stroke-white stroke-2 text-center" />
