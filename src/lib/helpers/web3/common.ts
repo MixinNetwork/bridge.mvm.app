@@ -51,15 +51,9 @@ export const getERC20Balance = async ({
 	return utils.formatUnits(balance, decimals);
 };
 
-export const getAssetBalance = async (
-	assets: Asset[],
-	assetId: string,
-	address: string,
-	network: Network
-) => {
-	if (assetId === ETH_ASSET_ID) return getBalance({ account: address, network });
+export const getAssetBalance = async (asset: Asset, address: string, network: Network) => {
+	if (asset.asset_id === ETH_ASSET_ID) return getBalance({ account: address, network });
 
-	const asset = assets.find((a) => a.asset_id === assetId);
 	const contract = network === 'mvm' ? asset?.contract : asset?.asset_key;
 	if (!contract) return '0';
 
