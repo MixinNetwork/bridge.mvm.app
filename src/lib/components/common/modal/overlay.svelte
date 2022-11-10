@@ -49,7 +49,8 @@
 	class={clsx('fixed inset-0 z-20 flex items-center justify-center overflow-auto', clazz)}
 	bind:this={element}
 >
-	<button
+	<!-- svelte-ignore a11y-click-events-have-key-events -->
+	<div
 		transition:tailwind|local={{
 			from: 'opacity-0',
 			to: '!opacity-100'
@@ -58,11 +59,12 @@
 		on:click|self={onClick}
 	/>
 
-	<button
+	<!-- svelte-ignore a11y-click-events-have-key-events -->
+	<div
 		use:focus={{ focusable: true, enabled: true }}
 		class="flex h-full w-full cursor-default items-center justify-center overflow-hidden text-start opacity-100 child:z-30"
 		on:click|self={onClick}
 	>
 		<svelte:component this={component} {...props} />
-	</button>
+	</div>
 </div>
