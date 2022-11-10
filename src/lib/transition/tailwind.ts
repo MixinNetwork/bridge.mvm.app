@@ -1,6 +1,5 @@
 import type { TransitionConfig } from 'svelte/types/runtime/transition';
 import { linear } from 'svelte/easing';
-import { tick } from 'svelte';
 
 export interface ClassesParams {
 	delay?: number;
@@ -56,10 +55,10 @@ export function tailwind(
 			callback();
 			return;
 		}
-		tick().then(() => {
+		setTimeout(() => {
 			node.classList.add(durationClass);
-			callback();
-		});
+			setTimeout(callback, 0);
+		}, 0);
 	};
 
 	return {
