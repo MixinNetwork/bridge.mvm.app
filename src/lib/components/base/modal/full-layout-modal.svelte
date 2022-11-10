@@ -11,7 +11,7 @@
 		to: 'translate-x-0 scale-100 opacity-100'
 	}}
 	class={clsx(
-		'z-10 flex h-screen w-screen flex-col items-stretch bg-brand-background pb-6 md:h-auto md:max-h-[85%] md:min-h-[560px] md:w-[375px] md:rounded-xl'
+		'z-10 flex h-full w-screen flex-col items-stretch bg-brand-background pb-6 md:h-auto md:max-h-[85%] md:min-h-[560px] md:w-[375px] md:rounded-xl'
 	)}
 >
 	<FullModalHeader on:click>

@@ -25,7 +25,7 @@
 	};
 </script>
 
-<LayoutBottomSheet>
+<LayoutBottomSheet class="h-4/5">
 	<FullModalHeader class="mb-0 hidden md:flex" on:click={close}>{$LL.assets()}</FullModalHeader>
 	<SearchBar bind:keyword class="md:pt-0" />
 	<div class="grow overflow-y-auto">
