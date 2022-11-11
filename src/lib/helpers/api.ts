@@ -183,16 +183,19 @@ export const checkOrder = async (
 
 			try {
 				const res = await fetchOrderStatus(order_id, user);
+				console.log('check order status', new Date());
+
 				if (
 					(source === '4Swap' && res && (res as OrderResponse).state === 'Done') ||
 					(source === 'MixPay' && res && (res as MixPayPaymentResponse).data.status === 'success')
 				) {
 					clearInterval(timer);
+					console.log('order success', new Date());
 					resolve(true);
 				}
 			} catch (e) {
 				return;
 			}
-		}, 5000);
+		}, 1000);
 	});
 };

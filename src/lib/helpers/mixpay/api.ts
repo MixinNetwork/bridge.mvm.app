@@ -190,6 +190,7 @@ const fetchMixPaySwapTraceId = async (
 
 			if (snapshot) {
 				clearInterval(timer);
+				console.log('send to mixpay', new Date());
 				resolve((snapshot as TransferResponse).trace_id);
 			}
 			if (count === 20) {

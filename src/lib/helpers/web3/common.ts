@@ -195,11 +195,15 @@ export const swapAsset = async (
 		const assetAmount = ethers.utils.parseEther(Number(order.funds).toFixed(8)).toString();
 		const bridge = new ethers.Contract(BRIDGE_ADDRESS, BRIDGE_ABI, signer);
 
-		await bridge.release(user.contract, info.extra, {
+		console.log('before send tx', new Date());
+		const r = await bridge.release(user.contract, info.extra, {
 			gasPrice: 10000000,
 			gasLimit: 500000,
 			value: assetAmount
 		});
+		console.log('sended', new Date())
+		await r.wait()
+		console.log('get tx receipt', new Date())
 
 		const follow_id = await info.getFollowId(Date.now());
 		return await checkOrder(source, follow_id, user);
@@ -211,10 +215,14 @@ export const swapAsset = async (
 		const tokenDecimal = await tokenContract.decimals();
 		const value = ethers.utils.parseUnits(`${order.funds}`, tokenDecimal);
 
-		await tokenContract.transferWithExtra(user.contract, value, info.extra, {
+		console.log('before send tx', new Date());
+		const r = await tokenContract.transferWithExtra(user.contract, value, info.extra, {
 			gasPrice: 10000000,
 			gasLimit: 450000
 		});
+		console.log('sended', new Date())
+		await r.wait()
+		console.log('get tx receipt', new Date())
 
 		const follow_id = await info.getFollowId(Date.now());
 		return await checkOrder(source, follow_id, user);
