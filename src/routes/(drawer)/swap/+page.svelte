@@ -68,7 +68,7 @@
 		setSearchParam($page, INPUT_KEY, inputAsset?.asset_id);
 		setSearchParam($page, OUTPUT_KEY, outputAsset?.asset_id);
 
-		goto($page.url, { keepfocus: true, replaceState: true, noscroll: true });
+		goto($page.url, { keepFocus: true, replaceState: true, noScroll: true });
 	};
 
 	const handleChangeInputAsset = (asset: Asset) => {
@@ -76,7 +76,7 @@
 		swapOrder.reset();
 		inputAsset = asset;
 		setSearchParam($page, INPUT_KEY, asset.asset_id);
-		goto($page.url, { keepfocus: true, replaceState: true, noscroll: true });
+		goto($page.url, { keepFocus: true, replaceState: true, noScroll: true });
 	};
 
 	const handleChangeOutputAsset = (asset: Asset) => {
