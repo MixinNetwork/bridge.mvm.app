@@ -201,9 +201,9 @@ export const swapAsset = async (
 			gasLimit: 500000,
 			value: assetAmount
 		});
-		console.log('sended', new Date())
-		await r.wait()
-		console.log('get tx receipt', new Date())
+		console.log('sended', new Date());
+		await r.wait();
+		console.log('get tx receipt', new Date());
 
 		const follow_id = await info.getFollowId(Date.now());
 		return await checkOrder(source, follow_id, user);
@@ -220,9 +220,9 @@ export const swapAsset = async (
 			gasPrice: 10000000,
 			gasLimit: 450000
 		});
-		console.log('sended', new Date())
-		await r.wait()
-		console.log('get tx receipt', new Date())
+		console.log('sended', new Date());
+		await r.wait();
+		console.log('get tx receipt', new Date());
 
 		const follow_id = await info.getFollowId(Date.now());
 		return await checkOrder(source, follow_id, user);
