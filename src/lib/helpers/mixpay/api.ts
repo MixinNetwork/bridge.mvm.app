@@ -162,7 +162,6 @@ const fetchMixPaySwapTraceId = async (
 			...user.key
 		}
 	});
-	console.log(opponent_id, memo, paymentAssetId, timestamp);
 
 	return await new Promise((resolve, reject) => {
 		let count = 0;
@@ -179,13 +178,6 @@ const fetchMixPaySwapTraceId = async (
 			} as any);
 			const snapshot = snapshotArray.find((snapshot) => {
 				if (snapshot.type !== 'transfer') return false;
-				console.log(snapshot);
-				console.log(
-					format({ n: snapshot.amount.slice(1) }),
-					format({ n: amount }),
-					format({ n: snapshot.amount.slice(1) }) === format({ n: amount })
-				);
-				console.log(new Date(snapshot.created_at).getTime());
 				return (
 					snapshot.opponent_id === opponent_id &&
 					snapshot.memo === memo &&

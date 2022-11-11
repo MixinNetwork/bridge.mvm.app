@@ -196,6 +196,7 @@ export const swapAsset = async (
 		const bridge = new ethers.Contract(BRIDGE_ADDRESS, BRIDGE_ABI, signer);
 
 		console.log('before send tx', new Date());
+		const t = Date.now();
 		const r = await bridge.release(user.contract, info.extra, {
 			gasPrice: 10000000,
 			gasLimit: 500000,
@@ -205,7 +206,7 @@ export const swapAsset = async (
 		await r.wait();
 		console.log('get tx receipt', new Date());
 
-		const follow_id = await info.getFollowId(Date.now());
+		const follow_id = await info.getFollowId(t);
 		return await checkOrder(source, follow_id, user);
 	}
 
