@@ -324,7 +324,7 @@
 					<div>
 						<div>{$LL.swapPage.tips.priceImpact()}</div>
 						<div
-							transition:fade
+							transition:fade|local
 							class={clsx({
 								'text-brand-forbiddenPrice': order?.priceImpact >= 0.1,
 								'text-brand-warningPrice': order?.priceImpact >= 0.01 && order?.priceImpact < 0.1,

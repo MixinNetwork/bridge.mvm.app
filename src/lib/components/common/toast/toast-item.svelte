@@ -20,7 +20,7 @@
 </script>
 
 <div
-	transition:fade
+	transition:fade|local
 	class={clsx('flex rounded-full bg-white mt-1 py-2 px-3 align-middle space-x-3', clazz)}
 >
 	<svelte:component this={component} {message} />
