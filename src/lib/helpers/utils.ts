@@ -24,5 +24,5 @@ export const getAsset = (assetId: string | null, assets: Asset[]) => {
 
 export const getTime = () => {
 	const t = new Date();
-	return `${t.getHours}:${t.getMinutes}:${t.getSeconds}`;
+	return `${t.getHours()}:${t.getMinutes()}:${t.getSeconds()}`;
 };
