@@ -518,10 +518,10 @@
   resolved "https://registry.yarnpkg.com/@metamask/safe-event-emitter/-/safe-event-emitter-2.0.0.tgz#af577b477c683fad17c619a78208cede06f9605c"
   integrity sha512-/kSXhY692qiV1MXu6EeOZvg5nECLclxNXcKCxJ3cXQgYuRymRHpdx/t7JXfsK+JLjwA1e1c1/SBrlQYpusC29Q==
 
-"@mixin.dev/mixin-node-sdk@^4.8.0":
-  version "4.8.0"
-  resolved "https://registry.yarnpkg.com/@mixin.dev/mixin-node-sdk/-/mixin-node-sdk-4.8.0.tgz#fc2f1f9843f0281dcd86f0dc392db27cbca1612f"
-  integrity sha512-z4TUIzcuIEShQ79ry8TTnrxJg0x8oNO9VxaKakMvE6/cGrFF7putwoYCGcMXMsM8imuQ4bLaD8+WLBk4Py4ovA==
+"@mixin.dev/mixin-node-sdk@^4.9.0":
+  version "4.9.0"
+  resolved "https://registry.yarnpkg.com/@mixin.dev/mixin-node-sdk/-/mixin-node-sdk-4.9.0.tgz#e24c874bcc48affd3a685a59aa6e766a49173f29"
+  integrity sha512-egpahQd8TdwrldMMlrqco9qU+b2SpcJjapPDA0AdQpTng2/OCmdnPtcw4cR/8o9qkujT5RiOw+blgZli3eupGA==
   dependencies:
     "@ethersproject/abi" "^5.6.3"
     "@ethersproject/providers" "^5.6.8"
