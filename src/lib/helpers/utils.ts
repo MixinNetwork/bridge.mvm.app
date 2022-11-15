@@ -21,3 +21,8 @@ export const getAsset = (assetId: string | null, assets: Asset[]) => {
 	if (!assetId) return;
 	return assets.find((a) => a.asset_id === assetId);
 };
+
+export const getTime = () => {
+	const t = new Date();
+	return `${t.getHours}:${t.getMinutes}:${t.getSeconds}`;
+}
