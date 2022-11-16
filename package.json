@@ -35,7 +35,7 @@
 		"autoprefixer": "^10.4.13",
 		"bignumber.js": "^9.1.0",
 		"clsx": "^1.2.1",
-		"daisyui": "^2.40.1",
+		"daisyui": "^2.41.0",
 		"dayjs": "^1.11.6",
 		"eslint": "^8.26.0",
 		"eslint-config-prettier": "^8.3.0",
