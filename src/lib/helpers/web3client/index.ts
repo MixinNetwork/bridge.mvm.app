@@ -7,12 +7,10 @@ import Logo from '$lib/assets/logo/logo.svg';
 import { loadLocale } from '$i18n/i18n-util.sync';
 import injectedModule from '@web3-onboard/injected-wallets';
 import walletConnectModule from '@web3-onboard/walletconnect';
-import coinbaseWalletModule from '@web3-onboard/coinbase';
 import type { i18n } from '@web3-onboard/core/dist/types';
 
 const injected = injectedModule();
 const walletConnect = walletConnectModule();
-const coinbaseWalletSdk = coinbaseWalletModule();
 
 loadLocale('en');
 loadLocale('zh');
@@ -20,7 +18,7 @@ loadLocale('zh');
 const en = i18nObject('en');
 
 const onboard = Onboard({
-	wallets: [injected, walletConnect, coinbaseWalletSdk],
+	wallets: [injected, walletConnect],
 	chains: [
 		{
 			id: '0x1',
