@@ -6,7 +6,7 @@ import inject from '@rollup/plugin-inject';
 
 import svg from '@poppanator/sveltekit-svg';
 
-const production = process.env.NODE_ENV === 'production';
+const isDev = process.env.NODE_ENV === 'development';
 
 /** @type {import('vite').UserConfig} */
 const config = {
@@ -15,17 +15,19 @@ const config = {
 	},
 	resolve: {
 		alias: {
-			path: 'path-browserify',
-			util: 'rollup-plugin-node-polyfills/polyfills/util'
+			path: 'path-br	owserify',
+			util: 'rollup-plugin-node-polyfills/polyfills/util',
+			'@ensdomains/address-encoder': '@ensdomains/address-encoder/lib/index.umd.js'
 		}
 	},
 	plugins: [
 		sveltekit(),
 		// ↓ Needed for development mode
-		!production &&
-			nodePolyfills({
-				include: ['node_modules/**/*.js', new RegExp('node_modules/.vite/.*js')]
-			}),
+		isDev
+			? nodePolyfills({
+					include: ['node_modules/**/*.js', new RegExp('node_modules/.vite/.*js')]
+			  })
+			: '',
 		svg({
 			type: 'url',
 			svgoOptions: {

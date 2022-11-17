@@ -10,6 +10,7 @@ declare global {
 		interface Locals {
 			user?: User;
 			provider?: ProviderKey;
+			providerLogo?: string;
 			lang: Locales;
 		}
 

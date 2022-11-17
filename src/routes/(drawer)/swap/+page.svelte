@@ -17,7 +17,7 @@
 	import { DEFAULT_SLIPPAGE, INPUT_KEY, OUTPUT_KEY, formatFiat } from '$lib/components/swap/export';
 	import Faq from '$lib/components/swap/faq.svelte';
 	import { registerAndSave, user } from '$lib/stores/user';
-	import { library } from '$lib/stores/ether';
+	import { library, needConnectWallet } from '$lib/stores/ether';
 	import { ETH_ASSET_ID, XIN_ASSET_ID } from '$lib/constants/common';
 	import Spinner from '$lib/components/common/spinner.svelte';
 	import { showToast } from '$lib/components/common/toast/toast-container.svelte';
@@ -36,14 +36,12 @@
 
 	$: a && !$assets.length && assets.set(a);
 
-	$: !inputAsset &&
-		(inputAsset =
-			getAsset($page.url.searchParams.get(INPUT_KEY) || ETH_ASSET_ID, $assets) ||
-			getAsset(ETH_ASSET_ID, $assets));
-	$: !outputAsset &&
-		(outputAsset =
-			getAsset($page.url.searchParams.get(OUTPUT_KEY) || XIN_ASSET_ID, $assets) ||
-			getAsset(XIN_ASSET_ID, $assets));
+	$: inputAsset =
+		getAsset($page.url.searchParams.get(INPUT_KEY) || ETH_ASSET_ID, $assets) ||
+		getAsset(ETH_ASSET_ID, $assets);
+	$: outputAsset =
+		getAsset($page.url.searchParams.get(OUTPUT_KEY) || XIN_ASSET_ID, $assets) ||
+		getAsset(XIN_ASSET_ID, $assets);
 
 	let lastEdited: 'input' | 'output' | undefined = undefined;
 	let inputAmount: number | string | undefined = undefined;
@@ -345,7 +343,7 @@
 
 		<button
 			class="mt-10 mb-6 flex w-28 justify-center self-center rounded-full bg-brand-primary px-6 py-3 text-white"
-			on:click={swap}
+			on:click={needConnectWallet(swap)}
 			disabled={!(order && +order.amount) ||
 				order?.priceImpact > 0.15 ||
 				$swapOrder.loading ||

@@ -6,6 +6,9 @@
 	import { setLocale } from '$i18n/i18n-svelte';
 	import { page } from '$app/stores';
 	import LL from '$i18n/i18n-svelte';
+	import Modal from '../lib/components/common/modal/modal.svelte';
+	import SpinnerModal from '../lib/components/common/spinner-modal.svelte';
+	import { logging } from '../lib/stores/model';
 
 	setLocale($page.data.lang);
 </script>
@@ -26,3 +29,10 @@
 <slot />
 <PortalContainer />
 <ToastContainer />
+
+<Modal
+	modal-opened={$logging}
+	this={SpinnerModal}
+	modal-mask-closeable={false}
+	modal-keyboard-closeable={false}
+/>

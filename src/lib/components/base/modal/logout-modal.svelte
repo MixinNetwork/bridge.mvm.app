@@ -24,7 +24,13 @@
 		<div class="text-xl font-bold">{$LL.logout.description()}</div>
 		<div class=" space-x-6 font-semibold child:h-12 child:w-28 child:rounded-full">
 			<button class="bg-black bg-opacity-5" on:click={close}>{$LL.cancel()}</button>
-			<button class="bg-brand-primary text-white" on:click={logout}>{$LL.yes()}</button>
+			<button
+				class="bg-brand-primary text-white"
+				on:click={async () => {
+					await logout();
+					close();
+				}}>{$LL.yes()}</button
+			>
 		</div>
 	</div>
 </div>

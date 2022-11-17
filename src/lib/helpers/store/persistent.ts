@@ -61,7 +61,7 @@ export const persistentWritable = <T>(
 ): Writable<T> => {
 	const decode = (value: string | null | undefined): T => {
 		if (!value) return initial;
-		if (!option) return value as T;
+		if (!option?.decode) return value as T;
 		return option.decode(value);
 	};
 
@@ -73,7 +73,7 @@ export const persistentWritable = <T>(
 
 	$deepWritable.onSet = (value: T) => {
 		if (!value) return removeItem(key);
-		const raw = option ? option.encode(value) : (value as string);
+		const raw = option?.encode ? option.encode(value) : (value as string);
 		setItem(key, raw);
 	};
 

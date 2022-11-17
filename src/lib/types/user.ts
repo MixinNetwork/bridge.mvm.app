@@ -12,5 +12,5 @@ export interface RegisteredUser {
 }
 
 export interface User extends RegisteredUser {
-	address: `0x${string}`;
+	address: string;
 }

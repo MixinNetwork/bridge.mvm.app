@@ -118,7 +118,8 @@ const en: BaseTranslation = {
 	},
 	amount: 'Amount',
 	pending: 'Pending({0:number})',
-	confirmations: '{0:number}/{1:number} Confirmations'
+	confirmations: '{0:number}/{1:number} Confirmations',
+	connectWallet: 'Connect Wallet'
 };
 
 export default en;

@@ -4,7 +4,7 @@ import { register } from '../helpers/api';
 import { jsonPersistentEncoder, persistentWritable } from '../helpers/store/persistent';
 import type { User } from '../types/user';
 import { account } from './ether';
-import { clearLastProvider } from './provider';
+import { clearLastProvider, providerKey } from './provider';
 import { LANG, USER_KEY } from '$lib/constants/common';
 import { dedupe } from '../helpers/store/dedupe';
 import { invalidateAll } from '$app/navigation';
@@ -35,11 +35,11 @@ export const switchLang = async (lang: Locales) => {
 
 export const lang = derived(persistentLang, (lang) => lang);
 
-export const user = dedupe(
-	derived([persistentUser, page], ([$user, $page]) => $user || $page.data.user)
+export const user = dedupe<User | undefined>(
+	derived([persistentUser, page], ([$user, $page]) => $user || $page.data?.user || undefined)
 );
 
-export const registerAndSave = async (address: `0x${string}`) => {
+export const registerAndSave = async (address: string) => {
 	const u = await register(address);
 	return persistentUser.set({
 		...u,
@@ -51,11 +51,18 @@ export const logout = async () => {
 	await invalidateAll();
 	persistentUser.set(undefined);
 	clearLastProvider();
+	location.reload();
 };
 
-export const legalUser = derived([persistentUser, account], ([$user, $account]) => {
-	return $user && $user.address === $account;
-});
+export const isLogged = derived(
+	[user, providerKey],
+	([$user, $providerKey]) => !!$user && !!$providerKey
+);
+
+export const legalUser = derived(
+	[persistentUser, account, isLogged],
+	([$user, $account, $isLogged]) => ($isLogged ? $user && $user.address === $account : undefined)
+);
 
 export const address = derived(user, ($user) => $user?.address);
 

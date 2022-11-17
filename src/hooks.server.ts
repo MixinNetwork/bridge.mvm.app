@@ -1,7 +1,7 @@
 import type { Handle, RequestEvent } from '@sveltejs/kit';
 import * as cookie from 'cookie';
 import type { User } from '$lib/types/user';
-import { LANG, PROVIDER_KEY, USER_KEY } from '$lib/constants/common';
+import { LANG, PROVIDER_KEY, PROVIDER_LOGO, USER_KEY } from '$lib/constants/common';
 import type { ProviderKey } from '$lib/helpers/web3client/type';
 import { detectLocale, initAcceptLanguageHeaderDetector } from 'typesafe-i18n/detectors';
 import { baseLocale, isLocale, locales } from '$i18n/i18n-util';
@@ -15,11 +15,13 @@ export const handle: Handle = async ({ event, resolve }) => {
 	try {
 		const userRaw = cookies[USER_KEY];
 		const provider = cookies[PROVIDER_KEY] as ProviderKey | undefined;
+		const providerLogo = cookies[PROVIDER_LOGO] as string | undefined;
 		if (userRaw && provider) {
 			const user: User = JSON.parse(userRaw);
 
 			event.locals.user = user;
 			event.locals.provider = provider;
+			event.locals.providerLogo = providerLogo;
 		}
 
 		const tempLang = (isLocale(cookies[LANG]) && (cookies[LANG] as Locales)) || undefined;

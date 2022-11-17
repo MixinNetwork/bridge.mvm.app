@@ -2,26 +2,54 @@ import { ethers } from 'ethers';
 import { derived, get } from '@square/svelte-store';
 import { deepWritable } from '../helpers/store/deep';
 import { clearLastProvider } from './provider';
+import type { EIP1193Provider } from '@web3-onboard/core';
+import { connectWallet as connect } from '../helpers/web3client';
+import { isLogged, registerAndSave, user } from './user';
+import { assets, logging } from './model';
+import { fetchAssets } from '../helpers/api';
+import { invalidateAll } from '$app/navigation';
+import { browser } from '$app/environment';
 
 interface EtherStore {
 	library?: ethers.providers.Web3Provider;
-	provider?: ethers.providers.Web3Provider;
-	chainId?: number;
-	account?: `0x${string}`;
+	provider?: EIP1193Provider;
+	chainId?: string;
+	account?: string;
 	// network?: string;
 }
 
 const store = deepWritable<EtherStore>({});
 
-export const setProvider = async (
-	provider: (ethers.providers.ExternalProvider | ethers.providers.JsonRpcFetchFunc) &
-		ethers.providers.Web3Provider
-) => {
+export const connectWallet = async () => {
+	if (!browser) return;
+	try {
+		logging.set(true);
+		const provider = await connect();
+		await setProvider(provider);
+		const $account = get(account);
+		if (!$account) throw new Error('No account found');
+		await registerAndSave($account);
+		assets.set(await fetchAssets(get(user)));
+		await invalidateAll();
+	} finally {
+		logging.set(false);
+	}
+};
+
+export const needConnectWallet = (fn: () => unknown) => {
+	return async () => {
+		const $isLogged = get(isLogged);
+		if (!$isLogged) await connectWallet();
+		fn();
+	};
+};
+
+export const setProvider = async (provider: EIP1193Provider) => {
 	const library: ethers.providers.Web3Provider = new ethers.providers.Web3Provider(provider, 'any');
-	const accounts = (await library.listAccounts()) as `0x${string}`[];
+	const accounts = (await library.listAccounts()) as string[];
 	const network = await library.getNetwork();
 
-	const handleChainChanged = (chainId: number) => {
+	const handleChainChanged = (chainId: string) => {
 		store.set({
 			...get(store),
 			chainId: chainId
@@ -33,7 +61,7 @@ export const setProvider = async (
 		store.set({});
 	};
 
-	const handleAccountsChanged = (accounts: `0x${string}`[] | undefined) => {
+	const handleAccountsChanged = (accounts: string[]) => {
 		if (!accounts || !accounts.length) {
 			handleDisconnect();
 			return;
@@ -44,13 +72,13 @@ export const setProvider = async (
 		});
 	};
 
-	get(store).provider?.removeAllListeners();
+	get(store).provider?.disconnect?.();
 
 	store.set({
 		provider,
 		library,
 		account: accounts[0],
-		chainId: network.chainId
+		chainId: `${network.chainId}`
 	});
 
 	provider.on('accountsChanged', handleAccountsChanged);

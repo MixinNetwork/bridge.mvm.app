@@ -1,21 +1,18 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
-	import { goto } from '$app/navigation';
-	import { page } from '$app/stores';
-	import { createWeb3Client } from '$lib/helpers/web3client';
-	import { setProvider } from '$lib/stores/ether';
-	import { legalUser, logout } from '$lib/stores/user';
-	import { LAST_URL } from '../../../constants/common';
+	import { isLogged, legalUser, logout } from '$lib/stores/user';
+	import { cacheConnectWallet } from '../../../helpers/web3client';
+	import { provider, setProvider } from '../../../stores/ether';
 
 	let listening = false;
 
 	const init = async () => {
 		if (!browser) return;
+		if (!$isLogged) return;
+		if ($provider) return;
 
-		let p;
-		const web3Client = await createWeb3Client();
 		try {
-			p = await web3Client.cacheConnect();
+			const p = await cacheConnectWallet();
 			await (p && setProvider(p));
 		} catch (e) {
 			console.log('guard error', e);
@@ -28,11 +25,6 @@
 
 	if (browser) init();
 	$: if (listening && !$legalUser) logout();
-
-	$: if (listening && !$legalUser) {
-		const url = $page.url.href.replace($page.url.origin, '');
-		goto(`/connect/?${LAST_URL}=${url}`);
-	}
 </script>
 
 <slot />

@@ -8,10 +8,10 @@ export const version = __version__;
 export const WITHDRAW_BOT_ID = '131a0774-59a1-4e3d-9af2-e1b43aa37936';
 export const MIXPAY_BOT_ID = '3539c3ce-52c0-4b0b-9573-c035ecb98d48';
 
-export const LAST_URL = 'last-url';
 export const USER_KEY = 'USER';
 export const LANG = 'lang';
 export const PROVIDER_KEY = 'PROVIDER';
+export const PROVIDER_LOGO = 'PROVIDER_LOGO';
 
 export const TRX_ASSET_ID = '25dabac5-056a-48ff-b9f9-f67395dc407c';
 export const ETH_ASSET_ID = '43d61dcd-e413-450d-80b8-101d5e903357';

@@ -41,7 +41,7 @@ export const fetchWithdrawalFee = async (asset_id: string, destination: string, 
 	}
 };
 
-export const fetchAssets = async (user: User) => {
+export const fetchAssets = async (user: User | undefined) => {
 	const networkClient = NetworkClient();
 
 	const [allAssets, addresses, ethBalance, tokens] = await Promise.all([
@@ -59,11 +59,13 @@ export const fetchAssets = async (user: User) => {
 				address: await fetchAssetContract(id)
 			}))
 		),
-		getBalance({
-			account: user.address,
-			network: 'mvm'
-		}),
-		fetchMvmTokens(user.address)
+		user
+			? getBalance({
+					account: user.address,
+					network: 'mvm'
+			  })
+			: undefined,
+		user ? fetchMvmTokens(user.address) : undefined
 	]);
 
 	let assets = allAssets.filter(({ asset_id }) => WHITELIST_ASSET_ID.includes(asset_id));
@@ -75,14 +77,14 @@ export const fetchAssets = async (user: User) => {
 	// balance and set contract
 	let whiteListAssets = assets.map((a) => {
 		const asset = a as Asset;
-		if (asset.asset_id === ETH_ASSET_ID) {
+		if (asset.asset_id === ETH_ASSET_ID && ethBalance) {
 			asset.balance = ethBalance;
 			return asset;
 		}
 
 		asset.contract = addresses.find((a) => a.id === asset.asset_id)?.address;
 
-		const token = tokens.find(
+		const token = tokens?.find(
 			(token) => token.contractAddress.toLowerCase() === asset.contract?.toLowerCase()
 		);
 		if (!token) {
@@ -121,7 +123,8 @@ export const fetchAssets = async (user: User) => {
 	whiteListAssets = sortBy(
 		whiteListAssets,
 		({ balance, price_usd }) => +bigMul(balance, price_usd),
-		'balance'
+		'balance',
+		({ price_usd }) => +price_usd
 	).reverse();
 
 	const eth = whiteListAssets.find((asset) => asset.asset_id === ETH_ASSET_ID);

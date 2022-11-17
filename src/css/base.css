@@ -47,4 +47,8 @@
 	input[type='number'] {
 		-moz-appearance: textfield;
 	}
+
+	:root {
+		--onboard-modal-z-index: 99999;
+	}
 }

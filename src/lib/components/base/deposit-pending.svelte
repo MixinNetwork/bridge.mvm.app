@@ -20,7 +20,8 @@
 		asset: Asset;
 	};
 
-	const DepositPendingStore = mapTemplate((user: User) => {
+	const DepositPendingStore = mapTemplate((user: User | undefined) => {
+		if (!user) return deepReadable<ExternalTransactionResponseWithAsset[]>([]);
 		const assetClient = AssetClient({
 			keystore: { ...user, ...user.key }
 		});

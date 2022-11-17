@@ -34,6 +34,7 @@
 	import LL from '$i18n/i18n-svelte';
 	import Apps from '$lib/components/base/apps.svelte';
 	import DepositPending from '$lib/components/base/deposit-pending.svelte';
+	import { needConnectWallet } from '$lib/stores/ether';
 
 	let a: Asset[] | undefined = $page.data.assets;
 
@@ -88,11 +89,19 @@
 				' [&>*:nth-child(n+2)]:before:content-[""]'
 			)}
 		>
-			<button on:click={() => $ethAsset && switchDepositMode($ethAsset, undefined)}>
+			<button
+				on:click={needConnectWallet(() => {
+					$ethAsset && switchDepositMode($ethAsset, undefined);
+				})}
+			>
 				<Send />
 				<span>{$LL.deposit()}</span>
 			</button>
-			<button on:click={() => $ethAsset && switchWithdrawMode($ethAsset)}>
+			<button
+				on:click={needConnectWallet(() => {
+					$ethAsset && switchWithdrawMode($ethAsset);
+				})}
+			>
 				<Receive />
 				<span>{$LL.withdraw()}</span>
 			</button>

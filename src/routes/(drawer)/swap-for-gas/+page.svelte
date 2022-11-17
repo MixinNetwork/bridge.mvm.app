@@ -4,11 +4,12 @@
 	import LL from '$i18n/i18n-svelte';
 	import UserInfo from '$lib/components/base/user-info.svelte';
 	import Apps from '$lib/components/base/apps.svelte';
-	import { user } from '$lib/stores/user';
+	import { isLogged, user } from '$lib/stores/user';
 	import Item from '$lib/components/swap-for-gas/item.svelte';
 	import { enhance } from '$app/forms';
 	import { browser } from '$app/environment';
 	import DepositPending from '$lib/components/base/deposit-pending.svelte';
+	import { connectWallet } from '../../../lib/stores/ether';
 
 	let price: string = $page.data.price;
 	let iconUrl: string = $page.data.iconUrl;
@@ -41,24 +42,32 @@
 			method="get"
 			target="_blank"
 			use:enhance={({ data, cancel, action }) => {
-				action.searchParams.append('address', $user.address);
-				action.searchParams.append('callbackUrl', window.location.href);
+				const asyncFn = async () => {
+					if (!$isLogged) await connectWallet();
+					$user && action.searchParams.append('address', $user.address);
+					action.searchParams.append('callbackUrl', window.location.href);
 
-				const quantity = data.get('quantity');
-				if (quantity && typeof quantity === 'string') {
-					if (quantity === 'custom') {
-						action.searchParams.append('quantity', customAmount + '');
-					} else {
-						action.searchParams.append('quantity', quantity);
+					const quantity = data.get('quantity');
+					if (quantity && typeof quantity === 'string') {
+						if (quantity === 'custom') {
+							action.searchParams.append('quantity', customAmount + '');
+						} else {
+							action.searchParams.append('quantity', quantity);
+						}
 					}
-				}
 
-				window.open(action, '_blank');
+					window.open(action, '_blank');
+				};
+
+				asyncFn();
+
 				cancel();
 			}}
 			class="mt-5 flex w-full flex-col items-center"
 		>
-			<input name="address" class="hidden" value={$user.address} type="checkbox" checked={true} />
+			{#if $user}
+				<input name="address" class="hidden" value={$user.address} type="checkbox" checked={true} />
+			{/if}
 			<input
 				name="callbackUrl"
 				class="hidden"

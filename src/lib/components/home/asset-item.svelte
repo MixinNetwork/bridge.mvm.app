@@ -10,6 +10,7 @@
 	import LL from '$i18n/i18n-svelte';
 	import ChainLabel from '../base/chain-label.svelte';
 	import clsx from 'clsx';
+	import { needConnectWallet } from '../../stores/ether';
 
 	export let asset: Asset;
 
@@ -18,7 +19,7 @@
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <div
-	on:click={() => (isOpen = true)}
+	on:click={needConnectWallet(() => (isOpen = true))}
 	class="flex w-full cursor-pointer items-center bg-brand-primary bg-opacity-0 p-5 opacity-100 hover:bg-opacity-5"
 >
 	<div class="flex flex-1 items-center justify-between space-x-3">

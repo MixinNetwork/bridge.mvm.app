@@ -117,7 +117,8 @@ const zh: Translation = {
 	},
 	amount: '数量',
 	pending: '待确认 ({0})',
-	confirmations: '{0}/{1} 确认数'
+	confirmations: '{0}/{1} 确认数',
+	connectWallet: '连接钱包'
 };
 
 export default zh;

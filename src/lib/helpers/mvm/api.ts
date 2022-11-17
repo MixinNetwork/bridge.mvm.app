@@ -2,7 +2,7 @@ import { utils } from 'ethers';
 import { sortBy } from 'lodash-es';
 import { bigMul } from '../big';
 
-export const fetchMvmTokens = async (address: `0x${string}`) => {
+export const fetchMvmTokens = async (address: string) => {
 	const response = await fetch(
 		`https://scan.mvm.dev/api?module=account&action=tokenlist&address=${address}`
 	);
@@ -19,28 +19,28 @@ export const fetchMvmTokens = async (address: `0x${string}`) => {
 };
 
 interface MvmTransaction {
-	blockHash: `0x${string}`;
+	blockHash: string;
 	blockNumber: number;
 	confirmations: number;
-	contractAddress: `0x${string}` | undefined;
+	contractAddress: string | undefined;
 	cumulativeGasUsed: number;
-	from: `0x${string}`;
+	from: string;
 	gas: number;
 	gasPrice: number;
 	gasUsed: number;
-	hash: `0x${string}`;
-	input: `0x${string}`;
+	hash: string;
+	input: string;
 	isError: number;
 	nonce: number;
 	timeStamp: number;
-	to: `0x${string}`;
+	to: string;
 	transactionIndex: number;
 	txreceipt_status: number;
 	value: number;
 }
 
 interface MvmTokenTransfer extends MvmTransaction {
-	contractAddress: `0x${string}`;
+	contractAddress: string;
 	tokenDecimal: number;
 	tokenName: string;
 	tokenSymbol: string;
@@ -51,7 +51,7 @@ const fetchMvmTransactions = async ({
 	startblock,
 	endblock
 }: {
-	address: `0x${string}`;
+	address: string;
 	startblock?: number;
 	endblock?: number;
 }) => {
@@ -71,7 +71,7 @@ const fetchMvmTokenTransactions = async ({
 	startblock,
 	endblock
 }: {
-	address: `0x${string}`;
+	address: string;
 	startblock?: number;
 	endblock?: number;
 }) => {
@@ -87,8 +87,8 @@ const fetchMvmTokenTransactions = async ({
 };
 
 export interface Transaction {
-	contract?: `0x${string}`;
-	hash: `0x${string}`;
+	contract?: string;
+	hash: string;
 	blockNumber: number;
 	timeStamp: number;
 	name: string;
@@ -100,16 +100,16 @@ export interface Transaction {
 }
 
 interface TransactionParams {
-	address: `0x${string}`;
+	address: string;
 }
 
 interface TransactionParamsWithEndblock extends TransactionParams {
-	lastHash: `0x${string}`;
+	lastHash: string;
 	endblock: number;
 }
 
 interface TransactionParamsWithStartblock extends TransactionParams {
-	firstHash: `0x${string}`;
+	firstHash: string;
 	startblock: number;
 }
 

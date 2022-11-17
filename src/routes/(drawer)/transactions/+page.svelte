@@ -16,6 +16,7 @@
 	import LL from '$i18n/i18n-svelte';
 	import Apps from '$lib/components/base/apps.svelte';
 	import DepositPending from '$lib/components/base/deposit-pending.svelte';
+	import Empty from '../../../lib/components/base/empty.svelte';
 
 	const DEFAULT_ICON =
 		'https://images.mixin.one/yH_I5b0GiV2zDmvrXRyr3bK5xusjfy5q7FX3lw3mM2Ryx4Dfuj6Xcw8SHNRnDKm7ZVE3_LvpKlLdcLrlFQUBhds=s128';
@@ -23,6 +24,8 @@
 	let a: Asset[] | undefined = $page.data.assets;
 	$: a && !$assets.length && assets.set(a);
 	let transactions: Transaction[] = $page.data.transactions;
+
+	$: transactions = $page.data.transactions;
 	$: transactions = transactions.map((tx) => {
 		const asset = $assets.find(({ asset_id, contract }) => {
 			if (tx.contract) return contract?.toLowerCase() === tx.contract?.toLowerCase();
@@ -49,6 +52,7 @@
 		if (event.detail.scrollTop + event.detail.clientHeight < event.detail.scrollHeight - 200) {
 			return;
 		}
+		if (!$user) return;
 
 		loading = true;
 
@@ -71,6 +75,7 @@
 
 	const updateTtransactions = async () => {
 		if (!transactions.length) return;
+		if (!$user) return;
 
 		const startblock = transactions[0].blockNumber;
 		const firstHash = transactions[0].hash;
@@ -136,6 +141,9 @@
 			</div>
 		</a>
 	{/each}
+	{#if !txs.length}
+		<Empty />
+	{/if}
 	{#if hasMore}
 		<div class="flex h-20 items-center justify-center">
 			<Spinner class="stroke-slate-500" />

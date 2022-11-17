@@ -209,9 +209,9 @@ type RootTranslation = {
 			/**
 			 * L​a​c​k​ ​o​f​ ​l​i​q​u​i​d​i​t​y​,​ ​p​l​e​a​s​e​ ​d​e​c​r​e​a​s​e​ ​s​w​a​p​ ​a​m​o​u​n​t
 			 */
-			warning: string,
+			warning: string
 			/**
-			 * Successful
+			 * S​u​c​c​e​s​s​f​u​l​ ​s​w​a​p
 			 */
 			success: string
 		}
@@ -364,6 +364,10 @@ type RootTranslation = {
 	 * @param {number} 1
 	 */
 	confirmations: RequiredParams<'0' | '1'>
+	/**
+	 * C​o​n​n​e​c​t​ ​W​a​l​l​e​t
+	 */
+	connectWallet: string
 }
 
 export type TranslationFunctions = {
@@ -560,7 +564,7 @@ export type TranslationFunctions = {
 			 */
 			warning: () => LocalizedString
 			/**
-			 * Successful
+			 * Successful swap
 			 */
 			success: () => LocalizedString
 		}
@@ -709,6 +713,10 @@ export type TranslationFunctions = {
 	 * {0}/{1} Confirmations
 	 */
 	confirmations: (arg0: number, arg1: number) => LocalizedString
+	/**
+	 * Connect Wallet
+	 */
+	connectWallet: () => LocalizedString
 }
 
 export type Formatters = {}

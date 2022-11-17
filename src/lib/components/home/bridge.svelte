@@ -67,17 +67,18 @@
 	$: assetWithdrawalFee = AssetWithdrawalFee({
 		asset_id: asset.asset_id,
 		chain_id: asset.chain_id,
-		destination: address || (isEthChain && $user.address) || undefined,
+		destination: address || (isEthChain && $user?.address) || undefined,
 		tag: memo
 	});
 
 	let loading = false;
 	const transfer = async () => {
-		if (!amount || !$library || !$user || !$assetWithdrawalFee) return;
+		if (!amount || !$library || !$user || !$assetWithdrawalFee || !$user) return;
 
 		loading = true;
 
 		if (!$user.contract) await registerAndSave($user.address);
+		if (!$user.contract) return;
 
 		const { deposit, withdraw } = await import('$lib/helpers/web3/common');
 
@@ -183,7 +184,7 @@
 		<div class="flex border-b-2 border-brand-background">
 			<textarea
 				class={clsx('grow resize-none break-all rounded-lg py-3 pl-4 font-semibold', inputClasses)}
-				placeholder={isEthChain ? $user.address || '' : 'Address'}
+				placeholder={isEthChain ? $user?.address || '' : 'Address'}
 				bind:value={address}
 			/>
 			{#if isEthChain}

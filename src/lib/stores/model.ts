@@ -3,7 +3,7 @@ import {
 	type AssetResponse,
 	type ExchangeRateResponse
 } from '@mixin.dev/mixin-node-sdk';
-import { asyncDerived, asyncReadable, derived, get } from '@square/svelte-store';
+import { asyncDerived, asyncReadable, derived, get, readable } from '@square/svelte-store';
 import { fetchPairs, type Pair } from '../helpers/4swap/api';
 import { fetchAssets, fetchFeeOnAsset, fetchWithdrawalFee } from '../helpers/api';
 import { bigAdd, bigMul } from '../helpers/big';
@@ -21,10 +21,13 @@ export const assets = deepWritable<Asset[]>([], (set) => {
 		const assets = await fetchAssets($user);
 		set(assets);
 	}, 5000);
+
 	return () => {
 		clearInterval(timer);
 	};
 });
+
+export const logging = deepWritable<boolean>(false);
 
 export const userDestinations = (() => {
 	const destinations = deepWritable<Pick<AssetResponse, 'asset_id' | 'deposit_entries'>[]>([]);
@@ -38,6 +41,8 @@ export const userDestinations = (() => {
 		subscribe: destinations.subscribe,
 		fetchDestination: async (assetId: string) => {
 			const $user = get(user);
+			if (!$user) throw new Error('User not found');
+
 			const assetClient = AssetClient({
 				keystore: { ...$user, ...$user.key },
 				requestConfig: { timeout: 1000 * 60 }
@@ -100,15 +105,18 @@ export const totalBalanceBtc = derived(assets, ($assets) => {
 });
 
 export const AssetWithdrawalFee = mapTemplate(
-	(parameters: { asset_id: string; chain_id: string; destination: string; tag: string }) =>
-		asyncReadable(undefined, async () => {
-			const { asset_id, chain_id, destination, tag } = parameters;
+	(parameters: { asset_id: string; chain_id: string; destination?: string; tag: string }) => {
+		const { asset_id, chain_id, destination, tag } = parameters;
+
+		if (!destination) return readable(undefined);
+		return asyncReadable(undefined, async () => {
 			const fee = await fetchWithdrawalFee(asset_id, destination, tag);
 
 			if (!fee || Number(fee) === 0 || asset_id === chain_id) return fee;
 
 			return await fetchFeeOnAsset(asset_id, chain_id, fee);
-		})
+		});
+	}
 );
 
 export const buildBalanceStore = ({ assetId, network }: { assetId: string; network: Network }) => {
