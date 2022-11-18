@@ -68,6 +68,9 @@ export const fetchAssets = async (user: User | undefined) => {
 		user ? fetchMvmTokens(user.address) : undefined
 	]);
 
+	const eth = allAssets.find((asset) => asset.asset_id === ETH_ASSET_ID);
+	if (eth) eth.name = 'Etheruem';
+
 	let assets = allAssets.filter(({ asset_id }) => WHITELIST_ASSET_ID.includes(asset_id));
 
 	assets = assets.filter((asset) =>
@@ -127,8 +130,6 @@ export const fetchAssets = async (user: User | undefined) => {
 		({ price_usd }) => +price_usd
 	).reverse();
 
-	const eth = whiteListAssets.find((asset) => asset.asset_id === ETH_ASSET_ID);
-	if (eth) eth.name = 'Etheruem';
 	return whiteListAssets;
 };
 

@@ -1,11 +1,9 @@
 <script lang="ts">
 	import clsx from 'clsx';
 	import { fade } from 'svelte/transition';
-	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import Switch from '$lib/assets/switch.svg?component';
 	import type { Order, SwapParams } from '$lib/types/swap';
-	import { setSearchParam } from '$lib/helpers/app-store';
 	import { assets, pairs, updateAssets } from '$lib/stores/model';
 	import { getAsset } from '$lib/helpers/utils';
 	import type { Asset } from '$lib/types/asset';
@@ -62,27 +60,18 @@
 		const temp = inputAsset;
 		inputAsset = outputAsset;
 		outputAsset = temp;
-
-		setSearchParam($page, INPUT_KEY, inputAsset?.asset_id);
-		setSearchParam($page, OUTPUT_KEY, outputAsset?.asset_id);
-
-		goto($page.url, { keepFocus: true, replaceState: true, noScroll: true });
 	};
 
 	const handleChangeInputAsset = (asset: Asset) => {
 		if (outputAsset?.asset_id === asset.asset_id) return;
 		swapOrder.reset();
 		inputAsset = asset;
-		setSearchParam($page, INPUT_KEY, asset.asset_id);
-		goto($page.url, { keepFocus: true, replaceState: true, noScroll: true });
 	};
 
 	const handleChangeOutputAsset = (asset: Asset) => {
 		if (inputAsset?.asset_id === asset.asset_id) return;
 		swapOrder.reset();
 		outputAsset = asset;
-		setSearchParam($page, OUTPUT_KEY, asset.asset_id);
-		goto($page.url, { keepFocus: true, replaceState: true, noScroll: true });
 	};
 
 	const handleChangeAmount = (source: 'input' | 'output') => {

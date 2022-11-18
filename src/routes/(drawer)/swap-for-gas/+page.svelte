@@ -9,7 +9,7 @@
 	import { enhance } from '$app/forms';
 	import { browser } from '$app/environment';
 	import DepositPending from '$lib/components/base/deposit-pending.svelte';
-	import { connectWallet } from '../../../lib/stores/ether';
+	import { connectWallet } from '$lib/stores/ether';
 
 	let price: string = $page.data.price;
 	let iconUrl: string = $page.data.iconUrl;

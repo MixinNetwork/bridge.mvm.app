@@ -29,11 +29,14 @@ const en: BaseTranslation = {
 	yes: 'Yes',
 	cancel: 'Cancel',
 	deposit: 'Deposit',
+	depositNetwork: 'Deposit Network',
+	depositFrom: 'Deposit from {0:string}',
 	withdraw: 'Withdraw',
 	searchBar: {
 		title: 'Search',
 		placeholder: 'Name, Symbol or Address'
 	},
+	searchAsset: 'Search Asset',
 	depositModal: {
 		title: 'Deposit to MVM',
 		qrCode: 'QR Code',

@@ -3,7 +3,7 @@ import { get } from '@square/svelte-store';
 import { assets } from '$lib/stores/model';
 import type { PageLoad } from './$types';
 import { fetchAssets } from '$lib/helpers/api';
-import { user as userStore } from '../../../lib/stores/user';
+import { user as userStore } from '$lib/stores/user';
 import { browser } from '$app/environment';
 
 export const load: PageLoad = async (foo) => {

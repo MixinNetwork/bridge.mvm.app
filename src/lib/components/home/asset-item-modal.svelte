@@ -3,7 +3,7 @@
 	import type { Asset } from '../../types/asset';
 	import AssetIcon from '../base/asset-icon.svelte';
 	import LayoutBottomSheet from '../base/modal/layout-bottom-sheet.svelte';
-	import { switchDepositMode, switchWithdrawMode, toSwapUrl } from './export';
+	import { toSwapUrl } from './export';
 	import LL from '$i18n/i18n-svelte';
 	import Copy from '$lib/assets/copy.svg?component';
 	import { showToast } from '../common/toast/toast-container.svelte';
@@ -21,6 +21,8 @@
 		//
 	};
 	export let asset: Asset;
+	export let onDeposit: () => void;
+	export let onWithdraw: () => void;
 
 	$: destination = $userDestinations.find(({ asset_id }) => asset_id === asset.chain_id)
 		?.deposit_entries?.[0].destination;
@@ -116,18 +118,8 @@
 			' [&>*:nth-child(n+2)]:before:content-[""]'
 		)}
 	>
-		<button
-			on:click={() => {
-				switchDepositMode(asset, undefined);
-				close();
-			}}>{$LL.deposit()}</button
-		>
-		<button
-			on:click={() => {
-				switchWithdrawMode(asset);
-				close();
-			}}>{$LL.withdraw()}</button
-		>
+		<button on:click={onDeposit}>{$LL.deposit()}</button>
+		<button on:click={onWithdraw}>{$LL.withdraw()}</button>
 		<a href={toSwapUrl(asset.asset_id)}>{$LL.swap()}</a>
 	</div>
 	{#if asset.asset_id !== ETH_ASSET_ID}

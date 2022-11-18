@@ -29,11 +29,14 @@ const zh: Translation = {
 	yes: '确认',
 	cancel: '取消',
 	deposit: '存入',
+	depositNetwork: '存入网络',
+	depositFrom: '通过 {0:string} 存入',
 	withdraw: '提出',
 	searchBar: {
 		title: '搜索',
 		placeholder: '名称、代号或地址'
 	},
+	searchAsset: '搜索资产',
 	depositModal: {
 		title: '存入到 MVM',
 		qrCode: '二维码',

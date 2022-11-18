@@ -9,15 +9,20 @@
 
 	let clazz: string | undefined = undefined;
 	let asset: Asset;
-	let onSelect: (data: Asset) => void;
-	export { clazz as class, asset, onSelect };
+	let onSelect: ((data: Asset) => void) | undefined = undefined;
+	let disabled = false;
+	export { clazz as class, asset, onSelect, disabled };
 
 	let openedSelectModal = false;
 	const toggle = () => (openedSelectModal = !openedSelectModal);
 </script>
 
 <button
-	class={clsx('flex w-full items-center shrink-0 justify-between px-4 py-3 space-x-4', clazz)}
+	class={clsx(
+		'flex w-full items-center shrink-0 justify-between px-4 py-3 space-x-4',
+		disabled && 'cursor-default default',
+		clazz
+	)}
 	on:click={toggle}
 >
 	<div class="flex items-center space-x-3">
@@ -40,12 +45,13 @@
 			</div>
 		</div>
 	</div>
-	<Arrow class="rotate-90" />
+	{#if !disabled}
+		<Arrow class="rotate-90" />
+	{/if}
 </button>
 
 <Modal
-	modal-opened={openedSelectModal}
-	overlay-class="!items-end md:!items-center"
+	modal-opened={openedSelectModal && !disabled}
 	this={AssetList}
 	modal-on-close={toggle}
 	{onSelect}

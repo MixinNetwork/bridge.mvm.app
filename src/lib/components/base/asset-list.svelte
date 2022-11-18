@@ -14,6 +14,7 @@
 		//
 	};
 	export let onSelect: ((data: Asset) => void) | undefined = undefined;
+	export let selectAndClose = true;
 
 	let keyword = '';
 
@@ -21,12 +22,13 @@
 
 	const click = (asset: Asset) => {
 		onSelect?.(asset);
-		close();
+		selectAndClose && close();
 	};
 </script>
 
 <LayoutBottomSheet class="h-4/5">
-	<FullModalHeader class="mb-0 hidden md:flex" on:click={close}>{$LL.assets()}</FullModalHeader>
+	<FullModalHeader class="mb-0 hidden md:flex" on:click={close}>{$LL.searchAsset()}</FullModalHeader
+	>
 	<SearchBar bind:keyword class="md:pt-0" />
 	<div class="grow overflow-y-auto">
 		{#each filtedAssets || [] as asset (asset.asset_id)}

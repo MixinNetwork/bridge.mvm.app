@@ -103,6 +103,15 @@ type RootTranslation = {
 	 */
 	deposit: string
 	/**
+	 * D​e​p​o​s​i​t​ ​N​e​t​w​o​r​k
+	 */
+	depositNetwork: string
+	/**
+	 * D​e​p​o​s​i​t​ ​f​r​o​m​ ​{​0​}
+	 * @param {string} 0
+	 */
+	depositFrom: RequiredParams<'0'>
+	/**
 	 * W​i​t​h​d​r​a​w
 	 */
 	withdraw: string
@@ -116,6 +125,10 @@ type RootTranslation = {
 		 */
 		placeholder: string
 	}
+	/**
+	 * S​e​a​r​c​h​ ​A​s​s​e​t
+	 */
+	searchAsset: string
 	depositModal: {
 		/**
 		 * D​e​p​o​s​i​t​ ​t​o​ ​M​V​M
@@ -460,6 +473,14 @@ export type TranslationFunctions = {
 	 */
 	deposit: () => LocalizedString
 	/**
+	 * Deposit Network
+	 */
+	depositNetwork: () => LocalizedString
+	/**
+	 * Deposit from {0}
+	 */
+	depositFrom: (arg0: string) => LocalizedString
+	/**
 	 * Withdraw
 	 */
 	withdraw: () => LocalizedString
@@ -473,6 +494,10 @@ export type TranslationFunctions = {
 		 */
 		placeholder: () => LocalizedString
 	}
+	/**
+	 * Search Asset
+	 */
+	searchAsset: () => LocalizedString
 	depositModal: {
 		/**
 		 * Deposit to MVM

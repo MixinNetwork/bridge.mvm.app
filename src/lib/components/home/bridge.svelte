@@ -23,7 +23,6 @@
 	import { library } from '$lib/stores/ether';
 	import Paste from '$lib/assets/paste.svg?component';
 	import { providerLogo, providerName } from '$lib/stores/provider';
-	import { selectAsset } from './export';
 	import { showToast } from '../common/toast/toast-container.svelte';
 	import { tick } from 'svelte';
 	import LL from '$i18n/i18n-svelte';
@@ -36,6 +35,7 @@
 
 	export let asset: Asset;
 	export let depositMode: boolean;
+	export let onChangeAsset: ((asset: Asset) => void) | undefined = undefined;
 
 	$: ethAsset = getAsset(ETH_ASSET_ID, $assets);
 
@@ -136,7 +136,14 @@
 		</div>
 	</div>
 	<div class=" divide-y-2 divide-brand-background child:w-full">
-		<SelectedAssetButton {asset} onSelect={selectAsset}>
+		<SelectedAssetButton
+			{asset}
+			onSelect={(a) => {
+				console.trace('fuck 1');
+				onChangeAsset?.(a);
+			}}
+			disabled={depositMode}
+		>
 			{$LL.balanceOf(fromBalance ? format({ n: fromBalance }) : '...', '')}</SelectedAssetButton
 		>
 		<input
@@ -194,7 +201,9 @@
 						address = $user?.address || '';
 					}}
 				>
-					<img loading="lazy" src={$providerLogo} width={18} height={18} alt={$providerName} />
+					<div class="h-5 w-5">
+						{@html $providerLogo}
+					</div>
 				</button>
 			{/if}
 			<button
@@ -296,14 +305,14 @@
 {/if}
 
 <button
-	class="mt-10 flex w-28 justify-center self-center rounded-full bg-brand-primary px-6 py-4 text-white"
+	class="mt-16 mb-6 flex min-w-[120px] justify-center self-center rounded-full bg-brand-primary px-6 py-4 text-white"
 	on:click={transfer}
 	disabled={!destination || (!isEthChain && !address) || !fromBalance || !amount || amount < 0.0001}
 >
 	{#if loading && !depositMode}
 		<Spinner class="stroke-white stroke-2 text-center" />
 	{:else}
-		{depositMode ? $LL.deposit() : $LL.withdraw()}
+		{depositMode ? ($providerName && $LL.depositFrom($providerName)) || '' : $LL.withdraw()}
 	{/if}
 </button>
 
