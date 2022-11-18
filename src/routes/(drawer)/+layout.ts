@@ -4,14 +4,13 @@ import { lang, user } from '$lib/stores/user';
 import type { LayoutLoad } from './$types';
 import { browser } from '$app/environment';
 
-export const load: LayoutLoad = async ({ parent }) => {
-	const data = await parent();
+export const load: LayoutLoad = async ({ parent, data }) => {
+	const parentData = await parent();
 
-	const rsp = {
-		user: data.user || (browser && get(user)) || undefined,
-		provider: data.provider || (browser && get(providerKey)) || undefined,
-		lang: data.lang || (browser && get(lang)) || undefined
+	return {
+		user: parentData.user || (browser && get(user)) || undefined,
+		provider: parentData.provider || (browser && get(providerKey)) || undefined,
+		lang: parentData.lang || (browser && get(lang)) || undefined,
+		assets: data.assets
 	};
-
-	return rsp;
 };

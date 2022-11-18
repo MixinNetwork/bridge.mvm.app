@@ -9,7 +9,6 @@
 	import { assets } from '$lib/stores/model';
 	import type { Asset } from '$lib/types/asset';
 	import AssetItem from '$lib/components/home/asset-item.svelte';
-	import { page } from '$app/stores';
 	import DepositModal from '$lib/components/home/deposit-modal.svelte';
 	import { ETH_ASSET_ID } from '$lib/constants/common';
 	import Modal from '$lib/components/common/modal/modal.svelte';
@@ -28,10 +27,6 @@
 	import { needConnectWallet } from '$lib/stores/ether';
 	import DepositQrcodeModal from '$lib/components/home/deposit-qrcode-modal.svelte';
 	import { withdrawAsset } from '$lib/components/home/export';
-
-	let a: Asset[] | undefined = $page.data.assets;
-
-	$: a && !$assets.length && assets.set(a);
 
 	$: ethAsset = derived(assets, ($assets) =>
 		$assets.find((asset) => asset.asset_id === ETH_ASSET_ID)

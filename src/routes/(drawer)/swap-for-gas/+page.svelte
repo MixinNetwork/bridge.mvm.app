@@ -1,6 +1,5 @@
 <script lang="ts">
 	import Header from '$lib/components/base/header.svelte';
-	import { page } from '$app/stores';
 	import LL from '$i18n/i18n-svelte';
 	import UserInfo from '$lib/components/base/user-info.svelte';
 	import Apps from '$lib/components/base/apps.svelte';
@@ -10,9 +9,15 @@
 	import { browser } from '$app/environment';
 	import DepositPending from '$lib/components/base/deposit-pending.svelte';
 	import { connectWallet } from '$lib/stores/ether';
+	import { assets } from '$lib/stores/model';
+	import { ETH_ASSET_ID } from '$lib/constants/common';
 
-	let price: string = $page.data.price;
-	let iconUrl: string = $page.data.iconUrl;
+	$: eth = $assets.find((asset) => asset.asset_id === ETH_ASSET_ID);
+
+	// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+	$: price = eth!.price_usd;
+	// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+	$: iconUrl = eth!.icon_url;
 
 	let selectCustom = false;
 	let customAmount: number;

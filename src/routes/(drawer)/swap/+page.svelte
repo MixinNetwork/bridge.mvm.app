@@ -26,13 +26,9 @@
 	import { tick } from 'svelte';
 	import DepositPending from '$lib/components/base/deposit-pending.svelte';
 
-	let a: Asset[] | undefined = $page.data.assets;
-
 	let inputAsset: Asset | undefined = undefined;
 	let outputAsset: Asset | undefined = undefined;
 	let slippage = DEFAULT_SLIPPAGE;
-
-	$: a && !$assets.length && assets.set(a);
 
 	$: inputAsset =
 		getAsset($page.url.searchParams.get(INPUT_KEY) || ETH_ASSET_ID, $assets) ||

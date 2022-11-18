@@ -7,7 +7,6 @@ import { account } from './ether';
 import { clearLastProvider, providerKey } from './provider';
 import { LANG, USER_KEY } from '$lib/constants/common';
 import { dedupe } from '../helpers/store/dedupe';
-import { invalidateAll } from '$app/navigation';
 import type { Locales } from '$i18n/i18n-types';
 import { locale, setLocale } from '$i18n/i18n-svelte';
 import { loadLocaleAsync } from '$i18n/i18n-util.async';

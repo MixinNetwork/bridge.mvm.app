@@ -67,7 +67,7 @@
 
 			const timer = setInterval(async () => {
 				update();
-			}, 5000);
+			}, 1000 * 5);
 
 			return () => {
 				clearInterval(timer);
