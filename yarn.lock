@@ -1341,10 +1341,10 @@
     ethers "5.5.4"
     joi "^17.6.1"
 
-"@web3-onboard/core@^2.10.0":
-  version "2.10.0"
-  resolved "https://registry.yarnpkg.com/@web3-onboard/core/-/core-2.10.0.tgz#ad6b0dc566a7828928dd87ed29a5a38a62330ad1"
-  integrity sha512-wzg9iefyKmhBmh6R0Jr6kmFqi4hggHaOmPn7pDBrGp/4GvyTjAlVj+42wV9KqJb0MY9ABB1Q8XIKmhtRnXftzQ==
+"@web3-onboard/core@^2.10.1":
+  version "2.10.1"
+  resolved "https://registry.yarnpkg.com/@web3-onboard/core/-/core-2.10.1.tgz#c437a7889792e3eb3cbdf9bae693280785f91502"
+  integrity sha512-PF3p0nQMjecsLTvSqTRNtbmKSAUYW8wCuZcGph+WSUl6HITMyPj2Z5SPcJR1vMc54YlnYRVtMN1DqLB3Mvwadw==
   dependencies:
     "@web3-onboard/common" "^2.2.3"
     bignumber.js "^9.0.0"
