@@ -51,9 +51,12 @@
 				<span class="text-sm opacity-30 md:opacity-100">{$shortAddress}</span>
 			</div>
 		{:else}
-			{$LL.connectWallet()}
+			<div class="sm:hidden md:block">
+				{$LL.connectWallet()}
+			</div>
 		{/if}
 	</div>
+
 	{#if $isLogged}
 		<Arrow class="rotate-90 sm:hidden md:block" />
 	{/if}

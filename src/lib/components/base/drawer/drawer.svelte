@@ -13,18 +13,27 @@
 	import Docs from '$lib/assets/drawer/docs.svg?component';
 	import LL from '$i18n/i18n-svelte';
 	import LogoutButton from '$lib/components/base/logout-button.svelte';
-	import Logout from '$lib/assets/logout.svg?component';
-
 	import Discrod from '$lib/assets/drawer/discord.svg?component';
 	import Telegram from '$lib/assets/drawer/telegram.svg?component';
 	import Mixin from '$lib/assets/drawer/mixin.svg?component';
 	import Twitter from '$lib/assets/drawer/twitter.svg?component';
 	import { version } from '$lib/constants/common';
+	import { isLogged } from '../../../stores/user';
+	import ConnectWallet from '$lib/assets/connect-wallet.svg?component';
+	import { connectWallet } from '../../../stores/ether';
 </script>
 
 <div class="flex w-72 flex-col rounded-r-2xl bg-white md:w-64 md:rounded-none">
 	<Brand class="hidden !space-x-2 px-5 py-4 md:mb-6 md:flex md:text-xl" logoClass="w-8" />
-	<UserInfo class=" mt-20 mb-9 ml-8  md:hidden" />
+	<UserInfo class="mt-20 mb-9 ml-8  md:hidden" />
+	{#if !$isLogged}
+		<DrawerItem
+			class="md:hidden"
+			logo={ConnectWallet}
+			title={$LL.connectWallet()}
+			on:click={connectWallet}
+		/>
+	{/if}
 	<DrawerItem logo={Assets} href="/" title={$LL.assets()} />
 	<DrawerItem logo={Transactions} href="/transactions/" title={$LL.transactions()} />
 	<DrawerItem logo={Swap} href="/swap/" title={$LL.swap()} />
@@ -52,14 +61,7 @@
 		rel="noreferrer"
 	/>
 
-	<LogoutButton
-		class="mt-5 flex items-center justify-start space-x-4 p-2 pl-8 font-semibold md:hidden"
-	>
-		<Logout />
-		<div>
-			{$LL.logout.title()}
-		</div>
-	</LogoutButton>
+	<LogoutButton />
 
 	<div class="mb-5 flex grow flex-col items-center justify-end">
 		<div class=" flex space-x-1 child:p-2">

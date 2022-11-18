@@ -48,7 +48,6 @@ export const registerAndSave = async (address: string) => {
 };
 
 export const logout = async () => {
-	await invalidateAll();
 	persistentUser.set(undefined);
 	clearLastProvider();
 	location.reload();

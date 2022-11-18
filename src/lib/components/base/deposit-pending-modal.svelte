@@ -1,7 +1,7 @@
 <script lang="ts">
 	import dayjs from 'dayjs';
 	import { entries, groupBy } from 'lodash-es';
-	import LL from '../../../i18n/i18n-svelte';
+	import LL from '$i18n/i18n-svelte';
 	import AssetIcon from './asset-icon.svelte';
 	import ChainLabel from './chain-label.svelte';
 	import type { ExternalTransactionResponseWithAsset } from './deposit-pending.svelte';

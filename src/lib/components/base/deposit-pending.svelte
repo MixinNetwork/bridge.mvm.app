@@ -13,7 +13,7 @@
 	import { fade } from 'svelte/transition';
 	import DepositPendingModal from './deposit-pending-modal.svelte';
 	import Modal from '../common/modal/modal.svelte';
-	import LL from '../../../i18n/i18n-svelte';
+	import LL from '$i18n/i18n-svelte';
 	import { flatMap } from 'lodash-es';
 
 	export type ExternalTransactionResponseWithAsset = ExternalTransactionResponse & {

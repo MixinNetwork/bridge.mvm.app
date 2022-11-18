@@ -2,7 +2,7 @@ import { providerKey, setProviderKey, setProviderLogo } from '../../stores/provi
 import { get } from '@square/svelte-store';
 import Onboard, { type WalletState } from '@web3-onboard/core';
 import { MVM_CHAIN_HEX_ID, MVM_RPC_URL, MVM_SCAN_URL, RPC_URL } from '../../constants/common';
-import { i18nObject } from '../../../i18n/i18n-util';
+import { i18nObject } from '$i18n/i18n-util';
 import Logo from '$lib/assets/logo/logo.svg';
 import { loadLocale } from '$i18n/i18n-util.sync';
 import injectedModule from '@web3-onboard/injected-wallets';
@@ -13,7 +13,6 @@ const injected = injectedModule();
 const walletConnect = walletConnectModule();
 
 loadLocale('en');
-loadLocale('zh');
 
 const en = i18nObject('en');
 
