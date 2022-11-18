@@ -34,7 +34,7 @@
 	}}
 >
 	{#if $isLogged}
-		<div class="h-16 w-16 md:h-5 md:w-5">
+		<div class="flex h-16 w-16 items-center justify-center md:h-5 md:w-5">
 			{#if $providerLogo}
 				{@html $providerLogo}
 			{/if}
@@ -70,7 +70,7 @@
 		)}
 	>
 		<div class=" flex items-center space-x-3 p-6">
-			<div class="h-14 w-14">
+			<div class="flex h-14 w-14 items-center justify-center">
 				{#if $providerLogo}
 					{@html $providerLogo}
 				{/if}

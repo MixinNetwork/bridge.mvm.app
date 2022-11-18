@@ -201,7 +201,7 @@
 						address = $user?.address || '';
 					}}
 				>
-					<div class="h-5 w-5">
+					<div class="h-5 w-5 flex justify-center items-center">
 						{@html $providerLogo}
 					</div>
 				</button>
