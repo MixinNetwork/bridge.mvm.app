@@ -30,7 +30,7 @@ const zh: Translation = {
 	cancel: '取消',
 	deposit: '存入',
 	depositNetwork: '存入网络',
-	depositFrom: '通过 {0:string} 存入',
+	depositFrom: '通过 {0} 存入',
 	withdraw: '提出',
 	searchBar: {
 		title: '搜索',
@@ -38,7 +38,7 @@ const zh: Translation = {
 	},
 	searchAsset: '搜索资产',
 	depositModal: {
-		title: '存入到 MVM',
+		title: '存入 {0}',
 		qrCode: '二维码',
 		tips1: '存款到账需要 {0} 个区块确认。',
 		tips2: '最少存入 0.00000001 {0}。'

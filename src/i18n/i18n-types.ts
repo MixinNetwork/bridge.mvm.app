@@ -131,9 +131,10 @@ type RootTranslation = {
 	searchAsset: string
 	depositModal: {
 		/**
-		 * D​e​p​o​s​i​t​ ​t​o​ ​M​V​M
+		 * D​e​p​o​s​i​t​ ​{​0​}
+		 * @param {string} 0
 		 */
-		title: string
+		title: RequiredParams<'0'>
 		/**
 		 * Q​R​ ​C​o​d​e
 		 */
@@ -500,9 +501,9 @@ export type TranslationFunctions = {
 	searchAsset: () => LocalizedString
 	depositModal: {
 		/**
-		 * Deposit to MVM
+		 * Deposit {0}
 		 */
-		title: () => LocalizedString
+		title: (arg0: string) => LocalizedString
 		/**
 		 * QR Code
 		 */

@@ -38,7 +38,7 @@ const en: BaseTranslation = {
 	},
 	searchAsset: 'Search Asset',
 	depositModal: {
-		title: 'Deposit to MVM',
+		title: 'Deposit {0:string}',
 		qrCode: 'QR Code',
 		tips1: 'Deposit will arrive {0:number} block confirmation.',
 		tips2: 'Min deposit: 0.00000001 {0:string}.'

@@ -26,7 +26,6 @@
 	import DepositPending from '$lib/components/base/deposit-pending.svelte';
 	import { needConnectWallet } from '$lib/stores/ether';
 	import DepositQrcodeModal from '$lib/components/home/deposit-qrcode-modal.svelte';
-	import { withdrawAsset } from '$lib/components/home/export';
 
 	$: ethAsset = derived(assets, ($assets) =>
 		$assets.find((asset) => asset.asset_id === ETH_ASSET_ID)
@@ -39,8 +38,12 @@
 	let depositSearchMode = false;
 	const toggleDepositSearchMode = () => (depositSearchMode = !depositSearchMode);
 
+	let withdrawSearchMode = false;
+	const toggleWithdrawSearchMode = () => (withdrawSearchMode = !withdrawSearchMode);
+
 	let depositQrcodeAsset: Asset | undefined = undefined;
 	let depositAsset: Asset | undefined = undefined;
+	let withdrawAsset: Asset | undefined = undefined;
 
 	let keyword = '';
 	$: filtedAssets = searchAssets(keyword, $assets);
@@ -82,11 +85,11 @@
 				' [&>*:nth-child(n+2)]:before:content-[""]'
 			)}
 		>
-			<button on:click={needConnectWallet(() => (depositSearchMode = true))}>
+			<button on:click={needConnectWallet(toggleDepositSearchMode)}>
 				<Send />
 				<span>{$LL.deposit()}</span>
 			</button>
-			<button on:click={needConnectWallet(() => withdrawAsset.set($ethAsset))}>
+			<button on:click={needConnectWallet(toggleWithdrawSearchMode)}>
 				<Receive />
 				<span>{$LL.withdraw()}</span>
 			</button>
@@ -126,7 +129,7 @@
 			{asset}
 			onClick={(asset) => (assetForModal = asset)}
 			onDeposit={(asset) => (depositQrcodeAsset = asset)}
-			onWithdraw={(asset) => withdrawAsset.set(asset)}
+			onWithdraw={(asset) => (withdrawAsset = asset)}
 		/>
 	{/each}
 
@@ -144,11 +147,12 @@
 	/>
 {/if}
 
-{#if $withdrawAsset}
+{#if withdrawAsset}
 	<Modal
-		modal-opened={!!$withdrawAsset}
+		modal-opened={!!withdrawAsset}
 		this={WithdrawModal}
-		modal-on-close={() => withdrawAsset.set(undefined)}
+		asset={withdrawAsset}
+		modal-on-close={() => (withdrawAsset = undefined)}
 	/>
 {/if}
 
@@ -165,6 +169,14 @@
 	this={AssetList}
 	modal-on-close={toggleDepositSearchMode}
 	onSelect={(asset) => (depositQrcodeAsset = asset)}
+	selectAndClose={false}
+/>
+
+<Modal
+	modal-opened={withdrawSearchMode}
+	this={AssetList}
+	modal-on-close={toggleWithdrawSearchMode}
+	onSelect={(asset) => (withdrawAsset = asset)}
 	selectAndClose={false}
 />
 
@@ -185,6 +197,6 @@
 		modal-on-close={() => (assetForModal = undefined)}
 		asset={assetForModal}
 		onDeposit={() => (depositQrcodeAsset = assetForModal)}
-		onWithdraw={() => withdrawAsset.set(assetForModal)}
+		onWithdraw={() => (withdrawAsset = assetForModal)}
 	/>
 {/if}

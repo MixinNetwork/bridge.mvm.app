@@ -34,7 +34,6 @@
 
 	export let asset: Asset;
 	export let depositMode: boolean;
-	export let onChangeAsset: ((asset: Asset) => void) | undefined = undefined;
 
 	$: ethAsset = getAsset(ETH_ASSET_ID, $assets);
 
@@ -136,14 +135,7 @@
 		</div>
 	</div>
 	<div class=" divide-y-2 divide-brand-background child:w-full">
-		<SelectedAssetButton
-			{asset}
-			onSelect={(a) => {
-				console.trace('fuck 1');
-				onChangeAsset?.(a);
-			}}
-			disabled={depositMode}
-		>
+		<SelectedAssetButton {asset} disabled={true}>
 			{$LL.balanceOf(fromBalance ? format({ n: fromBalance }) : '...', '')}</SelectedAssetButton
 		>
 		<input
