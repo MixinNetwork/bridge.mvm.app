@@ -25,6 +25,8 @@
 	import { swapOrder } from '$lib/stores/swap';
 	import { tick } from 'svelte';
 	import DepositPending from '$lib/components/base/deposit-pending.svelte';
+	import { setSearchParam } from '../../../lib/helpers/app-store';
+	import { goto } from '$app/navigation';
 
 	let inputAsset: Asset | undefined = undefined;
 	let outputAsset: Asset | undefined = undefined;
@@ -56,18 +58,27 @@
 		const temp = inputAsset;
 		inputAsset = outputAsset;
 		outputAsset = temp;
+
+		setSearchParam($page, INPUT_KEY, inputAsset?.asset_id);
+		setSearchParam($page, OUTPUT_KEY, outputAsset?.asset_id);
+
+		goto($page.url, { keepFocus: true, replaceState: true, noScroll: true });
 	};
 
 	const handleChangeInputAsset = (asset: Asset) => {
 		if (outputAsset?.asset_id === asset.asset_id) return;
 		swapOrder.reset();
 		inputAsset = asset;
+		setSearchParam($page, INPUT_KEY, inputAsset.asset_id);
+		goto($page.url, { noScroll: true, keepFocus: true, replaceState: true });
 	};
 
 	const handleChangeOutputAsset = (asset: Asset) => {
 		if (inputAsset?.asset_id === asset.asset_id) return;
 		swapOrder.reset();
 		outputAsset = asset;
+		setSearchParam($page, OUTPUT_KEY, outputAsset.asset_id);
+		goto($page.url, { noScroll: true, keepFocus: true, replaceState: true });
 	};
 
 	const handleChangeAmount = (source: 'input' | 'output') => {
@@ -224,7 +235,7 @@
 							type="number"
 							class="w-full text-right font-bold text-black"
 							autocomplete="off"
-							use:focus={{ enabled: true, focusable: true, focusDelay: 100 }}
+							use:focus={{ enabled: true, focusable: true }}
 							bind:value={inputAmount}
 							on:input={() => handleChangeAmount('input')}
 							placeholder="0.0"

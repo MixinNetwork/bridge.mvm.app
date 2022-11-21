@@ -24,7 +24,7 @@
 	>
 		<Search />
 		<input
-			use:focus={{ enabled: true }}
+			use:focus={{ enabled: true, focusable: true, focusDelay: 0 }}
 			id="search"
 			type="search"
 			class="w-full text-ellipsis bg-transparent placeholder-black placeholder-opacity-20"
