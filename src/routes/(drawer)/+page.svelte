@@ -161,7 +161,6 @@
 	this={AssetList}
 	modal-on-close={toggleSearchMode}
 	onSelect={(asset) => (assetForModal = asset)}
-	selectAndClose={false}
 />
 
 <Modal
@@ -169,7 +168,6 @@
 	this={AssetList}
 	modal-on-close={toggleDepositSearchMode}
 	onSelect={(asset) => (depositQrcodeAsset = asset)}
-	selectAndClose={false}
 />
 
 <Modal
@@ -177,7 +175,6 @@
 	this={AssetList}
 	modal-on-close={toggleWithdrawSearchMode}
 	onSelect={(asset) => (withdrawAsset = asset)}
-	selectAndClose={false}
 />
 
 {#if depositQrcodeAsset}
