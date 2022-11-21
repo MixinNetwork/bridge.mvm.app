@@ -6,7 +6,7 @@
 	export { clazz as class };
 </script>
 
-<div class={clsx('flex flex-col items-center justify-center space-y-3 py-14', clazz)}>
+<div class={clsx('flex flex-col items-center justify-center space-y-3 py-14 grow ', clazz)}>
 	<Empty />
 	<div class="font-semibold uppercase opacity-20">No Result</div>
 </div>

@@ -99,7 +99,7 @@
 </Header>
 
 <div
-	class="grow bg-white md:my-8 md:mx-5 md:rounded-2xl xl:mx-16"
+	class="flex grow flex-col bg-white md:my-8 md:mx-5 md:rounded-2xl xl:mx-16"
 	use:scrollableParent
 	on:parentScroll={onScroll}
 >

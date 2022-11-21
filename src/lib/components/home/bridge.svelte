@@ -6,7 +6,6 @@
 <script lang="ts">
 	import clsx from 'clsx';
 	import type { Asset } from '$lib/types/asset';
-	import Eth from '$lib/assets/logo/eth.svg?component';
 	import SelectedAssetButton from '$lib/components/base/selected-asset-button.svelte';
 	import {
 		AssetWithdrawalFee,
@@ -48,15 +47,14 @@
 	$: mainnetBalance = buildBalanceStore({ assetId, network: 'mainnet' });
 	$: mvmBalance = buildBalanceStore({ assetId, network: 'mvm' });
 	$: roundedMvmBalance = $mvmBalance
-		? format({ n: $mvmBalance || 0, dp: 8, fixed: true })
-		: format({ n: asset.balance, dp: 8, fixed: true });
+		? format({ n: $mvmBalance || 0 })
+		: format({ n: asset.balance });
 
 	$: fromBalance = depositMode ? $mainnetBalance : roundedMvmBalance;
 
 	let amount: number | undefined | string;
 
-	$: if (fromBalance && amount && bigGte(amount, fromBalance))
-		amount = Number.parseFloat(fromBalance);
+	$: if (fromBalance && amount && bigGte(amount, fromBalance)) amount = fromBalance;
 
 	let address = '';
 
@@ -127,12 +125,14 @@
 		<div>{$LL.from()}</div>
 		<div class="flex items-center space-x-1">
 			{#if depositMode}
-				<Eth height={16} width={16} />
+				<div class=" h-4 w-4">
+					{@html $providerLogo}
+				</div>
 			{:else}
 				<LogoCircle height={16} width={16} />
 			{/if}
 
-			<div>{depositMode ? 'Etheruem' : 'MVM'}</div>
+			<div>{depositMode ? $providerName : 'MVM'}</div>
 		</div>
 	</div>
 	<div class=" divide-y-2 divide-brand-background child:w-full">

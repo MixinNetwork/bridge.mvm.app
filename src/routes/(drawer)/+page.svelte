@@ -94,7 +94,7 @@
 	</div>
 </div>
 
-<div class="my-8 rounded-2xl bg-white last:child:rounded-b-2xl md:mx-5 xl:mx-16">
+<div class="my-8 flex grow flex-col rounded-2xl bg-white last:child:rounded-b-2xl md:mx-5 xl:mx-16">
 	<div class="flex h-14 items-center justify-between px-5 text-lg font-semibold">
 		<div>{$LL.assets()}</div>
 		<div class="relative grow child:absolute child:top-0 child:bottom-0 child:right-0">
