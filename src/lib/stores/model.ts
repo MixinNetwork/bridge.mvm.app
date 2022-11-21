@@ -3,21 +3,19 @@ import {
 	type AssetResponse,
 	type ExchangeRateResponse
 } from '@mixin.dev/mixin-node-sdk';
-import { asyncDerived, asyncReadable, derived, get, readable } from '@square/svelte-store';
-import { fetchPairs, type Pair } from '../helpers/4swap/api';
-import { fetchAssets, fetchFeeOnAsset, fetchWithdrawalFee } from '../helpers/api';
+import { asyncReadable, derived, get, readable } from '@square/svelte-store';
+import type { Pair } from '../helpers/4swap/api';
 import { bigAdd, bigMul } from '../helpers/big';
 import { deepWritable } from '../helpers/store/deep';
 import { mapTemplate } from '../helpers/store/map-template';
-import { getAssetBalance } from '../helpers/web3/common';
 import type { Asset } from '../types/asset';
-import type { Network } from '../types/network';
-import { user } from './user';
 
 export const assets = deepWritable<Asset[]>([], (set) => {
 	const timer = setInterval(async () => {
+		const { user } = await import('./user');
 		const $user = get(user);
 		if (!$user) return;
+		const { fetchAssets } = await import('../helpers/api');
 		const assets = await fetchAssets($user);
 		set(assets);
 	}, 5000);
@@ -40,6 +38,7 @@ export const userDestinations = (() => {
 	return {
 		subscribe: destinations.subscribe,
 		fetchDestination: async (assetId: string) => {
+			const { user } = await import('./user');
 			const $user = get(user);
 			if (!$user) throw new Error('User not found');
 
@@ -70,14 +69,17 @@ export const userDestinations = (() => {
 })();
 
 export const updateAssets = async () => {
+	const { user } = await import('./user');
 	const $user = get(user);
 	if (!$user) return;
+	const { fetchAssets } = await import('../helpers/api');
 	const $assets = await fetchAssets($user);
 	assets.set($assets);
 };
 
 export const pairs = deepWritable<Pair[]>([], (set) => {
 	const timer = setInterval(async () => {
+		const { fetchPairs } = await import('../helpers/4swap/api');
 		const pairs = await fetchPairs();
 		set(pairs);
 	}, 15000);
@@ -110,20 +112,13 @@ export const AssetWithdrawalFee = mapTemplate(
 
 		if (!destination) return readable(undefined);
 		return asyncReadable(undefined, async () => {
+			const { fetchWithdrawalFee } = await import('../helpers/api');
 			const fee = await fetchWithdrawalFee(asset_id, destination, tag);
 
 			if (!fee || Number(fee) === 0 || asset_id === chain_id) return fee;
 
+			const { fetchFeeOnAsset } = await import('../helpers/api');
 			return await fetchFeeOnAsset(asset_id, chain_id, fee);
 		});
 	}
 );
-
-export const buildBalanceStore = ({ assetId, network }: { assetId: string; network: Network }) => {
-	const asset = derived(assets, ($assets) => $assets.find((a) => a.asset_id === assetId));
-	return asyncDerived([asset, user], async ([$asset, $user]) => {
-		if (!$user) return '0';
-		if (!$asset) return '0';
-		return getAssetBalance($asset, $user.address, network);
-	});
-};

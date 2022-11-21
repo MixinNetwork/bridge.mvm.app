@@ -1,19 +1,22 @@
 <script context="module" lang="ts">
 	const inputClasses =
 		'font-semibold text-black text-opacity-80 placeholder-black placeholder-opacity-20';
+
+	const buildBalanceStore = ({ assetId, network }: { assetId: string; network: Network }) => {
+		const asset = derived(assets, ($assets) => $assets.find((a) => a.asset_id === assetId));
+		return asyncDerived([asset, user], async ([$asset, $user]) => {
+			if (!$user) return '0';
+			if (!$asset) return '0';
+			return getAssetBalance($asset, $user.address, network);
+		});
+	};
 </script>
 
 <script lang="ts">
 	import clsx from 'clsx';
 	import type { Asset } from '$lib/types/asset';
 	import SelectedAssetButton from '$lib/components/base/selected-asset-button.svelte';
-	import {
-		AssetWithdrawalFee,
-		updateAssets,
-		buildBalanceStore,
-		assets,
-		userDestinations
-	} from '$lib/stores/model';
+	import { AssetWithdrawalFee, updateAssets, assets, userDestinations } from '$lib/stores/model';
 	import { registerAndSave, user } from '$lib/stores/user';
 	import { EOS_ASSET_ID, ETH_ASSET_ID, TRANSACTION_GAS } from '$lib/constants/common';
 	import { bigGte, bigMul, format } from '$lib/helpers/big';
@@ -31,6 +34,9 @@
 	import TipModal from '../base/tip-modal.svelte';
 	import { browser } from '$app/environment';
 	import { slide } from 'svelte/transition';
+	import { asyncDerived, derived } from '@square/svelte-store';
+	import type { Network } from '../../types/network';
+	import { getAssetBalance } from '$lib/helpers/web3/common';
 
 	export let asset: Asset;
 	export let depositMode: boolean;

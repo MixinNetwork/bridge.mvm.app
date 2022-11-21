@@ -10,3 +10,4 @@ deploy
 .vercel
 .output
 .idea
+stats.*

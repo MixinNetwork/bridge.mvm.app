@@ -3,8 +3,8 @@ import nodePolyfills from 'rollup-plugin-polyfill-node';
 import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill';
 import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfill';
 import inject from '@rollup/plugin-inject';
-
 import svg from '@poppanator/sveltekit-svg';
+import { visualizer } from 'rollup-plugin-visualizer';
 
 const isDev = process.env.NODE_ENV === 'development';
 
@@ -41,6 +41,11 @@ const config = {
 					}
 				]
 			}
+		}),
+		visualizer({
+			open: process.env.VISUALIZER, //注意这里要设置为true，否则无效
+			gzipSize: true,
+			brotliSize: true
 		})
 	],
 	optimizeDeps: {
@@ -66,7 +71,10 @@ const config = {
 				// ↓ Needed for build
 				nodePolyfills(),
 				inject({ Buffer: ['buffer', 'Buffer'] })
-			]
+			],
+			output: {
+				// manualChunks(id) {}
+			}
 		},
 		// ↓ Needed for build if using WalletConnect and other providers
 		commonjsOptions: {
