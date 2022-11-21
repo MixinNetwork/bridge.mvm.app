@@ -48,7 +48,8 @@ export const registerAndSave = async (address: string) => {
 
 export const logout = async () => {
 	persistentUser.set(undefined);
-	clearLastProvider();
+	localStorage.removeItem('walletconnect');
+	await clearLastProvider();
 	location.reload();
 };
 
