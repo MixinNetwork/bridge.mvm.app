@@ -12,7 +12,7 @@
 </script>
 
 <FullLayoutModal on:click={close}>
-	<div slot="title">{$LL.depositModal.title(asset.name)}</div>
+	<div slot="title">{$LL.depositModal.title(asset.symbol)}</div>
 
 	<div class="flex grow flex-col items-stretch overflow-y-auto">
 		<Bridge {asset} depositMode={true} />
