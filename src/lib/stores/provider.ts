@@ -4,7 +4,7 @@ import type { ProviderKey } from '../helpers/web3client/type';
 import { PROVIDER_KEY, PROVIDER_LOGO } from '$lib/constants/common';
 import { page } from '$app/stores';
 import { dedupe } from '../helpers/store/dedupe';
-import { disconnectWallet } from '../helpers/web3client';
+
 import { browser } from '$app/environment';
 
 export const persistentProviderKey = persistentWritable<ProviderKey | undefined>(
@@ -37,6 +37,7 @@ export const clearLastProvider = async () => {
 	persistentProviderLogo.set(undefined);
 
 	const $persistentProviderKey = get(persistentProviderKey);
+	const { disconnectWallet } = await import('../helpers/web3client');
 	$persistentProviderKey && (await disconnectWallet($persistentProviderKey));
 };
 

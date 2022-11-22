@@ -3,7 +3,6 @@ import { derived, get } from '@square/svelte-store';
 import { deepWritable } from '../helpers/store/deep';
 import { clearLastProvider } from './provider';
 import type { EIP1193Provider } from '@web3-onboard/core';
-import { connectWallet as connect } from '../helpers/web3client';
 import { isLogged, registerAndSave, user } from './user';
 import { assets, logging } from './model';
 import { fetchAssets } from '../helpers/api';
@@ -24,7 +23,8 @@ export const connectWallet = async () => {
 	if (!browser) return;
 	try {
 		logging.set(true);
-		const provider = await connect();
+		const { connectWallet } = await import('../helpers/web3client');
+		const provider = await connectWallet();
 		await setProvider(provider);
 		const $account = get(account);
 		if (!$account) throw new Error('No account found');

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
 	import { isLogged, legalUser, logout } from '$lib/stores/user';
-	import { cacheConnectWallet } from '../../../helpers/web3client';
+
 	import { provider, setProvider } from '../../../stores/ether';
 
 	let listening = false;
@@ -12,6 +12,7 @@
 		if ($provider) return;
 
 		try {
+			const { cacheConnectWallet } = await import('../../../helpers/web3client');
 			const p = await cacheConnectWallet();
 			await (p && setProvider(p));
 		} catch (e) {
