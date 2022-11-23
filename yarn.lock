@@ -969,9 +969,9 @@
     import-meta-resolve "^2.1.0"
 
 "@sveltejs/kit@next":
-  version "1.0.0-next.551"
-  resolved "https://registry.yarnpkg.com/@sveltejs/kit/-/kit-1.0.0-next.551.tgz#ff523deb753e3aa2efe78764d4d496a67c7b2e6c"
-  integrity sha512-pZXPoKHFcEXCEN64bw87Xv3cZO7sGztPKYXyLuzceie4qNzAQOMejxewm1xSYcaublleYXLdBWcrWwGlaSWnyw==
+  version "1.0.0-next.560"
+  resolved "https://registry.yarnpkg.com/@sveltejs/kit/-/kit-1.0.0-next.560.tgz#53b3e7a06b0cc3a1e08243b32de6eb4a9096015a"
+  integrity sha512-ldZJyd+jfQWVkOkRHq25cXMffhL5MgB1Uzhhw1ngF8ezB38P/g4T+5ohP8wuk2lxPJIjbY3S6BeXN5mod9XOhA==
   dependencies:
     "@sveltejs/vite-plugin-svelte" "^1.1.0"
     "@types/cookie" "^0.5.1"
