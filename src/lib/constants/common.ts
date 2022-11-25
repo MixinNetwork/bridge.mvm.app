@@ -209,11 +209,6 @@ export const WHITELIST_ASSET = [
 		chain: 'EOS'
 	},
 	{
-		id: '0c79a53f-9caf-3e7c-a3ce-1edcba33301f',
-		symbol: 'FTT',
-		chain: 'ETH'
-	},
-	{
 		id: '659c407a-0489-30bf-9e6f-84ef25c971c9',
 		symbol: 'eUSD',
 		chain: 'MOB'
