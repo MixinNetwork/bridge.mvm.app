@@ -37,6 +37,7 @@
 	import { asyncDerived, derived } from '@square/svelte-store';
 	import type { Network } from '../../types/network';
 	import { getAssetBalance } from '$lib/helpers/web3/common';
+	import autosize from 'svelte-autosize';
 
 	export let asset: Asset;
 	export let depositMode: boolean;
@@ -51,11 +52,16 @@
 
 	$: mainnetBalance = buildBalanceStore({ assetId, network: 'mainnet' });
 	$: mvmBalance = buildBalanceStore({ assetId, network: 'mvm' });
+	$: roundedMainnetBalance = format({
+		n: $mainnetBalance,
+		max_dp: 8,
+		format: { groupSeparator: '' }
+	});
 	$: roundedMvmBalance = $mvmBalance
-		? format({ n: $mvmBalance || 0 })
-		: format({ n: asset.balance });
+		? format({ n: $mvmBalance, max_dp: 8, format: { groupSeparator: '' } })
+		: format({ n: asset.balance, max_dp: 8, format: { groupSeparator: '' } });
 
-	$: fromBalance = depositMode ? $mainnetBalance : roundedMvmBalance;
+	$: fromBalance = depositMode ? roundedMainnetBalance : roundedMvmBalance;
 
 	let amount: number | undefined | string;
 
@@ -191,6 +197,7 @@
 				class={clsx('grow resize-none break-all rounded-lg py-3 pl-4 font-semibold', inputClasses)}
 				placeholder={isEthChain ? $user?.address || '' : 'Address'}
 				bind:value={address}
+				use:autosize
 			/>
 			{#if isEthChain}
 				<button
@@ -222,6 +229,7 @@
 					)}
 					placeholder="Memo/Tag (Optional)"
 					bind:value={memo}
+					use:autosize
 				/>
 				<button
 					class="p-3"

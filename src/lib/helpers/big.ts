@@ -103,6 +103,7 @@ export function format(opts: {
 	max_dp?: number;
 	fixed?: boolean;
 	mode?: BigNumber.RoundingMode;
+	format?: BigNumber.Format;
 }): string {
 	const num = new BigNumber(opts.n);
 	const mode = opts.mode ?? BigNumber.ROUND_DOWN;
@@ -112,9 +113,11 @@ export function format(opts: {
 		dp = Math.min(dp, opts.max_dp);
 	}
 
+	const formatOpts = { decimalSeparator: '.', ...(opts.format || {}) };
+
 	return opts.fixed
-		? num.toFormat(dp, mode, { decimalSeparator: '.' })
-		: num.decimalPlaces(dp, mode).toFormat();
+		? num.toFormat(dp, mode, formatOpts)
+		: num.decimalPlaces(dp, mode).toFormat(formatOpts);
 }
 
 /**
