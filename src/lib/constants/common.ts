@@ -58,6 +58,7 @@ export const WHITELIST_ASSET = [
 	{ id: BOX_ASSET_ID, symbol: 'BOX', chain: 'ETH' },
 	{ id: XIN_ASSET_ID, symbol: 'XIN', chain: 'ETH' },
 	{ id: MOB_ASSET_ID, symbol: 'MOB', chain: undefined },
+	{ id: '05c5ac01-31f9-4a69-aa8a-ab796de1d041', symbol: 'XMR', chain: 'XMR' },
 	{
 		id: '9b180ab6-6abe-3dc0-a13f-04169eb34bfa',
 		symbol: 'USDC',
