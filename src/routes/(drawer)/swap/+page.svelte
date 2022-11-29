@@ -102,7 +102,13 @@
 		}
 	};
 
-	$: if (inputAsset && outputAsset && lastEdited && (inputAmount || outputAmount) && $pairs) {
+	$: if (
+		inputAsset?.asset_id &&
+		outputAsset?.asset_id &&
+		lastEdited &&
+		(inputAmount || outputAmount) &&
+		$pairs
+	) {
 		const requestParams = {
 			inputAsset: inputAsset.asset_id,
 			outputAsset: outputAsset.asset_id,

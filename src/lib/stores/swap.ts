@@ -27,6 +27,7 @@ const createSwapOrder = () => {
 		outputAsset: string | undefined;
 		amount: string | undefined;
 	};
+	let lastPair: Pair[];
 	let mixPayPaymentAssets: MixPayAsset[] = [];
 	let mixPaySettlementAssets: MixPayAsset[] = [];
 
@@ -151,9 +152,13 @@ const createSwapOrder = () => {
 			outputAsset: requestParams.outputAsset,
 			amount: lastEdited === 'input' ? requestParams.inputAmount : requestParams.outputAmount
 		};
+
 		if (lastSource === 'MixPay') {
 			if (isEqual(current, lastParams)) return;
+		} else if (lastSource === '4Swap') {
+			if (isEqual(lastPair, $pairs)) return;
 		}
+		lastPair = $pairs;
 		lastParams = current;
 
 		if (updateTimer) clearInterval(updateTimer);
