@@ -311,7 +311,16 @@
 				>
 					<div>
 						<div>{$LL.swapPage.tips.price()}</div>
-						<div>1 {inputAsset?.symbol} ≈ {price} {outputAsset?.symbol}</div>
+						<div class="flex flex-row space-x-1">
+							<Spinner
+								size={16}
+								class={clsx(
+									'stroke-gray-100 stroke-2 transition-all',
+									$swapOrder.loading ? 'opacity-100' : 'opacity-0'
+								)}
+							/>
+							<div>1 {inputAsset?.symbol} ≈ {price} {outputAsset?.symbol}</div>
+						</div>
 					</div>
 					<div>
 						<div>{$LL.swapPage.tips.minReceived()}</div>
@@ -351,7 +360,7 @@
 				$swapOrder.loading ||
 				!!(inputAmount && inputAsset?.balance && bigGte(inputAmount, inputAsset?.balance))}
 		>
-			{#if loading || $swapOrder.loading}
+			{#if loading}
 				<Spinner class="stroke-white stroke-2 text-center" />
 			{:else}
 				{$LL.swap()}

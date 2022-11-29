@@ -156,7 +156,7 @@ const createSwapOrder = () => {
 		if (lastSource === 'MixPay') {
 			if (isEqual(current, lastParams)) return;
 		} else if (lastSource === '4Swap') {
-			if (isEqual(lastPair, $pairs)) return;
+			if (isEqual(lastPair, $pairs) && isEqual(current, lastParams)) return;
 		}
 		lastPair = $pairs;
 		lastParams = current;
