@@ -88,7 +88,7 @@
 					}}
 				>
 					<div>
-						{destination?.slice(0, 4) + '...' + destination?.slice(-4)}
+						{destination?.slice(0, 6) + '...' + destination?.slice(-4)}
 					</div>
 					<Copy class="fill-brand-primary" />
 				</button>
