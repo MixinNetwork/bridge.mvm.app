@@ -273,7 +273,7 @@
 				{#if $assetWithdrawalFee}
 					{$assetWithdrawalFee}
 					{asset.symbol}
-					(${format({ n: bigMul($assetWithdrawalFee, asset.price_usd), max_dp: 3 })})
+					(${format({ n: bigMul($assetWithdrawalFee, asset.price_usd), dp: 3 })})
 				{:else}
 					...
 				{/if}
