@@ -7,7 +7,6 @@
 	import UserInfo from '$lib/components/base/user-info.svelte';
 	import { bigAdd, format } from '$lib/helpers/big';
 	import Spinner from '$lib/components/common/spinner.svelte';
-	import { scrollableParent } from '$lib/helpers/action';
 	import { user } from '$lib/stores/user';
 	import { assets } from '$lib/stores/model';
 	import { ETH_ASSET_ID } from '$lib/constants/common';
@@ -16,6 +15,7 @@
 	import Apps from '$lib/components/base/apps.svelte';
 	import DepositPending from '$lib/components/base/deposit-pending.svelte';
 	import Empty from '$lib/components/base/empty.svelte';
+	import scrollableParent from '$lib/helpers/actions/scrollable-parent';
 
 	const DEFAULT_ICON =
 		'https://images.mixin.one/yH_I5b0GiV2zDmvrXRyr3bK5xusjfy5q7FX3lw3mM2Ryx4Dfuj6Xcw8SHNRnDKm7ZVE3_LvpKlLdcLrlFQUBhds=s128';

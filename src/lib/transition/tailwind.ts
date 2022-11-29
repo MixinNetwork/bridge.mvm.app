@@ -34,10 +34,10 @@ const convertDurationClass = (duration: ClassesParams['duration']) => {
 
 const convertClasses = (clazz: string) => clazz.split(' ').filter(Boolean);
 
-export function tailwind(
+export default (
 	node: Element,
 	{ delay = 0, duration = 150, from, to, base }: ClassesParams
-): TransitionConfig {
+): TransitionConfig => {
 	const durationClass = convertDurationClass(duration);
 	const baseClass = base && convertClasses(base);
 
@@ -92,4 +92,4 @@ export function tailwind(
 			lastIsForward = isForward;
 		}
 	};
-}
+};

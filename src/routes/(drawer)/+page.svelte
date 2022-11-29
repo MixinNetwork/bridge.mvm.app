@@ -10,10 +10,8 @@
 	import type { Asset } from '$lib/types/asset';
 	import AssetItem from '$lib/components/home/asset-item.svelte';
 	import DepositModal from '$lib/components/home/deposit-modal.svelte';
-	import { ETH_ASSET_ID } from '$lib/constants/common';
 	import Modal from '$lib/components/common/modal/modal.svelte';
 	import WithdrawModal from '$lib/components/home/withdraw-modal.svelte';
-	import { derived } from '@square/svelte-store';
 	import SearchBar from '$lib/components/base/search-bar.svelte';
 	import { searchAssets } from '$lib/helpers/utils';
 	import AssetList from '$lib/components/base/asset-list.svelte';
@@ -26,10 +24,6 @@
 	import DepositPending from '$lib/components/base/deposit-pending.svelte';
 	import { needConnectWallet } from '$lib/stores/ether';
 	import DepositQrcodeModal from '$lib/components/home/deposit-qrcode-modal.svelte';
-
-	$: ethAsset = derived(assets, ($assets) =>
-		$assets.find((asset) => asset.asset_id === ETH_ASSET_ID)
-	);
 
 	let searchMode = false;
 	const toggleSearchMode = () => (searchMode = !searchMode);

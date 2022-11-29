@@ -12,7 +12,7 @@ const _findScrollable = (element: HTMLElement): HTMLElement | undefined => {
 	return undefined;
 };
 
-export const scrollableParent = (node: HTMLElement) => {
+export default (node: HTMLElement) => {
 	let scrollable: HTMLElement | null | undefined = undefined;
 
 	const listener = () => {

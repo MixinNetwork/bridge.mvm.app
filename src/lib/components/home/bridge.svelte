@@ -37,7 +37,7 @@
 	import { asyncDerived, derived } from '@square/svelte-store';
 	import type { Network } from '../../types/network';
 	import { getAssetBalance } from '$lib/helpers/web3/common';
-	import autosize from 'svelte-autosize';
+	import autosize from '$lib/helpers/actions/autosize';
 
 	export let asset: Asset;
 	export let depositMode: boolean;
@@ -54,12 +54,14 @@
 	$: mvmBalance = buildBalanceStore({ assetId, network: 'mvm' });
 	$: roundedMainnetBalance = format({
 		n: $mainnetBalance,
-		max_dp: 8,
+		dp: 8,
 		format: { groupSeparator: '' }
 	});
 	$: roundedMvmBalance = $mvmBalance
-		? format({ n: $mvmBalance, max_dp: 8, format: { groupSeparator: '' } })
-		: format({ n: asset.balance, max_dp: 8, format: { groupSeparator: '' } });
+		? format({ n: $mvmBalance, dp: 8, format: { groupSeparator: '' } })
+		: format({ n: asset.balance, dp: 8, format: { groupSeparator: '' } });
+
+	$: console.log('fuck', format({ n: '1602.29163043', dp: 8, format: { groupSeparator: '' } }));
 
 	$: fromBalance = depositMode ? roundedMainnetBalance : roundedMvmBalance;
 
@@ -300,7 +302,7 @@
 				{#if ethAsset}
 					{TRANSACTION_GAS} ETH (${format({
 						n: bigMul(TRANSACTION_GAS, ethAsset?.price_usd),
-						max_dp: 3
+						dp: 3
 					})})
 				{:else}
 					...

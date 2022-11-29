@@ -11,7 +11,7 @@
 	import type { SvelteComponentTyped } from 'svelte';
 	import clsx from 'clsx';
 	import { focus } from 'focus-svelte';
-	import { tailwind } from '../../../transition/tailwind';
+	import tailwind from '../../../transition/tailwind';
 	import { browser } from '$app/environment';
 	import { omit } from 'lodash-es';
 

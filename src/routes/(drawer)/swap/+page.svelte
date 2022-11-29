@@ -210,7 +210,7 @@
 						disabled={isInputAssetBalanceLegal}
 						on:click={() => {
 							lastEdited = 'input';
-							inputAmount = format({ n: inputAsset?.balance ?? 0, max_dp: 8, mode: 1 });
+							inputAmount = format({ n: inputAsset?.balance ?? 0, dp: 8, mode: 1 });
 						}}
 					>
 						{#if !isInputAssetBalanceLegal}
@@ -261,7 +261,7 @@
 						disabled={isOutputAssetBalanceLegal}
 						on:click={() => {
 							lastEdited = 'output';
-							outputAmount = format({ n: outputAsset?.balance ?? 0, max_dp: 8, mode: 1 });
+							outputAmount = format({ n: outputAsset?.balance ?? 0, dp: 8, mode: 1 });
 						}}
 					>
 						{#if !isOutputAssetBalanceLegal}

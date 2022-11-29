@@ -1003,6 +1003,11 @@
   resolved "https://registry.yarnpkg.com/@trysound/sax/-/sax-0.2.0.tgz#cccaab758af56761eb7bf37af6f03f326dd798ad"
   integrity sha512-L7z9BgrNEcYyUYtF+HaEfiS5ebkh9jXqbszz7pC0hRBPaatV0XjSD3+eHrpqFemQfgwiFF0QPIarnIihIDn7OA==
 
+"@types/autosize@^4.0.1":
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/@types/autosize/-/autosize-4.0.1.tgz#999a7c305b96766248044ebaac1a0299961f3b61"
+  integrity sha512-iPJT/FCaSO79G6j+9n6gmFc5nhxZ1gDrA2UAvb5FslJ6FJQZnDfbBU0qp5vpp0Cbjj7+gOyjuWZ7RrXvRuETaA==
+
 "@types/axios@^0.14.0":
   version "0.14.0"
   resolved "https://registry.yarnpkg.com/@types/axios/-/axios-0.14.0.tgz#ec2300fbe7d7dddd7eb9d3abf87999964cafce46"
@@ -1532,7 +1537,7 @@ autoprefixer@^10.4.13:
     picocolors "^1.0.0"
     postcss-value-parser "^4.2.0"
 
-autosize@*:
+autosize@^5.0.2:
   version "5.0.2"
   resolved "https://registry.yarnpkg.com/autosize/-/autosize-5.0.2.tgz#0a327c200dda4a1742817e94dcb8af5700685689"
   integrity sha512-FPVt5ynkqUAA9gcMZnJHka1XfQgr1WNd/yRfIjmj5WGmjua+u5Hl9hn8M2nU5CNy2bEIcj1ZUwXq7IOHsfZG9w==
@@ -3859,13 +3864,6 @@ svelte-adapter-appengine@^0.9.2:
     polka "^1.0.0-next.22"
     sirv "^2.0.2"
     yaml "^1.10.2"
-
-svelte-autosize@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/svelte-autosize/-/svelte-autosize-1.0.1.tgz#2121b2373ab89191a58aaa9a3aec957ca475e812"
-  integrity sha512-HBk7Xrt5bS0rpp5zSUZvuXNKc0UhAxvJGLNy1eTHMDK/KkHb0UsgWpbyn60jW3tE2ZfuXfLttnHvvb1H4zZZ0Q==
-  dependencies:
-    autosize "*"
 
 svelte-check@^2.9.2:
   version "2.9.2"

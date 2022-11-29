@@ -2,7 +2,7 @@
 	import clsx from 'clsx';
 
 	import Hamburger from '$lib/assets/drawer/hamburger.svg?component';
-	import { scrollableParent } from '../../helpers/action';
+	import scrollableParent from '../../helpers/actions/scrollable-parent';
 
 	let clazz: string | undefined = undefined;
 

@@ -1,15 +1,10 @@
 <script lang="ts">
 	import clsx from 'clsx';
-
 	import { providerLogo } from '../../stores/provider';
 	import { isLogged, shortAddress } from '../../stores/user';
-
-	import Logout from '$lib/assets/logout.svg?component';
 	import Arrow from '$lib/assets/arrow.svg?component';
-
 	import { totalBalanceUsd } from '../../stores/model';
 	import { format } from '../../helpers/big';
-
 	import LL from '$i18n/i18n-svelte';
 	import LogoutButton from './logout-button.svelte';
 	import { connectWallet } from '../../stores/ether';
@@ -81,12 +76,6 @@
 				</div>
 			</div>
 		</div>
-		<LogoutButton
-			class="flex h-14 items-center space-x-3 px-6 hover:bg-brand-primary hover:bg-opacity-5"
-		>
-			<Logout />
-			<div class="grow text-start">{$LL.logout.title()}</div>
-			<Arrow />
-		</LogoutButton>
+		<LogoutButton />
 	</div>
 </div>

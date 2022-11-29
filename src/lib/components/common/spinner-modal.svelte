@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { tailwind } from '../../transition/tailwind';
+	import tailwind from '../../transition/tailwind';
 
 	import Spinner from './spinner.svelte';
 </script>

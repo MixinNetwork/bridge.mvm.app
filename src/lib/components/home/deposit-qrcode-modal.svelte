@@ -59,7 +59,7 @@
 </script>
 
 <FullLayoutModal class="!bg-white" on:click={close}>
-	<div slot="title">{$LL.depositModal.title()}</div>
+	<div slot="title">{$LL.depositModal.title(asset.symbol)}</div>
 
 	<div class="flex grow flex-col items-stretch overflow-y-auto px-5">
 		<div class="space-y-2 rounded-xl bg-black bg-opacity-5 px-3 pt-2 pb-3">

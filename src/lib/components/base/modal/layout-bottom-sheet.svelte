@@ -1,6 +1,6 @@
 <script lang="ts">
 	import clsx from 'clsx';
-	import { tailwind } from '../../../transition/tailwind';
+	import tailwind from '../../../transition/tailwind';
 	let clazz: string | undefined = undefined;
 	export { clazz as class };
 </script>

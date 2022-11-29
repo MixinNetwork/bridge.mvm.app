@@ -2,7 +2,7 @@
 	import Close from '$lib/assets/close.svg?component';
 	import LL from '$i18n/i18n-svelte';
 	import { logout } from '../../../stores/user';
-	import { tailwind } from '../../../transition/tailwind';
+	import tailwind from '../../../transition/tailwind';
 
 	export let close = () => {
 		//
