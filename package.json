@@ -40,7 +40,7 @@
 		"autosize": "^5.0.2",
 		"bignumber.js": "^9.1.0",
 		"clsx": "^1.2.1",
-		"daisyui": "^2.41.0",
+		"daisyui": "^2.42.1",
 		"dayjs": "^1.11.6",
 		"eslint": "^8.28.0",
 		"eslint-config-prettier": "^8.3.0",
