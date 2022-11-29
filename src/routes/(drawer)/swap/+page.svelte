@@ -136,9 +136,9 @@
 		minReceived = $swapOrder.minReceived;
 
 		if (lastEdited === 'input') {
-			outputAmount = (order.amount && format({ n: order.amount, fixed: true, dp: 8 })) || undefined;
+			outputAmount = (order.amount && format({ n: order.amount, dp: 8 })) || undefined;
 		} else if (lastEdited === 'output') {
-			inputAmount = (order.funds && format({ n: order.funds, fixed: true, dp: 8 })) || undefined;
+			inputAmount = (order.funds && format({ n: order.funds, dp: 8 })) || undefined;
 		}
 	}
 
@@ -304,7 +304,7 @@
 			</label>
 		</div>
 
-		{#if order && +order.amount}
+		{#if (order && +order.amount) || $swapOrder.loading}
 			<div transition:slide|local>
 				<div
 					class="mt-3 space-y-2 rounded-lg bg-black bg-opacity-5 p-4 text-xs font-semibold text-black text-opacity-50 child:flex child:items-center child:justify-between"
@@ -314,38 +314,46 @@
 						<div class="flex flex-row space-x-1">
 							<Spinner
 								size={16}
-								class={clsx(
-									'stroke-gray-100 stroke-2 transition-all',
-									$swapOrder.loading ? 'opacity-100' : 'opacity-0'
-								)}
+								class={clsx('stroke-[#00000033] stroke-2', !$swapOrder.loading && 'hidden')}
 							/>
-							<div>1 {inputAsset?.symbol} ≈ {price} {outputAsset?.symbol}</div>
+							{#if price}
+								<div>
+									1 {inputAsset?.symbol} ≈ {price}
+									{outputAsset?.symbol}
+								</div>
+							{/if}
 						</div>
 					</div>
-					<div>
-						<div>{$LL.swapPage.tips.minReceived()}</div>
-						<div>{minReceived} {outputAsset?.symbol}</div>
-					</div>
-					<div>
-						<div>{$LL.swapPage.tips.fee()}</div>
-						<div>{fee} {inputAsset?.symbol}</div>
-					</div>
-					<div>
-						<div>{$LL.swapPage.tips.priceImpact()}</div>
-						<div
-							transition:fade|local
-							class={clsx({
-								'text-brand-forbiddenPrice': order?.priceImpact >= 0.1,
-								'text-brand-warningPrice': order?.priceImpact >= 0.01 && order?.priceImpact < 0.1,
-								'text-black text-opacity-50': order?.priceImpact < 0.01
-							})}
-						>
-							{toPercent({ n: order?.priceImpact })}
+					{#if minReceived}
+						<div transition:slide|local>
+							<div>{$LL.swapPage.tips.minReceived()}</div>
+							<div>{minReceived} {outputAsset?.symbol}</div>
 						</div>
-					</div>
+					{/if}
+					{#if fee}
+						<div transition:slide|local>
+							<div>{$LL.swapPage.tips.fee()}</div>
+							<div>{fee} {inputAsset?.symbol}</div>
+						</div>
+					{/if}
+					{#if order?.priceImpact}
+						<div transition:slide|local>
+							<div>{$LL.swapPage.tips.priceImpact()}</div>
+							<div
+								transition:fade|local
+								class={clsx({
+									'text-brand-forbiddenPrice': order?.priceImpact >= 0.1,
+									'text-brand-warningPrice': order?.priceImpact >= 0.01 && order?.priceImpact < 0.1,
+									'text-black text-opacity-50': order?.priceImpact < 0.01
+								})}
+							>
+								{toPercent({ n: order?.priceImpact })}
+							</div>
+						</div>
+					{/if}
 				</div>
 			</div>
-			{#if order?.priceImpact > 0.15}
+			{#if order?.priceImpact && order.priceImpact > 0.15}
 				<div transition:slide|local class="mt-3 self-center text-xs font-semibold opacity-50">
 					{$LL.swapPage.tips.warning()}
 				</div>

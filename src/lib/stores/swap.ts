@@ -133,7 +133,7 @@ const createSwapOrder = () => {
 						loading: false,
 						source: 'MixPay'
 					});
-				}, 1000 * 15);
+				}, 1000 * 10);
 		},
 		300
 	);
