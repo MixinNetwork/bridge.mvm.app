@@ -381,5 +381,5 @@
 			{/if}
 		</button>
 	</div>
-	<Faq />
+	<Faq class="hidden md:block" />
 </div>
