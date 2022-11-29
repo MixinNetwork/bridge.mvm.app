@@ -61,8 +61,6 @@
 		? format({ n: $mvmBalance, dp: 8, format: { groupSeparator: '' } })
 		: format({ n: asset.balance, dp: 8, format: { groupSeparator: '' } });
 
-	$: console.log('fuck', format({ n: '1602.29163043', dp: 8, format: { groupSeparator: '' } }));
-
 	$: fromBalance = depositMode ? roundedMainnetBalance : roundedMvmBalance;
 
 	let amount: number | undefined | string;
