@@ -13,7 +13,7 @@
 
 <FullLayoutModal on:click={close}>
 	<div slot="title">{$LL.withdraw()}</div>
-	<div class="flex grow flex-col items-stretch overflow-visible">
+	<div class="flex grow flex-col items-stretch overflow-y-auto">
 		<Bridge {asset} depositMode={false} />
 	</div>
 </FullLayoutModal>
