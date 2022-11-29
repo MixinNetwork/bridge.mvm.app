@@ -223,7 +223,10 @@
 							<span class="text-brand-primary">{$LL.max()}</span>
 						{/if}
 						<span>
-							{$LL.balanceOf(format({ n: inputAsset?.balance ?? 0 }), inputAsset?.symbol || '')}
+							{$LL.balanceOf(
+								format({ n: inputAsset?.balance ?? 0, dp: 8, mode: 1 }),
+								inputAsset?.symbol || ''
+							)}
 						</span>
 					</button>
 				</div>
@@ -274,7 +277,10 @@
 							<span class="text-brand-primary">{$LL.max()}</span>
 						{/if}
 						<span>
-							{$LL.balanceOf(format({ n: outputAsset?.balance ?? 0 }), outputAsset?.symbol || '')}
+							{$LL.balanceOf(
+								format({ n: outputAsset?.balance ?? 0, dp: 8, mode: 1 }),
+								outputAsset?.symbol || ''
+							)}
 						</span>
 					</button>
 				</div>
