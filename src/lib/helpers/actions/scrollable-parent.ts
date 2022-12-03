@@ -1,12 +1,12 @@
 import { tick } from 'svelte';
 
-const _findScrollable = (element: HTMLElement): HTMLElement | undefined => {
+export const findScrollable = (element: HTMLElement): HTMLElement | undefined => {
 	if (element.scrollHeight > element.clientHeight || element.scrollWidth > element.clientWidth) {
 		return element;
 	}
 
 	if (element.parentElement) {
-		return _findScrollable(element.parentElement);
+		return findScrollable(element.parentElement);
 	}
 
 	return undefined;
@@ -21,7 +21,7 @@ export default (node: HTMLElement) => {
 	};
 
 	tick().then(() => {
-		scrollable = node.parentElement && _findScrollable(node.parentElement);
+		scrollable = node.parentElement && findScrollable(node.parentElement);
 
 		if (scrollable) {
 			scrollable.addEventListener('scroll', listener);

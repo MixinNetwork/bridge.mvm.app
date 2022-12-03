@@ -15,7 +15,8 @@
 	import Apps from '$lib/components/base/apps.svelte';
 	import DepositPending from '$lib/components/base/deposit-pending.svelte';
 	import Empty from '$lib/components/base/empty.svelte';
-	import scrollableParent from '$lib/helpers/actions/scrollable-parent';
+	import { findScrollable } from '$lib/helpers/actions/scrollable-parent';
+	import { createVirtualizer } from '$lib/helpers/svelte-virtual';
 
 	const DEFAULT_ICON =
 		'https://images.mixin.one/yH_I5b0GiV2zDmvrXRyr3bK5xusjfy5q7FX3lw3mM2Ryx4Dfuj6Xcw8SHNRnDKm7ZVE3_LvpKlLdcLrlFQUBhds=s128';
@@ -41,18 +42,35 @@
 		};
 	});
 
+	$: tsxCount = txs.length;
+
+	let parent: HTMLElement | undefined;
+	let virtualizer: ReturnType<typeof createVirtualizer<HTMLElement, Element>> | undefined;
+
+	$: scrollable = (parent && findScrollable(parent)) || null;
+
+	$: virtualizerOptions = {
+		getScrollElement: () => scrollable,
+		initialRect: { height: 72 * tsxCount, width: 0 },
+		count: tsxCount,
+		estimateSize: () => 72,
+		scrollMargin: parent?.offsetTop ?? 0
+	};
+
+	$: virtualizer?.setOptions(virtualizerOptions);
+	$: !virtualizer && (virtualizer = createVirtualizer(virtualizerOptions));
+
+	$: totalSize = $virtualizer?.getTotalSize() ?? 0;
+	$: virtualItems = $virtualizer?.getVirtualItems() ?? [];
+	$: lastIndex = [...virtualItems].slice(-1)?.[0]?.index;
+
 	let loading = false;
 
-	const onScroll = async (event: CustomEvent<Element>) => {
-		if (!hasMore) return;
-		if (loading) return;
-		if (event.detail.scrollTop + event.detail.clientHeight < event.detail.scrollHeight - 200) {
-			return;
-		}
+	const loadMore = async (lastIndex: number) => {
 		if (!$user) return;
+		if (lastIndex < txs.length - 1) return;
 
 		loading = true;
-
 		try {
 			const lastTransaction = transactions[transactions.length - 1];
 
@@ -61,14 +79,14 @@
 				endblock: lastTransaction?.blockNumber,
 				lastHash: lastTransaction?.hash
 			});
-
 			hasMore = result.length >= 30;
-
 			transactions = [...transactions, ...result];
 		} finally {
 			loading = false;
 		}
 	};
+
+	$: parent && !loading && hasMore && $user && loadMore(lastIndex);
 
 	const updateTtransactions = async () => {
 		if (!transactions.length) return;
@@ -87,7 +105,7 @@
 	};
 
 	let timer: ReturnType<typeof setInterval> | undefined;
-	onMount(async () => (timer = setInterval(updateTtransactions, 1000 * 5)));
+	onMount(async () => (timer = setInterval(updateTtransactions, 1000 * 10)));
 	onDestroy(() => timer && clearInterval(timer));
 </script>
 
@@ -98,46 +116,59 @@
 	<DepositPending />
 </Header>
 
-<div
-	class="flex grow flex-col bg-white md:my-8 md:mx-5 md:rounded-2xl xl:mx-16"
-	use:scrollableParent
-	on:parentScroll={onScroll}
->
+<div class="flex grow flex-col bg-white md:my-8 md:mx-5 md:rounded-2xl xl:mx-16">
 	<div class="hidden px-5 py-4 text-lg font-semibold md:block">{$LL.allTransactions()}</div>
-	{#each txs as tx (tx.hash + tx.symbol)}
-		<a
-			class="flex h-[72px] items-center justify-between space-x-3 p-5 font-semibold"
-			href={`https://scan.mvm.dev/tx/${tx.hash}`}
-			target="_blank"
-			rel="noreferrer"
-		>
-			<div class="flex flex-1 items-center justify-between">
-				<div class="flex flex-1 items-center space-x-3">
-					<img loading="lazy" src={tx.icon || DEFAULT_ICON} width="24" height="24" alt={tx.name} />
-					<div class="grow">
-						{tx.total < 0 ? (tx.value !== 0 ? $LL.withdraw() : $LL.fee()) : $LL.deposit()}
+	<div bind:this={parent}>
+		<div class="relative w-full" style:height={`${totalSize}px`}>
+			{#each virtualItems as virtualRow (virtualRow.key)}
+				<a
+					class="absolute top-0 left-0 flex h-[72px] w-full items-center justify-between space-x-3 p-5 font-semibold"
+					href={`https://scan.mvm.dev/tx/${txs[virtualRow.index].hash}`}
+					target="_blank"
+					rel="noreferrer"
+					style:transform={`translateY(${virtualRow.start}px)`}
+				>
+					<div class="flex flex-1 items-center justify-between">
+						<div class="flex flex-1 items-center space-x-3">
+							<img
+								loading="lazy"
+								src={txs[virtualRow.index].icon || DEFAULT_ICON}
+								width="24"
+								height="24"
+								alt={txs[virtualRow.index].name}
+							/>
+							<div class="grow">
+								{txs[virtualRow.index].total < 0
+									? txs[virtualRow.index].value !== 0
+										? $LL.withdraw()
+										: $LL.fee()
+									: $LL.deposit()}
+							</div>
+						</div>
+						<div class="flex flex-1 justify-end space-x-2 text-sm md:grow">
+							<div
+								class={clsx({
+									'text-red-500': txs[virtualRow.index].total < 0,
+									'text-green-500': txs[virtualRow.index].total > 0
+								})}
+							>
+								{format({ n: txs[virtualRow.index].total })}
+							</div>
+							<div>
+								{txs[virtualRow.index].symbol}
+							</div>
+						</div>
 					</div>
-				</div>
-				<div class="flex flex-1 justify-end space-x-2 text-sm md:grow">
-					<div
-						class={clsx({
-							'text-red-500': tx.total < 0,
-							'text-green-500': tx.total > 0
-						})}
-					>
-						{format({ n: tx.total })}
-					</div>
-					<div>
-						{tx.symbol}
-					</div>
-				</div>
-			</div>
 
-			<div class="hidden flex-1 justify-end text-sm font-medium text-black text-opacity-20 lg:flex">
-				{tx.date}
-			</div>
-		</a>
-	{/each}
+					<div
+						class="hidden flex-1 justify-end text-sm font-medium text-black text-opacity-20 lg:flex"
+					>
+						{txs[virtualRow.index].date}
+					</div>
+				</a>
+			{/each}
+		</div>
+	</div>
 	{#if !txs.length}
 		<Empty />
 	{/if}

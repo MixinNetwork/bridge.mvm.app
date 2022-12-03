@@ -998,6 +998,11 @@
     svelte-hmr "^0.15.1"
     vitefu "^0.2.1"
 
+"@tanstack/virtual-core@^3.0.0-beta.23":
+  version "3.0.0-beta.23"
+  resolved "https://registry.yarnpkg.com/@tanstack/virtual-core/-/virtual-core-3.0.0-beta.23.tgz#2e586256bdb239e35c8d1ca4e8d66c1c55151419"
+  integrity sha512-xQfJgz4mdaxifPjOqUBYAar60UAQTrED2SpS0VI5AZvxYI4NDTxx5cFrjaP4baKY3UnVc8IsGFbqr8Q/LZNMag==
+
 "@trysound/sax@0.2.0":
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/@trysound/sax/-/sax-0.2.0.tgz#cccaab758af56761eb7bf37af6f03f326dd798ad"
