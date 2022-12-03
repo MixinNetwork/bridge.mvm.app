@@ -10,63 +10,60 @@ import {
 	type VirtualizerOptions
 } from '@tanstack/virtual-core';
 
-import { writable, derived } from '@square/svelte-store';
+import { writable, derived, type Writable } from '@square/svelte-store';
 
-const createVirtualizerBase = <TScrollElement, TItemElement extends Element, UpdateOptions>(
+const createVirtualizerBase = <TScrollElement, TItemElement extends Element>(
 	options: VirtualizerOptions<TScrollElement, TItemElement>
 ) => {
+	let originalOnChange = options.onChange;
+
 	const virtualizer = new Virtualizer(options);
 	const originalSetOptions = virtualizer.setOptions;
 
-	const virtualizerWritable = writable(virtualizer, () => virtualizer._didMount);
+	// eslint-disable-next-line prefer-const
+	let virtualizerWritable: Writable<Virtualizer<TScrollElement, TItemElement>>;
 
-	const originalOptions = options;
-
-	const setOptions = (options: UpdateOptions) => {
-		const newOptions = { ...originalOptions, ...options };
+	const setOptions = (options: Partial<VirtualizerOptions<TScrollElement, TItemElement>>) => {
+		originalOnChange = options.onChange || originalOnChange;
 		originalSetOptions({
-			...newOptions,
+			...virtualizer.options,
+			...options,
 			onChange: (instance: Virtualizer<TScrollElement, TItemElement>) => {
 				virtualizerWritable.set(instance);
-				newOptions.onChange?.(instance);
+				originalOnChange?.(instance);
 			}
 		});
 		virtualizer._willUpdate();
 	};
 
-	setOptions(options as UpdateOptions);
+	virtualizerWritable = writable(virtualizer, () => {
+		setOptions(options);
+		return virtualizer._didMount();
+	});
 
 	return derived(virtualizerWritable, (instance) => Object.assign(instance, { setOptions }));
 };
 
-export type CreateVirtualizerOptions<TScrollElement, TItemElement extends Element> = PartialKeys<
-	VirtualizerOptions<TScrollElement, TItemElement>,
-	'observeElementRect' | 'observeElementOffset' | 'scrollToFn'
->;
-
 export const createVirtualizer = <TScrollElement, TItemElement extends Element>(
-	options: CreateVirtualizerOptions<TScrollElement, TItemElement>
+	options: PartialKeys<
+		VirtualizerOptions<TScrollElement, TItemElement>,
+		'observeElementRect' | 'observeElementOffset' | 'scrollToFn'
+	>
 ) =>
-	createVirtualizerBase<
-		TScrollElement,
-		TItemElement,
-		CreateVirtualizerOptions<TScrollElement, TItemElement>
-	>({
+	createVirtualizerBase<TScrollElement, TItemElement>({
 		observeElementRect: observeElementRect,
 		observeElementOffset: observeElementOffset,
 		scrollToFn: elementScroll,
 		...options
 	});
 
-export type CreateWindowVirtualizerOptions<TItemElement extends Element> = PartialKeys<
-	VirtualizerOptions<Window, TItemElement>,
-	'getScrollElement' | 'observeElementRect' | 'observeElementOffset' | 'scrollToFn'
->;
-
 export const createWindowVirtualizer = <TItemElement extends Element>(
-	options: CreateWindowVirtualizerOptions<TItemElement>
+	options: PartialKeys<
+		VirtualizerOptions<Window, TItemElement>,
+		'getScrollElement' | 'observeElementRect' | 'observeElementOffset' | 'scrollToFn'
+	>
 ) =>
-	createVirtualizerBase<Window, TItemElement, CreateWindowVirtualizerOptions<TItemElement>>({
+	createVirtualizerBase<Window, TItemElement>({
 		getScrollElement: () => (typeof window !== 'undefined' ? window : null),
 		observeElementRect: observeWindowRect,
 		observeElementOffset: observeWindowOffset,
