@@ -11,7 +11,7 @@
 </script>
 
 {#if $isLogged}
-	<DrawerItem logo={Logout} title={$LL.logout.title()} on:click={toggle} />
+	<DrawerItem class="md:hidden" logo={Logout} title={$LL.logout.title()} on:click={toggle} />
 {/if}
 
 <Modal modal-opened={logoutModalOpen} this={LogoutModal} modal-on-close={toggle} />
