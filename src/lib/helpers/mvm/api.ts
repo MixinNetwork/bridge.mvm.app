@@ -169,8 +169,6 @@ export const fetchTransactions = async ({
 		const firstIndex = firstHash ? mvmTransactions.findIndex((tx) => tx.hash === firstHash) : 0;
 
 		transactions = transactions.slice(0, firstIndex).slice(-30);
-	} else {
-		transactions = transactions.slice(0, 30);
 	}
 
 	return transactions;

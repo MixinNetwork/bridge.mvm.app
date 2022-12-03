@@ -16,18 +16,18 @@ const createVirtualizerBase = <TScrollElement, TItemElement extends Element, Upd
 	options: VirtualizerOptions<TScrollElement, TItemElement>
 ) => {
 	const virtualizer = new Virtualizer(options);
+	const originalSetOptions = virtualizer.setOptions;
 
-	const virtualizerWritable = writable({ virtualizer }, () => virtualizer._didMount);
-	const virtualizerReadable = derived(virtualizerWritable, ({ virtualizer }) => virtualizer);
+	const virtualizerWritable = writable(virtualizer, () => virtualizer._didMount);
 
 	const originalOptions = options;
 
 	const setOptions = (options: UpdateOptions) => {
 		const newOptions = { ...originalOptions, ...options };
-		virtualizer.setOptions({
+		originalSetOptions({
 			...newOptions,
 			onChange: (instance: Virtualizer<TScrollElement, TItemElement>) => {
-				virtualizerWritable.set({ virtualizer: instance });
+				virtualizerWritable.set(instance);
 				newOptions.onChange?.(instance);
 			}
 		});
@@ -36,10 +36,7 @@ const createVirtualizerBase = <TScrollElement, TItemElement extends Element, Upd
 
 	setOptions(options as UpdateOptions);
 
-	return {
-		subscribe: virtualizerReadable.subscribe,
-		setOptions
-	};
+	return derived(virtualizerWritable, (instance) => Object.assign(instance, { setOptions }));
 };
 
 export type CreateVirtualizerOptions<TScrollElement, TItemElement extends Element> = PartialKeys<

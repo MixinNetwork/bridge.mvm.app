@@ -17,6 +17,7 @@
 	import Empty from '$lib/components/base/empty.svelte';
 	import { findScrollable } from '$lib/helpers/actions/scrollable-parent';
 	import { createVirtualizer } from '$lib/helpers/svelte-virtual';
+	import { slide } from 'svelte/transition';
 
 	const DEFAULT_ICON =
 		'https://images.mixin.one/yH_I5b0GiV2zDmvrXRyr3bK5xusjfy5q7FX3lw3mM2Ryx4Dfuj6Xcw8SHNRnDKm7ZVE3_LvpKlLdcLrlFQUBhds=s128';
@@ -57,7 +58,7 @@
 		scrollMargin: parent?.offsetTop ?? 0
 	};
 
-	$: virtualizer?.setOptions(virtualizerOptions);
+	$: $virtualizer?.setOptions(virtualizerOptions);
 	$: !virtualizer && (virtualizer = createVirtualizer(virtualizerOptions));
 
 	$: totalSize = $virtualizer?.getTotalSize() ?? 0;
@@ -173,7 +174,7 @@
 		<Empty />
 	{/if}
 	{#if hasMore}
-		<div class="flex h-20 items-center justify-center">
+		<div transition:slide|local class="flex h-20 items-center justify-center">
 			<Spinner class="stroke-slate-500" />
 		</div>
 	{/if}
