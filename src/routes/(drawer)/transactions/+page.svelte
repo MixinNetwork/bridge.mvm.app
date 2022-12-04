@@ -55,7 +55,8 @@
 		initialRect: { height: 72 * tsxCount, width: 0 },
 		count: tsxCount,
 		estimateSize: () => 72,
-		scrollMargin: parent?.offsetTop ?? 0
+		scrollMargin: parent?.offsetTop ?? 0,
+		overscan: 6
 	};
 
 	$: $virtualizer?.setOptions(virtualizerOptions);
