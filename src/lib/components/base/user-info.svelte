@@ -16,7 +16,7 @@
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <div
 	class={clsx(
-		'group relative flex md:h-10 items-center space-x-3 z-50 default md:py-2 md:px-4 md:rounded-full md:bg-white w-fit transition select-none',
+		'group hover:pointer-events-none md:hover:pointer-events-auto relative flex md:h-10 items-center space-x-3 z-50 default md:py-2 md:px-4 md:rounded-full md:bg-white w-fit transition select-none',
 		clazz,
 		{
 			'cursor-default': $isLogged,

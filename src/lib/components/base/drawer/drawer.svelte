@@ -61,7 +61,7 @@
 		rel="noreferrer"
 	/>
 
-	<LogoutButton />
+	<LogoutButton class="md:hidden" />
 
 	<div class="mb-5 flex grow flex-col items-center justify-end">
 		<div class=" flex space-x-1 child:p-2">

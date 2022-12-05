@@ -1,4 +1,5 @@
 <script lang="ts">
+	import clsx from 'clsx';
 	import Modal from '../common/modal/modal.svelte';
 	import DrawerItem from './drawer/drawer-item.svelte';
 	import LogoutModal from './modal/logout-modal.svelte';
@@ -8,10 +9,12 @@
 
 	let logoutModalOpen = false;
 	const toggle = () => (logoutModalOpen = !logoutModalOpen);
+	let clazz: string | undefined = undefined;
+	export { clazz as class };
 </script>
 
 {#if $isLogged}
-	<DrawerItem class="md:hidden" logo={Logout} title={$LL.logout.title()} on:click={toggle} />
+	<DrawerItem class={clsx(clazz)} logo={Logout} title={$LL.logout.title()} on:click={toggle} />
 {/if}
 
 <Modal modal-opened={logoutModalOpen} this={LogoutModal} modal-on-close={toggle} />

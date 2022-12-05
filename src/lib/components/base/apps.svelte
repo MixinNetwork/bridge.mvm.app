@@ -57,13 +57,10 @@
 
 <button
 	class={clsx(
-		'group relative flex items-center md:cursor-default select-none opacity-100 z-50 justify-center md:bg-white w-fit md:rounded-full space-x-3 md:py-2 md:px-4 transition',
+		'group hover:pointer-events-auto md:active:pointer-events-none relative flex items-center md:cursor-default select-none opacity-100 z-50 justify-center md:bg-white w-fit md:rounded-full space-x-3 md:py-2 md:px-4 transition',
 		clazz
 	)}
-	on:click={() => {
-		if (window.innerWidth > 720) return;
-		opened = true;
-	}}
+	on:click={() => (opened = true)}
 >
 	<Apps />
 	<div class=" hidden text-sm font-semibold text-black text-opacity-80 md:block">Apps</div>

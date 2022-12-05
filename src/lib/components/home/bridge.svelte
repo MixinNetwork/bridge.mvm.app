@@ -258,12 +258,9 @@
 					{$LL.withdrawModal.l1Gas()}
 				</div>
 				<button
-					class="tooltip hover:tooltip-open"
+					class="tooltip hover:tooltip-open md:active:pointer-events-none"
 					data-tip={$LL.withdrawModal.l1GasTip()}
-					on:click={() => {
-						if (window.innerWidth > 720) return;
-						l1GasModalOpened = true;
-					}}
+					on:click={() => (l1GasModalOpened = true)}
 				>
 					<Info />
 				</button>
@@ -285,12 +282,9 @@
 					{$LL.withdrawModal.l2Gas()}
 				</div>
 				<button
-					class="tooltip hover:tooltip-open"
+					class="tooltip hover:tooltip-open md:active:pointer-events-none"
 					data-tip={$LL.withdrawModal.l2GasTip()}
-					on:click={() => {
-						if (window.innerWidth > 720) return;
-						l2GasModalOpened = true;
-					}}
+					on:click={() => (l2GasModalOpened = true)}
 				>
 					<Info />
 				</button>

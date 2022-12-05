@@ -39,7 +39,7 @@
 		}
 		&:checked {
 			& ~ .drawer-side {
-				@apply overflow-y-auto;
+				@apply z-10 overflow-y-auto;
 				& > .drawer-overlay {
 					@apply visible;
 				}
