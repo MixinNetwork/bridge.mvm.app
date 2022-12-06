@@ -16,7 +16,7 @@
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <div
 	class={clsx(
-		'group hover:pointer-events-none md:hover:pointer-events-auto relative flex md:h-10 items-center space-x-3 z-50 default md:py-2 md:px-4 md:rounded-full md:bg-white w-fit transition select-none',
+		'default group relative z-50 flex w-fit select-none items-center space-x-3 transition hover:pointer-events-none md:h-10 md:rounded-full md:bg-white md:py-2 md:px-4 md:hover:pointer-events-auto',
 		clazz,
 		{
 			'cursor-default': $isLogged,
@@ -58,7 +58,7 @@
 
 	<div
 		class={clsx(
-			'invisible absolute top-10 right-0 z-50 mt-3 w-96 flex-col rounded-2xl default bg-white pb-5 opacity-0 shadow transition-all delay-100 group-hover:visible group-hover:opacity-100 md:flex',
+			'default invisible absolute top-10 right-0 z-50 mt-3 w-96 flex-col rounded-2xl bg-white pb-5 opacity-0 shadow transition-all delay-100 group-hover:visible group-hover:opacity-100 md:flex',
 			{
 				'!invisible': !$isLogged
 			}

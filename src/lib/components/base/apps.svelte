@@ -57,7 +57,7 @@
 
 <button
 	class={clsx(
-		'group hover:pointer-events-auto md:active:pointer-events-none relative flex items-center md:cursor-default select-none opacity-100 z-50 justify-center md:bg-white w-fit md:rounded-full space-x-3 md:py-2 md:px-4 transition',
+		'group relative z-50 flex w-fit select-none items-center justify-center space-x-3 opacity-100 transition hover:pointer-events-auto md:cursor-default md:rounded-full md:bg-white md:py-2 md:px-4 md:active:pointer-events-none',
 		clazz
 	)}
 	on:click={() => (opened = true)}

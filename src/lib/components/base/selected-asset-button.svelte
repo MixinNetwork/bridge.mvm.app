@@ -19,8 +19,8 @@
 
 <button
 	class={clsx(
-		'flex w-full items-center shrink-0 justify-between px-4 py-3 space-x-4',
-		disabled && 'cursor-default default',
+		'flex w-full shrink-0 items-center justify-between space-x-4 px-4 py-3',
+		disabled && 'default cursor-default',
 		clazz
 	)}
 	on:click={toggle}

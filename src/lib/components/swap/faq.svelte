@@ -5,7 +5,7 @@
 	export { clazz as class };
 </script>
 
-<div class={clsx('mt-4 rounded-lg bg-white pt-3 pb-10 px-5 lg:w-60', clazz)}>
+<div class={clsx('mt-4 rounded-lg bg-white px-5 pt-3 pb-10 lg:w-60', clazz)}>
 	<p class=" mb-6 text-xl font-bold">{$LL.swapPage.faq.description1()}</p>
 	<div class=" space-y-6 text-sm font-medium text-black text-opacity-50">
 		<p>

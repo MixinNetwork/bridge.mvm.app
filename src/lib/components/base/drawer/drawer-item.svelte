@@ -23,7 +23,7 @@
 	<div class={clsx('py-2 px-5', clazz)}>
 		<a
 			class={clsx(
-				'inline-flex h-11 w-full items-center space-x-4 rounded-xl px-3 py-2 transition hover:bg-brand-primary cursor-pointer hover:bg-opacity-5',
+				'inline-flex h-11 w-full cursor-pointer items-center space-x-4 rounded-xl px-3 py-2 transition hover:bg-brand-primary hover:bg-opacity-5',
 				{
 					'bg-brand-primary bg-opacity-10': $page.url.pathname === href
 				}

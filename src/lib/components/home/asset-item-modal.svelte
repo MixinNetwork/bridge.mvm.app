@@ -63,8 +63,8 @@
 
 	<div
 		class={clsx(
-			'flex flex-col space-y-5 font-semibold mt-8 mb-12 w-full',
-			'child:flex child:flex-row child:space-x-2 child:justify-between',
+			'mt-8 mb-12 flex w-full flex-col space-y-5 font-semibold',
+			'child:flex child:flex-row child:justify-between child:space-x-2',
 			'first:child:child:opacity-40'
 		)}
 	>
@@ -104,7 +104,7 @@
 
 	<div
 		class={clsx(
-			'flex w-full flex-row mb-8 font-semibold',
+			'mb-8 flex w-full flex-row font-semibold',
 			'child:flex child:h-12 child:w-full child:flex-1 child:items-center child:justify-center child:bg-brand-background child:text-center first:child:rounded-l-xl last:child:rounded-r-xl',
 			'[&>*:nth-child(n+2)]:relative',
 			'[&>*:nth-child(n+2)]:before:absolute',

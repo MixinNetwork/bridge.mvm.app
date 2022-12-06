@@ -64,9 +64,9 @@
 	<div class="mt-6 w-full px-11 md:w-80 md:p-0">
 		<div
 			class={clsx(
-				'grid h-12 w-full grid-cols-2 shadow-sm font-semibold child:space-x-2',
+				'grid h-12 w-full grid-cols-2 font-semibold shadow-sm child:space-x-2',
 				'[&>svg]:child:inline-block',
-				'child:bg-white first:child:rounded-l-xl last:child:rounded-r-xl child:flex child:items-center child:justify-center',
+				'child:flex child:items-center child:justify-center child:bg-white first:child:rounded-l-xl last:child:rounded-r-xl',
 				'[&>*:nth-child(n+2)]:relative',
 				'[&>*:nth-child(n+2)]:before:absolute',
 				'[&>*:nth-child(n+2)]:before:left-0',

@@ -21,7 +21,7 @@
 
 <div
 	transition:fade|local
-	class={clsx('flex rounded-full bg-white mt-1 py-2 px-3 align-middle space-x-3', clazz)}
+	class={clsx('mt-1 flex space-x-3 rounded-full bg-white py-2 px-3 align-middle', clazz)}
 >
 	<svelte:component this={component} {message} />
 </div>

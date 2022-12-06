@@ -4,7 +4,7 @@
 	import { totalBalanceBtc, totalBalanceUsd } from '../../stores/model';
 </script>
 
-<div class={clsx('flex flex-col items-center justify-center md:items-start transition')}>
+<div class={clsx('flex flex-col items-center justify-center transition md:items-start')}>
 	<div>
 		<span class="align-top font-semibold opacity-30">$</span>
 		<span class="text-3xl font-bold md:text-[40px]"
