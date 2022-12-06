@@ -16,14 +16,17 @@
 	import { omit } from 'lodash-es';
 
 	type Component = $$Generic<typeof SvelteComponentTyped<Record<string, any>>>;
-	type Props = Component extends typeof SvelteComponentTyped<infer T extends Record<string, any>>
-		? T
-		: never;
+	type ComponentProps = Component extends typeof SvelteComponentTyped<
+		infer T extends Record<string, any>
+	>
+		? T extends Record<string, never>
+			? Record<string, any>
+			: T
+		: Record<string, any>;
 
-	type $$Props = BaseProps &
-		Props & {
-			this: Component;
-		};
+	type $$Props = BaseProps & {
+		this: Component;
+	} & ComponentProps;
 
 	$: p = $$props as $$Props;
 
