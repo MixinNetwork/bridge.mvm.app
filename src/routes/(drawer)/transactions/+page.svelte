@@ -15,7 +15,6 @@
 	import Apps from '$lib/components/base/apps.svelte';
 	import DepositPending from '$lib/components/base/deposit-pending.svelte';
 	import Empty from '$lib/components/base/empty.svelte';
-	import { findScrollable } from '$lib/helpers/actions/scrollable-parent';
 	import { createVirtualizer } from '$lib/helpers/svelte-virtual';
 	import { slide } from 'svelte/transition';
 	import { browser } from '$app/environment';
