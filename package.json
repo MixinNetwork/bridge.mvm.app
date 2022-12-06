@@ -39,7 +39,7 @@
 		"@yeungkc/svelte-portal": "^0.0.3",
 		"autoprefixer": "^10.4.13",
 		"autosize": "^5.0.2",
-		"bignumber.js": "^9.1.0",
+		"bignumber.js": "^9.1.1",
 		"clsx": "^1.2.1",
 		"daisyui": "^2.42.1",
 		"dayjs": "^1.11.6",
