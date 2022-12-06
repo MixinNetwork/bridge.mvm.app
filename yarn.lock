@@ -1379,10 +1379,10 @@
     joi "^17.6.1"
     lodash.uniqby "^4.7.0"
 
-"@web3-onboard/walletconnect@^2.2.0":
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/@web3-onboard/walletconnect/-/walletconnect-2.2.0.tgz#ea537d91f891406fa1a4875833e45e6f154f2aff"
-  integrity sha512-nZAZo+oiWNHarggK4qVwknIg4cW6aUcVAwYMbQUQWtuLW8Fx3sW80xwUeLGfnyIWs7DWxS3SK5Rp2+Uk2Xl9uQ==
+"@web3-onboard/walletconnect@^2.2.1":
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/@web3-onboard/walletconnect/-/walletconnect-2.2.1.tgz#02b9688e00c75f2ea16d9c2d466ea09d3dbe5a12"
+  integrity sha512-XqhspQRzCxCFil1V/o7g8qXW8JPmYEiz1dIb1aMNOh//55WgT5+d0vF8Er3oJndh6+KAWRNQoWe+WNJIP9pBDw==
   dependencies:
     "@ethersproject/providers" "^5.5.0"
     "@walletconnect/client" "^1.7.1"
