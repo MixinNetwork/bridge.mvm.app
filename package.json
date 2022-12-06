@@ -33,7 +33,7 @@
 		"@types/qrcode": "^1.5.0",
 		"@typescript-eslint/eslint-plugin": "^5.45.1",
 		"@typescript-eslint/parser": "^5.45.1",
-		"@web3-onboard/core": "^2.10.1",
+		"@web3-onboard/core": "^2.11.0",
 		"@web3-onboard/injected-wallets": "^2.4.0",
 		"@web3-onboard/walletconnect": "^2.2.0",
 		"@yeungkc/svelte-portal": "^0.0.3",
