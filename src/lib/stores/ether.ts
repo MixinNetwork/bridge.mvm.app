@@ -3,11 +3,11 @@ import { derived, get } from '@square/svelte-store';
 import { deepWritable } from '../helpers/store/deep';
 import { clearLastProvider } from './provider';
 import type { EIP1193Provider } from '@web3-onboard/core';
-import { isLogged, registerAndSave, user } from './user';
+import { isLogged, registerAndSave } from './user';
 import { assets, logging } from './model';
-import { fetchAssets } from '../helpers/api';
 import { invalidateAll } from '$app/navigation';
 import { browser } from '$app/environment';
+import { page } from '$app/stores';
 
 interface EtherStore {
 	library?: ethers.providers.Web3Provider;
@@ -29,8 +29,10 @@ export const connectWallet = async () => {
 		const $account = get(account);
 		if (!$account) throw new Error('No account found');
 		await registerAndSave($account);
-		assets.set(await fetchAssets(get(user)));
+
 		await invalidateAll();
+		const newAssets = get(page).data.assets;
+		newAssets && assets.set(newAssets);
 	} finally {
 		logging.set(false);
 	}

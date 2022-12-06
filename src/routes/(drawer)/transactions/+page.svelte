@@ -18,6 +18,7 @@
 	import { findScrollable } from '$lib/helpers/actions/scrollable-parent';
 	import { createVirtualizer } from '$lib/helpers/svelte-virtual';
 	import { slide } from 'svelte/transition';
+	import { browser } from '$app/environment';
 
 	const DEFAULT_ICON =
 		'https://images.mixin.one/yH_I5b0GiV2zDmvrXRyr3bK5xusjfy5q7FX3lw3mM2Ryx4Dfuj6Xcw8SHNRnDKm7ZVE3_LvpKlLdcLrlFQUBhds=s128';
@@ -46,9 +47,9 @@
 	$: tsxCount = txs.length;
 
 	let parent: HTMLElement | undefined;
-	let virtualizer: ReturnType<typeof createVirtualizer<HTMLElement, Element>> | undefined;
+	let virtualizer: ReturnType<typeof createVirtualizer<Element, Element>> | undefined;
 
-	$: scrollable = (parent && findScrollable(parent)) || null;
+	$: scrollable = (browser && document.querySelector('div.drawer-content')) || null;
 
 	$: virtualizerOptions = {
 		getScrollElement: () => scrollable,
