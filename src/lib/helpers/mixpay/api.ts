@@ -5,6 +5,7 @@ import type { RegisteredUser } from '../../types/user';
 import { generateExtra } from '../sign';
 import { MIXPAY_BOT_ID } from '../../constants/common';
 import { format } from '../big';
+import { getTime } from '../utils';
 
 export interface MixPayAsset {
 	name: string;
@@ -190,6 +191,7 @@ const fetchMixPaySwapTraceId = async (
 
 			if (snapshot) {
 				clearInterval(timer);
+				console.log(getTime(), 'Mixin 收到交易并发送给 MixPay');
 				resolve((snapshot as TransferResponse).trace_id);
 			}
 			if (count === 20) {

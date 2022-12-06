@@ -21,3 +21,11 @@ export const getAsset = (assetId: string | null, assets: Asset[]) => {
 	if (!assetId) return;
 	return assets.find((a) => a.asset_id === assetId);
 };
+
+export const getTime = () => {
+	const t = new Date();
+	const h = t.getHours();
+	const m = t.getMinutes();
+	const s = t.getSeconds();
+	return `${h < 10 ? '0' + h : h}:${m < 10 ? '0' + m : m}:${s < 10 ? '0' + s : s}`;
+};

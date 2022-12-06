@@ -13,6 +13,7 @@ import { sortBy } from 'lodash-es';
 import { fetchMixPayOrder, type MixPayPaymentResponse } from './mixpay/api';
 import { fetch4SwapOrder, type OrderResponse } from './4swap/api';
 import type { SwapSource } from '../types/swap';
+import { getTime } from './utils';
 
 export const register = async (address: string): Promise<RegisteredUser> => {
 	const response = await fetch('https://bridge.mvm.dev/users', {
@@ -187,16 +188,19 @@ export const checkOrder = async (
 
 			try {
 				const res = await fetchOrderStatus(order_id, user);
+				console.log(getTime(), '查询 MixPay 订单状态');
+
 				if (
 					(source === '4Swap' && res && (res as OrderResponse).state === 'Done') ||
 					(source === 'MixPay' && res && (res as MixPayPaymentResponse).data.status === 'success')
 				) {
 					clearInterval(timer);
+					console.log(getTime(), 'Swap 成功');
 					resolve(true);
 				}
 			} catch (e) {
 				return;
 			}
-		}, 5000);
+		}, 1000);
 	});
 };

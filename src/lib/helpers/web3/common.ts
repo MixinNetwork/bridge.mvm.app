@@ -17,6 +17,7 @@ import { fetch4SwapTxInfo } from '../4swap/api';
 import { checkOrder } from '../api';
 import { fetchMixPayTxInfo } from '../mixpay/api';
 import { format } from '../big';
+import { getTime } from '../utils';
 
 export const mainnetProvider = ethers.getDefaultProvider(1);
 export const mvmProvider = ethers.getDefaultProvider(MVM_RPC_URL);
@@ -195,13 +196,17 @@ export const swapAsset = async (
 		const assetAmount = ethers.utils.parseEther(Number(order.funds).toFixed(8)).toString();
 		const bridge = new ethers.Contract(BRIDGE_ADDRESS, BRIDGE_ABI, signer);
 
-		await bridge.release(user.contract, info.extra, {
+		const t = Date.now();
+		const r = await bridge.release(user.contract, info.extra, {
 			gasPrice: 10000000,
 			gasLimit: 500000,
 			value: assetAmount
 		});
+		console.log(getTime(), 'MetaMask 签名完成并发交易到 MVM');
+		await r.wait();
+		console.log(getTime(), 'MVM 收到交易，开始走提现的逻辑给 MixPay 发送交易');
 
-		const follow_id = await info.getFollowId(Date.now());
+		const follow_id = await info.getFollowId(t);
 		return await checkOrder(source, follow_id, user);
 	}
 
@@ -211,12 +216,16 @@ export const swapAsset = async (
 		const tokenDecimal = await tokenContract.decimals();
 		const value = ethers.utils.parseUnits(`${order.funds}`, tokenDecimal);
 
-		await tokenContract.transferWithExtra(user.contract, value, info.extra, {
+		const t = Date.now();
+		const r = await tokenContract.transferWithExtra(user.contract, value, info.extra, {
 			gasPrice: 10000000,
 			gasLimit: 450000
 		});
+		console.log(getTime(), 'MetaMask 签名完成并发交易到 MVM');
+		await r.wait();
+		console.log(getTime(), 'MVM 收到交易，开始走提现的逻辑给 MixPay 发送交易');
 
-		const follow_id = await info.getFollowId(Date.now());
+		const follow_id = await info.getFollowId(t);
 		return await checkOrder(source, follow_id, user);
 	}
 
