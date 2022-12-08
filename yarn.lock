@@ -968,10 +968,10 @@
   dependencies:
     import-meta-resolve "^2.2.0"
 
-"@sveltejs/kit@^1.0.0-next.572":
-  version "1.0.0-next.572"
-  resolved "https://registry.yarnpkg.com/@sveltejs/kit/-/kit-1.0.0-next.572.tgz#ecae159b7109fe2697a573ef47a5a2bbd99547be"
-  integrity sha512-PiKEr55L/uJyMKvDPdyoa5MlAYQwdgs8HLMbr28YcCBmhw/v6V7gutKOKdqeXc3YwKEFVS3z7TvW6c7eDokJdQ==
+"@sveltejs/kit@^1.0.0-next.574":
+  version "1.0.0-next.574"
+  resolved "https://registry.yarnpkg.com/@sveltejs/kit/-/kit-1.0.0-next.574.tgz#073c71857e733092b0eb1a90bbd9993498a14abd"
+  integrity sha512-GW/M/Ky94A3ovUvh2QLmLmjqw5q9p47GgWWOfk5iuxlGejAwHdvhprQlXA+uD5iBwim1+rM4iTJ11ZmFxbKLCQ==
   dependencies:
     "@sveltejs/vite-plugin-svelte" "^1.3.1"
     "@types/cookie" "^0.5.1"
