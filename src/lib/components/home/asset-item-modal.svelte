@@ -124,7 +124,7 @@
 	</div>
 	{#if asset.asset_id !== ETH_ASSET_ID}
 		<button
-			class="mb-5 font-semibold text-brand-primary"
+			class="font-semibold text-brand-primary"
 			on:click={async () => {
 				$library && (await switchNetwork($library, 'mvm'));
 				$library && watchAsset($library, asset);
