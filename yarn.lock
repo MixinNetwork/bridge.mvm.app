@@ -1888,10 +1888,10 @@ curve25519-js@^0.0.4:
   resolved "https://registry.yarnpkg.com/curve25519-js/-/curve25519-js-0.0.4.tgz#e6ad967e8cd284590d657bbfc90d8b50e49ba060"
   integrity sha512-axn2UMEnkhyDUPWOwVKBMVIzSQy2ejH2xRGy1wq81dqRwApXfIzfbE3hIX0ZRFBIihf/KDqK158DLwESu4AK1w==
 
-daisyui@^2.42.1:
-  version "2.42.1"
-  resolved "https://registry.yarnpkg.com/daisyui/-/daisyui-2.42.1.tgz#68a5778249117bf013be93808ef091256ee54c54"
-  integrity sha512-IVeEvP8gvOzHR47fMrOp2YocQJMRmYskhdt7OsuhKJNn+YzLRGOpVpY7AGXt/56pYeYy7h03THHXRTW5cVU9rQ==
+daisyui@^2.43.1:
+  version "2.43.1"
+  resolved "https://registry.yarnpkg.com/daisyui/-/daisyui-2.43.1.tgz#0e13fd1fb85551e30ca0971e46a34e17a7333f88"
+  integrity sha512-QhIuBclYiXjoiUOWQe4qqlvdG52b2fVZAZ5hPAJy8uTfCBmKqStUcEcig6kK54Uo/MOCCkExK4JulLOf//C5rQ==
   dependencies:
     color "^4.2"
     css-selector-tokenizer "^0.8.0"
