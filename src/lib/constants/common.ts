@@ -140,11 +140,11 @@ export const WHITELIST_ASSET = [
 	// 	symbol: 'mAED',
 	// 	chain: 'ETH'
 	// },
-	{
-		id: '0ff3f325-4f34-334d-b6c0-a3bd8850fc06',
-		symbol: 'JPYC',
-		chain: 'ETH'
-	},
+	// {
+	// 	id: '0ff3f325-4f34-334d-b6c0-a3bd8850fc06',
+	// 	symbol: 'JPYC',
+	// 	chain: 'ETH'
+	// },
 	// {
 	// 	id: 'f1d987df-1835-3f03-aefd-5e3e4132d11e',
 	// 	symbol: 'HT',
