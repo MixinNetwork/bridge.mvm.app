@@ -1413,10 +1413,10 @@
     joi "^17.6.1"
     lodash.uniqby "^4.7.0"
 
-"@web3-onboard/walletconnect@^2.2.1":
-  version "2.2.1"
-  resolved "https://registry.yarnpkg.com/@web3-onboard/walletconnect/-/walletconnect-2.2.1.tgz#02b9688e00c75f2ea16d9c2d466ea09d3dbe5a12"
-  integrity sha512-XqhspQRzCxCFil1V/o7g8qXW8JPmYEiz1dIb1aMNOh//55WgT5+d0vF8Er3oJndh6+KAWRNQoWe+WNJIP9pBDw==
+"@web3-onboard/walletconnect@^2.2.2":
+  version "2.2.2"
+  resolved "https://registry.yarnpkg.com/@web3-onboard/walletconnect/-/walletconnect-2.2.2.tgz#202b700ee606d0a9055d4a716dba7b04e18da0f0"
+  integrity sha512-JIxjlUy3C0bbY76JQ50uwBLMtWRKXaxMDoeEcJQAnYcHMb+ba6B40qSv2BlJpAAEI7NGW52GHSdwUT0QOrM7Ng==
   dependencies:
     "@ethersproject/providers" "^5.5.0"
     "@walletconnect/client" "^1.7.1"
