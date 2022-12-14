@@ -13,6 +13,8 @@ export const LANG = 'lang';
 export const PROVIDER_KEY = 'PROVIDER';
 export const PROVIDER_LOGO = 'PROVIDER_LOGO';
 
+export const XIN_ASSET_ID = 'c94ac88f-4671-3976-b60a-09064f1811e8';
+
 export const TRX_ASSET_ID = '25dabac5-056a-48ff-b9f9-f67395dc407c';
 export const ETH_ASSET_ID = '43d61dcd-e413-450d-80b8-101d5e903357';
 export const BTC_ASSET_ID = 'c6d0c728-2624-429b-8e0d-d9d19b6592fa';
@@ -20,8 +22,8 @@ export const EOS_ASSET_ID = '6cfe566e-4aad-470b-8c9a-2fd35b49c68d';
 export const MOB_ASSET_ID = 'eea900a8-b327-488c-8d8d-1428702fe240';
 export const BOX_ASSET_ID = 'f5ef6b5d-cc5a-3d90-b2c0-a2fd386e7a3c';
 export const DOGE_ASSET_ID = '6770a1e5-6086-44d5-b60f-545f9d9e8ffd';
-export const XIN_ASSET_ID = 'c94ac88f-4671-3976-b60a-09064f1811e8';
-export const BNB_ASSET_ID = '17f78d7c-ed96-40ff-980c-5dc62fecbc85';
+export const BNB_ASSET_ID = '1949e683-6a08-49e2-b087-d6b72398588f';
+export const MATIC_ASSET_ID = 'b7938396-3f94-4e0a-9179-d3440718156f';
 
 export const REGISTRY_PID = 'bd67087276ce3263b9333aa337e212a4';
 export const REGISTRY_ADDRESS = '0x3c84B6C98FBeB813e05a7A7813F0442883450B1F';
@@ -60,6 +62,7 @@ export const WHITELIST_ASSET = [
 	{ id: XIN_ASSET_ID, symbol: 'XIN', chain: 'ETH' },
 	{ id: MOB_ASSET_ID, symbol: 'MOB', chain: 'MOB' },
 	{ id: BNB_ASSET_ID, symbol: 'BNB', chain: 'BNB' },
+	{ id: MATIC_ASSET_ID, symbol: 'MATIC', chain: 'MATIC' },
 	{ id: '05c5ac01-31f9-4a69-aa8a-ab796de1d041', symbol: 'XMR', chain: 'XMR' },
 	{ id: '3e3152d4-6eee-36b3-9685-e8ba54db4a22', symbol: 'JPYC', chain: 'ETH' },
 	{
@@ -223,8 +226,23 @@ export const WHITELIST_ASSET = [
 		chain: 'ETH'
 	},
 	{
-		id: 'f312d6a7-1b4d-34c0-bf84-75e657a3fcf3',
+		id: 'cfcd55cd-9f76-3941-81d6-9e7616cc1b83',
 		symbol: 'BUSD',
+		chain: 'BNB'
+	},
+	{
+		id: '218bc6f4-7927-3f8e-8568-3a3725b74361',
+		symbol: 'USDT',
+		chain: 'MATIC'
+	},
+	{
+		id: '7cf6f5a4-2b4a-30a1-a7f3-8718b6b5b56e',
+		symbol: 'WETH',
+		chain: 'MATIC'
+	},
+	{
+		id: '94213408-4ee7-3150-a9c4-9c5cce421c78',
+		symbol: 'USDT',
 		chain: 'BNB'
 	}
 ];
