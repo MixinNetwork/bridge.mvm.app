@@ -8,7 +8,9 @@
 		assetId !== ETH_ASSET_ID && chainId === ETH_ASSET_ID
 			? 'ERC20'
 			: assetId !== TRX_ASSET_ID && chainId === TRX_ASSET_ID
-			? 'TRC20'
+			? Number.isFinite(Number.parseInt(assetId))
+				? 'TRC10'
+				: 'TRC20'
 			: assetId !== EOS_ASSET_ID && chainId === EOS_ASSET_ID
 			? 'EOS'
 			: assetId !== MOB_ASSET_ID && chainId === MOB_ASSET_ID
