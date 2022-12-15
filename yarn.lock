@@ -1351,10 +1351,10 @@
     ethers "5.5.4"
     joi "^17.6.1"
 
-"@web3-onboard/core@^2.11.1":
-  version "2.11.1"
-  resolved "https://registry.yarnpkg.com/@web3-onboard/core/-/core-2.11.1.tgz#1c4dd694b3886e67171dd78f2ce4e6f7ded3adab"
-  integrity sha512-rHnuGKZMf4h6/laulOrMflDeZFCiK3TMgIppWcRRqaSyMId789VohKxml6gr47WUjTOcAbxGLS+UXQA0zaE9Xg==
+"@web3-onboard/core@^2.12.0":
+  version "2.12.0"
+  resolved "https://registry.yarnpkg.com/@web3-onboard/core/-/core-2.12.0.tgz#6f2c775064ff9cd1fe6619c62f1b6c1fa71db679"
+  integrity sha512-c4ZPOXqrT8NCT7Sc/EbwGU4UIpULpgWoDpFaQi5gvSLjvcIEUDCrwicEYBxXZ+4UPgONOxcW+PDiSBBVNUqRzg==
   dependencies:
     "@web3-onboard/common" "^2.2.3"
     bignumber.js "^9.0.0"
