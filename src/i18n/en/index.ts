@@ -36,7 +36,7 @@ const en: BaseTranslation = {
 		title: 'Search',
 		placeholder: 'Name, Symbol or Address'
 	},
-	searchAsset: 'Search Asset',
+	selectAnAsset: 'Select an Asset',
 	depositModal: {
 		title: 'Deposit {0:string}',
 		qrCode: 'QR Code',

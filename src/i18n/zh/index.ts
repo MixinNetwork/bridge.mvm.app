@@ -36,7 +36,7 @@ const zh: Translation = {
 		title: '搜索',
 		placeholder: '名称、代号或地址'
 	},
-	searchAsset: '搜索资产',
+	selectAnAsset: '选择资产',
 	depositModal: {
 		title: '存入 {0}',
 		qrCode: '二维码',

@@ -126,9 +126,9 @@ type RootTranslation = {
 		placeholder: string
 	}
 	/**
-	 * S​e​a​r​c​h​ ​A​s​s​e​t
+	 * S​e​l​e​c​t​ ​a​n​ ​A​s​s​e​t
 	 */
-	searchAsset: string
+	selectAnAsset: string
 	depositModal: {
 		/**
 		 * D​e​p​o​s​i​t​ ​{​0​}
@@ -496,9 +496,9 @@ export type TranslationFunctions = {
 		placeholder: () => LocalizedString
 	}
 	/**
-	 * Search Asset
+	 * Select an Asset
 	 */
-	searchAsset: () => LocalizedString
+	selectAnAsset: () => LocalizedString
 	depositModal: {
 		/**
 		 * Deposit {0}
