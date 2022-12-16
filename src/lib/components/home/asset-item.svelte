@@ -36,7 +36,7 @@
 				${format({ n: bigMul(asset.balance, asset.price_usd), dp: 2, fixed: true })}
 			</div>
 		</div>
-		<div class="flex grow flex-col items-end text-sm font-semibold text-black text-opacity-30">
+		<div class="flex grow flex-col items-end text-sm font-semibold text-black">
 			{#if bigGt(asset.price_usd, 0)}
 				<div
 					class={clsx({
