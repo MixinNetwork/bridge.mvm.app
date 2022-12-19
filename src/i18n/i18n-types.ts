@@ -160,7 +160,7 @@ type RootTranslation = {
 		 */
 		l2Gas: string
 		/**
-		 * L​1​ ​G​a​s​ ​f​e​e​ ​p​a​i​d​ ​t​o​ ​E​t​h​e​r​e​u​m​ ​m​i​n​e​r​s
+		 * L​1​ ​G​a​s​ ​f​e​e​ ​p​a​i​d​ ​t​o​ ​m​i​n​e​r​s
 		 */
 		l1GasTip: string
 		/**
@@ -527,7 +527,7 @@ export type TranslationFunctions = {
 		 */
 		l2Gas: () => LocalizedString
 		/**
-		 * L1 Gas fee paid to Ethereum miners
+		 * L1 Gas fee paid to miners
 		 */
 		l1GasTip: () => LocalizedString
 		/**
