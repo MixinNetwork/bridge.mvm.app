@@ -46,7 +46,7 @@ const zh: Translation = {
 	withdrawModal: {
 		l1Gas: 'L1 Gas: ',
 		l2Gas: 'L2 Gas: ',
-		l1GasTip: 'L1 Gas 费支付给以太坊矿工',
+		l1GasTip: 'L1 Gas 费支付以太坊矿工',
 		l2GasTip: 'L2 Gas 费支付 MVM 节点 '
 	},
 	from: '来自',

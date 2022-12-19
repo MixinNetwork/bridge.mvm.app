@@ -46,7 +46,7 @@ const en: BaseTranslation = {
 	withdrawModal: {
 		l1Gas: 'L1 Gas: ',
 		l2Gas: 'L2 Gas: ',
-		l1GasTip: 'L1 Gas fee paid to Ethereum miners',
+		l1GasTip: 'L1 Gas fee paid to miners',
 		l2GasTip: 'L2 Gas fee payment MVM node '
 	},
 	from: 'From',
