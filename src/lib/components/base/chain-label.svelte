@@ -4,7 +4,8 @@
 		ETH_ASSET_ID,
 		TRX_ASSET_ID,
 		MOB_ASSET_ID,
-		BNB_ASSET_ID,
+		BNB_1_ASSET_ID,
+		BNB_2_ASSET_ID,
 		MATIC_ASSET_ID
 	} from '../../constants/common';
 
@@ -22,7 +23,9 @@
 			? 'EOS'
 			: assetId !== MOB_ASSET_ID && chainId === MOB_ASSET_ID
 			? 'MOB'
-			: assetId !== BNB_ASSET_ID && chainId === BNB_ASSET_ID
+			: assetId !== BNB_1_ASSET_ID && chainId === BNB_1_ASSET_ID
+			? 'BEP10'
+			: assetId !== BNB_2_ASSET_ID && chainId === BNB_2_ASSET_ID
 			? 'BEP20'
 			: assetId !== MATIC_ASSET_ID && chainId === MATIC_ASSET_ID
 			? 'POLYGON'
