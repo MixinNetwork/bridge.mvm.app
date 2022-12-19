@@ -1424,10 +1424,10 @@
     "@web3-onboard/common" "^2.2.3"
     rxjs "^7.5.2"
 
-"@yeungkc/svelte-portal@^0.0.6":
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/@yeungkc/svelte-portal/-/svelte-portal-0.0.6.tgz#a34f23cf6a0543d09a671a707a9afae3e6b8c76c"
-  integrity sha512-xR2n++eolZ0b83fNU/Ky/X1n/Dw1pf0+vxsbySDjHkFC/51NqUyMLfiA7JVLdBgVF1aFfiHL3lz1LlDsIEatVg==
+"@yeungkc/svelte-portal@^0.0.9":
+  version "0.0.9"
+  resolved "https://registry.yarnpkg.com/@yeungkc/svelte-portal/-/svelte-portal-0.0.9.tgz#251b3456cc0ac6389c640d2cf0b37fbba0094a69"
+  integrity sha512-9rEf1gBYMjjN0VKOZY5Hwfw8h0YvJ3pvYBPjGVoch6FHC8+ClSa7sGd3nEIBVqT1FI6woBnN5WMBsH+I25ZbwQ==
 
 acorn-jsx@^5.3.2:
   version "5.3.2"
