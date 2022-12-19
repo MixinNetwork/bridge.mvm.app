@@ -187,7 +187,13 @@
 		this={AssetItemModal}
 		modal-on-close={() => (assetForModal = undefined)}
 		asset={assetForModal}
-		onDeposit={() => (depositQrcodeAsset = assetForModal)}
-		onWithdraw={() => (withdrawAsset = assetForModal)}
+		onDeposit={() => {
+			depositQrcodeAsset = assetForModal;
+			assetForModal = undefined;
+		}}
+		onWithdraw={() => {
+			withdrawAsset = assetForModal;
+			assetForModal = undefined;
+		}}
 	/>
 {/if}
