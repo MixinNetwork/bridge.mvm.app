@@ -953,10 +953,10 @@
   resolved "https://registry.yarnpkg.com/@sideway/pinpoint/-/pinpoint-2.0.0.tgz#cff8ffadc372ad29fd3f78277aeb29e632cc70df"
   integrity sha512-RNiOoTPkptFtSVzQevY/yWtZwf/RxyVnPy/OcA9HBM3MlGDnBEYL5B41H0MTn0Uec8Hi+2qUtTfG2WWZBmMejQ==
 
-"@square/svelte-store@^1.0.11":
-  version "1.0.11"
-  resolved "https://registry.yarnpkg.com/@square/svelte-store/-/svelte-store-1.0.11.tgz#08bdfff1a47e32fee3837bd68994095816f6b9e2"
-  integrity sha512-lnjalQRyr7VrVN7Du2KQnXNGikAMD92U4qNBB3LXjL19MbnFnbFHZ6HcrRclEhpNrTY9pSI1FrRmsFt7sRh0zg==
+"@square/svelte-store@^1.0.12":
+  version "1.0.12"
+  resolved "https://registry.yarnpkg.com/@square/svelte-store/-/svelte-store-1.0.12.tgz#065d0302aedfefa4acddb42706db0fbc0f66fa47"
+  integrity sha512-zkfRst2huQeHTni44vQFLIZR389fPDNlTJhJVhoZaAse+xe72pJBipE42WqZhKiMpXBPw9ID7kcXXpWv+PKb2A==
   dependencies:
     js-cookie "^3.0.1"
     svelte "^3.0.0"
