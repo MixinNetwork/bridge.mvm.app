@@ -212,7 +212,7 @@ export const swapAsset = async (
 		const value = ethers.utils.parseUnits(`${order.funds}`, tokenDecimal);
 
 		await tokenContract.transferWithExtra(user.contract, value, info.extra, {
-			gasPrice: 10000000,
+			gasPrice: await mvmProvider.getGasPrice(),
 			gasLimit: 450000
 		});
 
