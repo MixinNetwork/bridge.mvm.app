@@ -911,12 +911,12 @@
   resolved "https://registry.yarnpkg.com/@polka/url/-/url-1.0.0-next.21.tgz#5de5a2385a35309427f6011992b544514d559aa1"
   integrity sha512-a5Sab1C4/icpTZVzZc5Ghpz88yQtGOyNqYXcZgOssB2uuAr+wF/MvN6bgtW32q7HHrvBki+BsZ0OuNv6EV3K9g==
 
-"@poppanator/sveltekit-svg@^2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@poppanator/sveltekit-svg/-/sveltekit-svg-2.0.0.tgz#4f37f7106d0e66bd6505e2e8e67c5acb9835ea56"
-  integrity sha512-6oY0+RQ7mwDku2c5mEr9uvTn0sB4eZ7jo4v6C0xi9onlbJMY48T06VruTWeCNchBwetv8325AQUkjC8nANPsZw==
+"@poppanator/sveltekit-svg@^2.0.2":
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/@poppanator/sveltekit-svg/-/sveltekit-svg-2.0.2.tgz#0ad4de56797db9f9ad81ce57e6e848e738d162d6"
+  integrity sha512-ezXqTT5kYUpKnlzqa9qmTN/UhWr5LvpRrZzsE+YAU5KZ4uT4lbnAWs/ssVjQga0ola9WpCjaPfo3pPeGP/2XGw==
   dependencies:
-    svgo "^2.3.0"
+    svgo "^2.8.0"
 
 "@rollup/plugin-inject@^5.0.1":
   version "5.0.2"
@@ -3895,7 +3895,7 @@ svelte@^3.0.0, svelte@^3.49.0, svelte@^3.55.0:
   resolved "https://registry.yarnpkg.com/svelte/-/svelte-3.55.0.tgz#29cb958750a23e751309a6535ccd811fcabc9038"
   integrity sha512-uGu2FVMlOuey4JoKHKrpZFkoYyj0VLjJdz47zX5+gVK5odxHM40RVhar9/iK2YFRVxvfg9FkhfVlR0sjeIrOiA==
 
-svgo@^2.3.0:
+svgo@^2.8.0:
   version "2.8.0"
   resolved "https://registry.yarnpkg.com/svgo/-/svgo-2.8.0.tgz#4ff80cce6710dc2795f0c7c74101e6764cfccd24"
   integrity sha512-+N/Q9kV1+F+UeWYoSiULYo4xYSDQlTgb+ayMobAXPwMnLvop7oxKMo9OzIrX5x3eS4L4f2UHhc9axXwY8DpChg==
