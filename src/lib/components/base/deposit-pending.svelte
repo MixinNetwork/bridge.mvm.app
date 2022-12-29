@@ -2,8 +2,10 @@
 	import { mapTemplate } from '../../helpers/store/map-template';
 	import type { User } from '../../types/user';
 	import {
-		AssetClient,
 		ExternalClient,
+		NetworkClient,
+		type AssetCommonResponse,
+		type DepositRequest,
 		type ExternalTransactionResponse
 	} from '@mixin.dev/mixin-node-sdk';
 	import { deepReadable } from '../../helpers/store/deep';
@@ -14,43 +16,51 @@
 	import DepositPendingModal from './deposit-pending-modal.svelte';
 	import Modal from '../common/modal/modal.svelte';
 	import LL from '$i18n/i18n-svelte';
-	import { flatMap } from 'lodash-es';
+	import { difference, flatMap } from 'lodash-es';
 
 	export type ExternalTransactionResponseWithAsset = ExternalTransactionResponse & {
-		asset: Asset;
+		asset: Omit<Asset, 'balance'>;
 	};
 
 	const DepositPendingStore = mapTemplate((user: User | undefined) => {
 		if (!user) return deepReadable<ExternalTransactionResponseWithAsset[]>([]);
-		const assetClient = AssetClient({
-			keystore: { ...user, ...user.key }
-		});
+		const networkClient = NetworkClient();
 		const externalClient = ExternalClient({
 			keystore: { ...user, ...user.key }
 		});
 
 		return deepReadable<ExternalTransactionResponseWithAsset[]>([], (set) => {
+			let assets: AssetCommonResponse[] = [];
+
 			const update = async () => {
-				const assets = await assetClient.fetchList();
-				if (!assets.length) return;
+				if (!assets.length) assets = await networkClient.topAssets();
 
-				const chains = assets.filter((asset) => asset.chain_id === asset.asset_id);
+				const deposits = await externalClient.deposits({
+					limit: 500,
+					user: user.user_id
+				} as DepositRequest);
 
-				const result = await Promise.all(
-					chains.map((chain) =>
-						externalClient.deposits({ limit: 500, destination: chain.destination, tag: chain.tag })
-					)
+				const depositAssetIds = difference(
+					flatMap(deposits.map((deposit) => [deposit.asset_id, deposit.chain_id]))
+				);
+				const restIds = depositAssetIds.filter(
+					(assetId) => !assets.find((asset) => asset.asset_id === assetId)
 				);
 
-				const deposits = flatMap(result);
+				if (restIds.length) {
+					const restAssets = await Promise.all(
+						restIds.map((assetId) => networkClient.fetchAsset(assetId))
+					);
+					assets = assets.concat(restAssets);
+				}
 
 				const d = deposits
 					.map((d) => {
 						const existed = assets.find((asset) => asset.asset_id === d.asset_id);
-						const chainExisted = chains.find((asset) => asset.asset_id === d.chain_id);
+						const chainExisted = assets.find((asset) => asset.asset_id === d.chain_id);
 						if (!existed || !chainExisted) return;
 
-						const asset: Asset = Object.assign(existed, {
+						const asset: Omit<Asset, 'balance'> = Object.assign(existed, {
 							chain_icon_url: chainExisted.icon_url,
 							chain_name: chainExisted.name,
 							chain_symbol: chainExisted.symbol

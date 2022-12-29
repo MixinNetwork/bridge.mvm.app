@@ -13,7 +13,7 @@
 
 <div class={clsx('relative h-10 w-10', clazz)}>
 	<img loading="lazy" src={assetIconUrl} class="h-full w-full" alt={assetName} />
-	{#if chainIconUrl}
+	{#if chainIconUrl && chainIconUrl !== assetIconUrl}
 		<img
 			loading="lazy"
 			src={chainIconUrl}
