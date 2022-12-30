@@ -5,6 +5,8 @@ declare const __version__: string;
 
 export const version = __version__;
 
+const isProduction = Boolean(+import.meta.env.VITE_PRODUCTION);
+
 export const WITHDRAW_BOT_ID = '131a0774-59a1-4e3d-9af2-e1b43aa37936';
 export const MIXPAY_BOT_ID = '3539c3ce-52c0-4b0b-9573-c035ecb98d48';
 
@@ -62,7 +64,7 @@ export const WHITELIST_ASSET = [
 	{ id: BOX_ASSET_ID, symbol: 'BOX', chain: 'ETH' },
 	{ id: XIN_ASSET_ID, symbol: 'XIN', chain: 'ETH' },
 	{ id: MOB_ASSET_ID, symbol: 'MOB', chain: 'MOB' },
-	{ id: BNB_1_ASSET_ID, symbol: 'BNB', chain: 'BNB' },
+	{ id: BNB_1_ASSET_ID, symbol: 'BNB', chain: 'BNB', beta: true },
 	{ id: BNB_2_ASSET_ID, symbol: 'BNB', chain: 'BNB' },
 	{ id: MATIC_ASSET_ID, symbol: 'MATIC', chain: 'MATIC' },
 	{ id: '05c5ac01-31f9-4a69-aa8a-ab796de1d041', symbol: 'XMR', chain: 'XMR' },
@@ -195,7 +197,8 @@ export const WHITELIST_ASSET = [
 	{
 		id: '5dac5e28-ad13-31ea-869f-41770dfcee09',
 		symbol: 'USDT',
-		chain: 'EOS'
+		chain: 'EOS',
+		beta: true
 	},
 	// {
 	// 	id: 'bb4c9a0c-245b-3bd2-a3f4-a5eb73c90c00',
@@ -225,7 +228,7 @@ export const WHITELIST_ASSET = [
 	{
 		id: '6770a1e5-6086-44d5-b60f-545f9d9e8ffd',
 		symbol: 'DOGE',
-		chain: 'ETH'
+		chain: 'DOGE'
 	},
 	{
 		id: 'cfcd55cd-9f76-3941-81d6-9e7616cc1b83',
@@ -235,19 +238,26 @@ export const WHITELIST_ASSET = [
 	{
 		id: '218bc6f4-7927-3f8e-8568-3a3725b74361',
 		symbol: 'USDT',
-		chain: 'MATIC'
+		chain: 'MATIC',
+		beta: true
 	},
 	{
 		id: '7cf6f5a4-2b4a-30a1-a7f3-8718b6b5b56e',
 		symbol: 'WETH',
-		chain: 'MATIC'
+		chain: 'MATIC',
+		beta: true
 	},
 	{
 		id: '94213408-4ee7-3150-a9c4-9c5cce421c78',
 		symbol: 'USDT',
-		chain: 'BNB'
+		chain: 'BNB',
+		beta: true
 	}
-];
+].filter(({ beta }) => {
+	if (!isProduction) return true;
+	if (beta) return false;
+	return true;
+});
 
 export const WHITELIST_ASSET_ID = WHITELIST_ASSET.map((asset) => asset.id);
 
