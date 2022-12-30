@@ -165,6 +165,7 @@
 		)
 			return;
 
+		swapOrder.pause();
 		loading = true;
 
 		const { swapAsset } = await import('$lib/helpers/web3/common');
@@ -188,6 +189,7 @@
 
 			swapOrder.reset();
 		} finally {
+			swapOrder.resume();
 			loading = false;
 		}
 	};

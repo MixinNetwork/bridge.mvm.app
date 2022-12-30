@@ -31,6 +31,8 @@ const createSwapOrder = () => {
 	let mixPayPaymentAssets: MixPayAsset[] = [];
 	let mixPaySettlementAssets: MixPayAsset[] = [];
 
+	let paused = false;
+
 	const { subscribe, update, set } = writable<
 		PreOrderInfo & {
 			loading: boolean;
@@ -126,6 +128,7 @@ const createSwapOrder = () => {
 
 			if (source === 'MixPay')
 				updateTimer = setInterval(async () => {
+					if (paused) return;
 					modifyLoadingStatus(true);
 					const res = await fetchMixPayPreOrder(requestParams);
 					set({
@@ -200,6 +203,7 @@ const createSwapOrder = () => {
 			return;
 		}
 
+		if (paused) return;
 		modifyLoadingStatus(true);
 		if (!$pairs.length || !mixPayPaymentAssets.length || !mixPaySettlementAssets.length)
 			await init();
@@ -211,13 +215,16 @@ const createSwapOrder = () => {
 		subscribe,
 		fetchOrderInfo: updateSwapInfo,
 		reset: () => {
+			paused = false;
 			set({
 				...emptyOrder,
 				loading: false,
 				source: 'NoPair'
 			});
 			updateTimer && clearInterval(updateTimer);
-		}
+		},
+		pause: () => (paused = true),
+		resume: () => (paused = false)
 	};
 };
 
