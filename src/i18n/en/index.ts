@@ -23,8 +23,8 @@ const en: BaseTranslation = {
 	audit: 'Audit',
 	docs: 'Docs',
 	logout: {
-		title: 'Log Out',
-		description: 'Are you sure want to logout?'
+		title: 'Disconnect',
+		description: 'Are you sure want to Disconnect?'
 	},
 	yes: 'Yes',
 	cancel: 'Cancel',

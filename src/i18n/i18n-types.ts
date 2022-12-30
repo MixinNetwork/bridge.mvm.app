@@ -82,11 +82,11 @@ type RootTranslation = {
 	docs: string
 	logout: {
 		/**
-		 * L​o​g​ ​O​u​t
+		 * D​i​s​c​o​n​n​e​c​t
 		 */
 		title: string
 		/**
-		 * A​r​e​ ​y​o​u​ ​s​u​r​e​ ​w​a​n​t​ ​t​o​ ​l​o​g​o​u​t​?
+		 * A​r​e​ ​y​o​u​ ​s​u​r​e​ ​w​a​n​t​ ​t​o​ ​D​i​s​c​o​n​n​e​c​t​?
 		 */
 		description: string
 	}
@@ -453,11 +453,11 @@ export type TranslationFunctions = {
 	docs: () => LocalizedString
 	logout: {
 		/**
-		 * Log Out
+		 * Disconnect
 		 */
 		title: () => LocalizedString
 		/**
-		 * Are you sure want to logout?
+		 * Are you sure want to Disconnect?
 		 */
 		description: () => LocalizedString
 	}

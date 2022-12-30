@@ -23,8 +23,8 @@ const zh: Translation = {
 	audit: '审计',
 	docs: '文档',
 	logout: {
-		title: '登出',
-		description: '您确定要登出吗？'
+		title: '断开',
+		description: '您确定要断开连接吗？'
 	},
 	yes: '确认',
 	cancel: '取消',

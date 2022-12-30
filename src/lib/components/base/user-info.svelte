@@ -1,13 +1,15 @@
 <script lang="ts">
 	import clsx from 'clsx';
 	import { providerLogo } from '../../stores/provider';
-	import { isLogged, shortAddress } from '../../stores/user';
+	import { address, isLogged, shortAddress } from '../../stores/user';
 	import Arrow from '$lib/assets/arrow.svg?component';
 	import { totalBalanceUsd } from '../../stores/model';
 	import { format } from '../../helpers/big';
 	import LL from '$i18n/i18n-svelte';
 	import LogoutButton from './logout-button.svelte';
 	import { connectWallet } from '../../stores/ether';
+	import Copy from '$lib/assets/copy.svg?component';
+	import { showToast } from '../common/toast/toast-container.svelte';
 
 	let clazz: string | undefined = undefined;
 	export { clazz as class };
@@ -70,10 +72,18 @@
 					{@html $providerLogo}
 				{/if}
 			</div>
-			<div class=" font-semibold">
+			<div class="flex w-full flex-row items-center justify-between font-semibold">
 				<div>
 					{$shortAddress}
 				</div>
+				<button
+					on:click={async () => {
+						$address && (await navigator.clipboard.writeText($address));
+						showToast('success', $LL.copied());
+					}}
+				>
+					<Copy class="fill-black" />
+				</button>
 			</div>
 		</div>
 		<LogoutButton />

@@ -55,13 +55,13 @@
 	export { clazz as class };
 </script>
 
-<div class={clsx('group relative z-50 w-fit opacity-100 transition ', clazz)}>
+<div class={clsx('group relative z-50 w-fit opacity-100 transition', clazz)}>
 	<button
 		class="flex select-none items-center justify-center space-x-3 md:rounded-full md:bg-white md:py-2 md:px-4 md:active:pointer-events-none"
 		on:click={() => (opened = true)}
 	>
 		<Apps />
-		<div class=" hidden text-sm font-semibold text-black text-opacity-80 md:block">Apps</div>
+		<div class="hidden text-sm font-semibold text-black text-opacity-80 md:block">Apps</div>
 	</button>
 
 	<div

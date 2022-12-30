@@ -9,7 +9,7 @@
 	import type { Asset } from '$lib/types/asset';
 	import Header from '$lib/components/base/header.svelte';
 	import UserInfo from '$lib/components/base/user-info.svelte';
-	import { bigLte, bigGte, format, toPercent } from '$lib/helpers/big';
+	import { bigLte, format, toPercent, bigGt } from '$lib/helpers/big';
 	import SelectedAssetButton from '$lib/components/base/selected-asset-button.svelte';
 	import { slide } from 'svelte/transition';
 	import { DEFAULT_SLIPPAGE, INPUT_KEY, OUTPUT_KEY, formatFiat } from '$lib/components/swap/export';
@@ -375,7 +375,7 @@
 				order?.priceImpact > 0.15 ||
 				$swapOrder.loading ||
 				loading ||
-				!!(inputAmount && inputAsset?.balance && bigGte(inputAmount, inputAsset?.balance))}
+				!!(inputAmount && inputAsset?.balance && bigGt(inputAmount, inputAsset?.balance))}
 		>
 			{#if loading}
 				<Spinner class="stroke-white stroke-2 text-center" />
