@@ -55,22 +55,21 @@
 	export { clazz as class };
 </script>
 
-<button
-	class={clsx(
-		'group relative z-50 flex w-fit select-none items-center justify-center space-x-3 opacity-100 transition hover:pointer-events-auto md:cursor-default md:rounded-full md:bg-white md:py-2 md:px-4 md:active:pointer-events-none',
-		clazz
-	)}
-	on:click={() => (opened = true)}
->
-	<Apps />
-	<div class=" hidden text-sm font-semibold text-black text-opacity-80 md:block">Apps</div>
+<div class={clsx('group relative z-50 w-fit opacity-100 transition ', clazz)}>
+	<button
+		class="flex select-none items-center justify-center space-x-3 md:rounded-full md:bg-white md:py-2 md:px-4 md:active:pointer-events-none"
+		on:click={() => (opened = true)}
+	>
+		<Apps />
+		<div class=" hidden text-sm font-semibold text-black text-opacity-80 md:block">Apps</div>
+	</button>
 
 	<div
-		class="invisible absolute top-10 -right-48 z-50 mt-3 hidden h-[480px] w-96 flex-col overflow-y-auto rounded-2xl bg-white py-5 opacity-0 shadow transition-all delay-100 group-hover:visible group-hover:opacity-100 md:flex lg:right-0"
+		class="pointer-events-auto invisible absolute top-10 -right-48 z-50 mt-3 hidden h-[480px] w-96 flex-col overflow-y-auto rounded-2xl bg-white py-5 opacity-0 shadow transition-all delay-100 group-hover:visible group-hover:opacity-100 md:flex lg:right-0"
 	>
 		{#each data as { name, description, icon, href } (name)}
 			<a
-				class=" default flex flex-row space-x-3 bg-brand-primary bg-opacity-0 py-4 px-5 hover:bg-opacity-5"
+				class="default flex flex-row space-x-3 bg-brand-primary bg-opacity-0 py-4 px-5 hover:bg-opacity-5"
 				{href}
 				target="_blank"
 				rel="noreferrer"
@@ -90,6 +89,6 @@
 			</a>
 		{/each}
 	</div>
-</button>
+</div>
 
 <Modal this={AppsModal} {data} modal-opened={opened} modal-on-close={() => (opened = false)} />
