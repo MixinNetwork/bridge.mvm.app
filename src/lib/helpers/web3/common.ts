@@ -145,7 +145,7 @@ export const withdraw = async (
 
 		const bridge = new ethers.Contract(BRIDGE_ADDRESS, BRIDGE_ABI, signer);
 		await bridge.release(userContract, extra, {
-			gasPrice: 10000000,
+			gasPrice: await mvmProvider.getGasPrice(),
 			gasLimit: 350000,
 			value: totalAmount
 		});
@@ -163,7 +163,7 @@ export const withdraw = async (
 		);
 
 		await tokenContract.transferWithExtra(userContract, value, extra, {
-			gasPrice: 10000000,
+			gasPrice: await mvmProvider.getGasPrice(),
 			gasLimit: 350000
 		});
 		return;
