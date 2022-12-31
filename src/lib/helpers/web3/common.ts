@@ -196,7 +196,7 @@ export const swapAsset = async (
 		const bridge = new ethers.Contract(BRIDGE_ADDRESS, BRIDGE_ABI, signer);
 
 		await bridge.release(user.contract, info.extra, {
-			gasPrice: 10000000,
+			gasPrice: await mvmProvider.getGasPrice(),
 			gasLimit: 500000,
 			value: assetAmount
 		});
