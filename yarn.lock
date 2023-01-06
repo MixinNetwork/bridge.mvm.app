@@ -953,12 +953,12 @@
   resolved "https://registry.yarnpkg.com/@sideway/pinpoint/-/pinpoint-2.0.0.tgz#cff8ffadc372ad29fd3f78277aeb29e632cc70df"
   integrity sha512-RNiOoTPkptFtSVzQevY/yWtZwf/RxyVnPy/OcA9HBM3MlGDnBEYL5B41H0MTn0Uec8Hi+2qUtTfG2WWZBmMejQ==
 
-"@square/svelte-store@^1.0.12":
-  version "1.0.12"
-  resolved "https://registry.yarnpkg.com/@square/svelte-store/-/svelte-store-1.0.12.tgz#065d0302aedfefa4acddb42706db0fbc0f66fa47"
-  integrity sha512-zkfRst2huQeHTni44vQFLIZR389fPDNlTJhJVhoZaAse+xe72pJBipE42WqZhKiMpXBPw9ID7kcXXpWv+PKb2A==
+"@square/svelte-store@^1.0.13":
+  version "1.0.13"
+  resolved "https://registry.yarnpkg.com/@square/svelte-store/-/svelte-store-1.0.13.tgz#55bf8571afe05c05a8e690f95ae9eb9b695b66a2"
+  integrity sha512-UAspWhgQO6rPAU7WTImPPyfRmfV4GIvD1gIQhlZRNo3cYdbgfNBkWkxcZkZwg2vmhhQ6x42xt8m9FOrazQXBmQ==
   dependencies:
-    js-cookie "^3.0.1"
+    cookie-storage "^6.1.0"
     svelte "^3.0.0"
 
 "@sveltejs/adapter-auto@^1.0.0-next.90":
@@ -1812,6 +1812,11 @@ concat-map@0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/concat-map/-/concat-map-0.0.1.tgz#d8a96bd77fd68df7793a73036a3ba0d5405d477b"
   integrity sha512-/Srv4dswyQNBfohGpz9o6Yb3Gz3SrUDqBH5rTuhGR7ahtlbYKnVxw2bCFMRljaA7EXHaXZ8wsHdodFvbkhKmqg==
+
+cookie-storage@^6.1.0:
+  version "6.1.0"
+  resolved "https://registry.yarnpkg.com/cookie-storage/-/cookie-storage-6.1.0.tgz#291b2f662d961be44f999626593421cbfcf23790"
+  integrity sha512-HeVqbVy8BjXhAAuFtL6MTG+witHoLbxfky2jgVh9FmxmyL6IKa9gSSyPNjevXCCCxPu6Tzd9J8+eXTRQzYU/cg==
 
 cookie@^0.5.0:
   version "0.5.0"

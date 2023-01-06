@@ -20,7 +20,7 @@
 		"@mixin.dev/mixin-node-sdk": "^4.9.0",
 		"@playwright/test": "^1.29.1",
 		"@poppanator/sveltekit-svg": "^2.0.2",
-		"@square/svelte-store": "^1.0.12",
+		"@square/svelte-store": "^1.0.13",
 		"@sveltejs/adapter-auto": "^1.0.0-next.90",
 		"@sveltejs/kit": "^1.0.0-next.578",
 		"@tanstack/virtual-core": "^3.0.0-beta.34",
