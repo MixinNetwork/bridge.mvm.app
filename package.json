@@ -53,7 +53,7 @@
 		"js-cookie": "^3.0.1",
 		"lodash-es": "^4.17.21",
 		"postcss": "^8.4.20",
-		"prettier": "^2.8.1",
+		"prettier": "^2.8.2",
 		"prettier-plugin-svelte": "^2.9.0",
 		"prettier-plugin-tailwindcss": "^0.2.1",
 		"qrcode": "^1.5.1",
