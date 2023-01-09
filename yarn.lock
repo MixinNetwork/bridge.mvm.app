@@ -998,10 +998,10 @@
     svelte-hmr "^0.15.1"
     vitefu "^0.2.2"
 
-"@tanstack/virtual-core@^3.0.0-beta.34":
-  version "3.0.0-beta.34"
-  resolved "https://registry.yarnpkg.com/@tanstack/virtual-core/-/virtual-core-3.0.0-beta.34.tgz#4880c5331edd24161fd9b75fd92ec7b915eaed8d"
-  integrity sha512-9whWuShYSwpJV6kPufEGuNXXJfdkqspD55GMjqE1wPJ8g2iHk0HQdPlb5kGgt/2IDYrxAV/mMFWQM1lMj7cKkg==
+"@tanstack/virtual-core@^3.0.0-beta.35":
+  version "3.0.0-beta.35"
+  resolved "https://registry.yarnpkg.com/@tanstack/virtual-core/-/virtual-core-3.0.0-beta.35.tgz#55afdd0293260b3408378106c75ca4ae4c66b86e"
+  integrity sha512-p+dNBkN70nz3RzsfJImpmg1eoEHoX3X49lOk1N4I6jtUttKzZ/0U2+LqDmErNa5q/ksWD45zegOU4MnHwKRp2w==
 
 "@trysound/sax@0.2.0":
   version "0.2.0"
