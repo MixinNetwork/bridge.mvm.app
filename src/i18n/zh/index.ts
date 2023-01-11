@@ -16,7 +16,7 @@ const zh: Translation = {
 		tips: '发生错误'
 	},
 	assets: '资产',
-	transactions: '交易',
+	transactions: '转账记录',
 	swap: '兑换',
 	swapForGas: '兑换手续费',
 	explorer: '浏览器',
