@@ -108,11 +108,11 @@ export const WHITELIST_ASSET = [
 		symbol: 'DAI',
 		chain: 'ETH'
 	},
-	{
-		id: '83c8bfca-78ee-3845-9e6c-e3d69e7b381c',
-		symbol: 'WBTC',
-		chain: 'ETH'
-	},
+	// {
+	// 	id: '83c8bfca-78ee-3845-9e6c-e3d69e7b381c',
+	// 	symbol: 'WBTC',
+	// 	chain: 'ETH'
+	// },
 	{
 		id: 'b80af5fd-85b8-3f00-b7c2-68d2c9f1137a',
 		symbol: 'AAVE',
