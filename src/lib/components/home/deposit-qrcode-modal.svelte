@@ -17,10 +17,10 @@
 		chain_name,
 		name
 	}: Pick<Asset, 'chain_id' | 'chain_name' | 'name'>) => {
-		if (chain_id === ETH_ASSET_ID) return 'Ethereum (ERC-20)';
+		if (chain_id === ETH_ASSET_ID) return 'Ethereum';
 		if (chain_id === 'cbc77539-0a20-4666-8c8a-4ded62b36f0a') return 'Avalanche X-Chain';
-		if (chain_id === '17f78d7c-ed96-40ff-980c-5dc62fecbc85') return 'BNB Beacon Chain (BEP-2)';
-		if (chain_id === TRX_ASSET_ID) return 'Tron (TRC-20)';
+		if (chain_id === '17f78d7c-ed96-40ff-980c-5dc62fecbc85') return 'BNB Beacon Chain';
+		if (chain_id === TRX_ASSET_ID) return 'Tron';
 		if (chain_id === '05891083-63d2-4f3d-bfbe-d14d7fb9b25a') return 'BitShares';
 		return chain_name || name;
 	};
