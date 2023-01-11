@@ -6,7 +6,8 @@ import {
 	MAINNET_CHAIN_HEX_ID,
 	MVM_CHAIN_HEX_ID,
 	MVM_RPC_URL,
-	networkParams
+	networkParams,
+	RPC_URL
 } from '../../constants/common';
 import type { Network } from '../../types/network';
 import type { RegisteredUser } from '$lib/types/user';
@@ -18,7 +19,7 @@ import { checkOrder } from '../api';
 import { fetchMixPayTxInfo } from '../mixpay/api';
 import { format } from '../big';
 
-export const mainnetProvider = ethers.getDefaultProvider(1);
+export const mainnetProvider = ethers.getDefaultProvider(RPC_URL);
 export const mvmProvider = ethers.getDefaultProvider(MVM_RPC_URL);
 
 export const getBalance = async ({
