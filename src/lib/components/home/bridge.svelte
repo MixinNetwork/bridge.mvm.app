@@ -52,16 +52,31 @@
 
 	$: mainnetBalance = buildBalanceStore({ assetId, network: 'mainnet' });
 	$: mvmBalance = buildBalanceStore({ assetId, network: 'mvm' });
-	$: roundedMainnetBalance = format({
-		n: $mainnetBalance,
-		dp: 8,
-		format: { groupSeparator: '' }
-	});
+	$: roundedMainnetBalance = $mainnetBalance
+		? format({
+				n: $mainnetBalance,
+				dp: 8,
+				format: { groupSeparator: '' }
+		  })
+		: 0;
 	$: roundedMvmBalance = $mvmBalance
 		? format({ n: $mvmBalance, dp: 8, format: { groupSeparator: '' } })
 		: format({ n: asset.balance, dp: 8, format: { groupSeparator: '' } });
 
 	$: fromBalance = depositMode ? roundedMainnetBalance : roundedMvmBalance;
+
+	$: console.log(
+		'mainnetBalance',
+		$mainnetBalance,
+		'mvmBalance',
+		$mvmBalance,
+		'roundedMainnetBalance',
+		roundedMainnetBalance,
+		'roundedMvmBalance',
+		roundedMvmBalance,
+		'fromBalance',
+		fromBalance
+	);
 
 	let amount: number | undefined | string;
 
@@ -147,6 +162,7 @@
 		</div>
 	</div>
 	<div class=" divide-y-2 divide-brand-background child:w-full">
+		{@debug fromBalance}
 		<SelectedAssetButton {asset} disabled={true}>
 			{$LL.balanceOf(fromBalance ? format({ n: fromBalance }) : '...', '')}</SelectedAssetButton
 		>
