@@ -23,7 +23,8 @@ const onboard = Onboard({
 			id: '0x1',
 			token: 'ETH',
 			label: 'Ethereum Mainnet',
-			rpcUrl: RPC_URL
+			rpcUrl: RPC_URL,
+			blockExplorerUrl: 'https://etherscan.io/'
 		},
 		{
 			id: MVM_CHAIN_HEX_ID,

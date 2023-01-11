@@ -35,8 +35,7 @@ export const STORAGE_ADDRESS = '0xef241988D19892fE4efF4935256087F4fdc5ecAa';
 
 export const MVM_RPC_URI = 'https://geth.mvm.dev/';
 
-export const INFURA_ID = import.meta.env.VITE_INFURA_ID;
-export const RPC_URL = `https://mainnet.infura.io/v3/${INFURA_ID}`;
+export const RPC_URL = `https://cloudflare-eth.com`;
 export const ETHER_SCAN_URL = 'https://etherscan.io/';
 
 export const MVM_RPC_URL = 'https://geth.mvm.dev/';
