@@ -24,6 +24,15 @@ export const connectWallet = async () => {
 	try {
 		logging.set(true);
 		const { connectWallet } = await import('../helpers/web3client');
+
+		// hide logo
+		const onboardDom = document.querySelector('onboard-v2');
+		if (onboardDom) {
+			const styleDom = document.createElement('style');
+			styleDom.innerHTML = 'div.sidebar > div:nth-child(2) > svg { display: none; }';
+			onboardDom.shadowRoot?.appendChild(styleDom);
+		}
+
 		const provider = await connectWallet();
 		await setProvider(provider);
 		const $account = get(account);
