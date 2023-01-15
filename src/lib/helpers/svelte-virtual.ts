@@ -12,7 +12,10 @@ import {
 
 import { writable, derived, type Writable } from '@square/svelte-store';
 
-const createVirtualizerBase = <TScrollElement, TItemElement extends Element>(
+const createVirtualizerBase = <
+	TScrollElement extends Window | Element,
+	TItemElement extends Element
+>(
 	options: VirtualizerOptions<TScrollElement, TItemElement>
 ) => {
 	let originalOnChange = options.onChange;
@@ -44,7 +47,7 @@ const createVirtualizerBase = <TScrollElement, TItemElement extends Element>(
 	return derived(virtualizerWritable, (instance) => Object.assign(instance, { setOptions }));
 };
 
-export const createVirtualizer = <TScrollElement, TItemElement extends Element>(
+export const createVirtualizer = <TScrollElement extends Element, TItemElement extends Element>(
 	options: PartialKeys<
 		VirtualizerOptions<TScrollElement, TItemElement>,
 		'observeElementRect' | 'observeElementOffset' | 'scrollToFn'
