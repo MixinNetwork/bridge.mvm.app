@@ -119,7 +119,7 @@
 				await mvmBalance.reload?.();
 				await tick();
 
-				showToast('success', 'Successful');
+				showToast('success', $LL.successful());
 
 				amount = '';
 				address = '';
