@@ -49,6 +49,7 @@ const en: BaseTranslation = {
 		l1GasTip: 'L1 Gas fee paid to miners',
 		l2GasTip: 'L2 Gas fee payment MVM node '
 	},
+	successful: 'Successful',
 	from: 'From',
 	to: 'To',
 	address: 'Address',

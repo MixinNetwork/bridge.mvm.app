@@ -49,6 +49,7 @@ const zh: Translation = {
 		l1GasTip: 'L1 Gas 费支付以太坊矿工',
 		l2GasTip: 'L2 Gas 费支付 MVM 节点 '
 	},
+	successful: '成功',
 	from: '来自',
 	to: '到',
 	address: '地址',

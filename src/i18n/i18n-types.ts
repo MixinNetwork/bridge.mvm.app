@@ -169,6 +169,10 @@ type RootTranslation = {
 		l2GasTip: string
 	}
 	/**
+	 * S​u​c​c​e​s​s​f​u​l
+	 */
+	successful: string
+	/**
 	 * F​r​o​m
 	 */
 	from: string
@@ -535,6 +539,10 @@ export type TranslationFunctions = {
 		 */
 		l2GasTip: () => LocalizedString
 	}
+	/**
+	 * Successful
+	 */
+	successful: () => LocalizedString
 	/**
 	 * From
 	 */

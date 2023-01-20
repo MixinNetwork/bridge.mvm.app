@@ -65,19 +65,6 @@
 
 	$: fromBalance = depositMode ? roundedMainnetBalance : roundedMvmBalance;
 
-	$: console.log(
-		'mainnetBalance',
-		$mainnetBalance,
-		'mvmBalance',
-		$mvmBalance,
-		'roundedMainnetBalance',
-		roundedMainnetBalance,
-		'roundedMvmBalance',
-		roundedMvmBalance,
-		'fromBalance',
-		fromBalance
-	);
-
 	let amount: number | undefined | string;
 
 	$: if (fromBalance && amount && bigGte(amount, fromBalance)) amount = fromBalance;
@@ -97,22 +84,28 @@
 
 	let loading = false;
 	const transfer = async () => {
-		if (!amount || !$library || !$user || !$assetWithdrawalFee || !$user) return;
+		if (!amount || !$library || !$user) return;
 
 		loading = true;
 
-		if (!$user.contract) await registerAndSave($user.address);
-		if (!$user.contract) return;
-
-		const { deposit, withdraw } = await import('$lib/helpers/web3/common');
-
 		try {
+			if (!$user.contract) await registerAndSave($user.address);
+			if (!$user.contract) {
+				throw new Error('No contract');
+			}
+
+			const { deposit, withdraw } = await import('$lib/helpers/web3/common');
+
 			const value = amount.toString();
 			if (depositMode) {
 				const destination = await userDestinations.fetchDestination(asset.asset_id);
 				await deposit($library, asset, destination[0].destination, value);
 				await updateAssets();
 			} else {
+				if (!$assetWithdrawalFee) {
+					console.log('withdrawal fee not found');
+					throw new Error('No withdrawal fee');
+				}
 				await withdraw(
 					$library,
 					asset,
@@ -132,6 +125,9 @@
 				address = '';
 				memo = '';
 			}
+		} catch (e) {
+			console.error(e);
+			showToast('common', $LL.error.tips());
 		} finally {
 			loading = false;
 		}
