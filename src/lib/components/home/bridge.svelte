@@ -84,15 +84,14 @@
 
 	let loading = false;
 	const transfer = async () => {
-		if (!amount || !$library || !$user) return;
-
-		loading = true;
-
+		if (loading) return;
 		try {
+			if (!amount || !$library || !$user) throw new Error('No amount or library or user');
+
+			loading = true;
+
 			if (!$user.contract) await registerAndSave($user.address);
-			if (!$user.contract) {
-				throw new Error('No contract');
-			}
+			if (!$user.contract) throw new Error('No contract');
 
 			const { deposit, withdraw } = await import('$lib/helpers/web3/common');
 
@@ -102,10 +101,8 @@
 				await deposit($library, asset, destination[0].destination, value);
 				await updateAssets();
 			} else {
-				if (!$assetWithdrawalFee) {
-					console.log('withdrawal fee not found');
-					throw new Error('No withdrawal fee');
-				}
+				if (!$assetWithdrawalFee) throw new Error('No withdrawal fee');
+
 				await withdraw(
 					$library,
 					asset,
@@ -126,7 +123,9 @@
 				memo = '';
 			}
 		} catch (e) {
-			console.error(e);
+			if (e && typeof e === 'object' && 'code' in e && e.code === 'ACTION_REJECTED') return;
+
+			console.error('transfer error', e);
 			showToast('common', $LL.error.tips());
 		} finally {
 			loading = false;
@@ -158,7 +157,6 @@
 		</div>
 	</div>
 	<div class=" divide-y-2 divide-brand-background child:w-full">
-		{@debug fromBalance}
 		<SelectedAssetButton {asset} disabled={true}>
 			{$LL.balanceOf(fromBalance ? format({ n: fromBalance }) : '...', '')}</SelectedAssetButton
 		>
@@ -321,7 +319,7 @@
 	on:click={transfer}
 	disabled={!destination || (!isEthChain && !address) || !fromBalance || !amount || amount < 0.0001}
 >
-	{#if loading && !depositMode}
+	{#if loading}
 		<Spinner class="stroke-white stroke-2 text-center" />
 	{:else}
 		{depositMode ? ($providerName && $LL.depositFrom($providerName)) || '' : $LL.withdraw()}
