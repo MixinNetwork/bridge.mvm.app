@@ -67,7 +67,7 @@
 
 	let amount: number | undefined | string;
 
-	// $: if (fromBalance && amount && bigGte(amount, fromBalance)) amount = fromBalance;
+	$: if (fromBalance && amount && bigGte(amount, fromBalance)) amount = fromBalance;
 
 	let address = '';
 
