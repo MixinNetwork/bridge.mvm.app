@@ -67,7 +67,7 @@
 
 	let amount: number | undefined | string;
 
-	$: if (fromBalance && amount && bigGte(amount, fromBalance)) amount = fromBalance;
+	// $: if (fromBalance && amount && bigGte(amount, fromBalance)) amount = fromBalance;
 
 	let address = '';
 
@@ -123,9 +123,17 @@
 				memo = '';
 			}
 		} catch (e) {
-			if (e && typeof e === 'object' && 'code' in e && e.code === 'ACTION_REJECTED') return;
+			console.error('transfer error', JSON.stringify(e, null, 2));
 
-			console.error('transfer error', e);
+			if (e && typeof e === 'object') {
+				if ('code' in e && e.code === 'ACTION_REJECTED') return;
+				if ('reason' in e && e.reason) {
+					showToast('common', `${e.reason}`);
+				} else if ('message' in e && e.message) {
+					showToast('common', `${e.message}`);
+				}
+			}
+
 			showToast('common', $LL.error.tips());
 		} finally {
 			loading = false;
