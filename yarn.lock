@@ -1362,10 +1362,10 @@
     ethers "5.5.4"
     joi "^17.6.1"
 
-"@web3-onboard/core@2.13.0":
-  version "2.13.0"
-  resolved "https://registry.yarnpkg.com/@web3-onboard/core/-/core-2.13.0.tgz#aebdade07387dc9057753e1bc0194740d0fd3470"
-  integrity sha512-qV0IDvcL+B4L2osynzeYFJOwblytYoFVwR0mQVccph5iCKDvmC+NfQWQUAhPzZj9wbPl/26DKjp2oK5bycPTQQ==
+"@web3-onboard/core@2.13.1":
+  version "2.13.1"
+  resolved "https://registry.yarnpkg.com/@web3-onboard/core/-/core-2.13.1.tgz#c9d953751b239798ba1792c480babbd5b03ba015"
+  integrity sha512-1NL7Eev7Pjy/KxE9LaeoAhaNT+/UVoezXiW/GGFCe7Qx2efb74doCRQjjCf82KInyQAvfr8a/0lOQie4xFZ6ig==
   dependencies:
     "@unstoppabledomains/resolution" "^8.0"
     "@web3-onboard/common" "^2.2.3"
