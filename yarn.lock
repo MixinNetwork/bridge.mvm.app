@@ -1382,10 +1382,10 @@
     svelte "^3.49.0"
     svelte-i18n "^3.3.13"
 
-"@web3-onboard/injected-wallets@^2.6.0":
-  version "2.6.0"
-  resolved "https://registry.yarnpkg.com/@web3-onboard/injected-wallets/-/injected-wallets-2.6.0.tgz#6f59ded7728da42a1015215df6f27d016e7094d9"
-  integrity sha512-j/7hZM4RDCcLwhAARvgX9vjAXkahD59r3YywCPLsttih9YEXAfwyEvbi2aOYXyTMtNt8sEowl0oRBzYA4v2Ckw==
+"@web3-onboard/injected-wallets@^2.6.1":
+  version "2.6.1"
+  resolved "https://registry.yarnpkg.com/@web3-onboard/injected-wallets/-/injected-wallets-2.6.1.tgz#ca926e669593d32a68385c4e77ca3534b1d632e3"
+  integrity sha512-GuK0nr7eS3VIJNCOkdZrmhnoH0YiUrIopRFPFJENBH3HwRa6Wscl2ZkPdgq1kv9f1/4fKpXSmrAYqjteZGhHWg==
   dependencies:
     "@web3-onboard/common" "^2.2.3"
     joi "^17.6.1"
