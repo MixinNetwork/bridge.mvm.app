@@ -15,7 +15,7 @@
 		"typesafe-i18n": "typesafe-i18n"
 	},
 	"devDependencies": {
-		"@esbuild-plugins/node-globals-polyfill": "^0.1.1",
+		"@esbuild-plugins/node-globals-polyfill": "^0.2.1",
 		"@esbuild-plugins/node-modules-polyfill": "^0.2.0",
 		"@mixin.dev/mixin-node-sdk": "^4.9.0",
 		"@playwright/test": "^1.30.0",
