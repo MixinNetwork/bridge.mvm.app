@@ -16,7 +16,7 @@
 	},
 	"devDependencies": {
 		"@esbuild-plugins/node-globals-polyfill": "^0.2.3",
-		"@esbuild-plugins/node-modules-polyfill": "^0.2.0",
+		"@esbuild-plugins/node-modules-polyfill": "^0.2.2",
 		"@mixin.dev/mixin-node-sdk": "^4.9.0",
 		"@playwright/test": "^1.30.0",
 		"@poppanator/sveltekit-svg": "^2.1.1",
