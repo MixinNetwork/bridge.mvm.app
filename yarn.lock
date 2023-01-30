@@ -911,10 +911,10 @@
   resolved "https://registry.yarnpkg.com/@polka/url/-/url-1.0.0-next.21.tgz#5de5a2385a35309427f6011992b544514d559aa1"
   integrity sha512-a5Sab1C4/icpTZVzZc5Ghpz88yQtGOyNqYXcZgOssB2uuAr+wF/MvN6bgtW32q7HHrvBki+BsZ0OuNv6EV3K9g==
 
-"@poppanator/sveltekit-svg@^2.1.1":
-  version "2.1.1"
-  resolved "https://registry.yarnpkg.com/@poppanator/sveltekit-svg/-/sveltekit-svg-2.1.1.tgz#15aaab484c9cf58a9fa7b75c13680abab6dcef72"
-  integrity sha512-eGUasHG59jGeImU3FRoVAISj10A+SG5t63v5WcvewFOwtv0daUwGEMvJVuCNCZVr91F806ckFTE85cDcoJzBFA==
+"@poppanator/sveltekit-svg@^2.1.2":
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/@poppanator/sveltekit-svg/-/sveltekit-svg-2.1.2.tgz#f90406c7b27312d35dbeb52ca5accceba7176e24"
+  integrity sha512-d3s+Irf4vIrn1yHj6PffSRZT8Wo/Unt4QdGxZmLZWLT9eG6tHznJjQRAau1DEphjTeRohYHQSk6mM/KyMmQhEQ==
   dependencies:
     svgo "^2.8.0"
 
