@@ -4090,10 +4090,10 @@ typedarray-to-buffer@3.1.5:
   dependencies:
     is-typedarray "^1.0.0"
 
-typesafe-i18n@^5.21.0:
-  version "5.21.0"
-  resolved "https://registry.yarnpkg.com/typesafe-i18n/-/typesafe-i18n-5.21.0.tgz#6ee6a4ffb5dfdd73fce3e9677134fd7e02beec53"
-  integrity sha512-hfJQ7j0jvz21s2Iiv92Nx7rGyEQZJnVaQ64ek6Bn3IDaADiGFoUbSc7ZPYqeI9iTO8mOe35ACJ9MTn2cEp1ECA==
+typesafe-i18n@^5.24.0:
+  version "5.24.0"
+  resolved "https://registry.yarnpkg.com/typesafe-i18n/-/typesafe-i18n-5.24.0.tgz#3263669181e790b5f5e7a1972d618fc28fa6f759"
+  integrity sha512-GGIV+x+Azs+uVe1940ZX3MtIKSN0eXrO/x1Z7d0B/FO610evlmTEBIIYIHFWvjhZJslty11INedwRkZKSDVwTQ==
 
 typescript@^4.9.4, typescript@^4.9.5:
   version "4.9.5"
