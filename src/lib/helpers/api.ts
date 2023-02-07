@@ -1,5 +1,6 @@
 import { CodeClient, NetworkClient, type AssetCommonResponse } from '@mixin.dev/mixin-node-sdk';
 import type { PaymentRequestResponse } from '@mixin.dev/mixin-node-sdk';
+import { get } from '@square/svelte-store';
 import type { Asset } from '../types/asset';
 import type { RegisteredUser, User } from '../types/user';
 import ExternalClient from '@mixin.dev/mixin-node-sdk/src/client/external';
@@ -10,9 +11,13 @@ import { fetchMvmTokens } from './mvm/api';
 import { getBalance } from './web3/common';
 import { fetchAssetContract } from './web3/registry';
 import { sortBy } from 'lodash-es';
-import { fetchMixPayOrder, type MixPayPaymentResponse } from './mixpay/api';
+import { fetchMixPayPreOrder, fetchMixPayOrder, type MixPayPaymentResponse } from './mixpay/api';
 import { fetch4SwapOrder, type OrderResponse } from './4swap/api';
 import type { SwapSource } from '../types/swap';
+import { get4SwapSwapInfo } from './4swap/utils';
+import { DEFAULT_SLIPPAGE } from '$lib/components/swap/export';
+import { pairs } from '$lib/stores/model';
+import { bigGte } from '$lib/helpers/big';
 
 export const register = async (address: string): Promise<RegisteredUser> => {
 	const response = await fetch('https://bridge.mvm.dev/users', {
@@ -141,23 +146,29 @@ export const fetchFeeOnAsset = async (
 	const overChargeAmount = (Number(amount) * 1.05).toString();
 	if (Number.isNaN(overChargeAmount)) return '0';
 
-	const response = await fetch('https://api.4swap.org/api/orders/pre', {
-		method: 'POST',
-		body: JSON.stringify({
-			pay_asset_id: from,
-			fill_asset_id: to,
-			amount: overChargeAmount
-		})
+	const $pairs = get(pairs);
+	const fourSwapPreOrder = get4SwapSwapInfo($pairs, DEFAULT_SLIPPAGE, {
+		inputAsset: from,
+		outputAsset: to,
+		outputAmount: overChargeAmount
 	});
-	const { data } = await response.json();
+	const mixPayPreOrder = await fetchMixPayPreOrder({
+		inputAsset: from,
+		outputAsset: to,
+		outputAmount: overChargeAmount
+	});
 
-	if (data) {
-		const payAmount = Number(data.pay_amount);
-		if (payAmount > 0.0001) return (payAmount + 0.0001).toFixed(4);
-		return payAmount.toString();
-	}
+	let feeOnAsset: number;
+	if (mixPayPreOrder.order && fourSwapPreOrder.order) {
+		if (bigGte(fourSwapPreOrder.order.funds, mixPayPreOrder.order.funds))
+			feeOnAsset = fourSwapPreOrder.order.funds;
+		else feeOnAsset = mixPayPreOrder.order.funds;
+	} else if (mixPayPreOrder.order) feeOnAsset = mixPayPreOrder.order.funds;
+	else if (fourSwapPreOrder.order) feeOnAsset = fourSwapPreOrder.order.funds;
+	else return '';
 
-	return '';
+	if (feeOnAsset > 0.0001) return (feeOnAsset + 0.0001).toFixed(4);
+	return feeOnAsset.toString();
 };
 
 export const fetchCode = async (code_id: string): Promise<PaymentRequestResponse> => {
