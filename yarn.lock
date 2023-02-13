@@ -968,10 +968,10 @@
   resolved "https://registry.yarnpkg.com/@sideway/pinpoint/-/pinpoint-2.0.0.tgz#cff8ffadc372ad29fd3f78277aeb29e632cc70df"
   integrity sha512-RNiOoTPkptFtSVzQevY/yWtZwf/RxyVnPy/OcA9HBM3MlGDnBEYL5B41H0MTn0Uec8Hi+2qUtTfG2WWZBmMejQ==
 
-"@square/svelte-store@^1.0.13":
-  version "1.0.13"
-  resolved "https://registry.yarnpkg.com/@square/svelte-store/-/svelte-store-1.0.13.tgz#55bf8571afe05c05a8e690f95ae9eb9b695b66a2"
-  integrity sha512-UAspWhgQO6rPAU7WTImPPyfRmfV4GIvD1gIQhlZRNo3cYdbgfNBkWkxcZkZwg2vmhhQ6x42xt8m9FOrazQXBmQ==
+"@square/svelte-store@^1.0.14":
+  version "1.0.14"
+  resolved "https://registry.yarnpkg.com/@square/svelte-store/-/svelte-store-1.0.14.tgz#c80c129cb21cd884e3653301ad9ab29a9c8dd1cf"
+  integrity sha512-kNaSpEec2JevfOB9XaWkq00oAOvm2fq8/0yotg++UVEHuHXQqM6pW602ByjBwFHn1gTRSdb568BAtkEDBt5uKQ==
   dependencies:
     cookie-storage "^6.1.0"
     svelte "^3.0.0"
