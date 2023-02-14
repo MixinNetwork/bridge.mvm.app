@@ -277,6 +277,8 @@ export const networkParams: Record<string, NetworkParam> = {
 	}
 };
 
-export const TRANSACTION_GAS = 0.0000035;
+export const TRANSACTION_GAS = 0.000045;
+
+export const TRANSACTION_GAS_LIMIT = 900000;
 
 export const average_block_time = {};
