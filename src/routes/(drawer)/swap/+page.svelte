@@ -235,7 +235,7 @@
 				<div class="flex items-center">
 					{#if inputAsset}
 						<SelectedAssetButton
-							class=" w-fit"
+							class="!w-fit"
 							asset={inputAsset}
 							onSelect={handleChangeInputAsset}
 						/>
@@ -289,7 +289,7 @@
 				<div class="flex items-center">
 					{#if outputAsset}
 						<SelectedAssetButton
-							class=" w-fit"
+							class="!w-fit"
 							asset={outputAsset}
 							onSelect={handleChangeOutputAsset}
 						/>
