@@ -166,15 +166,26 @@
 	</div>
 	<div class=" divide-y-2 divide-brand-background child:w-full">
 		<SelectedAssetButton {asset} disabled={true}>
-			{$LL.balanceOf(fromBalance ? format({ n: fromBalance }) : '...', '')}</SelectedAssetButton
+			{$LL.balanceOf(
+				fromBalance ? format({ n: fromBalance, dp: 8, mode: 1 }) : '...',
+				''
+			)}</SelectedAssetButton
 		>
-		<input
-			class={clsx('rounded-b-lg  px-4 py-6', inputClasses)}
-			placeholder="Amount"
-			type="number"
-			bind:value={amount}
-			max={fromBalance}
-		/>
+		<div class="flex flex-row items-center">
+			<input
+				class={clsx('grow  rounded-b-lg px-4 py-6', inputClasses)}
+				placeholder="Amount"
+				type="number"
+				bind:value={amount}
+				max={fromBalance}
+			/>
+			<button
+				class="p-4 text-sm text-brand-primary"
+				on:click={() => {
+					amount = format({ n: fromBalance, dp: 8, mode: 1 });
+				}}>{$LL.max()}</button
+			>
+		</div>
 	</div>
 </div>
 
