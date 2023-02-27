@@ -111,7 +111,7 @@ const zh: Translation = {
 	tokenNA: '暂无价格',
 	tokenName: '代币名称',
 	tokenSymbol: '代币符号',
-	depositConfirmations: '存入确认区块',
+	depositConfirmations: '区块确认数',
 	addToMetaMask: '添加到 MetaMask',
 	swapForGasPage: {
 		tip: 'ETH 用于支付交易手续费',
