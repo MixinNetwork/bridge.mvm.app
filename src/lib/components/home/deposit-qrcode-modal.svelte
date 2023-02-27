@@ -3,7 +3,7 @@
 	import FullLayoutModal from '$lib/components/base/modal/full-layout-modal.svelte';
 	import LL from '$i18n/i18n-svelte';
 	import { providerName } from '../../stores/provider';
-	import { BTC_ASSET_ID, ETH_ASSET_ID, TRX_ASSET_ID } from '../../constants/common';
+	import { ETH_ASSET_ID, TRX_ASSET_ID } from '../../constants/common';
 	import { userDestinations } from '../../stores/model';
 	import { browser } from '$app/environment';
 	import { slide } from 'svelte/transition';
