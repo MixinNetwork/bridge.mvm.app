@@ -16,6 +16,7 @@
 	import Spinner from '../common/spinner.svelte';
 	import { browser } from '$app/environment';
 	import { fade } from 'svelte/transition';
+	import { getDepositEntry } from '../../helpers/utils';
 
 	export let close = () => {
 		//
@@ -24,8 +25,10 @@
 	export let onDeposit: () => void;
 	export let onWithdraw: () => void;
 
-	$: destination = $userDestinations.find(({ asset_id }) => asset_id === asset.chain_id)
-		?.deposit_entries?.[0].destination;
+	$: destination = getDepositEntry(
+		asset.chain_id,
+		$userDestinations.find(({ asset_id }) => asset_id === asset.chain_id)?.deposit_entries
+	)?.destination;
 
 	$: !destination && browser && userDestinations.fetchDestination(asset.chain_id);
 </script>

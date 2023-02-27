@@ -1,3 +1,5 @@
+import type { DepositEntryResponse } from '@mixin.dev/mixin-node-sdk';
+import { BTC_ASSET_ID } from '../constants/common';
 import type { Asset } from '../types/asset';
 
 export const toHex = (num: string | number) => {
@@ -20,4 +22,13 @@ export const searchAssets = (keyword: string, assets: Asset[]) => {
 export const getAsset = (assetId: string | null, assets: Asset[]) => {
 	if (!assetId) return;
 	return assets.find((a) => a.asset_id === assetId);
+};
+
+export const getDepositEntry = (
+	assetId: string,
+	depositEntries: DepositEntryResponse[] | undefined
+) => {
+	return assetId === BTC_ASSET_ID
+		? depositEntries?.filter(({ properties }) => properties?.includes('P2WPKH_V0'))?.[0]
+		: depositEntries?.[0];
 };
