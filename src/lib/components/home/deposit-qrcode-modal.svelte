@@ -41,7 +41,7 @@
 
 	$: depositEntry =
 		asset.chain_id === BTC_ASSET_ID
-			? depositEntries?.filter((d) => d.properties?.includes('P2WPKH_V0'))?.[0]
+			? depositEntries?.filter(({ properties }) => properties?.includes('P2WPKH_V0'))?.[0]
 			: depositEntries?.[0];
 
 	$: !depositEntry && browser && userDestinations.fetchDestination(asset.chain_id);
