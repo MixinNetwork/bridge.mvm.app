@@ -3,7 +3,7 @@
 	import FullLayoutModal from '$lib/components/base/modal/full-layout-modal.svelte';
 	import LL from '$i18n/i18n-svelte';
 	import { providerName } from '../../stores/provider';
-	import { ETH_ASSET_ID, TRX_ASSET_ID } from '../../constants/common';
+	import { BTC_ASSET_ID, ETH_ASSET_ID, TRX_ASSET_ID } from '../../constants/common';
 	import { userDestinations } from '../../stores/model';
 	import { browser } from '$app/environment';
 	import { slide } from 'svelte/transition';
@@ -39,7 +39,10 @@
 		({ asset_id }) => asset_id === asset.chain_id
 	)?.deposit_entries;
 
-	$: depositEntry = depositEntries?.[depositEntries.length - 1];
+	$: depositEntry =
+		asset.chain_id === BTC_ASSET_ID
+			? depositEntries?.filter((d) => d.properties?.includes('P2WPKH_V0'))?.[0]
+			: depositEntries?.[0];
 
 	$: !depositEntry && browser && userDestinations.fetchDestination(asset.chain_id);
 
