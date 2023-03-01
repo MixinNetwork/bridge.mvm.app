@@ -3,7 +3,7 @@
 	import FullLayoutModal from '$lib/components/base/modal/full-layout-modal.svelte';
 	import LL from '$i18n/i18n-svelte';
 	import { providerName } from '../../stores/provider';
-	import { BTC_ASSET_ID, ETH_ASSET_ID, TRX_ASSET_ID } from '../../constants/common';
+	import { ETH_ASSET_ID, TRX_ASSET_ID } from '../../constants/common';
 	import { userDestinations } from '../../stores/model';
 	import { browser } from '$app/environment';
 	import { slide } from 'svelte/transition';
@@ -11,6 +11,7 @@
 	import QrCode from '$lib/components/common/qr-code.svelte';
 	import Copy from '$lib/assets/copy.svg?component';
 	import Spinner from '../common/spinner.svelte';
+	import { getDepositEntry } from '../../helpers/utils';
 
 	const depositNetworkName = ({
 		chain_id,
@@ -35,14 +36,10 @@
 
 	export let asset: Asset;
 
-	$: depositEntries = $userDestinations.find(
-		({ asset_id }) => asset_id === asset.chain_id
-	)?.deposit_entries;
-
-	$: depositEntry =
-		asset.chain_id === BTC_ASSET_ID
-			? depositEntries?.filter(({ properties }) => properties?.includes('P2WPKH_V0'))?.[0]
-			: depositEntries?.[0];
+	$: depositEntry = getDepositEntry(
+		asset.chain_id,
+		$userDestinations.find(({ asset_id }) => asset_id === asset.chain_id)?.deposit_entries
+	);
 
 	$: !depositEntry && browser && userDestinations.fetchDestination(asset.chain_id);
 

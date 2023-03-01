@@ -28,7 +28,7 @@
 	import { showToast } from '../common/toast/toast-container.svelte';
 	import { tick } from 'svelte';
 	import LL from '$i18n/i18n-svelte';
-	import { getAsset } from '../../helpers/utils';
+	import { getAsset, getDepositEntry } from '../../helpers/utils';
 	import Info from '$lib/assets/info.svg?component';
 	import Modal from '../common/modal/modal.svelte';
 	import TipModal from '../base/tip-modal.svelte';
@@ -143,8 +143,10 @@
 	let l1GasModalOpened = false;
 	let l2GasModalOpened = false;
 
-	$: destination = $userDestinations.find(({ asset_id }) => asset_id === asset.chain_id)
-		?.deposit_entries?.[0].destination;
+	$: destination = getDepositEntry(
+		asset.chain_id,
+		$userDestinations.find(({ asset_id }) => asset_id === asset.chain_id)?.deposit_entries
+	);
 
 	$: !destination && browser && userDestinations.fetchDestination(asset.chain_id);
 </script>

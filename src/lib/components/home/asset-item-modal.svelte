@@ -5,17 +5,11 @@
 	import LayoutBottomSheet from '../base/modal/layout-bottom-sheet.svelte';
 	import { toSwapUrl } from './export';
 	import LL from '$i18n/i18n-svelte';
-	import Copy from '$lib/assets/copy.svg?component';
-	import { showToast } from '../common/toast/toast-container.svelte';
 	import { library } from '../../stores/ether';
 	import { watchAsset } from '../../helpers/web3/registry';
 	import { ETH_ASSET_ID } from '../../constants/common';
 	import Close from '$lib/assets/close.svg?component';
 	import { switchNetwork } from '../../helpers/web3/common';
-	import { userDestinations } from '../../stores/model';
-	import Spinner from '../common/spinner.svelte';
-	import { browser } from '$app/environment';
-	import { fade } from 'svelte/transition';
 
 	export let close = () => {
 		//
@@ -23,11 +17,6 @@
 	export let asset: Asset;
 	export let onDeposit: () => void;
 	export let onWithdraw: () => void;
-
-	$: destination = $userDestinations.find(({ asset_id }) => asset_id === asset.chain_id)
-		?.deposit_entries?.[0].destination;
-
-	$: !destination && browser && userDestinations.fetchDestination(asset.chain_id);
 </script>
 
 <LayoutBottomSheet class="!h-auto items-center p-5">
@@ -75,26 +64,6 @@
 		<div>
 			<div>{$LL.tokenSymbol()}</div>
 			<div>{asset.symbol}</div>
-		</div>
-		<div>
-			<div>{$LL.address()}</div>
-			{#if destination}
-				<button
-					transition:fade|local
-					class="flex flex-row items-center space-x-1 text-brand-primary"
-					on:click={async () => {
-						destination && (await navigator.clipboard.writeText(destination));
-						showToast('success', $LL.copied());
-					}}
-				>
-					<div>
-						{destination?.slice(0, 6) + '...' + destination?.slice(-4)}
-					</div>
-					<Copy class="fill-brand-primary" />
-				</button>
-			{:else}
-				<Spinner size={24} class="stroke-brand-primary" />
-			{/if}
 		</div>
 		<div>
 			<div>{$LL.depositConfirmations()}</div>
