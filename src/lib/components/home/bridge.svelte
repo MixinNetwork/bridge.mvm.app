@@ -19,7 +19,7 @@
 	import { AssetWithdrawalFee, updateAssets, assets, userDestinations } from '$lib/stores/model';
 	import { registerAndSave, user } from '$lib/stores/user';
 	import { EOS_ASSET_ID, ETH_ASSET_ID, TRANSACTION_GAS } from '$lib/constants/common';
-	import { bigGte, bigMul, format } from '$lib/helpers/big';
+	import { bigGt, bigMul, format } from '$lib/helpers/big';
 	import LogoCircle from '$lib/assets/logo/logo-circle.svg?component';
 	import Spinner from '$lib/components/common/spinner.svelte';
 	import { library } from '$lib/stores/ether';
@@ -28,7 +28,7 @@
 	import { showToast } from '../common/toast/toast-container.svelte';
 	import { tick } from 'svelte';
 	import LL from '$i18n/i18n-svelte';
-	import { getAsset, getDepositEntry } from '../../helpers/utils';
+	import { getAsset, getDepositEntry, filterNumericInputEvent } from '../../helpers/utils';
 	import Info from '$lib/assets/info.svg?component';
 	import Modal from '../common/modal/modal.svelte';
 	import TipModal from '../base/tip-modal.svelte';
@@ -41,6 +41,9 @@
 
 	export let asset: Asset;
 	export let depositMode: boolean;
+	export let close = () => {
+		//
+	};
 
 	$: ethAsset = getAsset(ETH_ASSET_ID, $assets);
 
@@ -58,16 +61,16 @@
 				dp: 8,
 				format: { groupSeparator: '' }
 		  })
-		: 0;
+		: '0';
 	$: roundedMvmBalance = $mvmBalance
 		? format({ n: $mvmBalance, dp: 8, format: { groupSeparator: '' } })
 		: format({ n: asset.balance, dp: 8, format: { groupSeparator: '' } });
 
 	$: fromBalance = depositMode ? roundedMainnetBalance : roundedMvmBalance;
 
-	let amount: number | undefined | string;
+	let amount = '';
 
-	$: if (fromBalance && amount && bigGte(amount, fromBalance)) amount = fromBalance;
+	$: if (fromBalance && amount && bigGt(amount, fromBalance)) amount = fromBalance;
 
 	let address = '';
 
@@ -78,7 +81,7 @@
 	$: assetWithdrawalFee = AssetWithdrawalFee({
 		asset_id: asset.asset_id,
 		chain_id: asset.chain_id,
-		destination: address || (isEthChain && $user?.address) || undefined,
+		destination: address || undefined,
 		tag: memo
 	});
 
@@ -121,6 +124,7 @@
 				amount = '';
 				address = '';
 				memo = '';
+				close();
 			}
 		} catch (e) {
 			console.error('transfer error', JSON.stringify(e, null, 2));
@@ -178,6 +182,7 @@
 				class={clsx('grow  rounded-b-lg px-4 py-6', inputClasses)}
 				placeholder="Amount"
 				type="number"
+				on:input={(e) => filterNumericInputEvent(e, amount)}
 				bind:value={amount}
 				max={fromBalance}
 			/>
@@ -226,7 +231,7 @@
 		<div class="flex border-b-2 border-brand-background">
 			<textarea
 				class={clsx('grow resize-none break-all rounded-lg py-3 pl-4 font-semibold', inputClasses)}
-				placeholder={isEthChain ? $user?.address || '' : 'Address'}
+				placeholder={$LL.address()}
 				bind:value={address}
 				use:autosize
 			/>
@@ -338,7 +343,12 @@
 <button
 	class="mt-16 mb-6 flex min-w-[120px] justify-center self-center rounded-full bg-brand-primary px-6 py-4 text-white"
 	on:click={transfer}
-	disabled={!destination || (!isEthChain && !address) || !fromBalance || !amount || amount < 0.0001}
+	disabled={!destination ||
+		(!isEthChain && !address) ||
+		!fromBalance ||
+		!amount ||
+		+amount < 0.0001 ||
+		!$assetWithdrawalFee}
 >
 	{#if loading}
 		<Spinner class="stroke-white stroke-2 text-center" />

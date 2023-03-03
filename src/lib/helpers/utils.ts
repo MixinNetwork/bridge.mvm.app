@@ -7,6 +7,17 @@ export const toHex = (num: string | number) => {
 	return '0x' + val.toString(16);
 };
 
+export const filterNumericInputEvent = (e: Event, oldValue: string | undefined) => {
+	if (!e) return;
+	if (!e.target) return;
+	if (!('value' in e.target)) return;
+	if (typeof e.target.value !== 'string') return;
+
+	if (e.target.value?.match(/^(\d*\.?\d*)?$/)?.[0] === undefined) {
+		e.target.value = oldValue ?? '';
+	}
+};
+
 export const searchAssets = (keyword: string, assets: Asset[]) => {
 	const lowerCaseKeyword = keyword.trim().toLowerCase();
 	return assets.filter((asset) => {

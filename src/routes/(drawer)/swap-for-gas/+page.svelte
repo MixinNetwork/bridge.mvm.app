@@ -11,6 +11,7 @@
 	import { connectWallet } from '$lib/stores/ether';
 	import { assets } from '$lib/stores/model';
 	import { ETH_ASSET_ID } from '$lib/constants/common';
+	import { filterNumericInputEvent } from '../../../lib/helpers/utils';
 
 	$: eth = $assets.find((asset) => asset.asset_id === ETH_ASSET_ID);
 
@@ -44,7 +45,7 @@
 
 		<form
 			action="https://cryptogasstation.xyz/mvm"
-			method="get"
+			method="POST"
 			target="_blank"
 			use:enhance={({ data, cancel, action }) => {
 				const asyncFn = async () => {
@@ -89,6 +90,7 @@
 				<Item value="custom" {price} selected={selectCustom} transactions={64}>
 					<input
 						type="number"
+						on:input={(e) => filterNumericInputEvent(e, customAmount + '')}
 						class="h-16 w-full rounded-lg bg-[#F5F7FA] p-1 text-lg font-semibold"
 						placeholder={$LL.amount()}
 						step="0.001"

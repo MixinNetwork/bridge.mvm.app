@@ -15,6 +15,6 @@
 	<div slot="title">{$LL.depositModal.title(asset.symbol)}</div>
 
 	<div class="flex grow flex-col items-stretch overflow-y-auto">
-		<Bridge {asset} depositMode={true} />
+		<Bridge {asset} depositMode={true} {close} />
 	</div>
 </FullLayoutModal>
