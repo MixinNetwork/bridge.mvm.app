@@ -146,7 +146,7 @@
 	$: destination = getDepositEntry(
 		asset.chain_id,
 		$userDestinations.find(({ asset_id }) => asset_id === asset.chain_id)?.deposit_entries
-	);
+	)?.destination;
 
 	$: !destination && browser && userDestinations.fetchDestination(asset.chain_id);
 </script>
