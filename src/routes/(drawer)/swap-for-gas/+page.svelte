@@ -11,7 +11,7 @@
 	import { connectWallet } from '$lib/stores/ether';
 	import { assets } from '$lib/stores/model';
 	import { ETH_ASSET_ID } from '$lib/constants/common';
-	import { filterNumericInputEvent } from '../../../lib/helpers/utils';
+	import { filterNumericInputEvent } from '$lib/helpers/utils';
 
 	$: eth = $assets.find((asset) => asset.asset_id === ETH_ASSET_ID);
 
