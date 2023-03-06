@@ -6,6 +6,7 @@ import {
 import { asyncReadable, derived, get, readable } from '@square/svelte-store';
 import type { Pair } from '../helpers/4swap/api';
 import { bigAdd, bigMul } from '../helpers/big';
+import type { Transaction } from '../helpers/mvm/api';
 import { deepWritable } from '../helpers/store/deep';
 import { mapTemplate } from '../helpers/store/map-template';
 import type { Asset } from '../types/asset';
@@ -122,3 +123,5 @@ export const AssetWithdrawalFee = mapTemplate(
 		});
 	}
 );
+
+export const transactions = deepWritable<Transaction[] | undefined>(undefined);

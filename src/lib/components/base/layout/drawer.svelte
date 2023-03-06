@@ -11,9 +11,10 @@
 		<label for="drawer-toggle" class="drawer-overlay" />
 		<Drawer />
 	</div>
-	{#key $page.url.pathname}
-		<div class="drawer-content flex flex-col">
+
+	<div class="drawer-content flex flex-col">
+		{#key $page.url.pathname}
 			<slot />
-		</div>
-	{/key}
+		{/key}
+	</div>
 </div>
