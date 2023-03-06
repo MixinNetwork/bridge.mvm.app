@@ -15,6 +15,7 @@ const en: BaseTranslation = {
 	error: {
 		tips: 'Error'
 	},
+	retry: 'retry',
 	assets: 'Assets',
 	transactions: 'Transactions',
 	swap: 'Swap',
@@ -47,7 +48,8 @@ const en: BaseTranslation = {
 		l1Gas: 'L1 Gas: ',
 		l2Gas: 'L2 Gas: ',
 		l1GasTip: 'L1 Gas fee paid to miners',
-		l2GasTip: 'L2 Gas fee payment MVM node '
+		l2GasTip: 'L2 Gas fee payment MVM node ',
+		l1GasError: 'Failed to fetch L1 Gas'
 	},
 	successful: 'Successful',
 	from: 'From',

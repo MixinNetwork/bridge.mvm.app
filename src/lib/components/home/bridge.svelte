@@ -85,6 +85,11 @@
 		tag: memo
 	});
 
+	$: assetWithdrawalFeeState = assetWithdrawalFee.state;
+	$: if ($assetWithdrawalFeeState?.isError) {
+		showToast('common', $LL.withdrawModal.l1GasError());
+	}
+
 	let loading = false;
 	const transfer = async () => {
 		if (loading) return;
@@ -307,6 +312,17 @@
 					{$assetWithdrawalFee}
 					{asset.symbol}
 					(${format({ n: bigMul($assetWithdrawalFee, asset.price_usd), dp: 3 })})
+				{:else if $assetWithdrawalFeeState?.isError}
+					<button
+						class="uppercases text-red-400"
+						on:click={async () => {
+							try {
+								await assetWithdrawalFee.load();
+							} catch (e) {
+								showToast('common', $LL.withdrawModal.l1GasError());
+							}
+						}}>{$LL.retry()}</button
+					>
 				{:else}
 					...
 				{/if}
