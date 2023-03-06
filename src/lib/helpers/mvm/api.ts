@@ -116,65 +116,60 @@ interface TransactionParamsWithStartblock extends TransactionParams {
 export const fetchTransactions = async ({
 	...params
 }: TransactionParams | TransactionParamsWithEndblock | TransactionParamsWithStartblock) => {
-	try {
-		const [tx, tokenTx] = await Promise.all([
-			fetchMvmTransactions(params),
-			fetchMvmTokenTransactions(params)
-		]);
+	const [tx, tokenTx] = await Promise.all([
+		fetchMvmTransactions(params),
+		fetchMvmTokenTransactions(params)
+	]);
 
-		const mvmTransactions: (Partial<MvmTokenTransfer> & MvmTransaction)[] = sortBy(
-			[...tx, ...tokenTx],
-			(tx) => -tx.timeStamp
-		);
+	const mvmTransactions: (Partial<MvmTokenTransfer> & MvmTransaction)[] = sortBy(
+		[...tx, ...tokenTx],
+		(tx) => -tx.timeStamp
+	);
 
-		let transactions = mvmTransactions.map(
-			({
-				blockNumber,
+	let transactions = mvmTransactions.map(
+		({
+			blockNumber,
+			hash,
+			timeStamp,
+			from,
+			value,
+			gasPrice,
+			gasUsed,
+			tokenDecimal,
+			tokenName,
+			tokenSymbol,
+			contractAddress
+		}) => {
+			const isSend = from.toLowerCase() === params.address.toLowerCase();
+			const formattedValue = utils.formatUnits(value || 0, tokenDecimal || 18);
+			return {
 				hash,
+				blockNumber,
 				timeStamp,
-				from,
-				value,
-				gasPrice,
-				gasUsed,
-				tokenDecimal,
-				tokenName,
-				tokenSymbol,
-				contractAddress
-			}) => {
-				const isSend = from.toLowerCase() === params.address.toLowerCase();
-				const formattedValue = utils.formatUnits(value || 0, tokenDecimal || 18);
-				return {
-					hash,
-					blockNumber,
-					timeStamp,
-					name: tokenName || 'Etheruem',
-					fee: tokenSymbol || !isSend ? 0 : +utils.formatUnits(bigMul(gasUsed, gasPrice), 18),
-					value: +formattedValue,
-					isSend,
-					symbol: tokenSymbol || 'ETH',
-					contract: tokenSymbol ? contractAddress : undefined
-				};
-			}
-		);
-
-		if ('lastHash' in params) {
-			const lastHash = params.lastHash;
-			const lastIndex = lastHash ? mvmTransactions.findIndex((tx) => tx.hash === lastHash) : 0;
-
-			transactions = transactions
-				.slice(lastIndex)
-				.filter((tx) => tx.hash !== lastHash)
-				.slice(0, 30);
-		} else if ('firstHash' in params) {
-			const firstHash = params.firstHash;
-			const firstIndex = firstHash ? mvmTransactions.findIndex((tx) => tx.hash === firstHash) : 0;
-
-			transactions = transactions.slice(0, firstIndex).slice(-30);
+				name: tokenName || 'Etheruem',
+				fee: tokenSymbol || !isSend ? 0 : +utils.formatUnits(bigMul(gasUsed, gasPrice), 18),
+				value: +formattedValue,
+				isSend,
+				symbol: tokenSymbol || 'ETH',
+				contract: tokenSymbol ? contractAddress : undefined
+			};
 		}
+	);
 
-		return transactions;
-	} catch (e) {
-		console.error(e);
-		return [];
+	if ('lastHash' in params) {
+		const lastHash = params.lastHash;
+		const lastIndex = lastHash ? mvmTransactions.findIndex((tx) => tx.hash === lastHash) : 0;
+
+		transactions = transactions
+			.slice(lastIndex)
+			.filter((tx) => tx.hash !== lastHash)
+			.slice(0, 30);
+	} else if ('firstHash' in params) {
+		const firstHash = params.firstHash;
+		const firstIndex = firstHash ? mvmTransactions.findIndex((tx) => tx.hash === firstHash) : 0;
+
+		transactions = transactions.slice(0, firstIndex).slice(-30);
 	}
+
+	return transactions;
 };
