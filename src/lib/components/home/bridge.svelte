@@ -86,13 +86,9 @@
 	});
 
 	$: assetWithdrawalFeeState = assetWithdrawalFee.state;
-	const showL1GasError = () => {
-		showToast('common', $LL.withdrawModal.l1GasError());
-	};
 	$: if ($assetWithdrawalFeeState?.isError) {
-		showL1GasError();
+		showToast('common', $LL.withdrawModal.l1GasError());
 	}
-	$: console.log(assetWithdrawalFee);
 
 	let loading = false;
 	const transfer = async () => {
@@ -133,8 +129,8 @@
 				amount = '';
 				address = '';
 				memo = '';
-				close();
 			}
+			close();
 		} catch (e) {
 			console.error('transfer error', JSON.stringify(e, null, 2));
 
@@ -321,12 +317,8 @@
 				{:else if $assetWithdrawalFeeState?.isError}
 					<button
 						class="uppercases text-red-400"
-						on:click={async () => {
-							try {
-								await assetWithdrawalFee?.reload?.();
-							} catch (e) {
-								showL1GasError();
-							}
+						on:click={() => {
+							assetWithdrawalFee?.reload?.();
 						}}>{$LL.retry()}</button
 					>
 				{:else}
