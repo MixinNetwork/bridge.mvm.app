@@ -115,16 +115,18 @@ export const deposit = async (
 			value: ethers.utils.parseEther(amount).toString(),
 			chainId: 0x1
 		};
-		return await signer.sendTransaction(transactionParameters);
+		const tx = await signer.sendTransaction(transactionParameters);
+		await tx.wait();
 	}
 
 	if (asset.chain_id === ETH_ASSET_ID) {
 		const tokenContract = new ethers.Contract(asset.asset_key, ERC20_ABI, signer);
 		const tokenDecimal = await tokenContract.decimals();
 		const value = ethers.utils.parseUnits(amount, tokenDecimal);
-		return await tokenContract.transfer(destination, value, {
+		const tx = await tokenContract.transfer(destination, value, {
 			gasLimit: 300000
 		});
+		await tx.wait();
 	}
 };
 
@@ -146,12 +148,12 @@ export const withdraw = async (
 		const totalAmount = ethers.utils.parseEther((Number(amount) + Number(fee)).toFixed(8));
 
 		const bridge = new ethers.Contract(BRIDGE_ADDRESS, BRIDGE_ABI, signer);
-		await bridge.release(userContract, extra, {
+		const tx = await bridge.release(userContract, extra, {
 			gasPrice: await mvmProvider.getGasPrice(),
 			gasLimit: TRANSACTION_GAS_LIMIT,
 			value: totalAmount
 		});
-		return;
+		await tx.wait();
 	}
 
 	if (asset.contract) {
@@ -164,11 +166,11 @@ export const withdraw = async (
 			tokenDecimal
 		);
 
-		await tokenContract.transferWithExtra(userContract, value, extra, {
+		const tx = await tokenContract.transferWithExtra(userContract, value, extra, {
 			gasPrice: await mvmProvider.getGasPrice(),
 			gasLimit: TRANSACTION_GAS_LIMIT
 		});
-		return;
+		await tx.wait();
 	}
 
 	throw new Error('Invalid asset');
@@ -197,11 +199,12 @@ export const swapAsset = async (
 		const assetAmount = ethers.utils.parseEther(Number(order.funds).toFixed(8)).toString();
 		const bridge = new ethers.Contract(BRIDGE_ADDRESS, BRIDGE_ABI, signer);
 
-		await bridge.release(user.contract, info.extra, {
+		const tx = await bridge.release(user.contract, info.extra, {
 			gasPrice: await mvmProvider.getGasPrice(),
 			gasLimit: TRANSACTION_GAS_LIMIT,
 			value: assetAmount
 		});
+		await tx.wait();
 
 		const follow_id = await info.getFollowId(Date.now());
 		return await checkOrder(source, follow_id, user);
@@ -213,10 +216,11 @@ export const swapAsset = async (
 		const tokenDecimal = await tokenContract.decimals();
 		const value = ethers.utils.parseUnits(`${order.funds}`, tokenDecimal);
 
-		await tokenContract.transferWithExtra(user.contract, value, info.extra, {
+		const tx = await tokenContract.transferWithExtra(user.contract, value, info.extra, {
 			gasPrice: await mvmProvider.getGasPrice(),
 			gasLimit: TRANSACTION_GAS_LIMIT
 		});
+		await tx.wait();
 
 		const follow_id = await info.getFollowId(Date.now());
 		return await checkOrder(source, follow_id, user);
