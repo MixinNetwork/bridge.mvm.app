@@ -162,7 +162,7 @@ export const fetchFeeOnAsset = async (
   to: string,
   amount: string,
 ): Promise<string> => {
-  const overChargeAmount = (Number(amount) * 1.05).toString();
+  const overChargeAmount = (Number(amount) * 1.05);
   if (!Number.isFinite(overChargeAmount)) return "0";
 
   const response = await fetch("https://api.4swap.org/api/orders/pre", {
@@ -170,7 +170,7 @@ export const fetchFeeOnAsset = async (
     body: JSON.stringify({
       pay_asset_id: from,
       fill_asset_id: to,
-      amount: overChargeAmount,
+      amount: overChargeAmount.toString(),
     }),
   });
   const { data } = await response.json();
