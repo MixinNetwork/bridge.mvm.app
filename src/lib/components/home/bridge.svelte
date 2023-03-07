@@ -86,8 +86,11 @@
 	});
 
 	$: assetWithdrawalFeeState = assetWithdrawalFee.state;
-	$: if ($assetWithdrawalFeeState?.isError) {
+	const showL1GasError = () => {
 		showToast('common', $LL.withdrawModal.l1GasError());
+	};
+	$: if ($assetWithdrawalFeeState?.isError) {
+		showL1GasError();
 	}
 
 	let loading = false;
@@ -138,8 +141,10 @@
 				if ('code' in e && e.code === 'ACTION_REJECTED') return;
 				if ('reason' in e && e.reason) {
 					showToast('common', `${e.reason}`);
+					return;
 				} else if ('message' in e && e.message) {
 					showToast('common', `${e.message}`);
+					return;
 				}
 			}
 
@@ -319,7 +324,7 @@
 							try {
 								await assetWithdrawalFee.load();
 							} catch (e) {
-								showToast('common', $LL.withdrawModal.l1GasError());
+								showL1GasError();
 							}
 						}}>{$LL.retry()}</button
 					>
