@@ -85,6 +85,15 @@
 		tag: memo
 	});
 
+	$: assetWithdrawalFeeState = assetWithdrawalFee.state;
+	const showL1GasError = () => {
+		showToast('common', $LL.withdrawModal.l1GasError());
+	};
+	$: if ($assetWithdrawalFeeState?.isError) {
+		showL1GasError();
+	}
+	$: console.log(assetWithdrawalFee);
+
 	let loading = false;
 	const transfer = async () => {
 		if (loading) return;
@@ -133,8 +142,10 @@
 				if ('code' in e && e.code === 'ACTION_REJECTED') return;
 				if ('reason' in e && e.reason) {
 					showToast('common', `${e.reason}`);
+					return;
 				} else if ('message' in e && e.message) {
 					showToast('common', `${e.message}`);
+					return;
 				}
 			}
 
@@ -307,6 +318,17 @@
 					{$assetWithdrawalFee}
 					{asset.symbol}
 					(${format({ n: bigMul($assetWithdrawalFee, asset.price_usd), dp: 3 })})
+				{:else if $assetWithdrawalFeeState?.isError}
+					<button
+						class="uppercases text-red-400"
+						on:click={async () => {
+							try {
+								await assetWithdrawalFee?.reload?.();
+							} catch (e) {
+								showL1GasError();
+							}
+						}}>{$LL.retry()}</button
+					>
 				{:else}
 					...
 				{/if}

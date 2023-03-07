@@ -847,19 +847,18 @@
     "@jridgewell/resolve-uri" "3.1.0"
     "@jridgewell/sourcemap-codec" "1.4.14"
 
-"@mixin.dev/mixin-node-sdk@^5.0.0":
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/@mixin.dev/mixin-node-sdk/-/mixin-node-sdk-5.0.0.tgz#38936c7eb5c4062d843b0b832d47c3d274e0a554"
-  integrity sha512-lylG/aOsHv52+aI7UEcxHYNyfOX8okK1gFStsfbebTgATvcd4yyGZoCpAf8vYeRZReDJ1cYkyh4jGAzCsLuM0g==
+"@mixin.dev/mixin-node-sdk@5.1.2":
+  version "5.1.2"
+  resolved "https://registry.npmmirror.com/@mixin.dev/mixin-node-sdk/-/mixin-node-sdk-5.1.2.tgz#1f61efb1c904ebf8befaceb22d458570d6ec4f96"
+  integrity sha512-CWzGQuwydYOHAT20B8alcAviyOyl5vSG3EcnD8y5DSAGa5ttSN3AuSIg9uV+dwUJxe+6kSPmoBbQepg2JY8iiA==
   dependencies:
     "@ethersproject/abi" "^5.6.3"
     "@ethersproject/providers" "^5.6.8"
-    "@types/axios" "^0.14.0"
     "@types/node-forge" "^1.0.2"
     "@types/serialize-javascript" "^5.0.2"
     "@types/uuid" "^8.3.4"
-    axios "^1.1.3"
-    axios-retry "^3.3.1"
+    axios "1.2.3"
+    axios-retry "3.4.0"
     bn.js "^5.2.1"
     browser-hrtime "^1.1.8"
     curve25519-js "^0.0.4"
@@ -1012,13 +1011,6 @@
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/@types/autosize/-/autosize-4.0.1.tgz#999a7c305b96766248044ebaac1a0299961f3b61"
   integrity sha512-iPJT/FCaSO79G6j+9n6gmFc5nhxZ1gDrA2UAvb5FslJ6FJQZnDfbBU0qp5vpp0Cbjj7+gOyjuWZ7RrXvRuETaA==
-
-"@types/axios@^0.14.0":
-  version "0.14.0"
-  resolved "https://registry.yarnpkg.com/@types/axios/-/axios-0.14.0.tgz#ec2300fbe7d7dddd7eb9d3abf87999964cafce46"
-  integrity sha512-KqQnQbdYE54D7oa/UmYVMZKq7CO4l8DEENzOKc4aBRwxCXSlJXGz83flFx5L7AWrOQnmuN3kVsRdt+GZPPjiVQ==
-  dependencies:
-    axios "*"
 
 "@types/cookie@^0.5.1":
   version "0.5.1"
@@ -1526,18 +1518,18 @@ autosize@^6.0.1:
   resolved "https://registry.yarnpkg.com/autosize/-/autosize-6.0.1.tgz#64ee78dd7029be959eddd3afbbd33235b957e10f"
   integrity sha512-f86EjiUKE6Xvczc4ioP1JBlWG7FKrE13qe/DxBCpe8GCipCq2nFw73aO8QEBKHfSbYGDN5eB9jXWKen7tspDqQ==
 
-axios-retry@^3.3.1:
-  version "3.3.1"
-  resolved "https://registry.yarnpkg.com/axios-retry/-/axios-retry-3.3.1.tgz#47624646138aedefbad2ac32f226f4ee94b6dcab"
-  integrity sha512-RohAUQTDxBSWLFEnoIG/6bvmy8l3TfpkclgStjl5MDCMBDgapAWCmr1r/9harQfWC8bzLC8job6UcL1A1Yc+/Q==
+axios-retry@3.4.0:
+  version "3.4.0"
+  resolved "https://registry.npmmirror.com/axios-retry/-/axios-retry-3.4.0.tgz#f464dbe9408e5aa78fa319afd38bb69b533d8854"
+  integrity sha512-VdgaP+gHH4iQYCCNUWF2pcqeciVOdGrBBAYUfTY+wPcO5Ltvp/37MLFNCmJKo7Gj3SHvCSdL8ouI1qLYJN3liA==
   dependencies:
     "@babel/runtime" "^7.15.4"
     is-retry-allowed "^2.2.0"
 
-axios@*, axios@^1.1.3:
-  version "1.1.3"
-  resolved "https://registry.yarnpkg.com/axios/-/axios-1.1.3.tgz#8274250dada2edf53814ed7db644b9c2866c1e35"
-  integrity sha512-00tXVRwKx/FZr/IDVFt4C+f9FYairX517WoGCL6dpOntqLkZofjhu43F/Xl44UOpqa+9sLFDrG/XAnFsUYgkDA==
+axios@1.2.3:
+  version "1.2.3"
+  resolved "https://registry.npmmirror.com/axios/-/axios-1.2.3.tgz#31a3d824c0ebf754a004b585e5f04a5f87e6c4ff"
+  integrity sha512-pdDkMYJeuXLZ6Xj/Q5J3Phpe+jbGdsSzlQaFVkMQzRUL05+6+tetX8TV3p4HrU4kzuO9bt+io/yGQxuyxA/xcw==
   dependencies:
     follow-redirects "^1.15.0"
     form-data "^4.0.0"

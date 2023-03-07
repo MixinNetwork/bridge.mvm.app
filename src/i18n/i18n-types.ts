@@ -53,6 +53,10 @@ type RootTranslation = {
 		tips: string
 	}
 	/**
+	 * r​e​t​r​y
+	 */
+	retry: string
+	/**
 	 * A​s​s​e​t​s
 	 */
 	assets: string
@@ -167,6 +171,10 @@ type RootTranslation = {
 		 * L​2​ ​G​a​s​ ​f​e​e​ ​p​a​y​m​e​n​t​ ​M​V​M​ ​n​o​d​e​ 
 		 */
 		l2GasTip: string
+		/**
+		 * F​a​i​l​e​d​ ​t​o​ ​f​e​t​c​h​ ​L​1​ ​G​a​s
+		 */
+		l1GasError: string
 	}
 	/**
 	 * S​u​c​c​e​s​s​f​u​l
@@ -428,6 +436,10 @@ export type TranslationFunctions = {
 		tips: () => LocalizedString
 	}
 	/**
+	 * retry
+	 */
+	retry: () => LocalizedString
+	/**
 	 * Assets
 	 */
 	assets: () => LocalizedString
@@ -538,6 +550,10 @@ export type TranslationFunctions = {
 		 * L2 Gas fee payment MVM node 
 		 */
 		l2GasTip: () => LocalizedString
+		/**
+		 * Failed to fetch L1 Gas
+		 */
+		l1GasError: () => LocalizedString
 	}
 	/**
 	 * Successful

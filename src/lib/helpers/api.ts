@@ -1,10 +1,10 @@
-import { CodeClient, NetworkClient, type AssetCommonResponse } from '@mixin.dev/mixin-node-sdk';
+import { type AssetCommonResponse, CodeClient, NetworkClient } from '@mixin.dev/mixin-node-sdk';
 import type { PaymentRequestResponse } from '@mixin.dev/mixin-node-sdk';
 import type { Asset } from '../types/asset';
 import type { RegisteredUser, User } from '../types/user';
 import ExternalClient from '@mixin.dev/mixin-node-sdk/src/client/external';
 import { utils } from 'ethers';
-import { WHITELIST_ASSET_ID, ETH_ASSET_ID, EOS_ASSET_ID } from '../constants/common';
+import { EOS_ASSET_ID, ETH_ASSET_ID, WHITELIST_ASSET_ID } from '../constants/common';
 import { bigMul } from './big';
 import { fetchMvmTokens } from './mvm/api';
 import { getBalance } from './web3/common';
@@ -36,8 +36,13 @@ export const fetchWithdrawalFee = async (asset_id: string, destination: string, 
 		});
 		return asset.fee;
 	} catch (e) {
+		if (e && typeof e === 'object' && 'code' in e && e.code === 30102) {
+			// e.description = 'Invalid address format.'
+			return undefined;
+		}
+
 		if (asset_id === EOS_ASSET_ID) return '0.5';
-		return '';
+		throw e;
 	}
 };
 
@@ -138,15 +143,15 @@ export const fetchFeeOnAsset = async (
 	to: string,
 	amount: string
 ): Promise<string> => {
-	const overChargeAmount = (Number(amount) * 1.05).toString();
-	if (Number.isNaN(overChargeAmount)) return '0';
+	const overChargeAmount = Number(amount) * 1.05;
+	if (!Number.isFinite(overChargeAmount)) return '0';
 
 	const response = await fetch('https://api.4swap.org/api/orders/pre', {
 		method: 'POST',
 		body: JSON.stringify({
 			pay_asset_id: from,
 			fill_asset_id: to,
-			amount: overChargeAmount
+			amount: overChargeAmount.toString()
 		})
 	});
 	const { data } = await response.json();
@@ -157,7 +162,7 @@ export const fetchFeeOnAsset = async (
 		return payAmount.toString();
 	}
 
-	return '';
+	throw new Error('Can not fetch fee on asset');
 };
 
 export const fetchCode = async (code_id: string): Promise<PaymentRequestResponse> => {
