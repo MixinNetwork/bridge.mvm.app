@@ -92,7 +92,6 @@
 	$: if ($assetWithdrawalFeeState?.isError) {
 		showL1GasError();
 	}
-	$: console.log(assetWithdrawalFee);
 
 	let loading = false;
 	const transfer = async () => {
@@ -133,8 +132,8 @@
 				amount = '';
 				address = '';
 				memo = '';
-				close();
 			}
+			close();
 		} catch (e) {
 			console.error('transfer error', JSON.stringify(e, null, 2));
 
