@@ -118,10 +118,13 @@ export const AssetWithdrawalFee = mapTemplate(
 				const { fetchWithdrawalFee } = await import('../helpers/api');
 				let fee = await fetchWithdrawalFee(asset_id, destination, tag);
 
-				if (!fee || Number(fee) === 0 || asset_id === chain_id) return fee;
+				if (!fee) throw new Error('Failed to fetch withdrawal fee');
+				if (Number(fee) === 0 || asset_id === chain_id) return fee;
 
 				const { fetchFeeOnAsset } = await import('../helpers/api');
 				fee = await fetchFeeOnAsset(asset_id, chain_id, fee);
+				if (!fee) throw new Error('Failed to fetch withdrawal fee');
+				
 				return fee;
 			},
 			{
