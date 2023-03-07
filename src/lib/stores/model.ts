@@ -125,7 +125,8 @@ export const AssetWithdrawalFee = mapTemplate(
 				return fee;
 			},
 			{
-				trackState: true
+				trackState: true,
+				reloadable: true
 			}
 		);
 	}

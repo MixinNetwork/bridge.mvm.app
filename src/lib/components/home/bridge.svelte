@@ -92,6 +92,7 @@
 	$: if ($assetWithdrawalFeeState?.isError) {
 		showL1GasError();
 	}
+	$: console.log(assetWithdrawalFee)
 
 	let loading = false;
 	const transfer = async () => {
@@ -322,7 +323,7 @@
 						class="uppercases text-red-400"
 						on:click={async () => {
 							try {
-								await assetWithdrawalFee.load();
+								await assetWithdrawalFee?.reload?.()
 							} catch (e) {
 								showL1GasError();
 							}
