@@ -124,12 +124,11 @@
 				await mvmBalance.reload?.();
 				await tick();
 
-				showToast('success', $LL.successful());
-
 				amount = '';
 				address = '';
 				memo = '';
 			}
+			showToast('success', $LL.successful());
 			close();
 		} catch (e) {
 			console.error('transfer error', JSON.stringify(e, null, 2));
