@@ -19,6 +19,7 @@
 	import { browser } from '$app/environment';
 	import type { VirtualItem } from '@tanstack/virtual-core';
 	import { showToast } from '../../../lib/components/common/toast/toast-container.svelte';
+	import { isEqual, unionBy } from 'lodash-es';
 
 	const DEFAULT_ICON =
 		'https://images.mixin.one/yH_I5b0GiV2zDmvrXRyr3bK5xusjfy5q7FX3lw3mM2Ryx4Dfuj6Xcw8SHNRnDKm7ZVE3_LvpKlLdcLrlFQUBhds=s128';
@@ -82,7 +83,7 @@
 
 		loading = true;
 		try {
-			const lastTransaction = transactions[transactions.length - 1];
+			const lastTransaction = $transactionStore?.[$transactionStore?.length - 1];
 
 			const result = await fetchTransactions({
 				address: $user.address,
@@ -90,7 +91,7 @@
 				lastHash: lastTransaction?.hash
 			});
 			hasMore = result.length >= 30;
-			$transactionStore = [...transactions, ...result];
+			$transactionStore = [...($transactionStore || []), ...result];
 		} catch (e) {
 			showToast('common', $LL.error.tips());
 		} finally {
@@ -102,11 +103,11 @@
 
 	onMount(async () => {
 		const timer = setInterval(async () => {
-			if (!transactions.length) return;
+			if (!$transactionStore?.length) return;
 			if (!$user) return;
 
-			const startblock = transactions[0].blockNumber;
-			const firstHash = transactions[0].hash;
+			const startblock = $transactionStore[0].blockNumber;
+			const firstHash = $transactionStore[0].hash;
 
 			const txs = await fetchTransactions({
 				address: $user.address,
@@ -114,7 +115,14 @@
 				firstHash
 			});
 
-			$transactionStore = [...txs, ...transactions];
+			const newTxs = unionBy([...txs, ...($transactionStore || [])], (tx) => [
+				tx.hash,
+				tx.contract
+			]);
+
+			if (isEqual(newTxs, $transactionStore)) return;
+
+			$transactionStore = newTxs;
 		}, 1000 * 10);
 		return () => clearInterval(timer);
 	});
