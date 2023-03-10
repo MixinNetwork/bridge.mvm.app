@@ -34,10 +34,12 @@
 	import TipModal from '../base/tip-modal.svelte';
 	import { browser } from '$app/environment';
 	import { slide } from 'svelte/transition';
-	import { asyncDerived, derived } from '@square/svelte-store';
+	import { asyncDerived, derived, type Loadable } from '@square/svelte-store';
 	import type { Network } from '../../types/network';
 	import { getAssetBalance } from '$lib/helpers/web3/common';
 	import autosize from '$lib/helpers/actions/autosize';
+	import { isValidAddress } from '../../helpers/address-validator';
+	import { debounce } from 'lodash-es';
 
 	export let asset: Asset;
 	export let depositMode: boolean;
@@ -74,20 +76,38 @@
 
 	let address = '';
 
+	$: isValid = isValidAddress(address, asset.chain_id);
+
 	depositMode && (address = $user?.address || '');
+
+	let assetWithdrawalFeeLoadable: Loadable<string | undefined> | undefined;
+	$: assetWithdrawalFee = assetWithdrawalFeeLoadable ? $assetWithdrawalFeeLoadable : undefined;
+	$: assetWithdrawalFeeState = assetWithdrawalFeeLoadable?.state;
+	$: if ($assetWithdrawalFeeState?.isError) {
+		showToast('common', $LL.withdrawModal.l1GasError());
+	}
+
+	const debounceAssetWithdrawalFee = debounce<
+		(key: Parameters<typeof AssetWithdrawalFee>[0] | undefined) => void
+	>((value) => {
+		if (value) assetWithdrawalFeeLoadable = AssetWithdrawalFee(value);
+		else assetWithdrawalFeeLoadable = undefined;
+	}, 250);
 
 	let memo = '';
 
-	$: assetWithdrawalFee = AssetWithdrawalFee({
-		asset_id: asset.asset_id,
-		chain_id: asset.chain_id,
-		destination: address || undefined,
-		tag: memo
-	});
-
-	$: assetWithdrawalFeeState = assetWithdrawalFee.state;
-	$: if ($assetWithdrawalFeeState?.isError) {
-		showToast('common', $LL.withdrawModal.l1GasError());
+	$: {
+		if (isValid) {
+			debounceAssetWithdrawalFee({
+				asset_id: asset.asset_id,
+				chain_id: asset.chain_id,
+				destination: address || undefined,
+				tag: memo
+			});
+		} else {
+			debounceAssetWithdrawalFee(undefined);
+			assetWithdrawalFeeLoadable = undefined;
+		}
 	}
 
 	let loading = false;
@@ -109,7 +129,7 @@
 				await deposit($library, asset, destination[0].destination, value);
 				await updateAssets();
 			} else {
-				if (!$assetWithdrawalFee) throw new Error('No withdrawal fee');
+				if (!$assetWithdrawalFeeLoadable) throw new Error('No withdrawal fee');
 
 				await withdraw(
 					$library,
@@ -118,7 +138,7 @@
 					value,
 					address || $user.address,
 					memo,
-					$assetWithdrawalFee
+					$assetWithdrawalFeeLoadable
 				);
 				await updateAssets();
 				await mvmBalance.reload?.();
@@ -185,7 +205,7 @@
 		>
 		<div class="flex flex-row items-center">
 			<input
-				class={clsx('grow  rounded-b-lg px-4 py-6', inputClasses)}
+				class={clsx('grow rounded-b-lg px-4 py-6', inputClasses)}
 				placeholder="Amount"
 				type="number"
 				on:input={(e) => filterNumericInputEvent(e, amount)}
@@ -234,9 +254,12 @@
 			{/if}
 		</div>
 	{:else}
-		<div class="flex border-b-2 border-brand-background">
+		<div class="flex border-b-2 border-brand-background pb-6">
 			<textarea
-				class={clsx('grow resize-none break-all rounded-lg py-3 pl-4 font-semibold', inputClasses)}
+				class={clsx(
+					'h-4 grow resize-none break-all rounded-lg py-3 pl-4 font-semibold',
+					inputClasses
+				)}
 				placeholder={$LL.address()}
 				bind:value={address}
 				use:autosize
@@ -309,17 +332,19 @@
 			</div>
 
 			<div>
-				{#if $assetWithdrawalFee}
-					{$assetWithdrawalFee}
+				{#if isValid && assetWithdrawalFee}
+					{assetWithdrawalFee}
 					{asset.symbol}
-					(${format({ n: bigMul($assetWithdrawalFee, asset.price_usd), dp: 3 })})
-				{:else if $assetWithdrawalFeeState?.isError}
+					(${format({ n: bigMul(assetWithdrawalFee, asset.price_usd), dp: 3 })})
+				{:else if isValid && $assetWithdrawalFeeState?.isError}
 					<button
 						class="uppercases text-red-400"
 						on:click={() => {
-							assetWithdrawalFee?.reload?.();
+							assetWithdrawalFeeLoadable?.reload?.();
 						}}>{$LL.retry()}</button
 					>
+				{:else if isValid && ($assetWithdrawalFeeState?.isLoading || $assetWithdrawalFeeState?.isReloading)}
+					<Spinner size={16} class="stroke-brand-primary" />
 				{:else}
 					...
 				{/if}
@@ -361,7 +386,8 @@
 		!fromBalance ||
 		!amount ||
 		+amount < 0.0001 ||
-		!$assetWithdrawalFee}
+		!$assetWithdrawalFeeLoadable ||
+		!isValid}
 >
 	{#if loading}
 		<Spinner class="stroke-white stroke-2 text-center" />

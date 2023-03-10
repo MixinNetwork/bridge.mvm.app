@@ -170,6 +170,8 @@
 
 		const { swapAsset } = await import('$lib/helpers/web3/common');
 
+		console.log('swap', $swapOrder.source);
+
 		try {
 			if (!$user.contract) await registerAndSave($user.address);
 			const res = await swapAsset(
@@ -188,6 +190,8 @@
 			if (res) showToast('success', $LL.swapPage.tips.success());
 
 			swapOrder.reset();
+			inputAmount = undefined;
+			outputAmount = undefined;
 		} finally {
 			swapOrder.resume();
 			loading = false;

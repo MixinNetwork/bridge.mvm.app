@@ -27,6 +27,7 @@ export const DOGE_ASSET_ID = '6770a1e5-6086-44d5-b60f-545f9d9e8ffd';
 export const BNB_1_ASSET_ID = '17f78d7c-ed96-40ff-980c-5dc62fecbc85';
 export const BNB_2_ASSET_ID = '1949e683-6a08-49e2-b087-d6b72398588f';
 export const MATIC_ASSET_ID = 'b7938396-3f94-4e0a-9179-d3440718156f';
+export const XMR_ASSET_ID = '05c5ac01-31f9-4a69-aa8a-ab796de1d041';
 
 export const REGISTRY_PID = 'bd67087276ce3263b9333aa337e212a4';
 export const REGISTRY_ADDRESS = '0x3c84B6C98FBeB813e05a7A7813F0442883450B1F';
@@ -66,7 +67,7 @@ export const WHITELIST_ASSET = [
 	{ id: BNB_1_ASSET_ID, symbol: 'BNB', chain: 'BNB', beta: true },
 	{ id: BNB_2_ASSET_ID, symbol: 'BNB', chain: 'BNB' },
 	{ id: MATIC_ASSET_ID, symbol: 'MATIC', chain: 'MATIC' },
-	{ id: '05c5ac01-31f9-4a69-aa8a-ab796de1d041', symbol: 'XMR', chain: 'XMR' },
+	{ id: XMR_ASSET_ID, symbol: 'XMR', chain: 'XMR' },
 	{ id: '3e3152d4-6eee-36b3-9685-e8ba54db4a22', symbol: 'JPYC', chain: 'ETH' },
 	{
 		id: '9b180ab6-6abe-3dc0-a13f-04169eb34bfa',

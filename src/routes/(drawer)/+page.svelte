@@ -108,10 +108,10 @@
 			{/if}
 			{#if !searchMode || !isMd}
 				<button
-					class="flex items-center justify-center space-x-3"
+					class="flex items-center bg-transparent"
 					on:click={toggleSearchMode}
 					transition:fade|local
-					><div class="font-semibold text-black opacity-20">{$LL.searchBar.title()}</div>
+					><div class="pr-3 font-semibold text-black opacity-20">{$LL.searchBar.title()}</div>
 					<Search />
 				</button>
 			{/if}
