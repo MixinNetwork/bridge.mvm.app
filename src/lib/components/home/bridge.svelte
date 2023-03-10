@@ -213,7 +213,7 @@
 				max={fromBalance}
 			/>
 			<button
-				class="p-4 text-sm text-brand-primary"
+				class="p-4 text-sm font-semibold text-brand-primary"
 				on:click={() => {
 					amount = format({ n: fromBalance, dp: 8, mode: 1 });
 				}}>{$LL.max()}</button
