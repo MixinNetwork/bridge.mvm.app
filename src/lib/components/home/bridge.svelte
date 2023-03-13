@@ -20,7 +20,6 @@
 	import { registerAndSave, user } from '$lib/stores/user';
 	import { EOS_ASSET_ID, ETH_ASSET_ID, TRANSACTION_GAS } from '$lib/constants/common';
 	import { bigGt, bigMul, format } from '$lib/helpers/big';
-	import LogoCircle from '$lib/assets/logo/logo-circle.svg?component';
 	import Spinner from '$lib/components/common/spinner.svelte';
 	import { library } from '$lib/stores/ether';
 	import Paste from '$lib/assets/paste.svg?component';
@@ -184,17 +183,6 @@
 <div class="mx-5 rounded-lg bg-white">
 	<div class="flex items-center justify-between py-5 px-4 pb-3 text-sm font-semibold">
 		<div>{$LL.from()}</div>
-		<div class="flex items-center space-x-1">
-			{#if depositMode}
-				<div class=" h-4 w-4">
-					{@html $providerLogo}
-				</div>
-			{:else}
-				<LogoCircle height={16} width={16} />
-			{/if}
-
-			<div>{depositMode ? $providerName : 'MVM'}</div>
-		</div>
 	</div>
 	<div class=" divide-y-2 divide-brand-background child:w-full">
 		<SelectedAssetButton {asset} disabled={true}>
@@ -225,21 +213,6 @@
 <div class=" mx-5 mt-3 rounded-lg bg-white">
 	<div class="flex items-center justify-between py-5 px-4 pb-3 text-sm font-semibold">
 		<div>{$LL.to()}</div>
-		<div class="flex items-center space-x-1">
-			{#if depositMode}
-				<LogoCircle height={16} width={16} />
-				<div>MVM</div>
-			{:else}
-				<img
-					loading="lazy"
-					src={asset.chain_icon_url || asset.icon_url}
-					width={16}
-					height={16}
-					alt={asset.chain_name || asset.name}
-				/>
-				<div>{asset.chain_name || asset.name}</div>
-			{/if}
-		</div>
 	</div>
 	{#if depositMode}
 		<div

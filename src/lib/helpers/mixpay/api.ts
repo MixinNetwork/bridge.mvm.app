@@ -88,12 +88,8 @@ const ins = axios.create({
 });
 
 ins.interceptors.response.use(
-	async (res: AxiosResponse) => {
-		return res.data;
-	},
-	async (e) => {
-		return e.response.data;
-	}
+	async (res: AxiosResponse) => res.data,
+	async (e) => e
 );
 
 export const fetchMixPayPaymentAssets = async () =>

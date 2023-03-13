@@ -154,7 +154,7 @@ export const fetchFeeOnAsset = async (
 			amount: overChargeAmount.toString()
 		})
 	});
-	const { data } = await response.json();
+	const { data } = (await response.json()) || {};
 
 	if (data) {
 		const payAmount = Number(data.pay_amount);
@@ -194,7 +194,7 @@ export const checkOrder = async (
 				const res = await fetchOrderStatus(order_id, user);
 				if (
 					(source === '4Swap' && res && (res as OrderResponse).state === 'Done') ||
-					(source === 'MixPay' && res && (res as MixPayPaymentResponse).data.status === 'success')
+					(source === 'MixPay' && res && (res as MixPayPaymentResponse).data?.status === 'success')
 				) {
 					clearInterval(timer);
 					resolve(true);
