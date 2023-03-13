@@ -178,6 +178,9 @@
 	)?.destination;
 
 	$: !destination && browser && userDestinations.fetchDestination(asset.chain_id);
+
+	let addressTextArea: Element | undefined;
+	let memoTextarea: Element | undefined;
 </script>
 
 <div class="mx-5 rounded-lg bg-white">
@@ -230,18 +233,22 @@
 		<div class="flex border-b-2 border-brand-background pb-6">
 			<textarea
 				class={clsx(
-					'h-4 grow resize-none break-all rounded-lg py-3 pl-4 font-semibold',
+					'h-12 grow resize-none break-all rounded-lg py-3 pl-4 font-semibold',
 					inputClasses
 				)}
 				placeholder={$LL.address()}
 				bind:value={address}
 				use:autosize
+				bind:this={addressTextArea}
 			/>
 			{#if isEthChain}
 				<button
 					class="p-3"
-					on:click={() => {
+					on:click={async () => {
 						address = $user?.address || '';
+						await tick();
+						console.log('addressTextArea', autosize.update);
+						addressTextArea && autosize.update(addressTextArea);
 					}}
 				>
 					<div class="flex h-5 w-5 items-center justify-center">
@@ -267,12 +274,15 @@
 					)}
 					placeholder="Memo/Tag (Optional)"
 					bind:value={memo}
+					bind:this={memoTextarea}
 					use:autosize
 				/>
 				<button
 					class="p-3"
 					on:click={async () => {
 						memo = await navigator.clipboard.readText();
+						await tick();
+						memoTextarea && autosize.update(memoTextarea);
 					}}
 				>
 					<Paste />
