@@ -368,7 +368,6 @@
 		(!isEthChain && !address) ||
 		!fromBalance ||
 		!amount ||
-		+amount < 0.0001 ||
 		!$assetWithdrawalFeeLoadable ||
 		!isValid}
 >
