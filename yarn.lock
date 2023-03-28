@@ -798,17 +798,39 @@
   dependencies:
     tslib "^2.1.0"
 
-"@hapi/hoek@^9.0.0":
-  version "9.3.0"
-  resolved "https://registry.yarnpkg.com/@hapi/hoek/-/hoek-9.3.0.tgz#8368869dcb735be2e7f5cb7647de78e167a251fb"
-  integrity sha512-/c6rf4UJlmHlC9b5BaNvzAcFv7HZ2QHaV0D4/HNlBdvFnvQq8RI4kYdhyPCl7Xj+oWvTWQ8ujhqS53LIgAe6KQ==
-
-"@hapi/topo@^5.0.0":
-  version "5.1.0"
-  resolved "https://registry.yarnpkg.com/@hapi/topo/-/topo-5.1.0.tgz#dc448e332c6c6e37a4dc02fd84ba8d44b9afb012"
-  integrity sha512-foQZKJig7Ob0BMAYBfcJk8d77QtOe7Wo4ox7ff1lQYoNNAb6jwcY1ncdoy2e9wQZzvNy7ODZCYJkK8kzmcAnAg==
+"@hapi/address@^5.1.0":
+  version "5.1.1"
+  resolved "https://registry.yarnpkg.com/@hapi/address/-/address-5.1.1.tgz#e9925fc1b65f5cc3fbea821f2b980e4652e84cb6"
+  integrity sha512-A+po2d/dVoY7cYajycYI43ZbYMXukuopIsqCjh5QzsBCipDtdofHntljDlpccMjIfTy6UOkg+5KPriwYch2bXA==
   dependencies:
-    "@hapi/hoek" "^9.0.0"
+    "@hapi/hoek" "^11.0.2"
+
+"@hapi/formula@^3.0.2":
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/@hapi/formula/-/formula-3.0.2.tgz#81b538060ee079481c906f599906d163c4badeaf"
+  integrity sha512-hY5YPNXzw1He7s0iqkRQi+uMGh383CGdyyIGYtB+W5N3KHPXoqychklvHhKCC9M3Xtv0OCs/IHw+r4dcHtBYWw==
+
+"@hapi/hoek@^11.0.2":
+  version "11.0.2"
+  resolved "https://registry.yarnpkg.com/@hapi/hoek/-/hoek-11.0.2.tgz#cb3ea547daac7de5c9cf1d960c3f35c34f065427"
+  integrity sha512-aKmlCO57XFZ26wso4rJsW4oTUnrgTFw2jh3io7CAtO9w4UltBNwRXvXIVzzyfkaaLRo3nluP/19msA8vDUUuKw==
+
+"@hapi/pinpoint@^2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@hapi/pinpoint/-/pinpoint-2.0.1.tgz#32077e715655fc00ab8df74b6b416114287d6513"
+  integrity sha512-EKQmr16tM8s16vTT3cA5L0kZZcTMU5DUOZTuvpnY738m+jyP3JIUj+Mm1xc1rsLkGBQ/gVnfKYPwOmPg1tUR4Q==
+
+"@hapi/tlds@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@hapi/tlds/-/tlds-1.0.1.tgz#4bf9336918a3a254317eff246898f70600afb666"
+  integrity sha512-OXs5OliWsLTmvzQKZtb3KhfEz30WuuaizwAn95GLfeK+JpGnBxR55lALv3kA4T1RRb3wlrNjnboBg6ur1Czvig==
+
+"@hapi/topo@^6.0.1":
+  version "6.0.2"
+  resolved "https://registry.yarnpkg.com/@hapi/topo/-/topo-6.0.2.tgz#f219c1c60da8430228af4c1f2e40c32a0d84bbb4"
+  integrity sha512-KR3rD5inZbGMrHmgPxsJ9dbi6zEK+C3ZwUwTa+eMwWLz7oijWUTWD2pMSNNYJAU6Qq+65NkxXjqHr/7LM2Xkqg==
+  dependencies:
+    "@hapi/hoek" "^11.0.2"
 
 "@humanwhocodes/config-array@^0.11.8":
   version "0.11.8"
@@ -934,23 +956,6 @@
     "@types/estree" "^1.0.0"
     estree-walker "^2.0.2"
     picomatch "^2.3.1"
-
-"@sideway/address@^4.1.3":
-  version "4.1.4"
-  resolved "https://registry.yarnpkg.com/@sideway/address/-/address-4.1.4.tgz#03dccebc6ea47fdc226f7d3d1ad512955d4783f0"
-  integrity sha512-7vwq+rOHVWjyXxVlR76Agnvhy8I9rpzjosTESvmhNeXOXdZZB15Fl+TI9x1SiHZH5Jv2wTGduSxFDIaq0m3DUw==
-  dependencies:
-    "@hapi/hoek" "^9.0.0"
-
-"@sideway/formula@^3.0.0":
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/@sideway/formula/-/formula-3.0.0.tgz#fe158aee32e6bd5de85044be615bc08478a0a13c"
-  integrity sha512-vHe7wZ4NOXVfkoRb8T5otiENVlT7a3IAiw7H5M2+GO+9CDgcVUUsX1zalAztCmwyOr2RUTGJdgB+ZvSVqmdHmg==
-
-"@sideway/pinpoint@^2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@sideway/pinpoint/-/pinpoint-2.0.0.tgz#cff8ffadc372ad29fd3f78277aeb29e632cc70df"
-  integrity sha512-RNiOoTPkptFtSVzQevY/yWtZwf/RxyVnPy/OcA9HBM3MlGDnBEYL5B41H0MTn0Uec8Hi+2qUtTfG2WWZBmMejQ==
 
 "@square/svelte-store@^1.0.14":
   version "1.0.14"
@@ -1346,14 +1351,14 @@
   dependencies:
     "@walletconnect/window-getters" "^1.0.0"
 
-"@web3-onboard/common@^2.2.3":
-  version "2.2.3"
-  resolved "https://registry.yarnpkg.com/@web3-onboard/common/-/common-2.2.3.tgz#fc0841186d84cf017f4cf0368dcd349e6ed8dc8b"
-  integrity sha512-ZI0XuCpxtuL9XGgeWglXR6rhgLP261EMEstjonxy8ptuOKLlTJcgvL7wSx2MjNDO3i/qmb/PGQpInvxYx5klSA==
+"@web3-onboard/common@^2.2.3", "@web3-onboard/common@^2.3.0":
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/@web3-onboard/common/-/common-2.3.0.tgz#22a2314e9e6d58494629c4e6ca35d9ba37f3dac3"
+  integrity sha512-wFVJ1Sw2dRSRbAwJLmHs9eloRBTfC2N7V2IdKEf8dN1oRhsVgkSYeMYR3Vv27YzjXmzyZUdlEux7Fy2JJqbQCg==
   dependencies:
     bignumber.js "^9.1.0"
     ethers "5.5.4"
-    joi "^17.6.1"
+    joi "17.8.1"
 
 "@web3-onboard/core@2.14.1":
   version "2.14.1"
@@ -1375,13 +1380,13 @@
     svelte "^3.49.0"
     svelte-i18n "^3.3.13"
 
-"@web3-onboard/injected-wallets@^2.7.0":
-  version "2.7.0"
-  resolved "https://registry.yarnpkg.com/@web3-onboard/injected-wallets/-/injected-wallets-2.7.0.tgz#31725e026b52d55e49ebb2d2bed6d77c1090a4cc"
-  integrity sha512-Prz9Ts38NnptpPOvBzzk0KyIDDqZ5x18U/CSLE9yqvbovQxlHteBGqWduJKmV4R5fvOHcggpZRD+EaExkpmFlg==
+"@web3-onboard/injected-wallets@^2.8.3":
+  version "2.8.3"
+  resolved "https://registry.yarnpkg.com/@web3-onboard/injected-wallets/-/injected-wallets-2.8.3.tgz#6614fcebc1c128ccbfb4c4b6cee96ac654fbb402"
+  integrity sha512-0pi6b4TxKAjJ9edwAF56nl8Bz16c3FvVw2sElBs/lx8+yZIzoc2XMjPlOFFFOTkR8mWNg5vKzDqKN6Xu8lxWTQ==
   dependencies:
-    "@web3-onboard/common" "^2.2.3"
-    joi "^17.6.1"
+    "@web3-onboard/common" "^2.3.0"
+    joi "17.8.1"
     lodash.uniqby "^4.7.0"
 
 "@web3-onboard/walletconnect@^2.2.2":
@@ -2862,16 +2867,17 @@ isexe@^2.0.0:
   resolved "https://registry.yarnpkg.com/isexe/-/isexe-2.0.0.tgz#e8fbf374dc556ff8947a10dcb0572d633f2cfa10"
   integrity sha512-RHxMLp9lnKHGHRng9QFhRCMbYAcVpn69smSGcq3f36xjgVVWThj4qqLbTLlq7Ssj8B+fIQ1EuCEGI2lKsyQeIw==
 
-joi@^17.6.1:
-  version "17.7.0"
-  resolved "https://registry.yarnpkg.com/joi/-/joi-17.7.0.tgz#591a33b1fe1aca2bc27f290bcad9b9c1c570a6b3"
-  integrity sha512-1/ugc8djfn93rTE3WRKdCzGGt/EtiYKxITMO4Wiv6q5JL1gl9ePt4kBsl1S499nbosspfctIQTpYIhSmHA3WAg==
+joi@17.8.1, joi@^17.6.1:
+  version "17.8.1"
+  resolved "https://registry.yarnpkg.com/joi/-/joi-17.8.1.tgz#82f08b9b7b16e770537914155e78f3fe185b9d18"
+  integrity sha512-Zoafe6E2kQ+hkkJQSBnOxA8beb2LF33keCxZP3vSy7qTHj9/2GAEQ9KLwfe+PR35WvspwNz0jWajDIHLnCKfpg==
   dependencies:
-    "@hapi/hoek" "^9.0.0"
-    "@hapi/topo" "^5.0.0"
-    "@sideway/address" "^4.1.3"
-    "@sideway/formula" "^3.0.0"
-    "@sideway/pinpoint" "^2.0.0"
+    "@hapi/address" "^5.1.0"
+    "@hapi/formula" "^3.0.2"
+    "@hapi/hoek" "^11.0.2"
+    "@hapi/pinpoint" "^2.0.1"
+    "@hapi/tlds" "^1.0.1"
+    "@hapi/topo" "^6.0.1"
 
 js-cookie@^3.0.1:
   version "3.0.1"
