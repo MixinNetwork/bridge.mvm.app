@@ -20,7 +20,7 @@
 		infer T extends Record<string, any>
 	>
 		? T
-		: Record<string, any>;
+		: never;
 
 	type $$Props = BaseProps & {
 		this: Component;
