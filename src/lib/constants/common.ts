@@ -102,11 +102,6 @@ export const WHITELIST_ASSET = [
 		chain: 'ETH'
 	},
 	{
-		id: '9ed81392-757f-3d57-8304-5fd6f81ff357',
-		symbol: 'TRX',
-		chain: 'ETH'
-	},
-	{
 		id: '8549b4ad-917c-3461-a646-481adc5d7f7f',
 		symbol: 'DAI',
 		chain: 'ETH'

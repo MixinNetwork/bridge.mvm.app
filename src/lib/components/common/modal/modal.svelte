@@ -15,13 +15,11 @@
 	import Overlay from './overlay.svelte';
 	import { omit } from 'lodash-es';
 
-	type Component = $$Generic<typeof SvelteComponentTyped<Record<string, any>>>;
+	type Component = $$Generic<typeof SvelteComponentTyped<any>>;
 	type ComponentProps = Component extends typeof SvelteComponentTyped<
 		infer T extends Record<string, any>
 	>
-		? T extends Record<string, never>
-			? Record<string, any>
-			: T
+		? T
 		: Record<string, any>;
 
 	type $$Props = BaseProps & {

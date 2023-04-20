@@ -40,7 +40,7 @@
 	let withdrawAsset: Asset | undefined = undefined;
 
 	let keyword = '';
-	$: filtedAssets = searchAssets(keyword, $assets);
+	$: filterAssets = searchAssets(keyword, $assets);
 
 	let innerWidth = 0;
 
@@ -118,7 +118,7 @@
 		</div>
 	</div>
 
-	{#each filtedAssets ?? [] as asset (asset.asset_id)}
+	{#each filterAssets ?? [] as asset (asset.asset_id)}
 		<AssetItem
 			{asset}
 			onClick={(asset) => (assetForModal = asset)}
@@ -127,7 +127,7 @@
 		/>
 	{/each}
 
-	{#if !filtedAssets.length}
+	{#if !filterAssets.length}
 		<Empty />
 	{/if}
 </div>
