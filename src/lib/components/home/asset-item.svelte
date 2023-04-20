@@ -22,6 +22,7 @@
 >
 	<div class="flex flex-1 items-center justify-between space-x-3">
 		<AssetIcon
+			class="shrink-0"
 			assetIconUrl={asset.icon_url}
 			assetName={asset.name}
 			chainIconUrl={asset.chain_icon_url}
