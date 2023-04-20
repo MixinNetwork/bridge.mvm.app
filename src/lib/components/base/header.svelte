@@ -32,7 +32,7 @@
 	use:scrollableParent
 	on:parentScroll={updateY}
 >
-	<label for="drawer-toggle" class="md:hidden">
+	<label for="drawer-toggle" class="expand-4 cursor-pointer md:hidden">
 		<svelte:component this={Hamburger} class="stroke-black" />
 	</label>
 	<slot />
