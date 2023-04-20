@@ -106,7 +106,7 @@
 		}
 		& ~ .drawer-side {
 			& > .drawer-overlay {
-				@apply cursor-pointer bg-black transition-all duration-300 ease-in-out;
+				@apply !cursor-default bg-black transition-all duration-300 ease-in-out;
 			}
 			& > .drawer-overlay + * {
 				@apply transition-all duration-300 ease-in-out;
@@ -118,7 +118,7 @@
 			}
 			& ~ .drawer-side {
 				& > .drawer-overlay {
-					opacity: 0.999999; /* 1 causes a bug on chrome 🤷‍♂️ */
+					opacity: 0.999999;
 					@apply bg-opacity-10;
 				}
 			}
