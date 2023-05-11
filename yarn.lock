@@ -942,10 +942,10 @@
   dependencies:
     "@hapi/hoek" "^9.0.0"
 
-"@sideway/formula@^3.0.0":
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/@sideway/formula/-/formula-3.0.0.tgz#fe158aee32e6bd5de85044be615bc08478a0a13c"
-  integrity sha512-vHe7wZ4NOXVfkoRb8T5otiENVlT7a3IAiw7H5M2+GO+9CDgcVUUsX1zalAztCmwyOr2RUTGJdgB+ZvSVqmdHmg==
+"@sideway/formula@^3.0.1":
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/@sideway/formula/-/formula-3.0.1.tgz#80fcbcbaf7ce031e0ef2dd29b1bfc7c3f583611f"
+  integrity sha512-/poHZJJVjx3L+zVD6g9KgHfYnb443oi7wLu/XKojDviHy6HOEOA6z1Trk5aR1dGcmPenJEgb2sK2I80LeS3MIg==
 
 "@sideway/pinpoint@^2.0.0":
   version "2.0.0"
@@ -1346,14 +1346,14 @@
   dependencies:
     "@walletconnect/window-getters" "^1.0.0"
 
-"@web3-onboard/common@^2.2.3":
-  version "2.2.3"
-  resolved "https://registry.yarnpkg.com/@web3-onboard/common/-/common-2.2.3.tgz#fc0841186d84cf017f4cf0368dcd349e6ed8dc8b"
-  integrity sha512-ZI0XuCpxtuL9XGgeWglXR6rhgLP261EMEstjonxy8ptuOKLlTJcgvL7wSx2MjNDO3i/qmb/PGQpInvxYx5klSA==
+"@web3-onboard/common@^2.2.3", "@web3-onboard/common@^2.3.2":
+  version "2.3.2"
+  resolved "https://registry.yarnpkg.com/@web3-onboard/common/-/common-2.3.2.tgz#bf2868e3a093a20a1390eea596e82922c2af8cd8"
+  integrity sha512-BmMc7MhqrpWD3RxJ2IWppF7AKRRFdaUrcIUvUa3/MNV6IrwFoHcg9eTsFPlF0cUqJip+oQz0XGCqdlVgcSLAcQ==
   dependencies:
     bignumber.js "^9.1.0"
     ethers "5.5.4"
-    joi "^17.6.1"
+    joi "17.9.1"
 
 "@web3-onboard/core@2.14.1":
   version "2.14.1"
@@ -1375,13 +1375,13 @@
     svelte "^3.49.0"
     svelte-i18n "^3.3.13"
 
-"@web3-onboard/injected-wallets@^2.7.0":
-  version "2.7.0"
-  resolved "https://registry.yarnpkg.com/@web3-onboard/injected-wallets/-/injected-wallets-2.7.0.tgz#31725e026b52d55e49ebb2d2bed6d77c1090a4cc"
-  integrity sha512-Prz9Ts38NnptpPOvBzzk0KyIDDqZ5x18U/CSLE9yqvbovQxlHteBGqWduJKmV4R5fvOHcggpZRD+EaExkpmFlg==
+"@web3-onboard/injected-wallets@^2.8.6":
+  version "2.8.6"
+  resolved "https://registry.yarnpkg.com/@web3-onboard/injected-wallets/-/injected-wallets-2.8.6.tgz#946843a8595752b6bd80ee04cc7030c1717ba180"
+  integrity sha512-mdvhU7Zv3pD69oopjbmrT0yVzKboEGUQcE372HGT63xA7w0m0p9rDHjlSQuy4DyNop7Vx0k1cKrnvjFE7dyqZg==
   dependencies:
-    "@web3-onboard/common" "^2.2.3"
-    joi "^17.6.1"
+    "@web3-onboard/common" "^2.3.2"
+    joi "17.9.1"
     lodash.uniqby "^4.7.0"
 
 "@web3-onboard/walletconnect@^2.2.2":
@@ -2862,15 +2862,15 @@ isexe@^2.0.0:
   resolved "https://registry.yarnpkg.com/isexe/-/isexe-2.0.0.tgz#e8fbf374dc556ff8947a10dcb0572d633f2cfa10"
   integrity sha512-RHxMLp9lnKHGHRng9QFhRCMbYAcVpn69smSGcq3f36xjgVVWThj4qqLbTLlq7Ssj8B+fIQ1EuCEGI2lKsyQeIw==
 
-joi@^17.6.1:
-  version "17.7.0"
-  resolved "https://registry.yarnpkg.com/joi/-/joi-17.7.0.tgz#591a33b1fe1aca2bc27f290bcad9b9c1c570a6b3"
-  integrity sha512-1/ugc8djfn93rTE3WRKdCzGGt/EtiYKxITMO4Wiv6q5JL1gl9ePt4kBsl1S499nbosspfctIQTpYIhSmHA3WAg==
+joi@17.9.1, joi@^17.6.1:
+  version "17.9.1"
+  resolved "https://registry.yarnpkg.com/joi/-/joi-17.9.1.tgz#74899b9fa3646904afa984a11df648eca66c9018"
+  integrity sha512-FariIi9j6QODKATGBrEX7HZcja8Bsh3rfdGYy/Sb65sGlZWK/QWesU1ghk7aJWDj95knjXlQfSmzFSPPkLVsfw==
   dependencies:
     "@hapi/hoek" "^9.0.0"
     "@hapi/topo" "^5.0.0"
     "@sideway/address" "^4.1.3"
-    "@sideway/formula" "^3.0.0"
+    "@sideway/formula" "^3.0.1"
     "@sideway/pinpoint" "^2.0.0"
 
 js-cookie@^3.0.1:
