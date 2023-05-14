@@ -15,7 +15,6 @@ const cryptoRegExps: {
 	[key: string]: RegExp | undefined;
 } = {
 	[ETH_ASSET_ID]: /^0x[a-fA-F0-9]{40}$/,
-	[BTC_ASSET_ID]: /^(1|[13]|bc1)[a-zA-HJ-NP-Z0-9]{25,39}$/,
 	[MOB_ASSET_ID]: /^[1-9A-HJ-NP-Za-km-z]+$/,
 	[EOS_ASSET_ID]: /^[.1-5a-z]{1,12}$/,
 	[DOGE_ASSET_ID]: /^D{1}[5-9A-HJ-NP-U]{1}[1-9A-HJ-NP-Za-km-z]{32}$/,

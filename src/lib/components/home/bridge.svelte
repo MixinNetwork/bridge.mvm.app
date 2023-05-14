@@ -199,6 +199,7 @@
 				class={clsx('grow rounded-b-lg px-4 py-6', inputClasses)}
 				placeholder="Amount"
 				type="number"
+				spellcheck="false"
 				on:input={(e) => filterNumericInputEvent(e, amount)}
 				bind:value={amount}
 				max={fromBalance}
