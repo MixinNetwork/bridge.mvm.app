@@ -19,7 +19,7 @@
 	import { AssetWithdrawalFee, updateAssets, assets, userDestinations } from '$lib/stores/model';
 	import { registerAndSave, user } from '$lib/stores/user';
 	import { EOS_ASSET_ID, ETH_ASSET_ID, TRANSACTION_GAS } from '$lib/constants/common';
-	import { bigGt, bigMul, format } from '$lib/helpers/big';
+	import { bigAdd, bigGt, bigMul, format } from '$lib/helpers/big';
 	import Spinner from '$lib/components/common/spinner.svelte';
 	import { library } from '$lib/stores/ether';
 	import Paste from '$lib/assets/paste.svg?component';
@@ -37,7 +37,6 @@
 	import type { Network } from '../../types/network';
 	import { getAssetBalance } from '$lib/helpers/web3/common';
 	import autosize from '$lib/helpers/actions/autosize';
-	import { isValidAddress } from '../../helpers/address-validator';
 	import { debounce } from 'lodash-es';
 
 	export let asset: Asset;
@@ -75,12 +74,9 @@
 
 	let address = '';
 
-	$: isValid = isValidAddress(address, asset.chain_id);
-
 	depositMode && (address = $user?.address || '');
 
 	let assetWithdrawalFeeLoadable: Loadable<string | undefined> | undefined;
-	$: assetWithdrawalFee = assetWithdrawalFeeLoadable ? $assetWithdrawalFeeLoadable : undefined;
 	$: assetWithdrawalFeeState = assetWithdrawalFeeLoadable?.state;
 	$: if ($assetWithdrawalFeeState?.isError) {
 		showToast('common', $LL.withdrawModal.l1GasError());
@@ -95,19 +91,27 @@
 
 	let memo = '';
 
-	$: {
-		if (isValid) {
-			debounceAssetWithdrawalFee({
-				asset_id: asset.asset_id,
-				chain_id: asset.chain_id,
-				destination: address || undefined,
-				tag: memo
-			});
-		} else {
-			debounceAssetWithdrawalFee(undefined);
-			assetWithdrawalFeeLoadable = undefined;
-		}
-	}
+	$: debounceAssetWithdrawalFee({
+		asset_id: asset.asset_id,
+		chain_id: asset.chain_id,
+		destination: address || undefined,
+		tag: memo
+	});
+
+	$: destination = getDepositEntry(
+		asset.chain_id,
+		$userDestinations.find(({ asset_id }) => asset_id === asset.chain_id)?.deposit_entries
+	)?.destination;
+
+	$: !destination && browser && userDestinations.fetchDestination(asset.chain_id);
+
+	$: submitDisabled =
+		!destination ||
+		(!isEthChain && !address) ||
+		!fromBalance ||
+		!amount ||
+		!$assetWithdrawalFeeLoadable ||
+		bigGt(bigAdd(amount, $assetWithdrawalFeeLoadable), fromBalance);
 
 	let loading = false;
 	const transfer = async () => {
@@ -171,13 +175,6 @@
 
 	let l1GasModalOpened = false;
 	let l2GasModalOpened = false;
-
-	$: destination = getDepositEntry(
-		asset.chain_id,
-		$userDestinations.find(({ asset_id }) => asset_id === asset.chain_id)?.deposit_entries
-	)?.destination;
-
-	$: !destination && browser && userDestinations.fetchDestination(asset.chain_id);
 
 	let addressTextArea: Element | undefined;
 	let memoTextarea: Element | undefined;
@@ -316,18 +313,18 @@
 			</div>
 
 			<div>
-				{#if isValid && assetWithdrawalFee}
-					{assetWithdrawalFee}
+				{#if $assetWithdrawalFeeLoadable}
+					{$assetWithdrawalFeeLoadable}
 					{asset.symbol}
-					(${format({ n: bigMul(assetWithdrawalFee, asset.price_usd), dp: 3 })})
-				{:else if isValid && $assetWithdrawalFeeState?.isError}
+					(${format({ n: bigMul($assetWithdrawalFeeLoadable, asset.price_usd), dp: 3 })})
+				{:else if $assetWithdrawalFeeState?.isError}
 					<button
 						class="uppercases text-red-400"
 						on:click={() => {
 							assetWithdrawalFeeLoadable?.reload?.();
 						}}>{$LL.retry()}</button
 					>
-				{:else if isValid && ($assetWithdrawalFeeState?.isLoading || $assetWithdrawalFeeState?.isReloading)}
+				{:else if $assetWithdrawalFeeState?.isLoading || $assetWithdrawalFeeState?.isReloading}
 					<Spinner size={16} class="stroke-brand-primary" />
 				{:else}
 					...
@@ -365,12 +362,7 @@
 <button
 	class="mt-16 mb-6 flex min-w-[120px] justify-center self-center rounded-full bg-brand-primary px-6 py-4 text-white"
 	on:click={transfer}
-	disabled={!destination ||
-		(!isEthChain && !address) ||
-		!fromBalance ||
-		!amount ||
-		!$assetWithdrawalFeeLoadable ||
-		!isValid}
+	disabled={submitDisabled}
 >
 	{#if loading}
 		<Spinner class="stroke-white stroke-2 text-center" />
