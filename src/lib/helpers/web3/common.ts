@@ -7,7 +7,8 @@ import {
 	MVM_CHAIN_HEX_ID,
 	MVM_RPC_URL,
 	networkParams,
-	RPC_URL
+	RPC_URL,
+	TRANSACTION_GAS_LIMIT
 } from '../../constants/common';
 import type { Network } from '../../types/network';
 import type { RegisteredUser } from '$lib/types/user';
@@ -147,7 +148,7 @@ export const withdraw = async (
 		const bridge = new ethers.Contract(BRIDGE_ADDRESS, BRIDGE_ABI, signer);
 		await bridge.release(userContract, extra, {
 			gasPrice: await mvmProvider.getGasPrice(),
-			gasLimit: 350000,
+			gasLimit: TRANSACTION_GAS_LIMIT,
 			value: totalAmount
 		});
 		return;
@@ -165,7 +166,7 @@ export const withdraw = async (
 
 		await tokenContract.transferWithExtra(userContract, value, extra, {
 			gasPrice: await mvmProvider.getGasPrice(),
-			gasLimit: 350000
+			gasLimit: TRANSACTION_GAS_LIMIT
 		});
 		return;
 	}
@@ -198,7 +199,7 @@ export const swapAsset = async (
 
 		await bridge.release(user.contract, info.extra, {
 			gasPrice: await mvmProvider.getGasPrice(),
-			gasLimit: 500000,
+			gasLimit: TRANSACTION_GAS_LIMIT,
 			value: assetAmount
 		});
 
@@ -214,7 +215,7 @@ export const swapAsset = async (
 
 		await tokenContract.transferWithExtra(user.contract, value, info.extra, {
 			gasPrice: await mvmProvider.getGasPrice(),
-			gasLimit: 450000
+			gasLimit: TRANSACTION_GAS_LIMIT
 		});
 
 		const follow_id = await info.getFollowId(Date.now());

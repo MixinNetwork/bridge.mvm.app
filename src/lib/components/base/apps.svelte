@@ -57,7 +57,7 @@
 
 <div class={clsx('group relative z-50 w-fit opacity-100 transition', clazz)}>
 	<button
-		class="flex select-none items-center justify-center space-x-3 md:rounded-full md:bg-white md:py-2 md:px-4 md:active:pointer-events-none"
+		class="expand-4 flex select-none items-center justify-center space-x-3 md:rounded-full md:bg-white md:py-2 md:px-4 md:active:pointer-events-none"
 		on:click={() => (opened = true)}
 	>
 		<Apps />

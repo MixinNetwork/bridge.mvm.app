@@ -1,11 +1,11 @@
-import { CodeClient, NetworkClient, type AssetCommonResponse } from '@mixin.dev/mixin-node-sdk';
+import { type AssetCommonResponse, CodeClient, NetworkClient } from '@mixin.dev/mixin-node-sdk';
 import type { PaymentRequestResponse } from '@mixin.dev/mixin-node-sdk';
 import { get } from '@square/svelte-store';
 import type { Asset } from '../types/asset';
 import type { RegisteredUser, User } from '../types/user';
 import ExternalClient from '@mixin.dev/mixin-node-sdk/src/client/external';
 import { utils } from 'ethers';
-import { WHITELIST_ASSET_ID, ETH_ASSET_ID, EOS_ASSET_ID } from '../constants/common';
+import { EOS_ASSET_ID, ETH_ASSET_ID, WHITELIST_ASSET_ID } from '../constants/common';
 import { bigMul } from './big';
 import { fetchMvmTokens } from './mvm/api';
 import { getBalance } from './web3/common';
@@ -41,8 +41,13 @@ export const fetchWithdrawalFee = async (asset_id: string, destination: string, 
 		});
 		return asset.fee;
 	} catch (e) {
+		if (e && typeof e === 'object' && 'code' in e && e.code === 30102) {
+			// e.description = 'Invalid address format.'
+			return undefined;
+		}
+
 		if (asset_id === EOS_ASSET_ID) return '0.5';
-		return '';
+		throw e;
 	}
 };
 
@@ -143,19 +148,19 @@ export const fetchFeeOnAsset = async (
 	to: string,
 	amount: string
 ): Promise<string> => {
-	const overChargeAmount = (Number(amount) * 1.05).toString();
-	if (Number.isNaN(overChargeAmount)) return '0';
+	const overChargeAmount = Number(amount) * 1.05;
+	if (!Number.isFinite(overChargeAmount)) return '0';
 
 	const $pairs = get(pairs);
 	const fourSwapPreOrder = get4SwapSwapInfo($pairs, DEFAULT_SLIPPAGE, {
 		inputAsset: from,
 		outputAsset: to,
-		outputAmount: overChargeAmount
+		outputAmount: overChargeAmount.toString()
 	});
 	const mixPayPreOrder = await fetchMixPayPreOrder({
 		inputAsset: from,
 		outputAsset: to,
-		outputAmount: overChargeAmount
+		outputAmount: overChargeAmount.toString()
 	});
 
 	let feeOnAsset: number;
@@ -165,7 +170,7 @@ export const fetchFeeOnAsset = async (
 		else feeOnAsset = mixPayPreOrder.order.funds;
 	} else if (mixPayPreOrder.order) feeOnAsset = mixPayPreOrder.order.funds;
 	else if (fourSwapPreOrder.order) feeOnAsset = fourSwapPreOrder.order.funds;
-	else return '';
+	else throw new Error('Can not fetch fee on asset');
 
 	if (feeOnAsset > 0.0001) return (feeOnAsset + 0.0001).toFixed(4);
 	return feeOnAsset.toString();
@@ -200,7 +205,7 @@ export const checkOrder = async (
 				const res = await fetchOrderStatus(order_id, user);
 				if (
 					(source === '4Swap' && res && (res as OrderResponse).state === 'Done') ||
-					(source === 'MixPay' && res && (res as MixPayPaymentResponse).data.status === 'success')
+					(source === 'MixPay' && res && (res as MixPayPaymentResponse).data?.status === 'success')
 				) {
 					clearInterval(timer);
 					resolve(true);

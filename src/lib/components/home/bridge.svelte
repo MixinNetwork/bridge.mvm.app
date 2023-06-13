@@ -19,8 +19,7 @@
 	import { AssetWithdrawalFee, updateAssets, assets, userDestinations } from '$lib/stores/model';
 	import { registerAndSave, user } from '$lib/stores/user';
 	import { EOS_ASSET_ID, ETH_ASSET_ID, TRANSACTION_GAS } from '$lib/constants/common';
-	import { bigGte, bigMul, format } from '$lib/helpers/big';
-	import LogoCircle from '$lib/assets/logo/logo-circle.svg?component';
+	import { bigAdd, bigGt, bigMul, format } from '$lib/helpers/big';
 	import Spinner from '$lib/components/common/spinner.svelte';
 	import { library } from '$lib/stores/ether';
 	import Paste from '$lib/assets/paste.svg?component';
@@ -28,19 +27,23 @@
 	import { showToast } from '../common/toast/toast-container.svelte';
 	import { tick } from 'svelte';
 	import LL from '$i18n/i18n-svelte';
-	import { getAsset } from '../../helpers/utils';
+	import { getAsset, getDepositEntry, filterNumericInputEvent } from '../../helpers/utils';
 	import Info from '$lib/assets/info.svg?component';
 	import Modal from '../common/modal/modal.svelte';
 	import TipModal from '../base/tip-modal.svelte';
 	import { browser } from '$app/environment';
 	import { slide } from 'svelte/transition';
-	import { asyncDerived, derived } from '@square/svelte-store';
+	import { asyncDerived, derived, type Loadable } from '@square/svelte-store';
 	import type { Network } from '../../types/network';
 	import { getAssetBalance } from '$lib/helpers/web3/common';
 	import autosize from '$lib/helpers/actions/autosize';
+	import { debounce } from 'lodash-es';
 
 	export let asset: Asset;
 	export let depositMode: boolean;
+	export let close = () => {
+		//
+	};
 
 	$: ethAsset = getAsset(ETH_ASSET_ID, $assets);
 
@@ -58,29 +61,57 @@
 				dp: 8,
 				format: { groupSeparator: '' }
 		  })
-		: 0;
+		: '0';
 	$: roundedMvmBalance = $mvmBalance
 		? format({ n: $mvmBalance, dp: 8, format: { groupSeparator: '' } })
 		: format({ n: asset.balance, dp: 8, format: { groupSeparator: '' } });
 
 	$: fromBalance = depositMode ? roundedMainnetBalance : roundedMvmBalance;
 
-	let amount: number | undefined | string;
+	let amount = '';
 
-	$: if (fromBalance && amount && bigGte(amount, fromBalance)) amount = fromBalance;
+	$: if (fromBalance && amount && bigGt(amount, fromBalance)) amount = fromBalance;
 
 	let address = '';
 
 	depositMode && (address = $user?.address || '');
 
+	let assetWithdrawalFeeLoadable: Loadable<string | undefined> | undefined;
+	$: assetWithdrawalFeeState = assetWithdrawalFeeLoadable?.state;
+	$: if ($assetWithdrawalFeeState?.isError) {
+		showToast('common', $LL.withdrawModal.l1GasError());
+	}
+
+	const debounceAssetWithdrawalFee = debounce<
+		(key: Parameters<typeof AssetWithdrawalFee>[0] | undefined) => void
+	>((value) => {
+		if (value) assetWithdrawalFeeLoadable = AssetWithdrawalFee(value);
+		else assetWithdrawalFeeLoadable = undefined;
+	}, 250);
+
 	let memo = '';
 
-	$: assetWithdrawalFee = AssetWithdrawalFee({
+	$: debounceAssetWithdrawalFee({
 		asset_id: asset.asset_id,
 		chain_id: asset.chain_id,
-		destination: address || (isEthChain && $user?.address) || undefined,
+		destination: address || undefined,
 		tag: memo
 	});
+
+	$: destination = getDepositEntry(
+		asset.chain_id,
+		$userDestinations.find(({ asset_id }) => asset_id === asset.chain_id)?.deposit_entries
+	)?.destination;
+
+	$: !destination && browser && userDestinations.fetchDestination(asset.chain_id);
+
+	$: submitDisabled =
+		!destination ||
+		(!isEthChain && !address) ||
+		!fromBalance ||
+		!amount ||
+		!$assetWithdrawalFeeLoadable ||
+		bigGt(bigAdd(amount, $assetWithdrawalFeeLoadable), fromBalance);
 
 	let loading = false;
 	const transfer = async () => {
@@ -101,7 +132,7 @@
 				await deposit($library, asset, destination[0].destination, value);
 				await updateAssets();
 			} else {
-				if (!$assetWithdrawalFee) throw new Error('No withdrawal fee');
+				if (!$assetWithdrawalFeeLoadable) throw new Error('No withdrawal fee');
 
 				await withdraw(
 					$library,
@@ -110,18 +141,18 @@
 					value,
 					address || $user.address,
 					memo,
-					$assetWithdrawalFee
+					$assetWithdrawalFeeLoadable
 				);
 				await updateAssets();
 				await mvmBalance.reload?.();
 				await tick();
 
-				showToast('success', $LL.successful());
-
 				amount = '';
 				address = '';
 				memo = '';
 			}
+			showToast('success', $LL.successful());
+			close();
 		} catch (e) {
 			console.error('transfer error', JSON.stringify(e, null, 2));
 
@@ -129,8 +160,10 @@
 				if ('code' in e && e.code === 'ACTION_REJECTED') return;
 				if ('reason' in e && e.reason) {
 					showToast('common', `${e.reason}`);
+					return;
 				} else if ('message' in e && e.message) {
 					showToast('common', `${e.message}`);
+					return;
 				}
 			}
 
@@ -143,59 +176,44 @@
 	let l1GasModalOpened = false;
 	let l2GasModalOpened = false;
 
-	$: destination = $userDestinations.find(({ asset_id }) => asset_id === asset.chain_id)
-		?.deposit_entries?.[0].destination;
-
-	$: !destination && browser && userDestinations.fetchDestination(asset.chain_id);
+	let addressTextArea: Element | undefined;
+	let memoTextarea: Element | undefined;
 </script>
 
 <div class="mx-5 rounded-lg bg-white">
 	<div class="flex items-center justify-between py-5 px-4 pb-3 text-sm font-semibold">
 		<div>{$LL.from()}</div>
-		<div class="flex items-center space-x-1">
-			{#if depositMode}
-				<div class=" h-4 w-4">
-					{@html $providerLogo}
-				</div>
-			{:else}
-				<LogoCircle height={16} width={16} />
-			{/if}
-
-			<div>{depositMode ? $providerName : 'MVM'}</div>
-		</div>
 	</div>
 	<div class=" divide-y-2 divide-brand-background child:w-full">
 		<SelectedAssetButton {asset} disabled={true}>
-			{$LL.balanceOf(fromBalance ? format({ n: fromBalance }) : '...', '')}</SelectedAssetButton
+			{$LL.balanceOf(
+				fromBalance ? format({ n: fromBalance, dp: 8, mode: 1 }) : '...',
+				''
+			)}</SelectedAssetButton
 		>
-		<input
-			class={clsx('rounded-b-lg  px-4 py-6', inputClasses)}
-			placeholder="Amount"
-			type="number"
-			bind:value={amount}
-			max={fromBalance}
-		/>
+		<div class="flex flex-row items-center">
+			<input
+				class={clsx('grow rounded-b-lg px-4 py-6', inputClasses)}
+				placeholder="Amount"
+				type="number"
+				spellcheck="false"
+				on:input={(e) => filterNumericInputEvent(e, amount)}
+				bind:value={amount}
+				max={fromBalance}
+			/>
+			<button
+				class="p-4 text-sm font-semibold text-brand-primary"
+				on:click={() => {
+					amount = format({ n: fromBalance, dp: 8, mode: 1 });
+				}}>{$LL.max()}</button
+			>
+		</div>
 	</div>
 </div>
 
 <div class=" mx-5 mt-3 rounded-lg bg-white">
 	<div class="flex items-center justify-between py-5 px-4 pb-3 text-sm font-semibold">
 		<div>{$LL.to()}</div>
-		<div class="flex items-center space-x-1">
-			{#if depositMode}
-				<LogoCircle height={16} width={16} />
-				<div>MVM</div>
-			{:else}
-				<img
-					loading="lazy"
-					src={asset.chain_icon_url || asset.icon_url}
-					width={16}
-					height={16}
-					alt={asset.chain_name || asset.name}
-				/>
-				<div>{asset.chain_name || asset.name}</div>
-			{/if}
-		</div>
 	</div>
 	{#if depositMode}
 		<div
@@ -210,18 +228,25 @@
 			{/if}
 		</div>
 	{:else}
-		<div class="flex border-b-2 border-brand-background">
+		<div class="flex border-b-2 border-brand-background pb-6">
 			<textarea
-				class={clsx('grow resize-none break-all rounded-lg py-3 pl-4 font-semibold', inputClasses)}
-				placeholder={isEthChain ? $user?.address || '' : 'Address'}
+				class={clsx(
+					'h-12 grow resize-none break-all rounded-lg py-3 pl-4 font-semibold',
+					inputClasses
+				)}
+				placeholder={$LL.address()}
 				bind:value={address}
 				use:autosize
+				bind:this={addressTextArea}
 			/>
 			{#if isEthChain}
 				<button
 					class="p-3"
-					on:click={() => {
+					on:click={async () => {
 						address = $user?.address || '';
+						await tick();
+						console.log('addressTextArea', autosize.update);
+						addressTextArea && autosize.update(addressTextArea);
 					}}
 				>
 					<div class="flex h-5 w-5 items-center justify-center">
@@ -247,12 +272,15 @@
 					)}
 					placeholder="Memo/Tag (Optional)"
 					bind:value={memo}
+					bind:this={memoTextarea}
 					use:autosize
 				/>
 				<button
 					class="p-3"
 					on:click={async () => {
 						memo = await navigator.clipboard.readText();
+						await tick();
+						memoTextarea && autosize.update(memoTextarea);
 					}}
 				>
 					<Paste />
@@ -285,10 +313,19 @@
 			</div>
 
 			<div>
-				{#if $assetWithdrawalFee}
-					{$assetWithdrawalFee}
+				{#if $assetWithdrawalFeeLoadable}
+					{$assetWithdrawalFeeLoadable}
 					{asset.symbol}
-					(${format({ n: bigMul($assetWithdrawalFee, asset.price_usd), dp: 3 })})
+					(${format({ n: bigMul($assetWithdrawalFeeLoadable, asset.price_usd), dp: 3 })})
+				{:else if $assetWithdrawalFeeState?.isError}
+					<button
+						class="uppercases text-red-400"
+						on:click={() => {
+							assetWithdrawalFeeLoadable?.reload?.();
+						}}>{$LL.retry()}</button
+					>
+				{:else if $assetWithdrawalFeeState?.isLoading || $assetWithdrawalFeeState?.isReloading}
+					<Spinner size={16} class="stroke-brand-primary" />
 				{:else}
 					...
 				{/if}
@@ -325,7 +362,7 @@
 <button
 	class="mt-16 mb-6 flex min-w-[120px] justify-center self-center rounded-full bg-brand-primary px-6 py-4 text-white"
 	on:click={transfer}
-	disabled={!destination || (!isEthChain && !address) || !fromBalance || !amount || amount < 0.0001}
+	disabled={submitDisabled}
 >
 	{#if loading}
 		<Spinner class="stroke-white stroke-2 text-center" />

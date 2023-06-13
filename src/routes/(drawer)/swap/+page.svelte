@@ -5,7 +5,7 @@
 	import Switch from '$lib/assets/switch.svg?component';
 	import type { Order, SwapParams } from '$lib/types/swap';
 	import { assets, pairs, updateAssets } from '$lib/stores/model';
-	import { getAsset } from '$lib/helpers/utils';
+	import { filterNumericInputEvent, getAsset } from '$lib/helpers/utils';
 	import type { Asset } from '$lib/types/asset';
 	import Header from '$lib/components/base/header.svelte';
 	import UserInfo from '$lib/components/base/user-info.svelte';
@@ -40,8 +40,8 @@
 		getAsset(XIN_ASSET_ID, $assets);
 
 	let lastEdited: 'input' | 'output' | undefined = undefined;
-	let inputAmount: number | string | undefined = undefined;
-	let outputAmount: number | string | undefined = undefined;
+	let inputAmount: string | undefined = undefined;
+	let outputAmount: string | undefined = undefined;
 
 	const handleSwitch = async () => {
 		swapOrder.reset();
@@ -170,6 +170,8 @@
 
 		const { swapAsset } = await import('$lib/helpers/web3/common');
 
+		console.log('swap', $swapOrder.source);
+
 		try {
 			if (!$user.contract) await registerAndSave($user.address);
 			const res = await swapAsset(
@@ -188,6 +190,8 @@
 			if (res) showToast('success', $LL.swapPage.tips.success());
 
 			swapOrder.reset();
+			inputAmount = undefined;
+			outputAmount = undefined;
 		} finally {
 			swapOrder.resume();
 			loading = false;
@@ -235,7 +239,7 @@
 				<div class="flex items-center">
 					{#if inputAsset}
 						<SelectedAssetButton
-							class=" w-fit"
+							class="!w-fit"
 							asset={inputAsset}
 							onSelect={handleChangeInputAsset}
 						/>
@@ -244,6 +248,7 @@
 						<input
 							id="input"
 							type="number"
+							on:input={(e) => filterNumericInputEvent(e, inputAmount)}
 							class="w-full text-right font-bold text-black"
 							autocomplete="off"
 							use:focus={{ enabled: true, focusable: true }}
@@ -289,7 +294,7 @@
 				<div class="flex items-center">
 					{#if outputAsset}
 						<SelectedAssetButton
-							class=" w-fit"
+							class="!w-fit"
 							asset={outputAsset}
 							onSelect={handleChangeOutputAsset}
 						/>
@@ -298,6 +303,7 @@
 						<input
 							id="output"
 							type="number"
+							on:input={(e) => filterNumericInputEvent(e, outputAmount)}
 							class="w-full text-right font-bold text-black"
 							autocomplete="off"
 							bind:value={outputAmount}

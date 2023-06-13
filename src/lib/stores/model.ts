@@ -6,6 +6,7 @@ import {
 import { asyncReadable, derived, get, readable } from '@square/svelte-store';
 import type { Pair } from '../helpers/4swap/api';
 import { bigAdd, bigMul } from '../helpers/big';
+import type { Transaction } from '../helpers/mvm/api';
 import { deepWritable } from '../helpers/store/deep';
 import { mapTemplate } from '../helpers/store/map-template';
 import type { Asset } from '../types/asset';
@@ -111,14 +112,24 @@ export const AssetWithdrawalFee = mapTemplate(
 		const { asset_id, chain_id, destination, tag } = parameters;
 
 		if (!destination) return readable(undefined);
-		return asyncReadable(undefined, async () => {
-			const { fetchWithdrawalFee } = await import('../helpers/api');
-			const fee = await fetchWithdrawalFee(asset_id, destination, tag);
+		return asyncReadable(
+			undefined,
+			async () => {
+				const { fetchWithdrawalFee } = await import('../helpers/api');
+				let fee = await fetchWithdrawalFee(asset_id, destination, tag);
 
-			if (!fee || Number(fee) === 0 || asset_id === chain_id) return fee;
+				if (!fee || Number(fee) === 0 || asset_id === chain_id) return fee;
 
-			const { fetchFeeOnAsset } = await import('../helpers/api');
-			return await fetchFeeOnAsset(asset_id, chain_id, fee);
-		});
+				const { fetchFeeOnAsset } = await import('../helpers/api');
+				fee = await fetchFeeOnAsset(asset_id, chain_id, fee);
+				return fee;
+			},
+			{
+				trackState: true,
+				reloadable: true
+			}
+		);
 	}
 );
+
+export const transactions = deepWritable<Transaction[] | undefined>(undefined);

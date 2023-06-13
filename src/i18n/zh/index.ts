@@ -15,6 +15,7 @@ const zh: Translation = {
 	error: {
 		tips: '发生错误'
 	},
+	retry: '重试',
 	assets: '资产',
 	transactions: '转账记录',
 	swap: '兑换',
@@ -47,7 +48,8 @@ const zh: Translation = {
 		l1Gas: 'L1 Gas: ',
 		l2Gas: 'L2 Gas: ',
 		l1GasTip: 'L1 Gas 费支付以太坊矿工',
-		l2GasTip: 'L2 Gas 费支付 MVM 节点 '
+		l2GasTip: 'L2 Gas 费支付 MVM 节点 ',
+		l1GasError: '获取 L1 Gas 费失败'
 	},
 	successful: '成功',
 	from: '来自',
@@ -111,7 +113,7 @@ const zh: Translation = {
 	tokenNA: '暂无价格',
 	tokenName: '代币名称',
 	tokenSymbol: '代币符号',
-	depositConfirmations: '存入确认区块',
+	depositConfirmations: '区块确认数',
 	addToMetaMask: '添加到 MetaMask',
 	swapForGasPage: {
 		tip: 'ETH 用于支付交易手续费',

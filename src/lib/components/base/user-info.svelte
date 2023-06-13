@@ -44,18 +44,18 @@
 				{format({ n: $totalBalanceUsd || 0, dp: 2, fixed: true })}
 			</div>
 			<div class="inline-flex">
-				<span class="sm:hidden md:block">Account&nbsp;</span>
+				<span class="hidden md:block">Account&nbsp;</span>
 				<span class="text-sm opacity-30 md:opacity-100">{$shortAddress}</span>
 			</div>
 		{:else}
-			<div class="sm:hidden md:block">
+			<div class="hidden md:block">
 				{$LL.connectWallet()}
 			</div>
 		{/if}
 	</div>
 
 	{#if $isLogged}
-		<Arrow class="rotate-90 sm:hidden md:block" />
+		<Arrow class="hidden rotate-90 md:block" />
 	{/if}
 
 	<div

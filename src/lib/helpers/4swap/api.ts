@@ -114,7 +114,7 @@ export interface ActionResponse {
 
 export const fetchPairs = async () => {
 	const response = await fetch('https://api.4swap.org/api/pairs');
-	const { data } = await response.json();
+	const { data } = (await response.json()) || {};
 	if (!data) throw new Error('No data found');
 	return data.pairs as Pair[];
 };
@@ -127,7 +127,7 @@ export const createAction = async (params: ActionRequest) => {
 			ContentType: 'application/json'
 		}
 	});
-	const { data } = await response.json();
+	const { data } = (await response.json()) || {};
 	if (!data) throw new Error('No data found');
 	return data as ActionResponse;
 };
@@ -149,7 +149,7 @@ export const fetch4SwapOrder = async (order_id: string, user: RegisteredUser) =>
 	});
 	if (response.status === 404) throw new Error('wait...');
 
-	const { data } = await response.json();
+	const { data } = (await response.json()) || {};
 	return data as OrderResponse;
 };
 
