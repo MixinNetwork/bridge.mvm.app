@@ -1,6 +1,5 @@
 import { type AssetCommonResponse, CodeClient, NetworkClient } from '@mixin.dev/mixin-node-sdk';
 import type { PaymentRequestResponse } from '@mixin.dev/mixin-node-sdk';
-import { get } from '@square/svelte-store';
 import type { Asset } from '../types/asset';
 import type { RegisteredUser, User } from '../types/user';
 import ExternalClient from '@mixin.dev/mixin-node-sdk/src/client/external';
@@ -14,9 +13,6 @@ import { sortBy } from 'lodash-es';
 import { fetchMixPayPreOrder, fetchMixPayOrder, type MixPayPaymentResponse } from './mixpay/api';
 import { fetch4SwapOrder, type OrderResponse } from './4swap/api';
 import type { SwapSource } from '../types/swap';
-import { get4SwapSwapInfo } from './4swap/utils';
-import { DEFAULT_SLIPPAGE } from '$lib/components/swap/export';
-import { pairs } from '$lib/stores/model';
 import { bigGte } from '$lib/helpers/big';
 
 export const register = async (address: string): Promise<RegisteredUser> => {
