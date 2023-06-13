@@ -152,19 +152,19 @@ export const fetchFeeOnAsset = async (
 	if (!Number.isFinite(overChargeAmount)) return '0';
 
 	const [response, mixPayPreOrder] = await Promise.all([
-			fetch('https://api.4swap.org/api/orders/pre', {
-				method: 'POST',
-				body: JSON.stringify({
-					pay_asset_id: from,
-					fill_asset_id: to,
-					amount: overChargeAmount.toString()
-				})
-			}),
-			fetchMixPayPreOrder({
-				inputAsset: from,
-				outputAsset: to,
-				outputAmount: overChargeAmount.toString()
+		fetch('https://api.4swap.org/api/orders/pre', {
+			method: 'POST',
+			body: JSON.stringify({
+				pay_asset_id: from,
+				fill_asset_id: to,
+				amount: overChargeAmount.toString()
 			})
+		}),
+		fetchMixPayPreOrder({
+			inputAsset: from,
+			outputAsset: to,
+			outputAmount: overChargeAmount.toString()
+		})
 	]);
 	const { data } = (await response.json()) || {};
 	const fourSwapPreOrder = data ? Number(data.pay_amount) : undefined;
