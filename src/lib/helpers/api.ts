@@ -151,25 +151,31 @@ export const fetchFeeOnAsset = async (
 	const overChargeAmount = Number(amount) * 1.05;
 	if (!Number.isFinite(overChargeAmount)) return '0';
 
-	const $pairs = get(pairs);
-	const fourSwapPreOrder = get4SwapSwapInfo($pairs, DEFAULT_SLIPPAGE, {
-		inputAsset: from,
-		outputAsset: to,
-		outputAmount: overChargeAmount.toString()
-	});
-	const mixPayPreOrder = await fetchMixPayPreOrder({
-		inputAsset: from,
-		outputAsset: to,
-		outputAmount: overChargeAmount.toString()
-	});
+	const [response, mixPayPreOrder] = await Promise.all([
+			fetch('https://api.4swap.org/api/orders/pre', {
+				method: 'POST',
+				body: JSON.stringify({
+					pay_asset_id: from,
+					fill_asset_id: to,
+					amount: overChargeAmount.toString()
+				})
+			}),
+			fetchMixPayPreOrder({
+				inputAsset: from,
+				outputAsset: to,
+				outputAmount: overChargeAmount.toString()
+			})
+	]);
+	const { data } = (await response.json()) || {};
+	const fourSwapPreOrder = data ? Number(data.pay_amount) : undefined;
 
 	let feeOnAsset: number;
-	if (mixPayPreOrder.order && fourSwapPreOrder.order) {
-		if (bigGte(fourSwapPreOrder.order.funds, mixPayPreOrder.order.funds))
-			feeOnAsset = fourSwapPreOrder.order.funds;
-		else feeOnAsset = mixPayPreOrder.order.funds;
+	if (mixPayPreOrder.order && fourSwapPreOrder) {
+		if (bigGte(fourSwapPreOrder, mixPayPreOrder.order.funds))
+			feeOnAsset = mixPayPreOrder.order.funds;
+		else feeOnAsset = fourSwapPreOrder;
 	} else if (mixPayPreOrder.order) feeOnAsset = mixPayPreOrder.order.funds;
-	else if (fourSwapPreOrder.order) feeOnAsset = fourSwapPreOrder.order.funds;
+	else if (fourSwapPreOrder) feeOnAsset = fourSwapPreOrder;
 	else throw new Error('Can not fetch fee on asset');
 
 	if (feeOnAsset > 0.0001) return (feeOnAsset + 0.0001).toFixed(4);
