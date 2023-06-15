@@ -172,10 +172,23 @@ type RootTranslation = {
 		 */
 		l2GasTip: string
 		/**
-		 * F​a​i​l​e​d​ ​t​o​ ​f​e​t​c​h​ ​L​1​ ​G​a​s
+		 * F​a​i​l​e​d​ ​t​o​ ​f​e​t​c​h​ ​g​a​s​ ​f​e​e
 		 */
-		l1GasError: string
+		fetchFeeError: string
+		/**
+		 * D​u​e​ ​t​o​ ​s​o​m​e​ ​t​e​c​h​n​i​c​a​l​ ​i​s​s​u​e​s​,​ ​{​0​}​ ​w​i​t​h​d​r​a​w​a​l​s​ ​a​r​e​ ​n​o​t​ ​c​u​r​r​e​n​t​l​y​ ​s​u​p​p​o​r​t​e​d​!​ ​Y​o​u​ ​c​a​n​ ​w​i​t​h​d​r​a​w​ ​t​h​i​s​ ​a​s​s​e​t​ ​t​o​ ​M​i​x​i​n​ ​M​e​s​s​e​n​g​e​r​ ​f​i​r​s​t​ ​a​n​d​ ​t​h​e​n​ ​w​i​t​h​d​r​a​w​ ​i​t​ ​t​o​ ​t​h​e​ ​a​b​o​v​e​ ​a​d​d​r​e​s​s​.
+		 * @param {string} 0
+		 */
+		otherError: RequiredParams<'0'>
 	}
+	/**
+	 * D​o​w​n​l​o​a​d​ ​M​i​x​i​n​ ​M​e​s​s​e​n​g​e​r
+	 */
+	downloadMixinMessenger: string
+	/**
+	 * I​n​v​a​l​i​d​ ​a​d​d​r​e​s​s​ ​f​o​r​m​a​t
+	 */
+	invalidAddressFormatError: string
 	/**
 	 * S​u​c​c​e​s​s​f​u​l
 	 */
@@ -551,10 +564,22 @@ export type TranslationFunctions = {
 		 */
 		l2GasTip: () => LocalizedString
 		/**
-		 * Failed to fetch L1 Gas
+		 * Failed to fetch gas fee
 		 */
-		l1GasError: () => LocalizedString
+		fetchFeeError: () => LocalizedString
+		/**
+		 * Due to some technical issues, {0} withdrawals are not currently supported! You can withdraw this asset to Mixin Messenger first and then withdraw it to the above address.
+		 */
+		otherError: (arg0: string) => LocalizedString
 	}
+	/**
+	 * Download Mixin Messenger
+	 */
+	downloadMixinMessenger: () => LocalizedString
+	/**
+	 * Invalid address format
+	 */
+	invalidAddressFormatError: () => LocalizedString
 	/**
 	 * Successful
 	 */

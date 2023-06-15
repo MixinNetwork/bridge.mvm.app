@@ -49,8 +49,12 @@ const en: BaseTranslation = {
 		l2Gas: 'L2 Gas: ',
 		l1GasTip: 'L1 Gas fee paid to miners',
 		l2GasTip: 'L2 Gas fee payment MVM node ',
-		l1GasError: 'Failed to fetch L1 Gas'
+		fetchFeeError: 'Failed to fetch gas fee',
+		otherError:
+			'Due to some technical issues, {0:string} withdrawals are not currently supported! You can withdraw this asset to Mixin Messenger first and then withdraw it to the above address.'
 	},
+	downloadMixinMessenger: 'Download Mixin Messenger',
+	invalidAddressFormatError: 'Invalid address format',
 	successful: 'Successful',
 	from: 'From',
 	to: 'To',

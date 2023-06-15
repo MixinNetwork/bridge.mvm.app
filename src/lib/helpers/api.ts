@@ -14,6 +14,7 @@ import { fetchMixPayPreOrder, fetchMixPayOrder, type MixPayPaymentResponse } fro
 import { fetch4SwapOrder, type OrderResponse } from './4swap/api';
 import type { SwapSource } from '../types/swap';
 import { bigGte } from '$lib/helpers/big';
+import { InvalidFormatError } from './errors';
 
 export const register = async (address: string): Promise<RegisteredUser> => {
 	const response = await fetch('https://bridge.mvm.dev/users', {
@@ -38,8 +39,7 @@ export const fetchWithdrawalFee = async (asset_id: string, destination: string, 
 		return asset.fee;
 	} catch (e) {
 		if (e && typeof e === 'object' && 'code' in e && e.code === 30102) {
-			// e.description = 'Invalid address format.'
-			return undefined;
+			throw new InvalidFormatError();
 		}
 
 		if (asset_id === EOS_ASSET_ID) return '0.5';

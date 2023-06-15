@@ -16,7 +16,7 @@ import type { Asset } from '$lib/types/asset';
 import type { Order, SwapSource } from '$lib/types/swap';
 import { getWithdrawalExtra } from '../sign';
 import { fetch4SwapTxInfo } from '../4swap/api';
-import { checkOrder } from '../api';
+import { checkOrder, fetchFeeOnAsset, fetchWithdrawalFee } from '../api';
 import { fetchMixPayTxInfo } from '../mixpay/api';
 import { format } from '../big';
 
@@ -223,4 +223,25 @@ export const swapAsset = async (
 	}
 
 	throw new Error('Invalid asset');
+};
+
+export const fetchAssetWithdrawalFee = async ({
+	asset_id,
+	chain_id,
+	destination,
+	tag
+}: {
+	asset_id: string;
+	chain_id: string;
+	destination?: string;
+	tag: string;
+}) => {
+	if (!destination) return undefined;
+
+	let fee = await fetchWithdrawalFee(asset_id, destination, tag);
+
+	if (!fee || Number(fee) === 0 || asset_id === chain_id) return fee;
+
+	fee = await fetchFeeOnAsset(asset_id, chain_id, fee);
+	return fee;
 };

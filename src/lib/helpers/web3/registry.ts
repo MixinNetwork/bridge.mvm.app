@@ -1,13 +1,14 @@
 import { ethers } from 'ethers';
 import { REGISTRY_ABI } from '../../constants/abis';
-import { REGISTRY_ADDRESS } from '../../constants/common';
+import { MVM_RPC_URL, REGISTRY_ADDRESS } from '../../constants/common';
 import type { Asset } from '../../types/asset';
-import { mvmProvider } from './common';
+// import { mvmProvider } from './common';
 
 export const ReadableRegistryContract = new ethers.Contract(
 	REGISTRY_ADDRESS,
 	REGISTRY_ABI,
-	mvmProvider
+	// mvmProvider // TODO fix ReferenceError: Cannot access 'mvmProvider' before initialization
+	ethers.getDefaultProvider(MVM_RPC_URL)
 );
 
 const assetContractMap: { [key: string]: string } = {};
@@ -32,8 +33,6 @@ export const fetchUsersContract = (userIds: string[], threshold = 1) => {
 	const identity = `0x${bufLen.toString('hex')}${ids}${bufThreshold.toString('hex')}`;
 	return ReadableRegistryContract.contracts(ethers.utils.keccak256(identity));
 };
-
-export const fetchUserContract = (userId: string) => fetchUsersContract([userId]);
 
 export const watchAsset = async (provider: ethers.providers.Web3Provider, asset: Asset) => {
 	const address = asset.contract || (await fetchAssetContract(asset.asset_id));

@@ -3,13 +3,15 @@ import {
 	type AssetResponse,
 	type ExchangeRateResponse
 } from '@mixin.dev/mixin-node-sdk';
-import { asyncReadable, derived, get, readable } from '@square/svelte-store';
+import { asyncDerived, derived, get } from '@square/svelte-store';
 import type { Pair } from '../helpers/4swap/api';
 import { bigAdd, bigMul } from '../helpers/big';
 import type { Transaction } from '../helpers/mvm/api';
 import { deepWritable } from '../helpers/store/deep';
-import { mapTemplate } from '../helpers/store/map-template';
 import type { Asset } from '../types/asset';
+import type { Network } from '../types/network';
+import { getAssetBalance } from '../helpers/web3/common';
+import { user } from './user';
 
 export const assets = deepWritable<Asset[]>([], (set) => {
 	const timer = setInterval(async () => {
@@ -107,29 +109,13 @@ export const totalBalanceBtc = derived(assets, ($assets) => {
 	}, '0');
 });
 
-export const AssetWithdrawalFee = mapTemplate(
-	(parameters: { asset_id: string; chain_id: string; destination?: string; tag: string }) => {
-		const { asset_id, chain_id, destination, tag } = parameters;
-
-		if (!destination) return readable(undefined);
-		return asyncReadable(
-			undefined,
-			async () => {
-				const { fetchWithdrawalFee } = await import('../helpers/api');
-				let fee = await fetchWithdrawalFee(asset_id, destination, tag);
-
-				if (!fee || Number(fee) === 0 || asset_id === chain_id) return fee;
-
-				const { fetchFeeOnAsset } = await import('../helpers/api');
-				fee = await fetchFeeOnAsset(asset_id, chain_id, fee);
-				return fee;
-			},
-			{
-				trackState: true,
-				reloadable: true
-			}
-		);
-	}
-);
-
 export const transactions = deepWritable<Transaction[] | undefined>(undefined);
+
+export const buildBalanceStore = ({ assetId, network }: { assetId: string; network: Network }) => {
+	const asset = derived(assets, ($assets) => $assets.find((a) => a.asset_id === assetId));
+	return asyncDerived([asset, user], async ([$asset, $user]) => {
+		if (!$user) return '0';
+		if (!$asset) return '0';
+		return getAssetBalance($asset, $user.address, network);
+	});
+};
