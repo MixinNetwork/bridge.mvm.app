@@ -180,6 +180,10 @@ type RootTranslation = {
 		 * @param {string} 0
 		 */
 		otherError: RequiredParams<'0'>
+		/**
+		 * I​n​s​u​f​f​i​c​i​e​n​t​ ​L​1​ ​G​a​s​ ​F​e​e
+		 */
+		insufficientL1Gas: string
 	}
 	/**
 	 * D​o​w​n​l​o​a​d​ ​M​i​x​i​n​ ​M​e​s​s​e​n​g​e​r
@@ -571,6 +575,10 @@ export type TranslationFunctions = {
 		 * Due to some technical issues, {0} withdrawals are not currently supported! You can withdraw this asset to Mixin Messenger first and then withdraw it to the above address.
 		 */
 		otherError: (arg0: string) => LocalizedString
+		/**
+		 * Insufficient L1 Gas Fee
+		 */
+		insufficientL1Gas: () => LocalizedString
 	}
 	/**
 	 * Download Mixin Messenger

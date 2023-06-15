@@ -41,6 +41,7 @@
 
 	$: assetId = asset.asset_id;
 	$: chainLabel = getChainLabel(assetId, asset.chain_id);
+	$: fullSymbol = `${asset.symbol}${chainLabel ? `(${chainLabel})` : ''}`;
 
 	let isEthChain = asset.chain_id === ETH_ASSET_ID;
 	$: isEthChain = asset.chain_id === ETH_ASSET_ID;
@@ -116,13 +117,11 @@
 
 	$: !destination && browser && userDestinations.fetchDestination(asset.chain_id);
 
+	$: insufficientL1Gas =
+		!!assetWithdrawalFee && bigGt(bigAdd(amount, assetWithdrawalFee), fromBalance);
+
 	$: submitDisabled =
-		!destination ||
-		!address ||
-		!fromBalance ||
-		!amount ||
-		!assetWithdrawalFee ||
-		bigGt(bigAdd(amount, assetWithdrawalFee), fromBalance);
+		!destination || !address || !fromBalance || !amount || !assetWithdrawalFee || insufficientL1Gas;
 
 	let loading = false;
 	const transfer = async () => {
@@ -288,95 +287,101 @@
 			{/if}
 		</div>
 
-		{#if assetWithdrawalFeeError}
-			<div class="mx-5 mt-3 rounded-lg bg-red-500 bg-opacity-10 p-3 text-sm font-normal">
-				<div class=" grid grid-cols-[auto,1fr] gap-x-2 gap-y-4">
-					<Warning />
-					<div class="text-red-500">
-						{#if isFetchFeeError}
-							{$LL.withdrawModal.fetchFeeError()}
-						{:else if isInvalidAddressFormatError}
-							{$LL.invalidAddressFormatError()}
-						{:else}
-							{$LL.withdrawModal.otherError(
-								`${asset.symbol}${chainLabel ? `(${chainLabel})` : ''}`
-							)}
-						{/if}
-					</div>
+		{#if assetWithdrawalFeeError || insufficientL1Gas}
+			<div class="px-5 pt-3">
+				<div class="rounded-lg bg-red-500 bg-opacity-10 p-3 text-sm font-normal">
+					<div class="grid min-h-[40px] grid-cols-[auto,1fr] items-center gap-x-2 gap-y-4">
+						<Warning />
+						<div class="text-red-500">
+							{#if insufficientL1Gas}
+								{$LL.withdrawModal.insufficientL1Gas()}
+							{:else if isFetchFeeError}
+								{$LL.withdrawModal.fetchFeeError()}
+							{:else if isInvalidAddressFormatError}
+								{$LL.invalidAddressFormatError()}
+							{:else}
+								{$LL.withdrawModal.otherError(fullSymbol)}
+							{/if}
+						</div>
 
-					<div class="col-start-2 text-start text-primary">
-						{#if isFetchFeeError || isInvalidAddressFormatError}
-							<button
-								on:click={() => {
-									assetWithdrawalFeeLoadable?.reload?.();
-								}}
-							>
-								{$LL.retry()}
-							</button>
-						{:else}
-							<a href="https://mixin.one/messenger" target="_blank" rel="noreferrer">
-								{$LL.downloadMixinMessenger()}
-							</a>
+						{#if isFetchFeeError || isInvalidAddressFormatError || assetWithdrawalFeeError}
+							<div class="col-start-2 text-start text-primary">
+								{#if isFetchFeeError || isInvalidAddressFormatError}
+									<button
+										on:click={() => {
+											assetWithdrawalFeeLoadable?.reload?.();
+										}}
+									>
+										{$LL.retry()}
+									</button>
+								{:else if assetWithdrawalFeeError}
+									<a href="https://mixin.one/messenger" target="_blank" rel="noreferrer">
+										{$LL.downloadMixinMessenger()}
+									</a>
+								{/if}
+							</div>
 						{/if}
 					</div>
 				</div>
 			</div>
 		{:else}
-			<div
-				class="mx-5 mt-3 rounded-lg bg-black bg-opacity-5 p-4 text-xs font-semibold text-black text-opacity-50"
-			>
+			<div class="px-5 pt-3">
 				<div
-					class="space-y-2 child:flex child:child:flex child:child:items-center child:justify-between child:child:space-x-1"
+					class="rounded-lg bg-black bg-opacity-5 p-4 text-xs font-semibold text-black text-opacity-50"
 				>
-					<div>
+					<div
+						class="space-y-2 child:flex child:child:flex child:child:items-center child:justify-between child:child:space-x-1"
+					>
 						<div>
 							<div>
-								{$LL.withdrawModal.l1Gas()}
+								<div>
+									{$LL.withdrawModal.l1Gas()}
+								</div>
+								<button
+									class="tooltip hover:tooltip-open md:active:pointer-events-none"
+									data-tip={$LL.withdrawModal.l1GasTip()}
+									on:click={() => (l1GasModalOpened = true)}
+								>
+									<Info />
+								</button>
 							</div>
-							<button
-								class="tooltip hover:tooltip-open md:active:pointer-events-none"
-								data-tip={$LL.withdrawModal.l1GasTip()}
-								on:click={() => (l1GasModalOpened = true)}
-							>
-								<Info />
-							</button>
-						</div>
 
-						<div>
-							{#if assetWithdrawalFee}
-								{assetWithdrawalFee}
-								{asset.symbol}
-								(${format({ n: bigMul(assetWithdrawalFee, asset.price_usd), dp: 3 })})
-							{:else if isLoadingAssetWithdrawalFee}
-								<Spinner size={16} class="stroke-brand-primary" />
-							{:else}
-								...
-							{/if}
+							<div>
+								{#if assetWithdrawalFee}
+									{assetWithdrawalFee}
+									{asset.symbol}
+									(${format({ n: bigMul(assetWithdrawalFee, asset.price_usd), dp: 3 })})
+								{:else if isLoadingAssetWithdrawalFee}
+									<Spinner size={16} class="stroke-brand-primary" />
+								{:else}
+									...
+								{/if}
+							</div>
 						</div>
-					</div>
-					<div>
 						<div>
 							<div>
-								{$LL.withdrawModal.l2Gas()}
+								<div>
+									{$LL.withdrawModal.l2Gas()}
+								</div>
+								<button
+									class="tooltip hover:tooltip-open md:active:pointer-events-none"
+									data-tip={$LL.withdrawModal.l2GasTip()}
+									on:click={() => (l2GasModalOpened = true)}
+								>
+									<Info />
+								</button>
 							</div>
-							<button
-								class="tooltip hover:tooltip-open md:active:pointer-events-none"
-								data-tip={$LL.withdrawModal.l2GasTip()}
-								on:click={() => (l2GasModalOpened = true)}
-							>
-								<Info />
-							</button>
-						</div>
 
-						<div>
-							{#if ethAsset}
-								{TRANSACTION_GAS} ETH (${format({
-									n: bigMul(TRANSACTION_GAS, ethAsset?.price_usd),
-									dp: 3
-								})})
-							{:else}
-								...
-							{/if}
+							<div>
+								{#if ethAsset}
+									{TRANSACTION_GAS} ETH (${format({
+										n: bigMul(TRANSACTION_GAS, ethAsset?.price_usd),
+										dp: 3
+									})})
+								{:else}
+									...
+								{/if}
+							</div>
 						</div>
 					</div>
 				</div>

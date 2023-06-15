@@ -51,7 +51,8 @@ const zh: Translation = {
 		l2GasTip: 'L2 Gas 费支付 MVM 节点 ',
 		fetchFeeError: '获取 L1 Gas 费失败',
 		otherError:
-			'由于一些技术问题暂不支持 {0} 提现！你可以将该资产先提现至 Mixin Messenger 后再提现到上面的地址。'
+			'由于一些技术问题暂不支持 {0} 提现！你可以将该资产先提现至 Mixin Messenger 后再提现到上面的地址。',
+		insufficientL1Gas: 'L1 Gas 不足'
 	},
 	downloadMixinMessenger: '下载 Mixin Messenger',
 	invalidAddressFormatError: '地址格式无效',
