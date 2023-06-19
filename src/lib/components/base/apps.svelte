@@ -2,37 +2,23 @@
 	import clsx from 'clsx';
 	import Apps from '$lib/assets/apps.svg?component';
 	import Quill from '$lib/assets/apps/quill.svg';
-	import PandoLeaf from '$lib/assets/apps/pando-leaf.svg';
-	import PandoRings from '$lib/assets/apps/pando-rings.svg';
-	import FourSwap from '$lib/assets/apps/4swap.svg';
+	import Pando from '$lib/assets/apps/pando.svg';
 	import Modal from '../common/modal/modal.svelte';
 	import AppsModal from './apps-modal.svelte';
 	import LL from '$i18n/i18n-svelte';
 
 	$: data = [
 		{
+			name: 'Pando',
+			description: $LL.apps.pando.description(),
+			icon: Pando,
+			href: 'https://app.pando.im/'
+		},
+		{
 			name: 'Quill',
 			description: $LL.apps.quill.description(),
 			icon: Quill,
 			href: 'https://quill.im/'
-		},
-		{
-			name: 'Pando Leaf',
-			description: $LL.apps.leaf.description(),
-			icon: PandoLeaf,
-			href: 'https://leaf.pando.im/'
-		},
-		{
-			name: 'Pando Rings',
-			description: $LL.apps.rings.description(),
-			icon: PandoRings,
-			href: 'https://rings.pando.im/'
-		},
-		{
-			name: '4swap',
-			description: $LL.apps.fourSwap.description(),
-			icon: FourSwap,
-			href: 'https://app.4swap.org/'
 		},
 		{
 			name: 'Trident',
@@ -65,7 +51,7 @@
 	</button>
 
 	<div
-		class="pointer-events-auto invisible absolute top-10 -right-48 z-50 mt-3 hidden h-[480px] w-96 flex-col overflow-y-auto rounded-2xl bg-white py-5 opacity-0 shadow transition-all delay-100 group-hover:visible group-hover:opacity-100 md:flex lg:right-0"
+		class="pointer-events-auto invisible absolute top-10 -right-48 z-50 mt-3 hidden w-96 flex-col overflow-y-auto rounded-2xl bg-white py-5 opacity-0 shadow transition-all delay-100 group-hover:visible group-hover:opacity-100 md:flex lg:right-0"
 	>
 		{#each data as { name, description, icon, href } (name)}
 			<a

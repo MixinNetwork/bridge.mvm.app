@@ -99,20 +99,14 @@ const zh: Translation = {
 		quill: {
 			description: 'Quill 正在 Web3 上为作者和读者建立一个创作应用。'
 		},
-		leaf: {
-			description: '一个去中心化的金融网络，实施一个衍生品流动性协议。'
-		},
-		rings: {
-			description: '一个算法的、自主的利率协议。'
-		},
-		fourSwap: {
-			description: '一项完全分散的自动流动性供应协议。'
-		},
 		trident: {
 			description: '世界上最简单易用的 NFT 市场。'
 		},
 		optionDance: {
 			description: '我们为投资者重新发明了期权交易，每个人都可以像大师一样交易期权。'
+		},
+		pando: {
+			description: '全面且易于使用的去中心化金融 (DeFi) 协议，包括 swap、稳定币协议、借贷协议等。'
 		}
 	},
 	tokenNA: '暂无价格',

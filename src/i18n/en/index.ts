@@ -99,21 +99,16 @@ const en: BaseTranslation = {
 		quill: {
 			description: 'Quill is building a value net on the Web3 for both authors and readers.'
 		},
-		leaf: {
-			description: 'A decentralized financial network, implement a derivatives liquidity protocol.'
-		},
-		rings: {
-			description: 'An algorithmic, autonomous interest rate protocol.'
-		},
-		fourSwap: {
-			description: 'A fully decentralized protocol for automated liquidity provision.'
-		},
 		trident: {
 			description: 'The most simple and easy-to-use NFTs marketplace in the world.'
 		},
 		optionDance: {
 			description:
 				'We reinvented options trading for investors, everyone can trade options like the gurus.'
+		},
+		pando: {
+			description:
+				'Comprehensive and user-friendly decentralized finance (DeFi) protocols, including swap, stablecoin, and lending protocols, among others.'
 		}
 	},
 	tokenNA: 'N/A',

@@ -322,24 +322,6 @@ type RootTranslation = {
 			 */
 			description: string
 		}
-		leaf: {
-			/**
-			 * A​ ​d​e​c​e​n​t​r​a​l​i​z​e​d​ ​f​i​n​a​n​c​i​a​l​ ​n​e​t​w​o​r​k​,​ ​i​m​p​l​e​m​e​n​t​ ​a​ ​d​e​r​i​v​a​t​i​v​e​s​ ​l​i​q​u​i​d​i​t​y​ ​p​r​o​t​o​c​o​l​.
-			 */
-			description: string
-		}
-		rings: {
-			/**
-			 * A​n​ ​a​l​g​o​r​i​t​h​m​i​c​,​ ​a​u​t​o​n​o​m​o​u​s​ ​i​n​t​e​r​e​s​t​ ​r​a​t​e​ ​p​r​o​t​o​c​o​l​.
-			 */
-			description: string
-		}
-		fourSwap: {
-			/**
-			 * A​ ​f​u​l​l​y​ ​d​e​c​e​n​t​r​a​l​i​z​e​d​ ​p​r​o​t​o​c​o​l​ ​f​o​r​ ​a​u​t​o​m​a​t​e​d​ ​l​i​q​u​i​d​i​t​y​ ​p​r​o​v​i​s​i​o​n​.
-			 */
-			description: string
-		}
 		trident: {
 			/**
 			 * T​h​e​ ​m​o​s​t​ ​s​i​m​p​l​e​ ​a​n​d​ ​e​a​s​y​-​t​o​-​u​s​e​ ​N​F​T​s​ ​m​a​r​k​e​t​p​l​a​c​e​ ​i​n​ ​t​h​e​ ​w​o​r​l​d​.
@@ -349,6 +331,12 @@ type RootTranslation = {
 		optionDance: {
 			/**
 			 * W​e​ ​r​e​i​n​v​e​n​t​e​d​ ​o​p​t​i​o​n​s​ ​t​r​a​d​i​n​g​ ​f​o​r​ ​i​n​v​e​s​t​o​r​s​,​ ​e​v​e​r​y​o​n​e​ ​c​a​n​ ​t​r​a​d​e​ ​o​p​t​i​o​n​s​ ​l​i​k​e​ ​t​h​e​ ​g​u​r​u​s​.
+			 */
+			description: string
+		}
+		pando: {
+			/**
+			 * C​o​m​p​r​e​h​e​n​s​i​v​e​ ​a​n​d​ ​u​s​e​r​-​f​r​i​e​n​d​l​y​ ​d​e​c​e​n​t​r​a​l​i​z​e​d​ ​f​i​n​a​n​c​e​ ​(​D​e​F​i​)​ ​p​r​o​t​o​c​o​l​s​,​ ​i​n​c​l​u​d​i​n​g​ ​s​w​a​p​,​ ​s​t​a​b​l​e​c​o​i​n​,​ ​a​n​d​ ​l​e​n​d​i​n​g​ ​p​r​o​t​o​c​o​l​s​,​ ​a​m​o​n​g​ ​o​t​h​e​r​s​.
 			 */
 			description: string
 		}
@@ -715,24 +703,6 @@ export type TranslationFunctions = {
 			 */
 			description: () => LocalizedString
 		}
-		leaf: {
-			/**
-			 * A decentralized financial network, implement a derivatives liquidity protocol.
-			 */
-			description: () => LocalizedString
-		}
-		rings: {
-			/**
-			 * An algorithmic, autonomous interest rate protocol.
-			 */
-			description: () => LocalizedString
-		}
-		fourSwap: {
-			/**
-			 * A fully decentralized protocol for automated liquidity provision.
-			 */
-			description: () => LocalizedString
-		}
 		trident: {
 			/**
 			 * The most simple and easy-to-use NFTs marketplace in the world.
@@ -742,6 +712,12 @@ export type TranslationFunctions = {
 		optionDance: {
 			/**
 			 * We reinvented options trading for investors, everyone can trade options like the gurus.
+			 */
+			description: () => LocalizedString
+		}
+		pando: {
+			/**
+			 * Comprehensive and user-friendly decentralized finance (DeFi) protocols, including swap, stablecoin, and lending protocols, among others.
 			 */
 			description: () => LocalizedString
 		}
