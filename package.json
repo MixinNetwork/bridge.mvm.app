@@ -35,7 +35,7 @@
 		"@typescript-eslint/parser": "^5.52.0",
 		"@web3-onboard/core": "2.14.1",
 		"@web3-onboard/injected-wallets": "^2.7.0",
-		"@web3-onboard/walletconnect": "^2.2.2",
+		"@web3-onboard/walletconnect": "^2.4.0",
 		"@yeungkc/svelte-portal": "^0.0.9",
 		"autoprefixer": "^10.4.13",
 		"autosize": "^6.0.1",

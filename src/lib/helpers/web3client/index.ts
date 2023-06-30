@@ -10,7 +10,10 @@ import walletConnectModule from '@web3-onboard/walletconnect';
 import type { i18n } from '@web3-onboard/core/dist/types';
 
 const injected = injectedModule();
-const walletConnect = walletConnectModule();
+const walletConnect = walletConnectModule({
+	version: 2,
+	projectId: import.meta.env.VITE_WALLET_CONNECT_PROJECT_ID
+});
 
 loadLocale('en');
 
