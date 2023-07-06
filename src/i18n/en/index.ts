@@ -52,7 +52,9 @@ const en: BaseTranslation = {
 		fetchFeeError: 'Failed to fetch gas fee',
 		otherError:
 			'Due to some technical issues, {0:string} withdrawals are not currently supported! You can withdraw this asset to Mixin Messenger first and then withdraw it to the above address.',
-		insufficientL1Gas: 'Insufficient L1 Gas Fee'
+		insufficientL1Gas:
+			'L1 Gas insufficient. Please make sure your wallet has {0:string} {1:string} as fee.',
+		withdrawalAllWithoutL1Gas: 'Withdrawal all without gas fee'
 	},
 	downloadMixinMessenger: 'Download Mixin Messenger',
 	invalidAddressFormatError: 'Invalid address format',

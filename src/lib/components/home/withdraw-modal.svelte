@@ -6,7 +6,7 @@
 	import { updateAssets, assets, userDestinations, buildBalanceStore } from '$lib/stores/model';
 	import { registerAndSave, user } from '$lib/stores/user';
 	import { EOS_ASSET_ID, ETH_ASSET_ID, TRANSACTION_GAS } from '$lib/constants/common';
-	import { bigAdd, bigGt, bigMul, format } from '$lib/helpers/big';
+	import { bigAdd, bigGt, bigMul, bigSub, format } from '$lib/helpers/big';
 	import Spinner from '$lib/components/common/spinner.svelte';
 	import { library } from '$lib/stores/ether';
 	import Paste from '$lib/assets/paste.svg?component';
@@ -119,6 +119,9 @@
 
 	$: insufficientL1Gas =
 		!!assetWithdrawalFee && bigGt(bigAdd(amount, assetWithdrawalFee), fromBalance);
+
+	$: isBalanceSufficientWithFee =
+		insufficientL1Gas && assetWithdrawalFee && bigGt(fromBalance, assetWithdrawalFee);
 
 	$: submitDisabled =
 		!destination || !address || !fromBalance || !amount || !assetWithdrawalFee || insufficientL1Gas;
@@ -293,8 +296,8 @@
 					<div class="grid min-h-[40px] grid-cols-[auto,1fr] items-center gap-x-2 gap-y-4">
 						<Warning />
 						<div class="text-red-500">
-							{#if insufficientL1Gas}
-								{$LL.withdrawModal.insufficientL1Gas()}
+							{#if assetWithdrawalFee && insufficientL1Gas}
+								{$LL.withdrawModal.insufficientL1Gas(assetWithdrawalFee, fullSymbol)}
 							{:else if isFetchFeeError}
 								{$LL.withdrawModal.fetchFeeError()}
 							{:else if isInvalidAddressFormatError}
@@ -304,9 +307,23 @@
 							{/if}
 						</div>
 
-						{#if isFetchFeeError || isInvalidAddressFormatError || assetWithdrawalFeeError}
+						{#if isFetchFeeError || isInvalidAddressFormatError || assetWithdrawalFeeError || isBalanceSufficientWithFee}
 							<div class="col-start-2 text-start text-primary">
-								{#if isFetchFeeError || isInvalidAddressFormatError}
+								{#if isBalanceSufficientWithFee}
+									<button
+										on:click={() => {
+											if (!assetWithdrawalFee) return;
+
+											amount = format({
+												n: bigSub(fromBalance, assetWithdrawalFee),
+												dp: 8,
+												mode: 1
+											});
+										}}
+									>
+										{$LL.withdrawModal.withdrawalAllWithoutL1Gas()}
+									</button>
+								{:else if isFetchFeeError || isInvalidAddressFormatError}
 									<button
 										on:click={() => {
 											assetWithdrawalFeeLoadable?.reload?.();

@@ -181,9 +181,15 @@ type RootTranslation = {
 		 */
 		otherError: RequiredParams<'0'>
 		/**
-		 * I​n​s​u​f​f​i​c​i​e​n​t​ ​L​1​ ​G​a​s​ ​F​e​e
+		 * L​1​ ​G​a​s​ ​i​n​s​u​f​f​i​c​i​e​n​t​.​ ​P​l​e​a​s​e​ ​m​a​k​e​ ​s​u​r​e​ ​y​o​u​r​ ​w​a​l​l​e​t​ ​h​a​s​ ​{​0​}​ ​{​1​}​ ​a​s​ ​f​e​e​.
+		 * @param {string} 0
+		 * @param {string} 1
 		 */
-		insufficientL1Gas: string
+		insufficientL1Gas: RequiredParams<'0' | '1'>
+		/**
+		 * W​i​t​h​d​r​a​w​a​l​ ​a​l​l​ ​w​i​t​h​o​u​t​ ​g​a​s​ ​f​e​e
+		 */
+		withdrawalAllWithoutL1Gas: string
 	}
 	/**
 	 * D​o​w​n​l​o​a​d​ ​M​i​x​i​n​ ​M​e​s​s​e​n​g​e​r
@@ -564,9 +570,13 @@ export type TranslationFunctions = {
 		 */
 		otherError: (arg0: string) => LocalizedString
 		/**
-		 * Insufficient L1 Gas Fee
+		 * L1 Gas insufficient. Please make sure your wallet has {0} {1} as fee.
 		 */
-		insufficientL1Gas: () => LocalizedString
+		insufficientL1Gas: (arg0: string, arg1: string) => LocalizedString
+		/**
+		 * Withdrawal all without gas fee
+		 */
+		withdrawalAllWithoutL1Gas: () => LocalizedString
 	}
 	/**
 	 * Download Mixin Messenger
