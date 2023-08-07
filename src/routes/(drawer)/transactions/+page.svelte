@@ -19,7 +19,7 @@
 	import { browser } from '$app/environment';
 	import type { VirtualItem } from '@tanstack/virtual-core';
 	import { showToast } from '../../../lib/components/common/toast/toast-container.svelte';
-	import { isEqual, unionBy } from 'lodash-es';
+	import { isEqual, unionBy, uniqWith } from 'lodash-es';
 
 	const DEFAULT_ICON =
 		'https://images.mixin.one/yH_I5b0GiV2zDmvrXRyr3bK5xusjfy5q7FX3lw3mM2Ryx4Dfuj6Xcw8SHNRnDKm7ZVE3_LvpKlLdcLrlFQUBhds=s128';
@@ -91,7 +91,7 @@
 				lastHash: lastTransaction?.hash
 			});
 			hasMore = result.length >= 30;
-			$transactionStore = [...($transactionStore || []), ...result];
+			$transactionStore = uniqWith([...($transactionStore || []), ...result], isEqual);
 		} catch (e) {
 			showToast('common', $LL.error.tips());
 		} finally {
